@@ -7,7 +7,7 @@ import stats.Stat;
 public class Pokemon {
 // Class Variables
     // Default Level
-    public static final int DEFAULT_LEVEL = 100;
+    public static final int DEFAULT_LEVEL = 50;
 
 
 // Object Variables
@@ -78,6 +78,10 @@ public class Pokemon {
     }
 
     // Methods
+    public void useTurn(Move move, Pokemon defender) {
+        
+    }
+
     public void useMove(Move move, Pokemon defender) {
         BattleLog.add(String.format("%s used %s!", this.pokemonName, move.moveName()));
         move.pp().decrement();
