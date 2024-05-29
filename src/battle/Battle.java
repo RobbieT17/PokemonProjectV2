@@ -38,8 +38,8 @@ public class Battle {
             if (!p1.charged()) m1 = chooseMove(p1);
             if (!p2.charged()) m2 = chooseMove(p2);
             
-           p1.useMove(p2, m1);
-           p2.useMove(p1, m2);
+           p1.useMove(m1, p2);
+           p2.useMove(m2, p1);
            BattleLog.out();
         }
     }

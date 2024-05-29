@@ -78,7 +78,7 @@ public class Pokemon {
     }
 
     // Methods
-    public void useMove(Pokemon defender, Move move) {
+    public void useMove(Move move, Pokemon defender) {
         BattleLog.add(String.format("%s used %s!", this.pokemonName, move.moveName()));
         move.pp().decrement();
         move.action().useMove(this, defender, move);
