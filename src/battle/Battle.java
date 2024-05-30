@@ -27,9 +27,10 @@ public class Battle {
         }
         return move;
     }
-    public static void main(String[] args) {    
-        Pokemon p1 = PokemonList.bulbasaur("Bob");
-        Pokemon p2 = PokemonList.charmander("Charlie");
+    public static void main(String[] args) {  
+        Pokemon p1 = PokemonList.charmander("");
+        Pokemon p2 = PokemonList.squirtle("");
+     
 
         Move m1 = null;
         Move m2 = null;
@@ -40,6 +41,8 @@ public class Battle {
             
            p1.useTurn(m1, p2);
            p2.useTurn(m2, p1);
+
+           BattleField.endOfRound(p1, p2);
            BattleLog.out();
         }
     }

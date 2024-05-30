@@ -93,8 +93,7 @@ public class Pokemon {
 
     public void useTurn(Move move, Pokemon defender) {
         this.applyEffects(true);
-        this.useMove(move, defender);
-        this.applyEffects(false);
+        this.useMove(move, defender);;
     }
 
     public void useMove(Move move, Pokemon defender) {

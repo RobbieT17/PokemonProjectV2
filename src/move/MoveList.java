@@ -2,8 +2,6 @@ package move;
 import battle.BattleField;
 import battle.BattleLog;
 import battle.Weather;
-import java.util.Random;
-import stats.StatusAction;
 import stats.StatusCondition;
 import stats.Type;
 
@@ -15,10 +13,7 @@ public interface MoveList {
             
             if (d.hasNonVolatileCondition()) return;
 
-            if (new Random().nextDouble() <= 0.8){
-                d.setPrimaryCondition(StatusAction.burn());
-                BattleLog.add(String.format("%s was burned!", d));
-            }
+            MoveAction.applyBurn(d, 100);
             
         };
 
@@ -57,7 +52,7 @@ public interface MoveList {
 
     public static Move rainDance() {
         MoveAction action = (a, d, move) -> {
-            Weather.changeWeather(Weather.RAIN);
+            MoveAction.changeWeather(Weather.RAIN);
         };
 
         return new MoveBuilder()
@@ -79,10 +74,7 @@ public interface MoveList {
 
             if (!MoveAction.moveHits(a, d, move)) return;
 
-            BattleLog.add(String.format("%s fell asleep!", d));
-            d.setImmobilized(true);
-            d.setActionable(false);
-            d.setPrimaryCondition(StatusAction.sleep(5));
+            MoveAction.applySleep(d, 5);
         };
 
         return new MoveBuilder()
@@ -131,7 +123,7 @@ public interface MoveList {
 
     public static Move sunnyDay() {
         MoveAction action = (a, d, move) -> {
-            Weather.changeWeather(Weather.SUNNY);
+            MoveAction.changeWeather(Weather.SUNNY);
         };
 
         return new MoveBuilder()

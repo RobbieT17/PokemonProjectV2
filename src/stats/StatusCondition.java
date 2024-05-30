@@ -20,7 +20,7 @@ public class StatusCondition {
         this.id = id;
         this.beforeMove = before;
         this.action = action;
-    }   
+    }
 
     // Getters
     public int id() {

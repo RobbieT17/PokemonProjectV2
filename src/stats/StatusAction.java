@@ -86,4 +86,22 @@ public interface StatusAction {
 
         return new StatusCondition(StatusCondition.BURN, action, true);
     }
+
+    public static StatusCondition getId(int i) {
+        switch (i) {
+            case StatusCondition.BURN -> {
+                return burn();
+            }
+            case StatusCondition.FREEZE -> {
+                return freeze();
+            }
+            case StatusCondition.PARALYSIS -> {
+                return paralysis();
+            }
+            case StatusCondition.POISON -> {
+                return poison();
+            }
+            default -> throw new IllegalArgumentException("Invalid condition id");
+        }
+    }
 }

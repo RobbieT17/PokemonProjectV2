@@ -6,6 +6,8 @@ import java.util.Random;
 import pokemon.Pokemon;
 import pokemon.PokemonType;
 import stats.Stat;
+import stats.StatusAction;
+import stats.StatusCondition;
 import stats.Type;
 
 @FunctionalInterface
@@ -14,17 +16,6 @@ public interface MoveAction {
     void useMove(Pokemon attacker, Pokemon defender, Move move);
 
     // Private Methods
-    private static void changeStat(Pokemon p, int change, int id) {
-        Stat s = p.stats()[id];
-        if (s.isAtHighestOrLowestStage(change)) {
-            BattleLog.add(String.format("%s's %s won't go any %s!", p, s, (change > 0) ? "higher" : "lower"));
-            return;
-        }
-        p.stats()[id].changeStage(change);
-        BattleLog.add(String.format("%s's %s %s%s!", p, s, (change > 0) ? "rose" : "fell", Stat.sizeOfChange(change)));
-    }
-
-
     private static double typeEffectiveness(String type, PokemonType p){
         double effect = 1.0; // Default type effectiveness
 
@@ -88,6 +79,23 @@ public interface MoveAction {
         * stab * crit * effectiveness * random * weather) + 1;      
     }
 
+    private static void changeStat(Pokemon p, int change, int id) {
+        Stat s = p.stats()[id];
+        if (s.isAtHighestOrLowestStage(change)) {
+            BattleLog.add(String.format("%s's %s won't go any %s!", p, s, (change > 0) ? "higher" : "lower"));
+            return;
+        }
+        p.stats()[id].changeStage(change);
+        BattleLog.add(String.format("%s's %s %s%s!", p, s, (change > 0) ? "rose" : "fell", Stat.sizeOfChange(change)));
+    }
+
+    private static void applyCondition(Pokemon p, double chance, StatusCondition condition, String message) {
+        if (new Random().nextDouble() > chance * 0.01) return;
+
+        p.setPrimaryCondition(condition);
+        BattleLog.add(message);
+    }
+
     // Methods for MoveList
     public static boolean moveHits(Pokemon attacker, Pokemon defender, Move move) {
         if (move.accuracy() == Move.INF || defender.immobilized()) return true;
@@ -134,6 +142,15 @@ public interface MoveAction {
         }
     }
 
+    // Weather Changes
+    public static void changeWeather(int c) {
+        if (BattleField.currentWeather == c){
+            BattleLog.add("But it failed!");
+            return;
+        }
+        Weather.change(c);
+    }
+
     // Stat Changes
     public static void attackStat(Pokemon p, int change) {
         changeStat(p, change, Stat.ATTACK);
@@ -161,5 +178,27 @@ public interface MoveAction {
 
     public static void evasionStat(Pokemon p, int change) {
         changeStat(p, change, Stat.EVASION);
+    }
+
+    // Status Conditions 
+    public static void applyBurn(Pokemon p, double chance) {
+        applyCondition(p, chance, StatusAction.burn(), p + " was burned!");
+    }
+
+    public static void applyFreeze(Pokemon p, double chance) {
+        applyCondition(p, chance, StatusAction.freeze(), p + " froze!");
+    }
+
+    public static void applyParalysis(Pokemon p, double chance) {
+        applyCondition(p, chance, StatusAction.paralysis(), p + " was paralyzed!");
+    }
+
+    public static void applyPoison(Pokemon p, double chance) {
+        applyCondition(p, chance, StatusAction.poison(), p + " was poisoned!");
+    }
+
+    public static void applySleep(Pokemon p, int turns) {
+        p.setPrimaryCondition(StatusAction.sleep(turns));
+        BattleLog.add(String.format("%s fell asleep!", p));
     }
 }

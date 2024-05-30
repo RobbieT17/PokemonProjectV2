@@ -1,4 +1,5 @@
 package stats;
+
 public abstract class Type {
 
 	// Pokemon Types Names
@@ -32,64 +33,27 @@ public abstract class Type {
 
 	// Selector Methods
 	public static Type getType(String type) {
-		switch (type) {
-			case BUG:
-				return bugType();
-
-			case DARK:
-				return darkType();
-
-			case DRAGON:
-				return dragonType();
-
-			case ELECTRIC:
-				return electricType();
-
-			case FAIRY:
-				return fairyType();
-
-			case FIGHTING:
-				return fightingType();
-
-			case FIRE:
-				return fireType();
-
-			case FLYING:
-				return flyingType();
-
-			case GHOST:
-				return ghostType();
-
-			case GRASS:
-				return grassType();
-
-			case GROUND:
-				return groundType();
-
-			case ICE:
-				return iceType();
-
-			case NORMAL:
-				return normalType();
-
-			case POISON:
-				return poisonType();
-
-			case PSYCHIC:
-				return psychicType();
-
-			case ROCK:
-				return rockType();
-
-			case STEEL:
-				return steelType();
-
-			case WATER:
-				return waterType();
-
-			default:
-				throw new IllegalArgumentException("Type inputted does not exist");
-		}
+		return switch (type) {
+			case BUG -> bugType();
+			case DARK -> darkType();
+            case DRAGON -> dragonType();
+			case ELECTRIC -> electricType();
+			case FAIRY -> fairyType();
+			case FIGHTING -> fightingType();
+			case FIRE -> fireType();
+			case FLYING -> flyingType();
+			case GHOST -> ghostType();
+			case GRASS -> grassType();
+			case GROUND -> groundType();
+			case ICE -> iceType();
+			case NORMAL -> normalType();
+			case POISON -> poisonType();
+			case PSYCHIC -> psychicType();
+			case ROCK -> rockType();
+			case STEEL -> steelType();
+			case WATER ->  waterType();
+			default -> throw new IllegalArgumentException("Type inputted does not exist");
+		};
 	}
 
 	// Class Getters
