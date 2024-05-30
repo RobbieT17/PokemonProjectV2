@@ -3,7 +3,7 @@ package pokemon;
 import move.MoveList;
 import stats.Type;
 
-public class PokemonList {
+public interface PokemonList {
 
     private static String defaultName(String a, String b) {
         return (b.equals("")) ? a : b;
@@ -17,7 +17,7 @@ public class PokemonList {
         .setWeight(15.2)
         .setHp(45)
         .setStats(49, 49, 65, 65, 45)
-        .addMove(MoveList.vineWhip())
+        .addMove(MoveList.sleepPowder())
         .addMove(MoveList.solarBeam())
         .addMove(MoveList.growth())
         .addMove(MoveList.sunnyDay())

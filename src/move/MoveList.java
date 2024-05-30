@@ -1,14 +1,25 @@
 package move;
 import battle.BattleField;
+import battle.BattleLog;
 import battle.Weather;
+import java.util.Random;
+import stats.StatusAction;
+import stats.StatusCondition;
 import stats.Type;
 
-public class MoveList {
+public interface MoveList {
     
     public static Move ember() {
-        MoveAction action = (p1, p2, move) -> {
-            MoveAction.dealDamage(p1, p2, move);
-            // TODO: Add burn effect
+        MoveAction action = (a, d, move) -> {
+            MoveAction.dealDamage(a, d, move);
+            
+            if (d.hasNonVolatileCondition()) return;
+
+            if (new Random().nextDouble() <= 0.8){
+                d.setPrimaryCondition(StatusAction.burn());
+                BattleLog.add(String.format("%s was burned!", d));
+            }
+            
         };
 
         return new MoveBuilder()
@@ -16,21 +27,21 @@ public class MoveList {
         .setName("Ember")
         .setType(Type.FIRE)
         .setCategory(Move.SPECIAL)
-        .setPow(40)
+        .setPower(40)
         .setPP(25)
         .setAction(action)
         .buildMove();
     }
 
     public static Move growth() {
-        MoveAction action = (p1, p2, move) -> {   
+        MoveAction action = (a, d, move) -> {   
             if (BattleField.currentWeather == Weather.SUNNY) {
-                MoveAction.attackStat(p1, 2);
-                MoveAction.spAttackStat(p1, 2);
+                MoveAction.attackStat(a, 2);
+                MoveAction.spAttackStat(a, 2);
             }
             else{
-                MoveAction.attackStat(p1, 1);
-                MoveAction.spAttackStat(p1, 1);
+                MoveAction.attackStat(a, 1);
+                MoveAction.spAttackStat(a, 1);
             }    
         };
 
@@ -45,7 +56,7 @@ public class MoveList {
     }
 
     public static Move rainDance() {
-        MoveAction action = (p1, p2, move) -> {
+        MoveAction action = (a, d, move) -> {
             Weather.changeWeather(Weather.RAIN);
         };
 
@@ -59,10 +70,36 @@ public class MoveList {
         .buildMove();
     }
 
+    public static Move sleepPowder() {
+        MoveAction action = (a, d, move) -> {
+            if (d.hasNonVolatileCondition()) {
+                BattleLog.add((a.hasNonVolatileCondition(StatusCondition.SLEEP) ? String.format("%s is already asleep!", d) : Move.FAILED));
+                return;
+            }
+
+            if (!MoveAction.moveHits(a, d, move)) return;
+
+            BattleLog.add(String.format("%s fell asleep!", d));
+            d.setImmobilized(true);
+            d.setActionable(false);
+            d.setPrimaryCondition(StatusAction.sleep(5));
+        };
+
+        return new MoveBuilder()
+        .setId(79)
+        .setName("Sleep Powder")
+        .setType(Type.GRASS)
+        .setCategory(Move.STATUS)
+        .setPP(15)
+        .setAccuracy(75)
+        .setAction(action)
+        .buildMove();
+    }
+
     public static Move smokescreen() {
-        MoveAction action = (p1, p2, move) -> {
-            if (!MoveAction.moveHits(p1, p2, move)) return;
-            MoveAction.accuracyStat(p2, -1);
+        MoveAction action = (a, d, move) -> {
+            if (!MoveAction.moveHits(a, d, move)) return;
+            MoveAction.accuracyStat(d, -1);
         };
 
         return new MoveBuilder()
@@ -76,9 +113,9 @@ public class MoveList {
     }
 
     public static Move solarBeam() {
-        MoveAction action = (p1, p2, move) -> {
-            if (BattleField.currentWeather == Weather.SUNNY) MoveAction.dealDamage(p1, p2, move);
-            else MoveAction.changeMove(p1, p2, move);
+        MoveAction action = (a, d, move) -> {
+            if (BattleField.currentWeather == Weather.SUNNY) MoveAction.dealDamage(a, d, move);
+            else MoveAction.changeMove(a, d, move);
         };
 
         return new MoveBuilder()
@@ -86,14 +123,14 @@ public class MoveList {
         .setName("Solar Beam")
         .setType(Type.GRASS)
         .setCategory(Move.SPECIAL)
-        .setPow(120)
+        .setPower(120)
         .setPP(10)
         .setAction(action)
         .buildMove();
     }
 
     public static Move sunnyDay() {
-        MoveAction action = (p1, p2, move) -> {
+        MoveAction action = (a, d, move) -> {
             Weather.changeWeather(Weather.SUNNY);
         };
 
@@ -108,8 +145,8 @@ public class MoveList {
     }
 
     public static Move tackle() {
-        MoveAction action = (p1, p2, move) -> {
-            MoveAction.dealDamage(p1, p2, move);
+        MoveAction action = (a, d, move) -> {
+            MoveAction.dealDamage(a, d, move);
         };
 
         return new MoveBuilder()
@@ -117,17 +154,16 @@ public class MoveList {
         .setName("Tackle")
         .setType(Type.NORMAL)
         .setCategory(Move.PHYSICAL)
-        .setPow(40)
+        .setPower(40)
         .setPP(35)
-        .setContact(true)
         .setAction(action)
         .buildMove();
     }
 
     public static Move tailWhip() {
-        MoveAction action = (p1, p2, move) -> {
-            if (!MoveAction.moveHits(p1, p2, move)) return;
-            MoveAction.defenseStat(p2, -1);
+        MoveAction action = (a, d, move) -> {
+            if (!MoveAction.moveHits(a, d, move)) return;
+            MoveAction.defenseStat(d, -1);
         };
 
         return new MoveBuilder()
@@ -141,8 +177,8 @@ public class MoveList {
     }
 
     public static Move vineWhip() {
-        MoveAction action = (p1, p2, move) -> {
-            MoveAction.dealDamage(p1, p2, move);
+        MoveAction action = (a, d, move) -> {
+            MoveAction.dealDamage(a, d, move);
         };
 
         return new MoveBuilder()
@@ -150,16 +186,15 @@ public class MoveList {
         .setName("Vine Whip")
         .setType(Type.GRASS)
         .setCategory(Move.PHYSICAL)
-        .setPow(40)
+        .setPower(40)
         .setPP(25)
-        .setContact(true)
         .setAction(action)
         .buildMove();
     }
 
     public static Move waterGun() {
-        MoveAction action = (p1, p2, move) -> {
-            MoveAction.dealDamage(p1, p2, move);
+        MoveAction action = (a, d, move) -> {
+            MoveAction.dealDamage(a, d, move);
         };
 
         return new MoveBuilder()
@@ -167,7 +202,7 @@ public class MoveList {
         .setName("Water Gun")
         .setType(Type.WATER)
         .setCategory(Move.SPECIAL)
-        .setPow(40)
+        .setPower(40)
         .setPP(25)
         .setAction(action)
         .buildMove();

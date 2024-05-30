@@ -11,11 +11,11 @@ public class Battle {
         boolean done = false;
         Move move = null;
 
-        System.out.println("\n" + p);
+        System.out.println("\n" + p.showStats());
 
         while (!done) {
             try {
-                System.out.printf("What move should %s use? ", p.pokemonName());
+                System.out.printf("What move should %s use? ", p);
                 int i = scanner.nextInt();
     
                 move = p.moves()[i];
@@ -28,8 +28,8 @@ public class Battle {
         return move;
     }
     public static void main(String[] args) {    
-        Pokemon p1 = PokemonList.charmander("Charlie");
-        Pokemon p2 = PokemonList.squirtle("Squirt");
+        Pokemon p1 = PokemonList.bulbasaur("Bob");
+        Pokemon p2 = PokemonList.charmander("Charlie");
 
         Move m1 = null;
         Move m2 = null;
@@ -38,8 +38,8 @@ public class Battle {
             if (!p1.charged()) m1 = chooseMove(p1);
             if (!p2.charged()) m2 = chooseMove(p2);
             
-           p1.useMove(m1, p2);
-           p2.useMove(m2, p1);
+           p1.useTurn(m1, p2);
+           p2.useTurn(m2, p1);
            BattleLog.out();
         }
     }

@@ -5,7 +5,7 @@ import pokemon.PokemonType;
 public class Move {
     // Class Variables
     // Message when a move fails
-    public static final String FAILED = "But it failed!\n";
+    public static final String FAILED = "But it failed!";
 
     public static final double UNIVERSAL_CRIT_RATE = 0.04;
     public static final double HIGH_CRIT = 0.125;
@@ -69,11 +69,15 @@ public class Move {
         return this.moveType.equals(t);
     }
 
-    @Override
-    public String toString() {
+    public String moveStats() {
         return new StringBuilder()
         .append(String.format("%s <%s>: (%d/%d)%n", this.moveName, this.moveType.toUpperCase(), this.pp.value(), this.pp.maxValue()))
         .toString();
+    }
+
+    @Override
+    public String toString() {
+        return this.moveName;
     }
 
     // Getters

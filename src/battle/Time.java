@@ -1,8 +1,8 @@
 package battle;
 
-public class Time {
+public interface Time {
 
-	private final static double SECONDS = 1.0;
+	public static final double SECONDS = 1.0;
 	
 	// Pauses the program for the supplied seconds
 	public static void hold() {

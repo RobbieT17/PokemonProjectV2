@@ -82,6 +82,11 @@ public class Stat {
 		return change > 0 ? this.stage == HIGHEST_STAT_STAGE : this.stage == LOWEST_STAT_STAGE;
 	}
 
+	@Override
+	public String toString() {
+		return this.statName;
+	}
+
 // Getters
 	public String statName() {
 		return this.statName;

@@ -31,6 +31,10 @@ public class MoveBuilder {
 
     public MoveBuilder setCategory(String c) {
         this.category = c;
+
+        // Physical Moves usually make contact, while Special and Status Moves don't
+        if (c.equals(Move.PHYSICAL)) this.contact = true;
+
         return this;
     }
 
@@ -54,12 +58,12 @@ public class MoveBuilder {
         return this;
     }
 
-    public MoveBuilder setPow(int p) {
+    public MoveBuilder setPower(int p) {
         this.pow = p;
         return this;
     }
 
-    public MoveBuilder setAcc(int a) {
+    public MoveBuilder setAccuracy(int a) {
         this.acc = a;
         return this;
     }

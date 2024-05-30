@@ -3,6 +3,7 @@ package pokemon;
 import battle.BattleLog;
 import move.Move;
 import stats.Stat;
+import stats.StatusCondition;
 
 public class Pokemon {
 // Class Variables
@@ -31,8 +32,13 @@ public class Pokemon {
     private final Move[] moves; // Up to 4 moves
 
     // Status Conditions
+    private boolean actionable;
+    private boolean immobilized;
     private boolean fainted;
     private boolean charged; // Charges moves
+
+    private StatusCondition primaryCondition;
+
 
     // Constructor
     public Pokemon(
@@ -54,6 +60,8 @@ public class Pokemon {
         this.hp = hp;
         this.stats = stats;
         this.moves = moves;
+
+        this.actionable = true;
     }
 
     // Private Methods
@@ -72,18 +80,27 @@ public class Pokemon {
     private String listMoves() {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < this.moves.length; i++) 
-            sb.append(String.format("[%d] %s", i, this.moves[i].toString())); 
+            sb.append(String.format("[%d] %s", i, this.moves[i].moveStats())); 
             
         return sb.toString();
     }
 
     // Methods
+    public void applyEffects(boolean before) {
+        if (this.primaryCondition != null)
+            if (this.primaryCondition.beforeMove() == before) this.primaryCondition.action().apply(this);
+    }
+
     public void useTurn(Move move, Pokemon defender) {
-        
+        this.applyEffects(true);
+        this.useMove(move, defender);
+        this.applyEffects(false);
     }
 
     public void useMove(Move move, Pokemon defender) {
-        BattleLog.add(String.format("%s used %s!", this.pokemonName, move.moveName()));
+        if (!this.actionable) return;
+
+        BattleLog.add(String.format("%s used %s!", this, move));
         move.pp().decrement();
         move.action().useMove(this, defender, move);
     }
@@ -93,12 +110,11 @@ public class Pokemon {
         this.hp.change(-value); 
         if (this.hp.value() == 0) {
             this.fainted = true;
-            BattleLog.add(String.format("%s fainted!", this.pokemonName));
+            BattleLog.add(String.format("%s fainted!", this));
         }
     }
 
-    @Override
-	public String toString() {
+	public String showStats() {
 		return new StringBuilder()
 		.append(String.format("Name: %s%n", this.pokemonName))
 		.append(String.format("Type: %s", this.type.toString()))
@@ -110,9 +126,39 @@ public class Pokemon {
         .toString();
 	}
 
+    @Override
+    public String toString() {
+        return this.pokemonName;
+    }
+
+    // Status Condition Booleans
+    public boolean hasNonVolatileCondition() {
+        return this.primaryCondition != null;
+    }
+
+    public boolean hasNonVolatileCondition(int i) {
+        return this.primaryCondition.id() == i;
+    }
+ 
     // Setters
+    public void setActionable(boolean a) {
+        this.actionable = a;
+    }
+
+    public void setImmobilized(boolean i) {
+        this.immobilized = i;
+    }
+
     public void setCharge(boolean c) {
         this.charged = c;
+    }
+
+    public void setPrimaryCondition(StatusCondition c) {
+        this.primaryCondition = c;
+    }
+
+    public void clearPrimaryCondition() {
+        this.primaryCondition = null;
     }
 
     // Getters
@@ -172,6 +218,14 @@ public class Pokemon {
 		return this.weight;
 	}
 
+    public boolean actionable() {
+        return this.actionable;
+    }
+
+    public boolean immobilized() {
+        return this.immobilized;
+    }
+
     public boolean fainted() {
         return this.fainted;
     }
@@ -182,6 +236,10 @@ public class Pokemon {
 
     public Move[] moves() {
         return this.moves;
+    }
+
+    public StatusCondition primaryCondition() {
+        return this.primaryCondition;
     }
 
 }

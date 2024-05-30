@@ -11,17 +11,17 @@ import stats.Type;
 @FunctionalInterface
 public interface MoveAction {
     // Function
-    void useMove(Pokemon user, Pokemon defender, Move moveUsed);
+    void useMove(Pokemon attacker, Pokemon defender, Move move);
 
     // Private Methods
     private static void changeStat(Pokemon p, int change, int id) {
         Stat s = p.stats()[id];
         if (s.isAtHighestOrLowestStage(change)) {
-            BattleLog.add(String.format("%s's %s won't go any %s!%n", p.pokemonName(), s.statName(), (change > 0) ? "higher" : "lower"));
+            BattleLog.add(String.format("%s's %s won't go any %s!", p, s, (change > 0) ? "higher" : "lower"));
             return;
         }
         p.stats()[id].changeStage(change);
-        BattleLog.add(String.format("%s's %s %s%s!", p.pokemonName(), s.statName(), (change > 0) ? "rose" : "fell", Stat.sizeOfChange(change)));
+        BattleLog.add(String.format("%s's %s %s%s!", p, s, (change > 0) ? "rose" : "fell", Stat.sizeOfChange(change)));
     }
 
 
@@ -43,7 +43,7 @@ public interface MoveAction {
     private static String isSuperEffective(double effect) {
         return (effect > 1.0) 
         ? "It's super effective!" 
-        : (effect < 1.0) ? "It's not very effective" : "";
+        : (effect < 1.0) ? "It's not very effective..." : "";
     }
 
     private static boolean criticalHit(double rate) {
@@ -90,13 +90,13 @@ public interface MoveAction {
 
     // Methods for MoveList
     public static boolean moveHits(Pokemon attacker, Pokemon defender, Move move) {
-        if (move.accuracy() == Move.INF) return true;
+        if (move.accuracy() == Move.INF || defender.immobilized()) return true;
 		double modifiedAccuracy = 0.01 * move.accuracy() * ((double) attacker.accuracy().power() / (double) defender.evasion().power());
 
 		boolean hit = new Random().nextDouble() <= modifiedAccuracy;
 
         if (!hit) {
-            BattleLog.add(String.format("But %s avoided the attack!", defender.pokemonName()));
+            BattleLog.add(String.format("But %s avoided the attack!", defender));
             return false;
         }
         else return true;
@@ -106,7 +106,7 @@ public interface MoveAction {
         double effectiveness = typeEffectiveness(move.moveType(), defender.pokemonType());
 
         if (effectiveness == 0) {
-            BattleLog.add(String.format("But it doesn't affect %s...", defender.pokemonName()));
+            BattleLog.add(String.format("But it doesn't affect %s...", defender));
             return;
         }
 
@@ -117,7 +117,7 @@ public interface MoveAction {
         int damage = calculateDamage(attacker, defender, move, effectiveness, isCritical);
         defender.takeDamage(damage);
 
-        BattleLog.add(String.format("%s took %d damage!", defender.pokemonName(), damage));
+        BattleLog.add(String.format("%s took %d damage!", defender, damage));
         BattleLog.add(isSuperEffective(effectiveness));
         BattleLog.add((isCritical) ? "Critical hit!" : "");
     }
@@ -126,7 +126,7 @@ public interface MoveAction {
         if (!p1.charged()) {
             move.pp().increment(); // Done bc pp is decremented every move call
             p1.setCharge(true);       
-            BattleLog.add(String.format("%s begins charging!", p1.pokemonName()));
+            BattleLog.add(String.format("%s begins charging!", p1));
         }
         else {
             p1.setCharge(false);
