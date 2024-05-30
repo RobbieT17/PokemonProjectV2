@@ -18,9 +18,9 @@ public interface PokemonList {
         .setHp(45)
         .setStats(49, 49, 65, 65, 45)
         .addMove(MoveList.sleepPowder())
-        .addMove(MoveList.solarBeam())
         .addMove(MoveList.growth())
-        .addMove(MoveList.sunnyDay())
+        .addMove(MoveList.takeDown())
+        .addMove(MoveList.poisonPowder())
         .buildPokemon();
     }
 

@@ -115,22 +115,23 @@ public interface MoveAction {
 
         if (effectiveness == 0) {
             BattleLog.add(String.format("But it doesn't affect %s...", defender));
-            return;
+            return ;
         }
 
-        if (!moveHits(attacker, defender, move)) return;
+        if (!moveHits(attacker, defender, move)) return ;
         
         boolean isCritical = criticalHit(move.critRate());
 
         int damage = calculateDamage(attacker, defender, move, effectiveness, isCritical);
         defender.takeDamage(damage);
+        attacker.addDealtDamage(damage);
 
         BattleLog.add(String.format("%s took %d damage!", defender, damage));
         BattleLog.add(isSuperEffective(effectiveness));
         BattleLog.add((isCritical) ? "Critical hit!" : "");
     }
 
-    public static void changeMove(Pokemon p1, Pokemon p2, Move move ) {
+    public static void chargeMove(Pokemon p1, Pokemon p2, Move move ) {
         if (!p1.charged()) {
             move.pp().increment(); // Done bc pp is decremented every move call
             p1.setCharge(true);       
@@ -141,6 +142,15 @@ public interface MoveAction {
             dealDamage(p1, p2, move);
         }
     }
+
+    public static void recoilDamage(Pokemon p, double recoil) {
+        int damage = (int) (p.damageDealt() * recoil);
+        p.takeDamage(damage);
+
+        BattleLog.add(String.format("%s took %d from the recoil!", p, damage));
+    }
+
+   
 
     // Weather Changes
     public static void changeWeather(int c) {

@@ -22,7 +22,10 @@ public class BattleField {
 
     private static void pokemonAfterEffects(Pokemon a, Pokemon b) {
         a.applyEffects(false);
+        a.resetDamageDealt();
+        
         b.applyEffects(false);
+        b.resetDamageDealt();
     }
 
     public static void endOfRound(Pokemon p1, Pokemon p2) {

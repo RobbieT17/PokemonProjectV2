@@ -17,7 +17,6 @@ public class Move {
     public static final String SPECIAL = "Special";
     public static final String STATUS = "Status";
 
-
     // Object Variables
     private final int moveID;
     private final String moveName;

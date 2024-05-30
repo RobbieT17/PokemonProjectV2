@@ -23,6 +23,8 @@ public interface StatusAction {
 
     public static StatusCondition freeze() {
         StatusAction action = p -> {
+            p.setCharge(false);
+
             if (new Random().nextDouble() <= 0.2) {
                 p.setImmobilized(false);
                 p.setActionable(true);
@@ -44,6 +46,7 @@ public interface StatusAction {
             BattleLog.add(String.format("%s is paralyzed!", p));
             if (new Random().nextDouble() <= 0.33){
                 p.setActionable(false);
+                p.setCharge(false);
                 BattleLog.add(String.format("%s cannot move!", p));
             }
             else{
@@ -59,18 +62,20 @@ public interface StatusAction {
 
         StatusAction action = p -> {
             counter.inc();
-            int damage = p.hp().maxValue() * (counter.count() / 16);
+            int damage = (int) (p.hp().maxValue() * (counter.count() / 16.0));
             p.takeDamage(damage);
             BattleLog.add(String.format("%s took %d damage from the poison!", p, damage));
         };
 
-        return new StatusCondition(StatusCondition.PARALYSIS, action, false);
+        return new StatusCondition(StatusCondition.POISON, action, false);
     }
 
     public static StatusCondition sleep(int duration) {
         Counter counter = new Counter(duration);
 
         StatusAction action = p -> {
+            p.setCharge(false);
+
             counter.inc();
             if (counter.terminated()) {
                 p.setImmobilized(false);
@@ -84,7 +89,7 @@ public interface StatusAction {
             }
         };
 
-        return new StatusCondition(StatusCondition.BURN, action, true);
+        return new StatusCondition(StatusCondition.SLEEP, action, true);
     }
 
     public static StatusCondition getId(int i) {

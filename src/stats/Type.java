@@ -3,6 +3,8 @@ package stats;
 public abstract class Type {
 
 	// Pokemon Types Names
+	public final static String NO_TYPE = "No Type";
+
 	public final static String BUG = "Bug";
 	public final static String DARK = "Dark";
 	public final static String DRAGON = "Dragon";

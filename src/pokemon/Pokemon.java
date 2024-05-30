@@ -39,6 +39,9 @@ public class Pokemon {
 
     private StatusCondition primaryCondition;
 
+    // Other Stats
+    private int damageDealt;
+
 
     // Constructor
     public Pokemon(
@@ -93,7 +96,7 @@ public class Pokemon {
 
     public void useTurn(Move move, Pokemon defender) {
         this.applyEffects(true);
-        this.useMove(move, defender);;
+        this.useMove(move, defender);
     }
 
     public void useMove(Move move, Pokemon defender) {
@@ -130,13 +133,21 @@ public class Pokemon {
         return this.pokemonName;
     }
 
-    // Status Condition Booleans
+
+    // Boolean Methods
     public boolean hasNonVolatileCondition() {
         return this.primaryCondition != null;
     }
 
     public boolean hasNonVolatileCondition(int i) {
         return this.primaryCondition.id() == i;
+    }
+
+    public boolean hasNoMoves() {
+        for (Move m : this.moves) 
+            if (!m.pp().depleted()) return false;
+
+        return true;
     }
  
     // Setters
@@ -158,6 +169,15 @@ public class Pokemon {
 
     public void clearPrimaryCondition() {
         this.primaryCondition = null;
+    }
+
+    public void addDealtDamage(int d) {
+        if (d <= 0) throw new IllegalArgumentException("Damage must be positive");
+        this.damageDealt += d;
+    }
+
+    public void resetDamageDealt() {
+        this.damageDealt = 0;
     }
 
     // Getters
@@ -239,6 +259,10 @@ public class Pokemon {
 
     public StatusCondition primaryCondition() {
         return this.primaryCondition;
+    }
+
+    public int damageDealt() {
+        return this.damageDealt;
     }
 
 }
