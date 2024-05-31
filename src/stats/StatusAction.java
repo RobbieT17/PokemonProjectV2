@@ -14,7 +14,7 @@ public interface StatusAction {
     // Class Functions
     public static StatusCondition burn() {
         StatusAction action = p -> {
-            int damage = p.hp().maxValue() / 16;
+            int damage = p.hp().max() / 16;
             p.takeDamage(damage);
             BattleLog.add(String.format("%s took %d damage from the burn!", p, damage));
         };
@@ -30,12 +30,12 @@ public interface StatusAction {
                 p.setActionable(true);
                 p.clearPrimaryCondition();
                 BattleLog.add(String.format("%s thawed!", p));
+                return;
             }
-            else {
-                p.setImmobilized(false);
-                p.setActionable(true);
-                BattleLog.add(String.format("%s is frozen solid!", p));
-            }
+
+            p.setImmobilized(false);
+            p.setActionable(true);
+            BattleLog.add(String.format("%s is frozen solid!", p));
         };
         
         return new StatusCondition(StatusCondition.FREEZE, action, true);
@@ -44,14 +44,15 @@ public interface StatusAction {
     public static StatusCondition paralysis() {
         StatusAction action = p -> {
             BattleLog.add(String.format("%s is paralyzed!", p));
-            if (new Random().nextDouble() <= 0.33){
+            if (new Random().nextDouble() <= 0.5){
                 p.setActionable(false);
                 p.setCharge(false);
                 BattleLog.add(String.format("%s cannot move!", p));
+                return;
             }
-            else{
-                p.setActionable(true);
-            }
+            
+            p.setActionable(true);
+            
         };
 
         return new StatusCondition(StatusCondition.PARALYSIS, action, true);
@@ -62,7 +63,7 @@ public interface StatusAction {
 
         StatusAction action = p -> {
             counter.inc();
-            int damage = (int) (p.hp().maxValue() * (counter.count() / 16.0));
+            int damage = (int) (p.hp().max() * (counter.count() / 16.0));
             p.takeDamage(damage);
             BattleLog.add(String.format("%s took %d damage from the poison!", p, damage));
         };
@@ -82,11 +83,13 @@ public interface StatusAction {
                 p.setActionable(true);
                 p.clearPrimaryCondition();
                 BattleLog.add(String.format("%s woke up!", p));
-            } else {
-                p.setImmobilized(true);
-                p.setActionable(false);
-                BattleLog.add(String.format("%s is fast asleep...", p));
-            }
+                return;
+            } 
+
+            p.setImmobilized(true);
+            p.setActionable(false);
+            BattleLog.add(String.format("%s is fast asleep...", p));
+            
         };
 
         return new StatusCondition(StatusCondition.SLEEP, action, true);

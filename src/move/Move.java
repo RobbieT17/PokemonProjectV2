@@ -70,7 +70,7 @@ public class Move {
 
     public String moveStats() {
         return new StringBuilder()
-        .append(String.format("%s <%s>: (%d/%d)%n", this.moveName, this.moveType.toUpperCase(), this.pp.value(), this.pp.maxValue()))
+        .append(String.format("%s <%s>: %s%n", this.moveName, this.moveType.toUpperCase(), this.pp))
         .toString();
     }
 

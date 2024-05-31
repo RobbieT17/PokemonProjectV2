@@ -3,7 +3,6 @@ public class PowerPoints {
 
     private final int maxPowerPoints;
     private int powerPoints;
-    private boolean hasNoPowerPoints;
 
     public PowerPoints(int pp) {
         this.maxPowerPoints = pp;
@@ -18,19 +17,16 @@ public class PowerPoints {
 
     public void decrement() {
         this.powerPoints--;
-        if (this.powerPoints == 0) this.hasNoPowerPoints = true;
+        if (this.powerPoints < 0) this.powerPoints = 0;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("(%d/%d)", this.powerPoints, this.maxPowerPoints);
     }
 
     // Getters
-    public int maxValue() {
-        return this.maxPowerPoints;
-    }
-
-    public int value(){
-        return this.powerPoints;
-    }
-
     public boolean depleted() {
-        return this.hasNoPowerPoints;
+        return this.powerPoints == 0;
     }
 }

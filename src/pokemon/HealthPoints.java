@@ -24,11 +24,12 @@ public class HealthPoints {
     }
 
     // Getters
-    public int maxValue() {
+    public int max() {
         return this.maxHealthPoints;
     }
 
-    public int value() {
-        return this.healthPoints;
+    public boolean depleted() {
+        return this.healthPoints == 0;
     }
+
 }

@@ -1,21 +1,24 @@
 package move;
 
 import battle.BattleField;
-import battle.BattleLog;
 import battle.Weather;
+import java.util.Random;
 import stats.StatusCondition;
 import stats.Type;
 
 public interface MoveList {
-    
+
+    private static int randomInt(int min, int max) {
+        if (min > max) throw new IllegalArgumentException("Max must be greater than min");
+        return new Random().nextInt((max - min) + 1) + min;
+    }
+
     public static Move ember() {
         MoveAction action = (a, d, m) -> {
             MoveAction.dealDamage(a, d, m);
             
-            if (d.hasNonVolatileCondition()) return;
-
-            MoveAction.applyBurn(d, 100);
-            
+            if (d.hasPrimaryCondition()) return;
+            MoveAction.applyBurn(d, 50);   
         };
 
         return new MoveBuilder()
@@ -23,8 +26,8 @@ public interface MoveList {
         .setName("Ember")
         .setType(Type.FIRE)
         .setCategory(Move.SPECIAL)
-        .setPower(40)
         .setPP(25)
+        .setPower(40)
         .setAction(action)
         .buildMove();
     }
@@ -53,14 +56,8 @@ public interface MoveList {
 
     public static Move poisonPowder() {
         MoveAction action = (a, d, m) -> {
-            if (d.hasNonVolatileCondition()) {
-                BattleLog.add((a.hasNonVolatileCondition(StatusCondition.POISON) ? String.format("%s is already poisoned!", d) : Move.FAILED));
-                return;
-            }
-
             if (!MoveAction.moveHits(a, d, m)) return;
-
-            MoveAction.applyPoison(d, 100);
+            MoveAction.statusEffect(d, StatusCondition.POISON);
         };
 
         return new MoveBuilder()
@@ -91,14 +88,8 @@ public interface MoveList {
 
     public static Move sleepPowder() {
         MoveAction action = (a, d, m) -> {
-            if (d.hasNonVolatileCondition()) {
-                BattleLog.add((a.hasNonVolatileCondition(StatusCondition.SLEEP) ? String.format("%s is already asleep!", d) : Move.FAILED));
-                return;
-            }
-
             if (!MoveAction.moveHits(a, d, m)) return;
-
-            MoveAction.applySleep(d, 5);
+            MoveAction.statusEffect(d, StatusCondition.SLEEP, randomInt(1, 3));
         };
 
         return new MoveBuilder()
@@ -141,6 +132,23 @@ public interface MoveList {
         .setCategory(Move.SPECIAL)
         .setPower(120)
         .setPP(10)
+        .setAction(action)
+        .buildMove();
+    }
+
+    public static Move stunSpore() {
+        MoveAction action = (a, d, m) -> {
+            if (!MoveAction.moveHits(a, d, m)) return;
+            MoveAction.statusEffect(d, StatusCondition.PARALYSIS);
+        };
+
+        return new MoveBuilder()
+        .setId(78)
+        .setName("Stun Spore")
+        .setType(Type.GRASS)
+        .setCategory(Move.STATUS)
+        .setPP(30)
+        .setAccuracy(75)
         .setAction(action)
         .buildMove();
     }
@@ -205,7 +213,7 @@ public interface MoveList {
         .setCategory(Move.PHYSICAL)
         .setPP(20)
         .setPower(90)
-        .setAccuracy(85)
+        .setAccuracy(10)
         .setAction(action)
         .buildMove();
     }

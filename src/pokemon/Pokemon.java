@@ -1,6 +1,7 @@
 package pokemon;
 
 import battle.BattleLog;
+import battle.PokemonFaintsException;
 import move.Move;
 import stats.Stat;
 import stats.StatusCondition;
@@ -94,7 +95,7 @@ public class Pokemon {
             if (this.primaryCondition.beforeMove() == before) this.primaryCondition.action().apply(this);
     }
 
-    public void useTurn(Move move, Pokemon defender) {
+    public void useTurn(Move move, Pokemon defender){
         this.applyEffects(true);
         this.useMove(move, defender);
     }
@@ -109,11 +110,12 @@ public class Pokemon {
 
     public void takeDamage(int value) {
         if (value <= 0) throw new IllegalArgumentException("Damage must be a positive value");
+
         this.hp.change(-value); 
-        if (this.hp.value() == 0) {
+        if (this.hp.depleted()) {
             this.fainted = true;
-            BattleLog.add(String.format("%s fainted!", this));
-        }
+            throw new PokemonFaintsException(this);     
+        } 
     }
 
 	public String showStats() {
@@ -135,11 +137,11 @@ public class Pokemon {
 
 
     // Boolean Methods
-    public boolean hasNonVolatileCondition() {
+    public boolean hasPrimaryCondition() {
         return this.primaryCondition != null;
     }
 
-    public boolean hasNonVolatileCondition(int i) {
+    public boolean hasPrimaryCondition(int i) {
         return this.primaryCondition.id() == i;
     }
 

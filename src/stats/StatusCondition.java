@@ -22,6 +22,18 @@ public class StatusCondition {
         this.action = action;
     }
 
+    // Methods
+    public static String failMessage(int id) {
+        return switch (id) {
+            case BURN -> "burned";
+            case FREEZE -> "frozen";
+            case PARALYSIS -> "paralyzed";
+            case POISON -> "poisoned";
+            case SLEEP -> "asleep";
+            default -> throw new IllegalArgumentException("Invalid status condition id");
+        };
+    }
+
     // Getters
     public int id() {
         return this.id;

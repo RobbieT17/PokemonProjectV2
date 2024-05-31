@@ -82,7 +82,7 @@ public interface MoveAction {
     private static void changeStat(Pokemon p, int change, int id) {
         Stat s = p.stats()[id];
         if (s.isAtHighestOrLowestStage(change)) {
-            BattleLog.add(String.format("%s's %s won't go any %s!", p, s, (change > 0) ? "higher" : "lower"));
+            BattleLog.add(String.format("But %s's %s won't go any %s!", p, s, (change > 0) ? "higher" : "lower"));
             return;
         }
         p.stats()[id].changeStage(change);
@@ -94,6 +94,14 @@ public interface MoveAction {
 
         p.setPrimaryCondition(condition);
         BattleLog.add(message);
+    }
+
+    private static boolean canBeApplied(Pokemon p, int id) {
+        if (p.hasPrimaryCondition()){
+            BattleLog.add((p.hasPrimaryCondition(id) ? String.format("But %s is already %s!", p, StatusCondition.failMessage(id)) : Move.FAILED));
+            return false;
+        }
+        return true;
     }
 
     // Methods for MoveList
@@ -144,9 +152,11 @@ public interface MoveAction {
     }
 
     public static void recoilDamage(Pokemon p, double recoil) {
+        if (p.damageDealt() == 0) return;
+
         int damage = (int) (p.damageDealt() * recoil);
         p.takeDamage(damage);
-
+        
         BattleLog.add(String.format("%s took %d from the recoil!", p, damage));
     }
 
@@ -210,5 +220,26 @@ public interface MoveAction {
     public static void applySleep(Pokemon p, int turns) {
         p.setPrimaryCondition(StatusAction.sleep(turns));
         BattleLog.add(String.format("%s fell asleep!", p));
+    }
+
+    public static void statusEffect(Pokemon p, int statusId) {
+        if (!canBeApplied(p, statusId)) return;
+
+        switch (statusId) {
+            case StatusCondition.BURN -> applyBurn(p, 100);  
+            case StatusCondition.FREEZE -> applyFreeze(p, 100);  
+            case StatusCondition.PARALYSIS -> applyParalysis(p, 100);   
+            case StatusCondition.POISON -> applyPoison(p, 100); 
+            default -> throw new IllegalArgumentException("Invalid condition id");
+        }
+    }
+
+    public static void statusEffect(Pokemon p, int statusId, int duration) {
+        if (!canBeApplied(p, statusId)) return;
+        
+        switch (statusId) {
+            case StatusCondition.SLEEP ->  applySleep(p, duration);
+            default -> throw new IllegalArgumentException("Invalid condition id");
+        }
     }
 }
