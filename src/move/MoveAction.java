@@ -224,9 +224,8 @@ public interface MoveAction {
     }
 
     public static void applySleep(Pokemon p, int turns) {
-        p.setPrimaryCondition(StatusAction.sleep(turns));
+        applyCondition(p, 100, StatusAction.sleep(turns), p + " fell asleep!");
         p.setCharge(false);
-        BattleLog.add(String.format("%s fell asleep!", p));
     }
 
     public static void statusEffect(Pokemon p, int statusId) {
