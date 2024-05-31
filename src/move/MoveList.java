@@ -17,7 +17,7 @@ public interface MoveList {
         MoveAction action = (a, d, m) -> {
             MoveAction.dealDamage(a, d, m);
             MoveAction.canApplyCondition(d, StatusCondition.BURN);
-            MoveAction.applyBurn(d, 100);   
+            MoveAction.applyBurn(d, 10);   
         };
 
         return new MoveBuilder()
