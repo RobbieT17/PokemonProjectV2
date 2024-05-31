@@ -7,14 +7,16 @@ import pokemon.Pokemon;
 import pokemon.PokemonList;
 
 public class Battle {
-    public static Move chooseMove(Pokemon p) {
+    public static void chooseMove(Pokemon p) {
+        if (p.charged()) return;
+        
         Scanner scanner = new Scanner(System.in);
         boolean done = false;
-        Move move = null;
+        Move move = p.moveSelected();
 
         if (p.hasNoMoves()) {
             BattleLog.add(String.format("%s has no moves!", p));
-            return MoveList.struggle();
+            p.setMove(MoveList.struggle());
         }
 
         System.out.println("\n" + p.showStats());
@@ -31,23 +33,20 @@ public class Battle {
             }
 
         }
-        return move;
+        p.setMove(move);
     }
 
     public static void main(String[] args) {
-        Pokemon p1 = PokemonList.squirtle("");
-        Pokemon p2 = PokemonList.charmander("");
-
-        Move m1 = null;
-        Move m2 = null;
+        Pokemon p1 = PokemonList.bulbasaur("Bob");
+        Pokemon p2 = PokemonList.bulbasaur("Bub");
 
         while (!p1.fainted() && !p2.fainted()) {
-            if (!p1.charged()) m1 = chooseMove(p1);
-            if (!p2.charged()) m2 = chooseMove(p2);
+            chooseMove(p1);
+            chooseMove(p2);
 
             try {
-                p1.useTurn(m1, p2);
-                p2.useTurn(m2, p1);
+                p1.useTurn(p1.moveSelected(), p2);
+                p2.useTurn(p2.moveSelected(), p1);
             } catch (PokemonFaintedException e) {
                 BattleLog.add(e.getMessage());
             }

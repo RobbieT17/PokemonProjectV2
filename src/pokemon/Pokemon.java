@@ -43,6 +43,7 @@ public class Pokemon {
 
     // Other Stats
     private int damageDealt;
+    private Move moveSelected;
 
 
     // Constructor
@@ -189,6 +190,14 @@ public class Pokemon {
         this.damageDealt = 0;
     }
 
+    public void setMove(Move m) {
+        this.moveSelected = m;
+    }
+
+    public void resetMove() {
+        this.moveSelected = null;
+    }
+
     // Getters
     public int level() {
         return this.level;
@@ -272,6 +281,10 @@ public class Pokemon {
 
     public int damageDealt() {
         return this.damageDealt;
+    }
+
+    public Move moveSelected() {
+        return this.moveSelected;
     }
 
 }

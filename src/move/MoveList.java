@@ -97,7 +97,7 @@ public interface MoveList {
         .setType(Type.GRASS)
         .setCategory(Move.STATUS)
         .setPP(15)
-        .setAccuracy(75)
+        .setAccuracy(100)
         .setAction(action)
         .buildMove();
     }

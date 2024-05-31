@@ -212,6 +212,7 @@ public interface MoveAction {
 
     public static void applyFreeze(Pokemon p, double chance) {
         applyCondition(p, chance, StatusAction.freeze(), p + " froze!");
+        p.setCharge(false);
     }
 
     public static void applyParalysis(Pokemon p, double chance) {
@@ -224,6 +225,7 @@ public interface MoveAction {
 
     public static void applySleep(Pokemon p, int turns) {
         p.setPrimaryCondition(StatusAction.sleep(turns));
+        p.setCharge(false);
         BattleLog.add(String.format("%s fell asleep!", p));
     }
 
