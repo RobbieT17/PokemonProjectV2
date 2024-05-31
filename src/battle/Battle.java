@@ -9,7 +9,7 @@ import pokemon.PokemonList;
 public class Battle {
     public static void chooseMove(Pokemon p) {
         if (p.charged()) return;
-        
+
         Scanner scanner = new Scanner(System.in);
         boolean done = false;
         Move move = p.moveSelected();
@@ -37,8 +37,8 @@ public class Battle {
     }
 
     public static void main(String[] args) {
-        Pokemon p1 = PokemonList.bulbasaur("Bob");
-        Pokemon p2 = PokemonList.bulbasaur("Bub");
+        Pokemon p1 = PokemonList.bulbasaur("");
+        Pokemon p2 = PokemonList.bulbasaur("Bob");
 
         while (!p1.fainted() && !p2.fainted()) {
             chooseMove(p1);
