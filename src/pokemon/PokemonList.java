@@ -17,10 +17,10 @@ public interface PokemonList {
         .setWeight(15.2)
         .setHp(45)
         .setStats(49, 49, 65, 65, 45)
+        .addMove(MoveList.vineWhip())
         .addMove(MoveList.solarBeam())
         .addMove(MoveList.growth())
         .addMove(MoveList.sleepPowder())
-        .addMove(MoveList.sunnyDay())
         .buildPokemon();
     }
 

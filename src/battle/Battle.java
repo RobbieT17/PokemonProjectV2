@@ -38,7 +38,7 @@ public class Battle {
 
     public static void main(String[] args) {
         Pokemon p1 = PokemonList.bulbasaur("");
-        Pokemon p2 = PokemonList.bulbasaur("Bob");
+        Pokemon p2 = PokemonList.charmander("");
 
         while (!p1.fainted() && !p2.fainted()) {
             chooseMove(p1);
