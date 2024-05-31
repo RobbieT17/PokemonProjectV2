@@ -20,6 +20,14 @@ public interface BattleLog {
 	 * @param message supplied as a String
 	 */
 	public static void addPrint(String message) {
+		System.out.print(message);
+	}
+
+	/**
+	 * Prints out a message line, does not add it to the queue
+	 * @param message supplied as a String
+	 */
+	public static void addPrintln(String message) {
 		System.out.println(message);
 	}
 	

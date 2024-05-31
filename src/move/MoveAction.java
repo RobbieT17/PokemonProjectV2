@@ -107,6 +107,7 @@ public interface MoveAction {
         if (new Random().nextDouble() > chance * 0.01) return;
 
         p.setPrimaryCondition(condition);
+        StatusAction.additionalSetters(p, condition);
         BattleLog.add(message);
     }
 
@@ -228,7 +229,6 @@ public interface MoveAction {
 
     public static void applySleep(Pokemon p, int turns) {
         applyCondition(p, 100, StatusAction.sleep(turns), p + " fell asleep!");
-        p.setCharge(false);
     }
 
     public static void statusEffect(Pokemon p, int statusId) {

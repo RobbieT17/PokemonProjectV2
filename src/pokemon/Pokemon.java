@@ -1,9 +1,14 @@
 package pokemon;
 
 import battle.BattleLog;
+import battle.Input;
 import battle.MoveInterruptedException;
 import battle.PokemonFaintedException;
+import java.util.InputMismatchException;
+import java.util.Scanner;
 import move.Move;
+import move.MoveList;
+import player.PokemonTrainer;
 import stats.Stat;
 import stats.StatusCondition;
 
@@ -16,6 +21,7 @@ public class Pokemon {
 // Object Variables
     // Pokemon Level, higher level means stronger pokemon
     private final int level;
+
 
     private final String pokemonName;
 
@@ -60,35 +66,14 @@ public class Pokemon {
         this.level = level;
         this.pokemonName = name;
         this.type = types;
+
         this.pokedexNo = pokedex;
         this.weight = weight;
-
         this.hp = hp;
         this.stats = stats;
+
         this.moves = moves;
-
         this.actionable = true;
-    }
-
-    // Private Methods
-    private String listStats() {
-        return new StringBuilder()
-        .append(String.format("Attack: %d%n", this.stats[Stat.ATTACK].power()))
-        .append(String.format("Defense: %d%n", this.stats[Stat.DEFENSE].power()))
-        .append(String.format("Special-Attack: %d%n", this.stats[Stat.SPECIAL_ATTACK].power()))
-        .append(String.format("Special-Defense: %d%n", this.stats[Stat.SPECIAL_DEFENSE].power()))
-        .append(String.format("Speed: %d%n", this.stats[Stat.SPEED].power()))
-        .append(String.format("Accuracy: %d%%%n", this.stats[Stat.ACCURACY].power()))
-        .append(String.format("Evasion: %d%%%n", this.stats[Stat.EVASION].power()))
-        .toString();
-    }
-
-    private String listMoves() {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < this.moves.length; i++) 
-            sb.append(String.format("[%d] %s", i, this.moves[i].moveStats())); 
-            
-        return sb.toString();
     }
 
     // Methods
@@ -126,7 +111,68 @@ public class Pokemon {
         } 
     }
 
-	public String showStats() {
+    public void chooseMove(PokemonTrainer pt) {
+        if (this.charged) return;
+
+        Scanner scanner = new Scanner(System.in);
+        boolean done = false;
+        Move move = this.moveSelected();
+
+        if (this.hasNoMoves()) {
+            BattleLog.add(String.format("%s has no moves!", this));
+            this.setMove(MoveList.struggle());
+        }
+
+        BattleLog.addPrintln("\n" + this.showAllStats());
+        BattleLog.addPrintln("[S]: Switch Pokemon");
+
+        while (!done) {
+            try {
+                BattleLog.addPrint(String.format("What move should %s use? ", this)); 
+                String input = scanner.nextLine();
+
+                if (Input.isChar(input, 's')){ 
+                    pt.choosePokemon();
+                    return;
+                }
+
+                if (Input.isNumeric(input)) {
+                    move = this.moves()[Integer.parseInt(input)];
+                    done = !move.pp().depleted();
+                }
+            
+            } catch (IndexOutOfBoundsException e) {
+                BattleLog.addPrintln("Invalid input try again");
+            } catch (InputMismatchException e) {
+                BattleLog.addPrintln("Invalid input try again");
+                scanner.next();
+            }
+
+        }
+        this.setMove(move);
+    }
+
+    public String listStats() {
+        return new StringBuilder()
+        .append(String.format("Attack: %d%n", this.stats[Stat.ATTACK].power()))
+        .append(String.format("Defense: %d%n", this.stats[Stat.DEFENSE].power()))
+        .append(String.format("Special-Attack: %d%n", this.stats[Stat.SPECIAL_ATTACK].power()))
+        .append(String.format("Special-Defense: %d%n", this.stats[Stat.SPECIAL_DEFENSE].power()))
+        .append(String.format("Speed: %d%n", this.stats[Stat.SPEED].power()))
+        .append(String.format("Accuracy: %d%%%n", this.stats[Stat.ACCURACY].power()))
+        .append(String.format("Evasion: %d%%%n", this.stats[Stat.EVASION].power()))
+        .toString();
+    }
+
+    public String listMoves() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < this.moves.length; i++) 
+            sb.append(String.format("[%d] %s", i, this.moves[i].moveStats())); 
+            
+        return sb.toString();
+    }
+
+    public String showAllStats() {
 		return new StringBuilder()
 		.append(String.format("Name: %s%n", this.pokemonName))
 		.append(String.format("Type: %s", this.type.toString()))
@@ -137,6 +183,17 @@ public class Pokemon {
         .append(String.format("%nMOVES: %n%s", this.listMoves()))
         .toString();
 	}
+
+    public String showCondition() {
+        if (this.fainted) return "FAINTED";
+        if (!this.hasPrimaryCondition()) return "";
+        return this.primaryCondition.toString();
+    }
+
+    public String showPartyStats() {
+        return String.format("%s (HP: %s) %s%n", this, this.hp, this.showCondition());
+    }
+
 
     @Override
     public String toString() {
@@ -197,6 +254,11 @@ public class Pokemon {
     public void resetMove() {
         this.moveSelected = null;
     }
+
+    public void backToTrainer() {
+        this.moveSelected = null;
+    }
+
 
     // Getters
     public int level() {

@@ -34,6 +34,18 @@ public class StatusCondition {
         };
     }
 
+    @Override
+    public String toString() {
+        return switch (this.id){
+            case BURN -> "BURNED";
+            case FREEZE -> "FROZEN";
+            case PARALYSIS -> "PARALYZED";
+            case POISON -> "POISONED";
+            case SLEEP -> "ASLEEP";
+            default -> throw new IllegalArgumentException("Invalid status condition id");
+        };
+    }
+
     // Getters
     public int id() {
         return this.id;

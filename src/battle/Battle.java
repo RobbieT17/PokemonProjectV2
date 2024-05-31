@@ -1,58 +1,55 @@
 package battle;
 
-import java.util.Scanner;
-import move.Move;
-import move.MoveList;
+import player.*;
 import pokemon.Pokemon;
 import pokemon.PokemonList;
 
 public class Battle {
-    public static void chooseMove(Pokemon p) {
-        if (p.charged()) return;
+    public static void moveSelection(PokemonTrainer pt1, PokemonTrainer pt2) {
+        Pokemon p1 = pt1.pokemonInBattle();
+        Pokemon p2 = pt2.pokemonInBattle();
 
-        Scanner scanner = new Scanner(System.in);
-        boolean done = false;
-        Move move = p.moveSelected();
+        try {
+            p1.chooseMove(pt1);
+            p2.chooseMove(pt2);
 
-        if (p.hasNoMoves()) {
-            BattleLog.add(String.format("%s has no moves!", p));
-            p.setMove(MoveList.struggle());
-        }
+            p1.useMove(p1.moveSelected(), p2);
+            p2.useMove(p2.moveSelected(), p1);
+        } catch (PokemonFaintedException e) {
+            BattleLog.add(e.getMessage());
+        } 
 
-        System.out.println("\n" + p.showStats());
-
-        while (!done) {
-            try {
-                System.out.printf("What move should %s use? ", p);
-                int i = scanner.nextInt();
-
-                move = p.moves()[i];
-                done = !move.pp().depleted();
-            } catch (IndexOutOfBoundsException e) {
-                System.out.println("Invalid input try again");
-            }
-
-        }
-        p.setMove(move);
+        BattleField.endOfRound(p1, p2);
+        BattleLog.out();
     }
 
     public static void main(String[] args) {
-        Pokemon p1 = PokemonList.bulbasaur("");
-        Pokemon p2 = PokemonList.charmander("");
 
-        while (!p1.fainted() && !p2.fainted()) {
-            chooseMove(p1);
-            chooseMove(p2);
+        PokemonTrainer player1 = new PokemonTrainerBuilder()
+        .setName("Robbie")
+        .addPokemon(PokemonList.bulbasaur("Bobby"))
+        .addPokemon(PokemonList.charmander("Charlie"))
+        .addPokemon(PokemonList.squirtle("Squirt"))
+        .buildTrainer();
 
-            try {
-                p1.useTurn(p1.moveSelected(), p2);
-                p2.useTurn(p2.moveSelected(), p1);
-            } catch (PokemonFaintedException e) {
-                BattleLog.add(e.getMessage());
-            }
+        PokemonTrainer player2 = new PokemonTrainerBuilder()
+        .setName("Sammi")
+        .addPokemon(PokemonList.bulbasaur("Bub"))
+        .addPokemon(PokemonList.charmander("Chandler"))
+        .addPokemon(PokemonList.squirtle("Tim"))
+        .buildTrainer();
 
-            BattleField.endOfRound(p1, p2); 
-            BattleLog.out();
+        player1.choosePokemon();
+        player2.choosePokemon();
+
+        BattleLog.out();
+
+        while (!player1.outOfPokemon() && !player2.outOfPokemon()) {
+            while (!player1.pokemonInBattle().fainted() && !player2.pokemonInBattle().fainted()) 
+                moveSelection(player1, player2);
+            
+            if (player1.pokemonInBattle().fainted()) player1.choosePokemon();
+            if (player2.pokemonInBattle().fainted()) player2.choosePokemon();
         }
     }
 

@@ -23,8 +23,6 @@ public interface StatusAction {
 
     public static StatusCondition freeze() {
         StatusAction action = p -> {
-            p.setCharge(false);
-
             if (new Random().nextDouble() <= 0.2) {
                 p.setImmobilized(false);
                 p.setActionable(true);
@@ -32,9 +30,6 @@ public interface StatusAction {
                 BattleLog.add(String.format("%s thawed!", p));
                 return;
             }
-
-            p.setImmobilized(false);
-            p.setActionable(true);
             BattleLog.add(String.format("%s is frozen solid!", p));
         };
         
@@ -49,12 +44,9 @@ public interface StatusAction {
                 p.setCharge(false);
                 BattleLog.add(String.format("%s cannot move!", p));
                 return;
-            }
-            
-            p.setActionable(true);
-            
+            }      
+            p.setActionable(true);           
         };
-
         return new StatusCondition(StatusCondition.PARALYSIS, action, true);
     }
 
@@ -67,7 +59,6 @@ public interface StatusAction {
             BattleLog.add(String.format("%s took %d damage from the poison!", p, damage));
             p.takeDamage(damage);
         };
-
         return new StatusCondition(StatusCondition.POISON, action, false);
     }
 
@@ -75,8 +66,6 @@ public interface StatusAction {
         Counter counter = new Counter(duration);
 
         StatusAction action = p -> {
-            p.setCharge(false);
-
             counter.inc();
             if (counter.terminated()) {
                 p.setImmobilized(false);
@@ -85,31 +74,30 @@ public interface StatusAction {
                 BattleLog.add(String.format("%s woke up!", p));
                 return;
             } 
-
-            p.setImmobilized(true);
-            p.setActionable(false);
-            BattleLog.add(String.format("%s is fast asleep...", p));
-            
+            BattleLog.add(String.format("%s is fast asleep...", p));      
         };
 
         return new StatusCondition(StatusCondition.SLEEP, action, true);
     }
 
     public static StatusCondition getId(int i) {
-        switch (i) {
-            case StatusCondition.BURN -> {
-                return burn();
-            }
-            case StatusCondition.FREEZE -> {
-                return freeze();
-            }
-            case StatusCondition.PARALYSIS -> {
-                return paralysis();
-            }
-            case StatusCondition.POISON -> {
-                return poison();
-            }
+        return switch (i) {
+            case StatusCondition.BURN -> burn();   
+            case StatusCondition.FREEZE -> freeze();        
+            case StatusCondition.PARALYSIS -> paralysis();   
+            case StatusCondition.POISON -> poison();
             default -> throw new IllegalArgumentException("Invalid condition id");
+        };
+    }
+
+
+    public static void additionalSetters(Pokemon p, StatusCondition condition) {
+        switch (condition.id()){
+            case StatusCondition.FREEZE, StatusCondition.SLEEP -> {
+                p.setActionable(false);
+                p.setCharge(false);
+                p.setImmobilized(true);    
+            }
         }
     }
 }
