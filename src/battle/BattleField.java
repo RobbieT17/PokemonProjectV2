@@ -20,17 +20,20 @@ public class BattleField {
         }
     }
 
-    private static void pokemonAfterEffects(Pokemon a, Pokemon b) {
-        a.applyEffects(false);
-        a.resetDamageDealt();
-        
-        b.applyEffects(false);
-        b.resetDamageDealt();
+    private static void pokemonAfterEffects(Pokemon p) {
+        try {
+            p.applyEffects(false);
+            p.resetDamageDealt();
+        } catch (PokemonFaintedException e) {
+            BattleLog.add(e.getMessage());
+        }
+      
     }
 
     public static void endOfRound(Pokemon p1, Pokemon p2) {
         weatherUpdate();
-        pokemonAfterEffects(p1, p2);
+        pokemonAfterEffects(p1);
+        pokemonAfterEffects(p2);
     }
 
 }

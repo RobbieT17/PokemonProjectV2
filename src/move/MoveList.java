@@ -16,9 +16,8 @@ public interface MoveList {
     public static Move ember() {
         MoveAction action = (a, d, m) -> {
             MoveAction.dealDamage(a, d, m);
-            
             MoveAction.canApplyCondition(d, StatusCondition.BURN);
-            MoveAction.applyBurn(d, 10);   
+            MoveAction.applyBurn(d, 100);   
         };
 
         return new MoveBuilder()

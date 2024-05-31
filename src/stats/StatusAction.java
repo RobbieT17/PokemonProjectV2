@@ -14,7 +14,7 @@ public interface StatusAction {
     // Class Functions
     public static StatusCondition burn() {
         StatusAction action = p -> {
-            int damage = p.hp().max() / 16;
+            int damage = p.hp().max() / 2;
             BattleLog.add(String.format("%s took %d damage from the burn!", p, damage));
             p.takeDamage(damage);
         };
