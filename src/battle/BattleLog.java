@@ -2,10 +2,10 @@ package battle;
 import java.util.Deque;
 import java.util.LinkedList;
 
-public abstract class BattleLog {
+public interface BattleLog {
 
 	// Currently prints all message to the terminal, soon will print into actual application
-	private static final Deque<String> MESSAGE_LIST = new LinkedList<>();
+	public Deque<String> MESSAGE_LIST = new LinkedList<>();
 	
 	/**
 	 * Adds a message to the queue
