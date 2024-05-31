@@ -71,17 +71,13 @@ public interface MoveList {
     }
 
     public static Move rainDance() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.changeWeather(Weather.RAIN);
-        };
-
         return new MoveBuilder()
         .setId(240)
         .setName("Rain Dance")
         .setType(Type.WATER)
         .setCategory(Move.STATUS)
         .setPP(5)
-        .setAction(action)
+        .setAction((a, d, m) -> MoveAction.changeWeather(Weather.RAIN))
         .buildMove();
     }
 
@@ -152,26 +148,18 @@ public interface MoveList {
         .buildMove();
     }
 
-    public static Move sunnyDay() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.changeWeather(Weather.SUNNY);
-        };
-
+    public static Move sunnyDay() {  
         return new MoveBuilder()
         .setId(241)
         .setName("Sunny Day")
         .setType(Type.FIRE)
         .setCategory(Move.STATUS)
         .setPP(5)
-        .setAction(action)
+        .setAction((a, d, m) -> MoveAction.changeWeather(Weather.SUNNY))
         .buildMove();
     }
 
     public static Move tackle() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.dealDamage(a, d, m);
-        };
-
         return new MoveBuilder()
         .setId(33)
         .setName("Tackle")
@@ -179,7 +167,7 @@ public interface MoveList {
         .setCategory(Move.PHYSICAL)
         .setPower(40)
         .setPP(35)
-        .setAction(action)
+        .setAction(MoveAction.DEFAULT_ACTION)
         .buildMove();
     }
 
@@ -199,11 +187,7 @@ public interface MoveList {
         .buildMove();
     }
 
-    public static Move takeDown() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.dealDamageRecoil(a, d, m, 25);
-        };
-        
+    public static Move takeDown() {    
         return new MoveBuilder()
         .setId(36)
         .setName("Take Down")
@@ -212,15 +196,11 @@ public interface MoveList {
         .setPP(20)
         .setPower(90)
         .setAccuracy(85)
-        .setAction(action)
+        .setAction((a, d, m) -> MoveAction.dealDamageRecoil(a, d, m, 25))
         .buildMove();
     }
 
     public static Move vineWhip() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.dealDamage(a, d, m);
-        };
-
         return new MoveBuilder()
         .setId(22)
         .setName("Vine Whip")
@@ -228,15 +208,11 @@ public interface MoveList {
         .setCategory(Move.PHYSICAL)
         .setPower(40)
         .setPP(25)
-        .setAction(action)
+        .setAction(MoveAction.DEFAULT_ACTION)
         .buildMove();
     }
 
     public static Move waterGun() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.dealDamage(a, d, m);
-        };
-
         return new MoveBuilder()
         .setId(55)
         .setName("Water Gun")
@@ -244,7 +220,7 @@ public interface MoveList {
         .setCategory(Move.SPECIAL)
         .setPower(40)
         .setPP(25)
-        .setAction(action)
+        .setAction(MoveAction.DEFAULT_ACTION)
         .buildMove();
     }
 

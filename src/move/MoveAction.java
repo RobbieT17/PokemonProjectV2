@@ -14,6 +14,9 @@ import stats.Type;
 
 @FunctionalInterface
 public interface MoveAction {
+    // Public Variables
+    public static final MoveAction DEFAULT_ACTION = (a, d, m) ->  MoveAction.dealDamage(a, d, m);
+
     // Function
     void useMove(Pokemon attacker, Pokemon defender, Move move);
 
