@@ -35,8 +35,8 @@ public class Battle {
     }
 
     public static void main(String[] args) {
-        Pokemon p1 = PokemonList.bulbasaur("");
-        Pokemon p2 = PokemonList.squirtle("");
+        Pokemon p1 = PokemonList.squirtle("");
+        Pokemon p2 = PokemonList.charmander("");
 
         Move m1 = null;
         Move m2 = null;
@@ -48,12 +48,11 @@ public class Battle {
             try {
                 p1.useTurn(m1, p2);
                 p2.useTurn(m2, p1);
-            } catch (PokemonFaintsException e) {
-             
+            } catch (PokemonFaintedException e) {
+                BattleLog.add(e.getMessage());
             }
-           
 
-            BattleField.endOfRound(p1, p2);
+            BattleField.endOfRound(p1, p2); 
             BattleLog.out();
         }
     }

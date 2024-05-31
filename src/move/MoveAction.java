@@ -1,6 +1,8 @@
 package move;
 import battle.BattleField;
 import battle.BattleLog;
+import battle.MoveInterruptedException;
+import battle.PokemonFaintedException;
 import battle.Weather;
 import java.util.Random;
 import pokemon.Pokemon;
@@ -89,6 +91,15 @@ public interface MoveAction {
         BattleLog.add(String.format("%s's %s %s%s!", p, s, (change > 0) ? "rose" : "fell", Stat.sizeOfChange(change)));
     }
 
+    
+    private static void recoilDamage(Pokemon p, double recoil) {
+        if (p.damageDealt() == 0) return;
+
+        int damage = (int) (0.01 * recoil * p.damageDealt()); 
+        BattleLog.add(String.format("%s took %d from the recoil!", p, damage));
+        p.takeDamage(damage);
+    }
+
     private static void applyCondition(Pokemon p, double chance, StatusCondition condition, String message) {
         if (new Random().nextDouble() > chance * 0.01) return;
 
@@ -105,17 +116,11 @@ public interface MoveAction {
     }
 
     // Methods for MoveList
-    public static boolean moveHits(Pokemon attacker, Pokemon defender, Move move) {
-        if (move.accuracy() == Move.INF || defender.immobilized()) return true;
-		double modifiedAccuracy = 0.01 * move.accuracy() * ((double) attacker.accuracy().power() / (double) defender.evasion().power());
-
-		boolean hit = new Random().nextDouble() <= modifiedAccuracy;
-
-        if (!hit) {
-            BattleLog.add(String.format("But %s avoided the attack!", defender));
-            return false;
-        }
-        else return true;
+    public static void moveHits(Pokemon attacker, Pokemon defender, Move move) {
+        if (move.accuracy() == Move.INF || defender.immobilized()) return;
+		
+        double modifiedAccuracy = 0.01 * move.accuracy() * ((double) attacker.accuracy().power() / (double) defender.evasion().power());
+        if (new Random().nextDouble() > modifiedAccuracy) throw new MoveInterruptedException(String.format("But %s avoided the attack!", defender));   
     } 
 
     public static void dealDamage(Pokemon attacker, Pokemon defender, Move move) {
@@ -126,17 +131,28 @@ public interface MoveAction {
             return ;
         }
 
-        if (!moveHits(attacker, defender, move)) return ;
+        moveHits(attacker, defender, move);
         
         boolean isCritical = criticalHit(move.critRate());
 
         int damage = calculateDamage(attacker, defender, move, effectiveness, isCritical);
-        defender.takeDamage(damage);
-        attacker.addDealtDamage(damage);
-
+      
         BattleLog.add(String.format("%s took %d damage!", defender, damage));
         BattleLog.add(isSuperEffective(effectiveness));
         BattleLog.add((isCritical) ? "Critical hit!" : "");
+
+        attacker.addDealtDamage(damage);
+        defender.takeDamage(damage);
+    }
+
+    public static void dealDamageRecoil(Pokemon attacker, Pokemon defender, Move move, double percent) {
+        try {
+            dealDamage(attacker, defender, move);
+        } catch (MoveInterruptedException | PokemonFaintedException e) {
+            BattleLog.add(e.getMessage());
+        }
+
+        recoilDamage(attacker, percent);
     }
 
     public static void chargeMove(Pokemon p1, Pokemon p2, Move move ) {
@@ -150,17 +166,6 @@ public interface MoveAction {
             dealDamage(p1, p2, move);
         }
     }
-
-    public static void recoilDamage(Pokemon p, double recoil) {
-        if (p.damageDealt() == 0) return;
-
-        int damage = (int) (p.damageDealt() * recoil);
-        p.takeDamage(damage);
-        
-        BattleLog.add(String.format("%s took %d from the recoil!", p, damage));
-    }
-
-   
 
     // Weather Changes
     public static void changeWeather(int c) {
@@ -241,5 +246,9 @@ public interface MoveAction {
             case StatusCondition.SLEEP ->  applySleep(p, duration);
             default -> throw new IllegalArgumentException("Invalid condition id");
         }
+    }
+
+    public static void canApplyCondition(Pokemon p, int statusId) {
+        if (p.hasPrimaryCondition()) throw new MoveInterruptedException();
     }
 }

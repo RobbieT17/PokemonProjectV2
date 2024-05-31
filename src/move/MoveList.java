@@ -17,8 +17,8 @@ public interface MoveList {
         MoveAction action = (a, d, m) -> {
             MoveAction.dealDamage(a, d, m);
             
-            if (d.hasPrimaryCondition()) return;
-            MoveAction.applyBurn(d, 50);   
+            MoveAction.canApplyCondition(d, StatusCondition.BURN);
+            MoveAction.applyBurn(d, 10);   
         };
 
         return new MoveBuilder()
@@ -37,11 +37,11 @@ public interface MoveList {
             if (BattleField.currentWeather == Weather.SUNNY) {
                 MoveAction.attackStat(a, 2);
                 MoveAction.spAttackStat(a, 2);
+                return;
             }
-            else{
-                MoveAction.attackStat(a, 1);
-                MoveAction.spAttackStat(a, 1);
-            }    
+          
+            MoveAction.attackStat(a, 1);
+            MoveAction.spAttackStat(a, 1);
         };
 
         return new MoveBuilder()
@@ -56,7 +56,7 @@ public interface MoveList {
 
     public static Move poisonPowder() {
         MoveAction action = (a, d, m) -> {
-            if (!MoveAction.moveHits(a, d, m)) return;
+            MoveAction.moveHits(a, d, m);
             MoveAction.statusEffect(d, StatusCondition.POISON);
         };
 
@@ -79,7 +79,7 @@ public interface MoveList {
         return new MoveBuilder()
         .setId(240)
         .setName("Rain Dance")
-        .setType(Type.NORMAL)
+        .setType(Type.WATER)
         .setCategory(Move.STATUS)
         .setPP(5)
         .setAction(action)
@@ -88,7 +88,7 @@ public interface MoveList {
 
     public static Move sleepPowder() {
         MoveAction action = (a, d, m) -> {
-            if (!MoveAction.moveHits(a, d, m)) return;
+            MoveAction.moveHits(a, d, m);
             MoveAction.statusEffect(d, StatusCondition.SLEEP, randomInt(1, 3));
         };
 
@@ -105,7 +105,7 @@ public interface MoveList {
 
     public static Move smokescreen() {
         MoveAction action = (a, d, m) -> {
-            if (!MoveAction.moveHits(a, d, m)) return;
+            MoveAction.moveHits(a, d, m);
             MoveAction.accuracyStat(d, -1);
         };
 
@@ -138,7 +138,7 @@ public interface MoveList {
 
     public static Move stunSpore() {
         MoveAction action = (a, d, m) -> {
-            if (!MoveAction.moveHits(a, d, m)) return;
+            MoveAction.moveHits(a, d, m);
             MoveAction.statusEffect(d, StatusCondition.PARALYSIS);
         };
 
@@ -186,7 +186,7 @@ public interface MoveList {
 
     public static Move tailWhip() {
         MoveAction action = (a, d, m) -> {
-            if (!MoveAction.moveHits(a, d, m)) return;
+            MoveAction.moveHits(a, d, m);
             MoveAction.defenseStat(d, -1);
         };
 
@@ -202,8 +202,7 @@ public interface MoveList {
 
     public static Move takeDown() {
         MoveAction action = (a, d, m) -> {
-            MoveAction.dealDamage(a, d, m);
-            MoveAction.recoilDamage(a, 0.25);
+            MoveAction.dealDamageRecoil(a, d, m, 25);
         };
         
         return new MoveBuilder()
@@ -213,7 +212,7 @@ public interface MoveList {
         .setCategory(Move.PHYSICAL)
         .setPP(20)
         .setPower(90)
-        .setAccuracy(10)
+        .setAccuracy(85)
         .setAction(action)
         .buildMove();
     }
@@ -253,8 +252,7 @@ public interface MoveList {
     // Struggle: Used when pokemon is out of moves
     public static Move struggle() {
         MoveAction action = (a, d, m) -> {
-            MoveAction.dealDamage(a, d, m);
-            MoveAction.recoilDamage(a, 0.25);
+            MoveAction.dealDamageRecoil(a, d, m, 25);
         };
 
         return new MoveBuilder()

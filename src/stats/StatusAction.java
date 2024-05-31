@@ -15,8 +15,8 @@ public interface StatusAction {
     public static StatusCondition burn() {
         StatusAction action = p -> {
             int damage = p.hp().max() / 16;
-            p.takeDamage(damage);
             BattleLog.add(String.format("%s took %d damage from the burn!", p, damage));
+            p.takeDamage(damage);
         };
         return new StatusCondition(StatusCondition.BURN, action, false);
     }
@@ -64,8 +64,8 @@ public interface StatusAction {
         StatusAction action = p -> {
             counter.inc();
             int damage = (int) (p.hp().max() * (counter.count() / 16.0));
-            p.takeDamage(damage);
             BattleLog.add(String.format("%s took %d damage from the poison!", p, damage));
+            p.takeDamage(damage);
         };
 
         return new StatusCondition(StatusCondition.POISON, action, false);

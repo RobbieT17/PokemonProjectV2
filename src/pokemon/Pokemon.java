@@ -1,7 +1,8 @@
 package pokemon;
 
 import battle.BattleLog;
-import battle.PokemonFaintsException;
+import battle.MoveInterruptedException;
+import battle.PokemonFaintedException;
 import move.Move;
 import stats.Stat;
 import stats.StatusCondition;
@@ -95,17 +96,23 @@ public class Pokemon {
             if (this.primaryCondition.beforeMove() == before) this.primaryCondition.action().apply(this);
     }
 
-    public void useTurn(Move move, Pokemon defender){
-        this.applyEffects(true);
-        this.useMove(move, defender);
-    }
-
     public void useMove(Move move, Pokemon defender) {
         if (!this.actionable) return;
 
         BattleLog.add(String.format("%s used %s!", this, move));
         move.pp().decrement();
-        move.action().useMove(this, defender, move);
+
+        try {
+            move.action().useMove(this, defender, move);
+        } catch (MoveInterruptedException e) {
+            BattleLog.add(e.getMessage());
+        }
+       
+    }
+
+    public void useTurn(Move move, Pokemon defender){
+        this.applyEffects(true);
+        this.useMove(move, defender);
     }
 
     public void takeDamage(int value) {
@@ -113,8 +120,8 @@ public class Pokemon {
 
         this.hp.change(-value); 
         if (this.hp.depleted()) {
-            this.fainted = true;
-            throw new PokemonFaintsException(this);     
+            this.fainted = true; 
+            throw new PokemonFaintedException(this);
         } 
     }
 
