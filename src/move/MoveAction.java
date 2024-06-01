@@ -107,7 +107,6 @@ public interface MoveAction {
         if (new Random().nextDouble() > chance * 0.01) return;
 
         p.setPrimaryCondition(condition);
-        StatusAction.additionalSetters(p, condition);
         BattleLog.add(message);
     }
 

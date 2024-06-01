@@ -1,14 +1,9 @@
 package pokemon;
 
 import battle.BattleLog;
-import battle.Input;
 import battle.MoveInterruptedException;
 import battle.PokemonFaintedException;
-import java.util.InputMismatchException;
-import java.util.Scanner;
 import move.Move;
-import move.MoveList;
-import player.PokemonTrainer;
 import stats.Stat;
 import stats.StatusCondition;
 
@@ -44,6 +39,7 @@ public class Pokemon {
     private boolean immobilized;
     private boolean fainted;
     private boolean charged; // Charges moves
+    private boolean switchedIn; // Set to true when pokemon first enters the field;
 
     private StatusCondition primaryCondition;
 
@@ -111,46 +107,6 @@ public class Pokemon {
         } 
     }
 
-    public void chooseMove(PokemonTrainer pt) {
-        if (this.charged) return;
-
-        Scanner scanner = new Scanner(System.in);
-        boolean done = false;
-        Move move = this.moveSelected();
-
-        if (this.hasNoMoves()) {
-            BattleLog.add(String.format("%s has no moves!", this));
-            this.setMove(MoveList.struggle());
-        }
-
-        BattleLog.addPrintln("\n" + this.showAllStats());
-        BattleLog.addPrintln("[S]: Switch Pokemon");
-
-        while (!done) {
-            try {
-                BattleLog.addPrint(String.format("What move should %s use? ", this)); 
-                String input = scanner.nextLine();
-
-                if (Input.isChar(input, 's')){ 
-                    pt.choosePokemon();
-                    return;
-                }
-
-                if (Input.isNumeric(input)) {
-                    move = this.moves()[Integer.parseInt(input)];
-                    done = !move.pp().depleted();
-                }
-            
-            } catch (IndexOutOfBoundsException e) {
-                BattleLog.addPrintln("Invalid input try again");
-            } catch (InputMismatchException e) {
-                BattleLog.addPrintln("Invalid input try again");
-                scanner.next();
-            }
-
-        }
-        this.setMove(move);
-    }
 
     public String listStats() {
         return new StringBuilder()
@@ -230,6 +186,10 @@ public class Pokemon {
         this.charged = c;
     }
 
+    public void setSwitchedIn(boolean s) {
+        this.switchedIn = s;
+    }
+
     public void setPrimaryCondition(StatusCondition c) {
         this.primaryCondition = c;
     }
@@ -256,6 +216,11 @@ public class Pokemon {
     }
 
     public void backToTrainer() {
+        this.damageDealt = 0;
+        this.charged = false;
+        this.switchedIn = false;
+        this.immobilized = false;
+        this.actionable = true;
         this.moveSelected = null;
     }
 
@@ -331,6 +296,10 @@ public class Pokemon {
 
     public boolean charged() {
         return this.charged;
+    }
+
+    public boolean switchedIn() {
+        return this.switchedIn;
     }
 
     public Move[] moves() {

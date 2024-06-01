@@ -30,6 +30,10 @@ public interface StatusAction {
                 BattleLog.add(String.format("%s thawed!", p));
                 return;
             }
+
+            p.setImmobilized(true);
+            p.setActionable(false);
+            p.setCharge(false);
             BattleLog.add(String.format("%s is frozen solid!", p));
         };
         
@@ -74,6 +78,10 @@ public interface StatusAction {
                 BattleLog.add(String.format("%s woke up!", p));
                 return;
             } 
+
+            p.setImmobilized(true);
+            p.setActionable(false);
+            p.setCharge(false);
             BattleLog.add(String.format("%s is fast asleep...", p));      
         };
 
@@ -90,14 +98,4 @@ public interface StatusAction {
         };
     }
 
-
-    public static void additionalSetters(Pokemon p, StatusCondition condition) {
-        switch (condition.id()){
-            case StatusCondition.FREEZE, StatusCondition.SLEEP -> {
-                p.setActionable(false);
-                p.setCharge(false);
-                p.setImmobilized(true);    
-            }
-        }
-    }
 }

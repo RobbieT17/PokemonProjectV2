@@ -23,6 +23,7 @@ public class BattleField {
     private static void pokemonAfterEffects(Pokemon p) {
         try {
             p.applyEffects(false);
+            p.setSwitchedIn(false);
             p.resetDamageDealt();
         } catch (PokemonFaintedException e) {
             BattleLog.add(e.getMessage());

@@ -1,8 +1,6 @@
 package player;
 
 import battle.BattleLog;
-import java.util.InputMismatchException;
-import java.util.Scanner;
 import pokemon.Pokemon;
 
 public class PokemonTrainer {
@@ -45,33 +43,6 @@ public class PokemonTrainer {
         .toString();
     }
 
-    public void choosePokemon() {
-        Scanner scanner = new Scanner(System.in);
-        boolean done = false;
-        Pokemon pokemon = this.pokemonInBattle;
-
-        BattleLog.addPrintln(this.showPokemon());
-
-        while (!done) {
-            try {
-                BattleLog.addPrint(String.format("%s, choose a Pokemon: ", this));
-                int i = scanner.nextInt();
-
-                pokemon = this.team()[i];
-                done = !pokemon.fainted();
-            } catch (IndexOutOfBoundsException e) {
-                BattleLog.addPrintln("Invalid input try again");
-            } catch (InputMismatchException e) {
-                BattleLog.addPrintln("Invalid input try again");
-                scanner.next();
-            }
-
-        }
-
-        this.returns();
-        this.sendOut(pokemon);
-    }
-
     @Override
     public String toString() {
         return this.playerName;
@@ -80,6 +51,7 @@ public class PokemonTrainer {
     // Setters
     public void sendOut(Pokemon p) {
         this.pokemonInBattle = p;
+        this.pokemonInBattle.setSwitchedIn(true);
         BattleLog.add(String.format("%s sends out %s!", this, p)); 
     }
 
