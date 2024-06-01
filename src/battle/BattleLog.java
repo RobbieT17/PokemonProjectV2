@@ -14,6 +14,11 @@ public interface BattleLog {
 	public static void add(String message) {
 		MESSAGE_LIST.offer(message);
 	}
+
+	// Adds a new line to the queue
+	public static void addLine() {
+		MESSAGE_LIST.offer("\n");
+	}
 	
 	/**
 	 * Prints out a message, does not add it to the queue

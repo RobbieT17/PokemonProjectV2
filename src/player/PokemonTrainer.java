@@ -36,9 +36,18 @@ public class PokemonTrainer {
         return true;
     }
 
+    public int pokemonAvailable() {
+        int count = 0;
+
+        for (Pokemon p : this.team)
+            if (!p.fainted()) count++;
+
+        return count;
+    }
+
     public String showPokemon() {
         return new StringBuilder()
-        .append(String.format("%s's Pokemon:%n", this))
+        .append(String.format("%s's Pokemon:%n%n", this))
         .append(this.listPokemon())
         .toString();
     }
@@ -52,13 +61,13 @@ public class PokemonTrainer {
     public void sendOut(Pokemon p) {
         this.pokemonInBattle = p;
         this.pokemonInBattle.setSwitchedIn(true);
-        BattleLog.add(String.format("%s sends out %s!", this, p)); 
+        BattleLog.add(String.format("%n%s sends out %s!", this, p)); 
     }
 
     public void returns() {
         if (this.pokemonInBattle == null) return;
         
-        BattleLog.add(String.format("%s returns %s!", this, this.pokemonInBattle));
+        BattleLog.add(String.format("%n%s returns %s!", this, this.pokemonInBattle));
         this.pokemonInBattle.backToTrainer();
         this.pokemonInBattle = null;
     }

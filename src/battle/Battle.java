@@ -15,11 +15,13 @@ public class Battle {
     }
 
     public static void choosePokemon(PokemonTrainer trainer) {
+        if (trainer.outOfPokemon()) return;
+
         Scanner scanner = new Scanner(System.in);
         boolean done = false;
         Pokemon pokemon = trainer.pokemonInBattle();
 
-        BattleLog.addPrintln(trainer.showPokemon());
+        BattleLog.addPrintln("\n" + trainer.showPokemon());
 
         while (!done) {
             try {
@@ -67,7 +69,8 @@ public class Battle {
                 BattleLog.addPrint(String.format("What should %s do? ", p)); 
                 String input = scanner.nextLine();
 
-                if (Input.isChar(input, 's')){ 
+                // Switches pokemon out, not possible if trainer has one pokemon
+                if (Input.isChar(input, 's') && pt.pokemonAvailable() > 1){ 
                     choosePokemon(pt);
                     return;
                 }
@@ -93,6 +96,8 @@ public class Battle {
         Pokemon defender = b.pokemonInBattle();
 
         if (attacker.moveSelected() == null) return;
+
+        BattleLog.addLine();
         attacker.useTurn(attacker.moveSelected(), defender);
     }
 
@@ -141,13 +146,15 @@ public class Battle {
         }
 
         if (player1.outOfPokemon()) {
-            BattleLog.add(String.format("%s is out of Pokemon!", player1));
+            BattleLog.add(String.format("%n%s is out of Pokemon!", player1));
             BattleLog.add(String.format("%s wins the battle!", player2));
         }
         else {
-            BattleLog.add(String.format("%s is out of Pokemon!", player2));
+            BattleLog.add(String.format("%n%s is out of Pokemon!", player2));
             BattleLog.add(String.format("%s wins the battle!", player1));
         }
+
+        BattleLog.out();
     }
 
 }
