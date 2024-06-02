@@ -107,7 +107,7 @@ public class Pokemon {
         } 
     }
 
-
+    // Statistic Methods
     public String listStats() {
         return new StringBuilder()
         .append(String.format("Attack: %d%n", this.stats[Stat.ATTACK].power()))
@@ -169,7 +169,6 @@ public class Pokemon {
     public boolean hasNoMoves() {
         for (Move m : this.moves) 
             if (!m.pp().depleted()) return false;
-
         return true;
     }
  

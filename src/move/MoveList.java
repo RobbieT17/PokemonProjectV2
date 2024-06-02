@@ -236,6 +236,7 @@ public interface MoveList {
         .setType(Type.NO_TYPE)
         .setCategory(Move.PHYSICAL)
         .setPP(-1)
+        .setPower(40)
         .setAction(action)
         .buildMove();
     }

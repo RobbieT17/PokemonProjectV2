@@ -59,6 +59,7 @@ public class Battle {
         if (p.hasNoMoves()) {
             BattleLog.add(String.format("%s has no moves!", p));
             p.setMove(MoveList.struggle());
+            return;
         }
 
         BattleLog.addPrintln("\n" + p.showAllStats());

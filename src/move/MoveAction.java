@@ -50,12 +50,12 @@ public interface MoveAction {
         return 0.85 + (1 - 0.85) * new Random().nextDouble();
     }
 
-    private static double calculateAttack(Stat stat, boolean crit) {
-        return crit && stat.stage() < 0 ? stat.base() : stat.power();
+    private static double calculateAttack(Stat atkStat, boolean crit) {
+        return crit && atkStat.stage() < 0 ? atkStat.base() : atkStat.power();
     }
 
-    private static double calculateDefense(Stat stat, boolean crit) {
-        return crit && stat.stage() > 0 ? stat.base() : stat.power();
+    private static double calculateDefense(Stat defStat, boolean crit) {
+        return crit && defStat.stage() > 0 ? defStat.base() : defStat.power();
     }
 
     private static double sameTypeAttackBonus(Pokemon p, Move m){
@@ -71,7 +71,7 @@ public interface MoveAction {
         ;
     }
 
-    private static int calculateDamage(Pokemon attacker, Pokemon defender, Move move, double effectiveness, boolean isCritical){
+    private static int calculateDamage(Pokemon attacker, Pokemon defender, Move move, double effectiveness, boolean isCritical) {
         double stab = sameTypeAttackBonus(attacker, move);
         double crit = isCritical ? 1.5 : 1.0;
         double random = random();
@@ -81,7 +81,7 @@ public interface MoveAction {
         double defense = (move.category().equals(Move.SPECIAL) ? calculateDefense(defender.specialDefense(), isCritical) : calculateDefense(defender.defense(), isCritical));
         
         return (int) (((((2 * Pokemon.DEFAULT_LEVEL) / 5.0 + 2) * move.power() * (attack / defense)) / 50.0 + 2) 
-        * stab * crit * effectiveness * random * weather) + 1;      
+        * stab * crit * effectiveness * random * weather);      
     }
 
     private static void changeStat(Pokemon p, int change, int id) {
@@ -128,16 +128,11 @@ public interface MoveAction {
 
     public static void dealDamage(Pokemon attacker, Pokemon defender, Move move) {
         double effectiveness = typeEffectiveness(move.moveType(), defender.pokemonType());
-
-        if (effectiveness == 0) {
-            BattleLog.add(String.format("But it doesn't affect %s...", defender));
-            return ;
-        }
-
+        
+        if (effectiveness == 0) throw new MoveInterruptedException(String.format("But it doesn't affect %s...", defender)); 
         moveHits(attacker, defender, move);
         
         boolean isCritical = criticalHit(move.critRate());
-
         int damage = calculateDamage(attacker, defender, move, effectiveness, isCritical);
       
         BattleLog.add(String.format("%s took %d damage!", defender, damage));
@@ -154,7 +149,6 @@ public interface MoveAction {
         } catch (MoveInterruptedException | PokemonFaintedException e) {
             BattleLog.add(e.getMessage());
         }
-
         recoilDamage(attacker, percent);
     }
 
