@@ -47,7 +47,6 @@ public class Pokemon {
     private int damageDealt;
     private Move moveSelected;
 
-
     // Constructor
     public Pokemon(
         int level,

@@ -1,17 +1,12 @@
 package move;
 
 import battle.BattleField;
+import battle.Input;
 import battle.Weather;
-import java.util.Random;
 import stats.StatusCondition;
 import stats.Type;
 
 public interface MoveList {
-
-    private static int randomInt(int min, int max) {
-        if (min > max) throw new IllegalArgumentException("Max must be greater than min");
-        return new Random().nextInt((max - min) + 1) + min;
-    }
 
     public static Move ember() {
         MoveAction action = (a, d, m) -> {
@@ -84,7 +79,7 @@ public interface MoveList {
     public static Move sleepPowder() {
         MoveAction action = (a, d, m) -> {
             MoveAction.moveHits(a, d, m);
-            MoveAction.statusEffect(d, StatusCondition.SLEEP, randomInt(1, 3));
+            MoveAction.statusEffect(d, StatusCondition.SLEEP, Input.randomInt(1, 3));
         };
 
         return new MoveBuilder()
