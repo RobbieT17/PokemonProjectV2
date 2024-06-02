@@ -7,10 +7,10 @@ import battle.Weather;
 import java.util.Random;
 import pokemon.Pokemon;
 import pokemon.PokemonType;
+import stats.GameType;
 import stats.Stat;
 import stats.StatusAction;
 import stats.StatusCondition;
-import stats.Type;
 
 @FunctionalInterface
 public interface MoveAction {
@@ -20,7 +20,15 @@ public interface MoveAction {
     // Function
     void useMove(Pokemon attacker, Pokemon defender, Move move);
 
-    // Private Methods
+    // Accuracy Methods
+    public static void moveHits(Pokemon attacker, Pokemon defender, Move move) {
+        if (move.accuracy() == Move.INF || defender.immobilized()) return;
+		
+        double modifiedAccuracy = 0.01 * move.accuracy() * ((double) attacker.accuracy().power() / (double) defender.evasion().power());
+        if (new Random().nextDouble() > modifiedAccuracy) throw new MoveInterruptedException(String.format("But %s avoided the attack!", defender));   
+    } 
+
+    // Damaging Methods
     private static double typeEffectiveness(String type, PokemonType p){
         double effect = 1.0; // Default type effectiveness
 
@@ -64,9 +72,9 @@ public interface MoveAction {
 
     private static double weatherBonus(Move m) {
         return (BattleField.currentWeather == Weather.SUNNY) 
-        ? (m.isType(Type.FIRE)) ? 1.5 : (m.isType(Type.WATER)) ? 0.5 : 1.0
+        ? (m.isType(GameType.FIRE)) ? 1.5 : (m.isType(GameType.WATER)) ? 0.5 : 1.0
         :  (BattleField.currentWeather == Weather.RAIN) 
-            ? (m.isType(Type.WATER)) ? 1.5 : (m.isType(Type.FIRE)) ? 0.5 : 1.0
+            ? (m.isType(GameType.WATER)) ? 1.5 : (m.isType(GameType.FIRE)) ? 0.5 : 1.0
             : 1.0
         ;
     }
@@ -84,17 +92,7 @@ public interface MoveAction {
         * stab * crit * effectiveness * random * weather);      
     }
 
-    private static void changeStat(Pokemon p, int change, int id) {
-        Stat s = p.stats()[id];
-        if (s.isAtHighestOrLowestStage(change)) {
-            BattleLog.add(String.format("But %s's %s won't go any %s!", p, s, (change > 0) ? "higher" : "lower"));
-            return;
-        }
-        p.stats()[id].changeStage(change);
-        BattleLog.add(String.format("%s's %s %s%s!", p, s, (change > 0) ? "rose" : "fell", Stat.sizeOfChange(change)));
-    }
 
-    
     private static void recoilDamage(Pokemon p, double recoil) {
         if (p.damageDealt() == 0) return;
 
@@ -103,28 +101,6 @@ public interface MoveAction {
         p.takeDamage(damage);
     }
 
-    private static void applyCondition(Pokemon p, double chance, StatusCondition condition, String message) {
-        if (new Random().nextDouble() > chance * 0.01) return;
-
-        p.setPrimaryCondition(condition);
-        BattleLog.add(message);
-    }
-
-    private static boolean canBeApplied(Pokemon p, int id) {
-        if (p.hasPrimaryCondition()){
-            BattleLog.add((p.hasPrimaryCondition(id) ? String.format("But %s is already %s!", p, StatusCondition.failMessage(id)) : Move.FAILED));
-            return false;
-        }
-        return true;
-    }
-
-    // Methods for MoveList
-    public static void moveHits(Pokemon attacker, Pokemon defender, Move move) {
-        if (move.accuracy() == Move.INF || defender.immobilized()) return;
-		
-        double modifiedAccuracy = 0.01 * move.accuracy() * ((double) attacker.accuracy().power() / (double) defender.evasion().power());
-        if (new Random().nextDouble() > modifiedAccuracy) throw new MoveInterruptedException(String.format("But %s avoided the attack!", defender));   
-    } 
 
     public static void dealDamage(Pokemon attacker, Pokemon defender, Move move) {
         double effectiveness = typeEffectiveness(move.moveType(), defender.pokemonType());
@@ -152,6 +128,7 @@ public interface MoveAction {
         recoilDamage(attacker, percent);
     }
 
+    // Charge Methods
     public static void chargeMove(Pokemon p1, Pokemon p2, Move move ) {
         if (!p1.charged()) {
             move.pp().increment(); // Done bc pp is decremented every move call
@@ -174,6 +151,16 @@ public interface MoveAction {
     }
 
     // Stat Changes
+    private static void changeStat(Pokemon p, int change, int id) {
+        Stat s = p.stats()[id];
+        if (s.isAtHighestOrLowestStage(change)) {
+            BattleLog.add(String.format("But %s's %s won't go any %s!", p, s, (change > 0) ? "higher" : "lower"));
+            return;
+        }
+        p.stats()[id].changeStage(change);
+        BattleLog.add(String.format("%s's %s %s%s!", p, s, (change > 0) ? "rose" : "fell", Stat.sizeOfChange(change)));
+    }
+
     public static void attackStat(Pokemon p, int change) {
         changeStat(p, change, Stat.ATTACK);
     }
@@ -203,41 +190,45 @@ public interface MoveAction {
     }
 
     // Status Conditions 
-    public static void applyBurn(Pokemon p, double chance) {
+    private static void applyCondition(Pokemon p, double chance, StatusCondition condition, String message) {
+        if (new Random().nextDouble() > chance * 0.01) return;
+
+        p.setPrimaryCondition(condition);
+        BattleLog.add(message);
+    }
+
+    private static void canBeApplied(Pokemon p, int id) {
+        if (p.hasPrimaryCondition()) throw new MoveInterruptedException(String.format(p.hasPrimaryCondition(id) ? String.format("But %s is already %s!", p, StatusCondition.failMessage(id)) : Move.FAILED));
+    }
+
+    private static void applyBurn(Pokemon p, double chance) {
         applyCondition(p, chance, StatusAction.burn(), p + " was burned!");
     }
 
-    public static void applyFreeze(Pokemon p, double chance) {
+    private static void applyFreeze(Pokemon p, double chance) {
         applyCondition(p, chance, StatusAction.freeze(), p + " froze!");
         p.setCharge(false);
     }
 
-    public static void applyParalysis(Pokemon p, double chance) {
+    private static void applyParalysis(Pokemon p, double chance) {
         applyCondition(p, chance, StatusAction.paralysis(), p + " was paralyzed!");
     }
 
-    public static void applyPoison(Pokemon p, double chance) {
+    private static void applyPoison(Pokemon p, double chance) {
         applyCondition(p, chance, StatusAction.poison(), p + " was poisoned!");
     }
 
-    public static void applySleep(Pokemon p, int turns) {
+    private static void applySleep(Pokemon p, int turns) {
         applyCondition(p, 100, StatusAction.sleep(turns), p + " fell asleep!");
     }
 
-    public static void statusEffect(Pokemon p, int statusId) {
-        if (!canBeApplied(p, statusId)) return;
-
-        switch (statusId) {
-            case StatusCondition.BURN -> applyBurn(p, 100);  
-            case StatusCondition.FREEZE -> applyFreeze(p, 100);  
-            case StatusCondition.PARALYSIS -> applyParalysis(p, 100);   
-            case StatusCondition.POISON -> applyPoison(p, 100); 
-            default -> throw new IllegalArgumentException("Invalid condition id");
-        }
+    public static void guaranteedEffect(Pokemon p, int statusId) {
+        canBeApplied(p, statusId);
+        statusEffect(p, statusId, 100);
     }
 
-    public static void statusEffect(Pokemon p, int statusId, int duration) {
-        if (!canBeApplied(p, statusId)) return;
+    public static void guaranteedEffect(Pokemon p, int statusId, int duration) {
+        canBeApplied(p, statusId);
         
         switch (statusId) {
             case StatusCondition.SLEEP ->  applySleep(p, duration);
@@ -245,7 +236,15 @@ public interface MoveAction {
         }
     }
 
-    public static void canApplyCondition(Pokemon p, int statusId) {
+    public static void statusEffect(Pokemon p, int statusId, double chance) {
         if (p.hasPrimaryCondition()) throw new MoveInterruptedException();
+
+        switch (statusId) {
+            case StatusCondition.BURN -> applyBurn(p, chance);  
+            case StatusCondition.FREEZE -> applyFreeze(p, chance);  
+            case StatusCondition.PARALYSIS -> applyParalysis(p, chance);   
+            case StatusCondition.POISON -> applyPoison(p, chance); 
+            default -> throw new IllegalArgumentException("Invalid condition id");
+        }
     }
 }

@@ -1,8 +1,8 @@
 package stats;
 
-public abstract class Type {
+public abstract class GameType {
 
-	// Pokemon Types Names
+	// Pokemon GameType Names
 	public final static String NO_TYPE = "No Type";
 
 	public final static String BUG = "Bug";
@@ -34,7 +34,7 @@ public abstract class Type {
 	public abstract String[] immunities();
 
 	// Selector Methods
-	public static Type getType(String type) {
+	public static GameType getType(String type) {
 		return switch (type) {
 			case BUG -> bugType();
 			case DARK -> darkType();
@@ -59,80 +59,80 @@ public abstract class Type {
 	}
 
 	// Class Getters
-	public static Type bugType() {
+	public static GameType bugType() {
 		return new BugType();
 	}
 
-	public static Type darkType() {
+	public static GameType darkType() {
 		return new DarkType();
 	}
 
-	public static Type dragonType() {
+	public static GameType dragonType() {
 		return new DragonType();
 	}
 
-	public static Type electricType() {
+	public static GameType electricType() {
 		return new ElectricType();
 	}
 
-	public static Type fairyType() {
+	public static GameType fairyType() {
 		return new FairyType();
 	}
 
-	public static Type fightingType() {
+	public static GameType fightingType() {
 		return new FightingType();
 	}
 
-	public static Type fireType() {
+	public static GameType fireType() {
 		return new FireType();
 	}
 
-	public static Type flyingType() {
+	public static GameType flyingType() {
 		return new FlyingType();
 	}
 
-	public static Type ghostType() {
+	public static GameType ghostType() {
 		return new GhostType();
 	}
 
-	public static Type grassType() {
+	public static GameType grassType() {
 		return new GrassType();
 	}
 
-	public static Type groundType() {
+	public static GameType groundType() {
 		return new GroundType();
 	}
 
-	public static Type iceType() {
+	public static GameType iceType() {
 		return new IceType();
 	}
 
-	public static Type normalType() {
+	public static GameType normalType() {
 		return new NormalType();
 	}
 
-	public static Type poisonType() {
+	public static GameType poisonType() {
 		return new PoisonType();
 	}
 
-	public static Type psychicType() {
+	public static GameType psychicType() {
 		return new PsychicType();
 	}
 
-	public static Type rockType() {
+	public static GameType rockType() {
 		return new RockType();
 	}
 
-	public static Type steelType() {
+	public static GameType steelType() {
 		return new SteelType();
 	}
 
-	public static Type waterType() {
+	public static GameType waterType() {
 		return new WaterType();
 	}
 
 	// Child Classes
-	private static class BugType extends Type {
+	private static class BugType extends GameType {
 
 		@Override
 		public String typeName() {
@@ -156,7 +156,7 @@ public abstract class Type {
 
 	}
 
-	private static class DarkType extends Type {
+	private static class DarkType extends GameType {
 
 		@Override
 		public String typeName() {
@@ -180,7 +180,7 @@ public abstract class Type {
 
 	}
 
-	private static class DragonType extends Type {
+	private static class DragonType extends GameType {
 
 		@Override
 		public String typeName() {
@@ -204,7 +204,7 @@ public abstract class Type {
 
 	}
 
-	private static class ElectricType extends Type {
+	private static class ElectricType extends GameType {
 
 		@Override
 		public String typeName() {
@@ -228,7 +228,7 @@ public abstract class Type {
 
 	}
 
-	private static class FairyType extends Type {
+	private static class FairyType extends GameType {
 
 		@Override
 		public String typeName() {
@@ -252,7 +252,7 @@ public abstract class Type {
 
 	}
 
-	private static class FightingType extends Type {
+	private static class FightingType extends GameType {
 
 		@Override
 		public String typeName() {
@@ -276,7 +276,7 @@ public abstract class Type {
 
 	}
 
-	private static class FireType extends Type {
+	private static class FireType extends GameType {
 
 		@Override
 		public String typeName() {
@@ -300,7 +300,7 @@ public abstract class Type {
 
 	}
 
-	private static class FlyingType extends Type {
+	private static class FlyingType extends GameType {
 
 		@Override
 		public String typeName() {
@@ -324,7 +324,7 @@ public abstract class Type {
 
 	}
 
-	private static class GhostType extends Type {
+	private static class GhostType extends GameType {
 
 		@Override
 		public String typeName() {
@@ -348,7 +348,7 @@ public abstract class Type {
 
 	}
 
-	private static class GrassType extends Type {
+	private static class GrassType extends GameType {
 
 		@Override
 		public String typeName() {
@@ -372,7 +372,7 @@ public abstract class Type {
 
 	}
 
-	private static class GroundType extends Type {
+	private static class GroundType extends GameType {
 
 		@Override
 		public String typeName() {
@@ -396,7 +396,7 @@ public abstract class Type {
 
 	}
 
-	private static class IceType extends Type {
+	private static class IceType extends GameType {
 
 		@Override
 		public String typeName() {
@@ -420,7 +420,7 @@ public abstract class Type {
 
 	}
 
-	private static class NormalType extends Type {
+	private static class NormalType extends GameType {
 
 		@Override
 		public String typeName() {
@@ -444,7 +444,7 @@ public abstract class Type {
 
 	}
 
-	private static class PoisonType extends Type {
+	private static class PoisonType extends GameType {
 
 		@Override
 		public String typeName() {
@@ -468,7 +468,7 @@ public abstract class Type {
 
 	}
 
-	private static class PsychicType extends Type {
+	private static class PsychicType extends GameType {
 
 		@Override
 		public String typeName() {
@@ -492,7 +492,7 @@ public abstract class Type {
 
 	}
 
-	private static class RockType extends Type {
+	private static class RockType extends GameType {
 
 		@Override
 		public String typeName() {
@@ -516,7 +516,7 @@ public abstract class Type {
 
 	}
 
-	private static class SteelType extends Type {
+	private static class SteelType extends GameType {
 
 		@Override
 		public String typeName() {
@@ -540,7 +540,7 @@ public abstract class Type {
 
 	}
 
-	private static class WaterType extends Type {
+	private static class WaterType extends GameType {
 
 		@Override
 		public String typeName() {

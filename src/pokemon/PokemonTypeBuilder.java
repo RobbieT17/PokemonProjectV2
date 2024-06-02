@@ -2,12 +2,12 @@ package pokemon;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import stats.Type;
+import stats.GameType;
 
 public class PokemonTypeBuilder {
     // Object Variables
-    private Type primaryType = null;
-    private Type secondaryType = null;
+    private GameType primaryType = null;
+    private GameType secondaryType = null;
 
     private final ArrayList<String> resistances = new ArrayList<>();
     private final ArrayList<String> weaknesses = new ArrayList<>();
@@ -16,12 +16,12 @@ public class PokemonTypeBuilder {
     boolean hasSetMatchups = false;
 
     public PokemonTypeBuilder setPrimaryType(String t) {
-        this.primaryType = Type.getType(t);
+        this.primaryType = GameType.getType(t);
         return this;
     }
 
     public PokemonTypeBuilder setSecondaryType(String t) {
-        this.secondaryType = Type.getType(t);
+        this.secondaryType = GameType.getType(t);
         return this;
     }
 
@@ -47,7 +47,7 @@ public class PokemonTypeBuilder {
             );
     }
 
-    private void addMatchups(Type t) {
+    private void addMatchups(GameType t) {
         if (t == null) return;
         
         this.hasSetMatchups = true;  

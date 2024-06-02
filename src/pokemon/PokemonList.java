@@ -1,7 +1,7 @@
 package pokemon;
 
 import move.MoveList;
-import stats.Type;
+import stats.GameType;
 
 public interface PokemonList {
 
@@ -12,7 +12,7 @@ public interface PokemonList {
     public static Pokemon bulbasaur(String name) {
         return new PokemonBuilder()
         .setName(defaultName("Bulbasaur", name))
-        .setTypes(Type.GRASS, Type.POISON)
+        .setTypes(GameType.GRASS, GameType.POISON)
         .setPokedexNo(1)
         .setWeight(15.2)
         .setHp(45)
@@ -27,7 +27,7 @@ public interface PokemonList {
     public static Pokemon charmander(String name) {
         return new PokemonBuilder()
         .setName(defaultName("Charmander", name))
-        .setTypes(Type.FIRE)
+        .setTypes(GameType.FIRE)
         .setPokedexNo(4)
         .setWeight(18.7)
         .setHp(39)
@@ -43,7 +43,7 @@ public interface PokemonList {
     public static Pokemon squirtle(String name) {
         return new PokemonBuilder()
         .setName(defaultName("Squirtle", name))
-        .setTypes(Type.WATER)
+        .setTypes(GameType.WATER)
         .setPokedexNo(7)
         .setWeight(19.8)
         .setHp(44)

@@ -1,12 +1,12 @@
 package pokemon;
 
-import stats.Type;
+import stats.GameType;
 
 public class PokemonType {
 
 	// Object Variables
-	private final Type primary;
-	private final Type secondary;
+	private final GameType primary;
+	private final GameType secondary;
 
 	private final String[] typeResistances;
 	private final String[] typeWeaknesses;
@@ -15,8 +15,8 @@ public class PokemonType {
 	
 	// Constructor	
 	public PokemonType(
-        Type type1, 
-        Type type2,
+        GameType type1, 
+        GameType type2,
         String[]  resistances,
         String[]  weaknesses,
         String[] immunities
@@ -50,11 +50,11 @@ public class PokemonType {
 	}
 	
 	// Getters
-	public Type primaryType() {
+	public GameType primaryType() {
 		return this.primary;
 	}
 	
-	public Type secondaryType() {
+	public GameType secondaryType() {
 		return this.secondary;
 	}
 	
