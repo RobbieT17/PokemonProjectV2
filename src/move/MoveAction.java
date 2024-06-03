@@ -295,4 +295,9 @@ public interface MoveAction {
             default -> throw new IllegalArgumentException("Invalid condition id");
         }
     }
+
+    public static void applyFlinch(Pokemon p, double chance) {
+        if (p.hasMoved() || new Random().nextDouble() > chance * 0.01) return;
+        p.setFlinched(true);
+    }
 }

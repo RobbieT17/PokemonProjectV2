@@ -12,7 +12,7 @@ public interface MoveList {
     public static Move airSlash() {
         MoveAction action = (a, d, m) -> {
             MoveAction.dealDamage(a, d, m);
-            // TODO: Add Flinch Effect
+            MoveAction.applyFlinch(d, 30);
         };
 
         return new MoveBuilder()
@@ -44,7 +44,7 @@ public interface MoveList {
     public static Move bite() {
         MoveAction action = (a, d, m) -> {
             MoveAction.dealDamage(a, d, m);
-            // TODO: Add Flinch Effect
+            MoveAction.applyFlinch(d, 100);
         };
 
         return new MoveBuilder()
@@ -111,7 +111,7 @@ public interface MoveList {
         MoveAction action = (a, d, m) -> {
             MoveAction.dealDamage(a, d, m);
             MoveAction.statusEffect(d, StatusCondition.BURN, 10);
-            // TODO: Add Flinch Effect
+            MoveAction.applyFlinch(d, 10);
         };
 
         return new MoveBuilder()

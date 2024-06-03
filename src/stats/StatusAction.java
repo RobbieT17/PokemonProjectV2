@@ -1,6 +1,7 @@
 package stats;
 
 import battle.BattleLog;
+import battle.PokemonCannotActException;
 import java.util.Random;
 import pokemon.Pokemon;
 
@@ -9,7 +10,6 @@ public interface StatusAction {
 
     // Object Function
     public void apply(Pokemon p);
-
 
     // Class Functions
     public static StatusCondition burn() {
@@ -25,16 +25,14 @@ public interface StatusAction {
         StatusAction action = p -> {
             if (new Random().nextDouble() <= 0.2) {
                 p.setImmobilized(false);
-                p.setActionable(true);
                 p.clearPrimaryCondition();
                 BattleLog.add(String.format("%s thawed!", p));
                 return;
             }
 
             p.setImmobilized(true);
-            p.setActionable(false);
             p.setCharge(false);
-            BattleLog.add(String.format("%s is frozen solid!", p));
+            throw new PokemonCannotActException(String.format("%s is frozen solid!", p));
         };
         
         return new StatusCondition(StatusCondition.FREEZE, action, true);
@@ -43,13 +41,8 @@ public interface StatusAction {
     public static StatusCondition paralysis() {
         StatusAction action = p -> {
             BattleLog.add(String.format("%s is paralyzed!", p));
-            if (new Random().nextDouble() <= 0.5){
-                p.setActionable(false);
-                p.setCharge(false);
-                BattleLog.add(String.format("%s cannot move!", p));
-                return;
-            }      
-            p.setActionable(true);           
+            if (new Random().nextDouble() > 0.5) return;   
+            throw new PokemonCannotActException(String.format("%s cannot move!", p));                 
         };
         return new StatusCondition(StatusCondition.PARALYSIS, action, true);
     }
@@ -73,16 +66,14 @@ public interface StatusAction {
             counter.inc();
             if (counter.terminated()) {
                 p.setImmobilized(false);
-                p.setActionable(true);
                 p.clearPrimaryCondition();
                 BattleLog.add(String.format("%s woke up!", p));
                 return;
             } 
 
             p.setImmobilized(true);
-            p.setActionable(false);
             p.setCharge(false);
-            BattleLog.add(String.format("%s is fast asleep...", p));      
+            throw new PokemonCannotActException(String.format("%s is fast asleep...", p));    
         };
 
         return new StatusCondition(StatusCondition.SLEEP, action, true);

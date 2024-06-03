@@ -10,6 +10,8 @@ public class StatusCondition {
     public static final int POISON = 3;
     public static final int SLEEP = 4;
 
+    public static final int FLINCH = 5;
+
     // Object Variables
     private final int id;
     private final StatusAction action;
