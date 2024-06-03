@@ -106,6 +106,11 @@ public class Pokemon {
         } 
     }
 
+    public void healDamage(int value) {
+        if (value <= 0) throw new IllegalArgumentException("Damage must be a positive value");
+        this.hp.change(value);
+    }
+
     // Statistic Methods
     public String listStats() {
         return new StringBuilder()

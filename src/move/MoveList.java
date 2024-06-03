@@ -8,6 +8,74 @@ import stats.StatusCondition;
 
 public interface MoveList {
 
+// A
+    public static Move airSlash() {
+        MoveAction action = (a, d, m) -> {
+            MoveAction.dealDamage(a, d, m);
+            // TODO: Add Flinch Effect
+        };
+
+        return new MoveBuilder()
+        .setId(403)
+        .setName("Air Slash")
+        .setType(GameType.FLYING)
+        .setCategory(Move.SPECIAL)
+        .setPP(15)
+        .setPower(75)
+        .setAccuracy(95)
+        .setAction(action)
+        .buildMove();
+    }
+
+    public static Move aquaTail() {
+        return new MoveBuilder()
+        .setId(401)
+        .setName("Aqua Tail")
+        .setType(GameType.WATER)
+        .setCategory(Move.PHYSICAL)
+        .setPP(10)
+        .setPower(90)
+        .setAccuracy(90)
+        .setAction(MoveAction.DEFAULT_ACTION)
+        .buildMove();
+    }
+
+// B
+    public static Move bite() {
+        MoveAction action = (a, d, m) -> {
+            MoveAction.dealDamage(a, d, m);
+            // TODO: Add Flinch Effect
+        };
+
+        return new MoveBuilder()
+        .setId(44)
+        .setName("Bite")
+        .setType(GameType.DARK)
+        .setCategory(Move.PHYSICAL)
+        .setPP(25)
+        .setPower(60)
+        .setAction(action)
+        .buildMove();
+    }
+
+// D
+    public static Move dragonBreath() {
+        MoveAction action = (a, d, m) -> {
+            MoveAction.dealDamage(a, d, m);
+            MoveAction.statusEffect(d, StatusCondition.PARALYSIS, 30);
+        };
+
+        return new MoveBuilder()
+        .setId(225)
+        .setName("Dragon Breath")
+        .setType(GameType.DRAGON)
+        .setCategory(Move.SPECIAL)
+        .setPP(20)
+        .setPower(60)
+        .setAction(action)
+        .buildMove();
+    }
+
     public static Move dragonClaw() {
         return new MoveBuilder()
         .setId(337)
@@ -20,6 +88,7 @@ public interface MoveList {
         .buildMove();
     }
 
+// E
     public static Move ember() {
         MoveAction action = (a, d, m) -> {
             MoveAction.dealDamage(a, d, m);
@@ -37,8 +106,81 @@ public interface MoveList {
         .buildMove();
     }
 
+// F
+    public static Move fireFang() {
+        MoveAction action = (a, d, m) -> {
+            MoveAction.dealDamage(a, d, m);
+            MoveAction.statusEffect(d, StatusCondition.BURN, 10);
+            // TODO: Add Flinch Effect
+        };
+
+        return new MoveBuilder()
+        .setId(424)
+        .setName("Fire Fang")
+        .setType(GameType.FIRE)
+        .setCategory(Move.PHYSICAL)
+        .setPP(15)
+        .setPower(65)
+        .setAccuracy(95)
+        .setAction(action)
+        .buildMove();
+    }
+
+    public static Move flamethrower() {
+        MoveAction action = (a, d, m) -> {
+            MoveAction.dealDamage(a, d, m);
+            MoveAction.statusEffect(d, StatusCondition.BURN, 10);
+        };
+
+        return new MoveBuilder()
+        .setId(53)
+        .setName("Flamethrower")
+        .setType(GameType.FIRE)
+        .setCategory(Move.SPECIAL)
+        .setPP(15)
+        .setPower(90)
+        .setAction(action)
+        .buildMove();
+    }
+
+    public static Move flareBlitz() {
+        MoveAction action = (a, d, m) -> {
+            MoveAction.dealDamageRecoil(a, d, m, 33);
+            MoveAction.statusEffect(d, StatusCondition.BURN, 10);
+        };
+
+        return new MoveBuilder()
+        .setId(394)
+        .setName("Flare Blitz")
+        .setType(GameType.FIRE)
+        .setCategory(Move.PHYSICAL)
+        .setPP(15)
+        .setPower(120)
+        .setAction(action)
+        .buildMove();
+    }
+
+    public static Move flashCannon() {
+        MoveAction action = (a, d, m) -> {
+            MoveAction.dealDamage(a, d, m);
+            MoveAction.spDefenseStat(d, -1, 10);
+        };
+
+        return new MoveBuilder()
+        .setId(430)
+        .setName("Flash Cannon")
+        .setType(GameType.STEEL)
+        .setCategory(Move.SPECIAL)
+        .setPP(10)
+        .setPower(80)
+        .setAction(action)
+        .buildMove();
+    }
+
+// G
     public static Move growl() {
         MoveAction action = (a, d, m) -> {
+            MoveAction.moveHits(a, d, m);
             MoveAction.attackStat(d, -1);
         };
 
@@ -74,10 +216,11 @@ public interface MoveList {
         .buildMove();
     }
 
+// H
     public static Move heatWave() {
         MoveAction action = (a, d, m) -> {
             MoveAction.dealDamage(a, d, m);
-
+            MoveAction.statusEffect(d, StatusCondition.BURN, 10);
         };
 
         return new MoveBuilder()
@@ -92,10 +235,103 @@ public interface MoveList {
         .buildMove();
     }
 
+    public static Move hydroPump() {
+        return new MoveBuilder()
+        .setId(56)
+        .setName("Hydro Pump")
+        .setType(GameType.WATER)
+        .setCategory(Move.SPECIAL)
+        .setPP(5)
+        .setPower(110)
+        .setAccuracy(80)
+        .setAction(MoveAction.DEFAULT_ACTION)
+        .buildMove();
+    }
+
+// I
+    public static Move inferno() {
+        MoveAction action = (a, d, m) -> {
+            MoveAction.dealDamage(a, d, m);
+            MoveAction.statusEffect(d, StatusCondition.BURN, 100);
+        };
+
+        return new MoveBuilder()
+        .setId(517)
+        .setName("Inferno")
+        .setType(GameType.FIRE)
+        .setCategory(Move.SPECIAL)
+        .setPP(5)
+        .setPower(100)
+        .setAccuracy(50)
+        .setAction(action)
+        .buildMove();
+    }
+
+    public static Move ironDefense() {
+        return new MoveBuilder()
+        .setId(334)
+        .setName("Iron Defense")
+        .setType(GameType.STEEL)
+        .setCategory(Move.STATUS)
+        .setPP(15)
+        .setAction((a, d, m) -> MoveAction.defenseStat(a, 2))
+        .buildMove();
+    }
+
+// L
+    public static Move leechSeed() {
+        MoveAction action = (a, d, m) -> {
+            MoveAction.moveHits(a, d, m);
+            // TODO: Add Seeded Effect
+        };
+
+        return new MoveBuilder()
+        .setId(73)
+        .setName("Leech Seed")
+        .setType(GameType.GRASS)
+        .setCategory(Move.STATUS)
+        .setPP(10)
+        .setAccuracy(90)
+        .setAction(action)
+        .buildMove();
+    }
+ 
+// P
+    public static Move petalBlizzard() {
+        return new MoveBuilder()
+        .setId(572)
+        .setName("Petal Blizzard")
+        .setType(GameType.GRASS)
+        .setCategory(Move.PHYSICAL)
+        .setPP(15)
+        .setPower(90)
+        .setContact(false)
+        .setAction(MoveAction.DEFAULT_ACTION)
+        .buildMove();
+    }
+
+    public static Move petalDance() {
+        MoveAction action = (a, d, m) -> {
+            MoveAction.dealDamage(a, d, m);
+            // TODO: Add Rampage Effect
+        };
+
+        return new MoveBuilder()
+        .setId(80)
+        .setName("Petal Dance")
+        .setType(GameType.GRASS)
+        .setCategory(Move.SPECIAL)
+        .setPP(10)
+        .setPower(120)
+        .setContact(true)
+        .setAction(action)
+        .buildMove();
+    }
+
     public static Move poisonPowder() {
         MoveAction action = (a, d, m) -> {
             MoveAction.moveHits(a, d, m);
-            MoveAction.guaranteedEffect(d, StatusCondition.POISON);
+            MoveAction.canApplyEffect(d, StatusCondition.POISON);
         };
 
         return new MoveBuilder()
@@ -109,6 +345,20 @@ public interface MoveList {
         .buildMove();
     }
 
+    public static Move powerWhip() {
+        return new MoveBuilder()
+        .setId(438)
+        .setName("Power Whip")
+        .setType(GameType.GRASS)
+        .setCategory(Move.PHYSICAL)
+        .setPP(10)
+        .setPower(120)
+        .setAccuracy(85)
+        .setAction(MoveAction.DEFAULT_ACTION)
+        .buildMove();
+    }
+
+// R
     public static Move rainDance() {
         return new MoveBuilder()
         .setId(240)
@@ -120,10 +370,117 @@ public interface MoveList {
         .buildMove();
     }
 
+    public static Move rapidSpin() {
+        MoveAction action = (a, d, m) -> {
+            MoveAction.dealDamage(a, d, m);
+            MoveAction.speedStat(a, 1);
+            // TODO: Removes Trap Effects
+        };
+
+        return new MoveBuilder()
+        .setId(229)
+        .setName("Rapid Spin")
+        .setType(GameType.NORMAL)
+        .setCategory(Move.PHYSICAL)
+        .setPP(40)
+        .setPower(50)
+        .setAction(action)
+        .buildMove();
+    }
+    
+    public static Move razorLeaf() {
+        return new MoveBuilder()
+        .setId(75)
+        .setName("Razor Leaf")
+        .setType(GameType.GRASS)
+        .setCategory(Move.PHYSICAL)
+        .setPP(25)
+        .setPower(55)
+        .setAccuracy(95)
+        .setCritRatio(Move.HIGH_CRIT)
+        .setContact(false)
+        .setAction(MoveAction.DEFAULT_ACTION)
+        .buildMove();
+    }
+
+// S
+    public static Move scaryFace() {
+        MoveAction action = (a, d, m) -> {
+            MoveAction.moveHits(a, d, m);
+            MoveAction.speedStat(d, -2);
+        };
+
+        return new MoveBuilder()
+        .setId(184)
+        .setName("Scary Face")
+        .setType(GameType.NORMAL)
+        .setCategory(Move.STATUS)
+        .setPP(10)
+        .setAction(action)
+        .buildMove();
+    }
+
+    public static Move scratch() {
+        return new MoveBuilder()
+        .setId(10)
+        .setName("Scratch")
+        .setType(GameType.NORMAL)
+        .setCategory(Move.PHYSICAL)
+        .setPP(35)
+        .setPower(40)
+        .setAction(MoveAction.DEFAULT_ACTION)
+        .buildMove();
+    }
+
+    public static Move seedBomb() {
+        return new MoveBuilder()
+        .setId(402)
+        .setName("Seed Bomb")
+        .setType(GameType.GRASS)
+        .setCategory(Move.PHYSICAL)
+        .setPP(15)
+        .setPower(80)
+        .setContact(false)
+        .setAction(MoveAction.DEFAULT_ACTION)
+        .buildMove();
+    }
+
+    public static Move shellSmash() {
+        MoveAction action = (a, d, m) -> {
+            MoveAction.defenseStat(a, -1);
+            MoveAction.spDefenseStat(a, -1);
+            MoveAction.attackStat(a, 2);
+            MoveAction.spAttackStat(a, 2);
+            MoveAction.speedStat(a, 2);
+        };
+
+        return new MoveBuilder()
+        .setId(504)
+        .setName("Shell Smash")
+        .setType(GameType.NORMAL)
+        .setCategory(Move.STATUS)
+        .setPP(15)
+        .setAction(action)
+        .buildMove();
+    }
+
+    public static Move slash() {
+        return new MoveBuilder()
+        .setId(163)
+        .setName("Slash")
+        .setType(GameType.NORMAL)
+        .setCategory(Move.PHYSICAL)
+        .setPP(20)
+        .setPower(70)
+        .setCritRatio(Move.HIGH_CRIT)
+        .setAction(MoveAction.DEFAULT_ACTION)
+        .buildMove();
+    }
+
     public static Move sleepPowder() {
         MoveAction action = (a, d, m) -> {
             MoveAction.moveHits(a, d, m);
-            MoveAction.guaranteedEffect(d, StatusCondition.SLEEP, Input.randomInt(1, 3));
+            MoveAction.canApplyEffect(d, StatusCondition.SLEEP, Input.randomInt(1, 3));
         };
 
         return new MoveBuilder()
@@ -173,7 +530,7 @@ public interface MoveList {
     public static Move stunSpore() {
         MoveAction action = (a, d, m) -> {
             MoveAction.moveHits(a, d, m);
-            MoveAction.guaranteedEffect(d, StatusCondition.PARALYSIS);
+            MoveAction.canApplyEffect(d, StatusCondition.PARALYSIS);
         };
 
         return new MoveBuilder()
@@ -198,6 +555,42 @@ public interface MoveList {
         .buildMove();
     }
 
+    public static Move sweetScent() {
+        MoveAction action = (a, d, m) -> {
+            MoveAction.moveHits(a, d, m);
+            MoveAction.evasionStat(d, -1);
+        };
+
+        return new MoveBuilder()
+        .setId(230)
+        .setName("Sweet Scent")
+        .setType(GameType.NORMAL)
+        .setCategory(Move.STATUS)
+        .setPP(20)
+        .setAction(action)
+        .buildMove();
+    }
+
+    public static Move synthesis() {
+        MoveAction action = (a, d, m) -> {
+            double percent = (BattleField.currentWeather == Weather.SUNNY) 
+                ? 67
+                : (BattleField.currentWeather == Weather.CLEAR) ? 50 : 25;
+
+            MoveAction.restoreHp(a, percent);            
+        };
+
+        return new MoveBuilder()
+        .setId(235)
+        .setName("Synthesis")
+        .setType(GameType.GRASS)
+        .setCategory(Move.STATUS)
+        .setPP(5)
+        .setAction(action)
+        .buildMove();
+    }
+
+// T
     public static Move tackle() {
         return new MoveBuilder()
         .setId(33)
@@ -239,6 +632,7 @@ public interface MoveList {
         .buildMove();
     }
 
+// V
     public static Move vineWhip() {
         return new MoveBuilder()
         .setId(22)
@@ -251,6 +645,7 @@ public interface MoveList {
         .buildMove();
     }
 
+// W
     public static Move waterGun() {
         return new MoveBuilder()
         .setId(55)
@@ -263,12 +658,47 @@ public interface MoveList {
         .buildMove();
     }
 
-    // Struggle: Used when pokemon is out of moves
-    public static Move struggle() {
+    public static Move waterPulse() {
         MoveAction action = (a, d, m) -> {
-            MoveAction.dealDamageRecoil(a, d, m, 25);
+            MoveAction.dealDamage(a, d, m);
+            // TODO: Add Confusion Effect
         };
 
+        return new MoveBuilder()
+        .setId(352)
+        .setName("Water Pulse")
+        .setType(GameType.WATER)
+        .setCategory(Move.SPECIAL)
+        .setPP(20)
+        .setAction(action)
+        .buildMove();
+    }
+
+    public static Move waveCrash() {
+        return new MoveBuilder()
+        .setId(834)
+        .setName("Wave Crash")
+        .setType(GameType.WATER)
+        .setCategory(Move.PHYSICAL)
+        .setPP(10)
+        .setPower(120)
+        .setAction((a, d, m) -> MoveAction.dealDamageRecoil(a, d, m, 33))
+        .buildMove();
+    }
+
+    public static Move withdraw() {
+        return new MoveBuilder()
+        .setId(110)
+        .setName("Withdraw")
+        .setType(GameType.WATER)
+        .setCategory(Move.STATUS)
+        .setPP(40)
+        .setAction((a, d, m) -> MoveAction.defenseStat(a, 1))
+        .buildMove();
+    }
+
+// Struggle: Used when pokemon is out of moves
+    public static Move struggle() {
         return new MoveBuilder()
         .setId(165)
         .setName("Struggle")
@@ -276,7 +706,7 @@ public interface MoveList {
         .setCategory(Move.PHYSICAL)
         .setPP(-1)
         .setPower(40)
-        .setAction(action)
+        .setAction((a, d, m) -> MoveAction.dealDamageRecoil(a, d, m, 25))
         .buildMove();
     }
 

@@ -3,10 +3,10 @@ package move;
 public class MoveBuilder {
     
     // Must Set
-    private String category = null;
     private int id = 0;
     private String name = null;
-    private String type = null;  
+    private String type = null;
+    private String category = null;   
     private PowerPoints pp = null;
     private MoveAction action = null;
 
@@ -29,15 +29,6 @@ public class MoveBuilder {
         return new Move(this.id, this.name, this.type, this.category, this.crit, this.pp, this.pow, this.acc, this.prot, this.contact, this.action);
     }
 
-    public MoveBuilder setCategory(String c) {
-        this.category = c;
-
-        // Physical Moves usually make contact, while Special and Status Moves don't
-        if (c.equals(Move.PHYSICAL)) this.contact = true;
-
-        return this;
-    }
-
     public MoveBuilder setId(int i) {
         this.id = i;
         return this;
@@ -50,6 +41,15 @@ public class MoveBuilder {
 
     public MoveBuilder setType(String t) {
         this.type = t;
+        return this;
+    }
+
+    public MoveBuilder setCategory(String c) {
+        this.category = c;
+
+        // Physical Moves usually make contact, while Special and Status Moves don't
+        if (c.equals(Move.PHYSICAL)) this.contact = true;
+
         return this;
     }
 
@@ -68,12 +68,12 @@ public class MoveBuilder {
         return this;
     }
 
-    public MoveBuilder setProt(int p) {
+    public MoveBuilder setPriority(int p) {
         this.prot = p;
         return this;
     }
 
-    public MoveBuilder setCrit(double c) {
+    public MoveBuilder setCritRatio(double c) {
         this.crit = c;
         return this;
     }

@@ -15,7 +15,7 @@ import stats.StatusCondition;
 @FunctionalInterface
 public interface MoveAction {
     // Public Variables
-    public static final MoveAction DEFAULT_ACTION = (a, d, m) ->  MoveAction.dealDamage(a, d, m);
+    public static final MoveAction DEFAULT_ACTION = (a, d, m) -> MoveAction.dealDamage(a, d, m);
 
     // Function
     void useMove(Pokemon attacker, Pokemon defender, Move move);
@@ -79,17 +79,27 @@ public interface MoveAction {
         ;
     }
 
+    private static double physicalMoveBonus(Pokemon p) {
+        return p.hasPrimaryCondition(StatusCondition.BURN) ? 0.5 : 1.0;
+    }
+
+    private static double specialMoveBonus(Pokemon p) {
+        return 1.0;
+    }
+
     private static int calculateDamage(Pokemon attacker, Pokemon defender, Move move, double effectiveness, boolean isCritical) {
         double stab = sameTypeAttackBonus(attacker, move);
         double crit = isCritical ? 1.5 : 1.0;
         double random = random();
         double weather = weatherBonus(move);
 
-        double attack = (move.category().equals(Move.SPECIAL) ? calculateAttack(attacker.specialAttack(), isCritical) : calculateAttack(attacker.attack(), isCritical));
-        double defense = (move.category().equals(Move.SPECIAL) ? calculateDefense(defender.specialDefense(), isCritical) : calculateDefense(defender.defense(), isCritical));
+        double attack = move.category().equals(Move.SPECIAL) ? calculateAttack(attacker.specialAttack(), isCritical) : calculateAttack(attacker.attack(), isCritical);
+        double defense = move.category().equals(Move.SPECIAL) ? calculateDefense(defender.specialDefense(), isCritical) : calculateDefense(defender.defense(), isCritical);
+
+        double additional = move.category().equals(Move.SPECIAL) ? specialMoveBonus(attacker) : physicalMoveBonus(attacker);
         
         return (int) (((((2 * Pokemon.DEFAULT_LEVEL) / 5.0 + 2) * move.power() * (attack / defense)) / 50.0 + 2) 
-        * stab * crit * effectiveness * random * weather);      
+        * stab * crit * effectiveness * random * weather * additional);      
     }
 
 
@@ -128,6 +138,13 @@ public interface MoveAction {
         recoilDamage(attacker, percent);
     }
 
+    // Restore HP Methods
+    public static void restoreHp(Pokemon p, double percent) {
+        int heal = (int) (0.01 * percent * p.hp().max());
+        BattleLog.add(String.format("%s restored %d HP", p, heal));
+        p.healDamage(heal);
+    }
+
     // Charge Methods
     public static void chargeMove(Pokemon p1, Pokemon p2, Move move ) {
         if (!p1.charged()) {
@@ -151,7 +168,9 @@ public interface MoveAction {
     }
 
     // Stat Changes
-    private static void changeStat(Pokemon p, int change, int id) {
+    private static void changeStat(Pokemon p, int change, int id, double chance) {
+        if (new Random().nextDouble() > chance * 0.01) return;
+
         Stat s = p.stats()[id];
         if (s.isAtHighestOrLowestStage(change)) {
             BattleLog.add(String.format("But %s's %s won't go any %s!", p, s, (change > 0) ? "higher" : "lower"));
@@ -162,31 +181,59 @@ public interface MoveAction {
     }
 
     public static void attackStat(Pokemon p, int change) {
-        changeStat(p, change, Stat.ATTACK);
+        changeStat(p, change, Stat.ATTACK, 100);
+    }
+
+    public static void attackStat(Pokemon p, int change, double chance) {
+        changeStat(p, change, Stat.ATTACK, chance);
     }
 
     public static void defenseStat(Pokemon p, int change) {
-        changeStat(p, change, Stat.DEFENSE);
+        changeStat(p, change, Stat.DEFENSE, 100);
+    }
+
+    public static void defenseStat(Pokemon p, int change, double chance) {
+        changeStat(p, change, Stat.DEFENSE, chance);
     }
 
     public static void spAttackStat(Pokemon p, int change) {
-        changeStat(p, change, Stat.SPECIAL_ATTACK);
+        changeStat(p, change, Stat.SPECIAL_ATTACK, 100);
+    }
+    
+    public static void spAttackStat(Pokemon p, int change, double chance) {
+        changeStat(p, change, Stat.SPECIAL_ATTACK, chance);
     }
 
     public static void spDefenseStat(Pokemon p, int change) {
-        changeStat(p, change, Stat.SPECIAL_DEFENSE);
+        changeStat(p, change, Stat.SPECIAL_DEFENSE, 100);
+    }
+
+    public static void spDefenseStat(Pokemon p, int change, double chance) {
+        changeStat(p, change, Stat.SPECIAL_DEFENSE, chance);
     }
 
     public static void speedStat(Pokemon p, int change) {
-        changeStat(p, change, Stat.SPEED);
+        changeStat(p, change, Stat.SPEED, 100);
+    }
+
+    public static void speedStat(Pokemon p, int change, double chance) {
+        changeStat(p, change, Stat.SPEED, 100);
     }
 
     public static void accuracyStat(Pokemon p, int change) {
-        changeStat(p, change, Stat.ACCURACY);
+        changeStat(p, change, Stat.ACCURACY, 100);
+    }
+
+    public static void accuracyStat(Pokemon p, int change, double chance) {
+        changeStat(p, change, Stat.ACCURACY, chance);
     }
 
     public static void evasionStat(Pokemon p, int change) {
-        changeStat(p, change, Stat.EVASION);
+        changeStat(p, change, Stat.EVASION, 100);
+    }
+
+    public static void evasionStat(Pokemon p, int change, double chance) {
+        changeStat(p, change, Stat.EVASION, chance);
     }
 
     // Status Conditions 
@@ -222,12 +269,12 @@ public interface MoveAction {
         applyCondition(p, 100, StatusAction.sleep(turns), p + " fell asleep!");
     }
 
-    public static void guaranteedEffect(Pokemon p, int statusId) {
+    public static void canApplyEffect(Pokemon p, int statusId) {
         canBeApplied(p, statusId);
         statusEffect(p, statusId, 100);
     }
 
-    public static void guaranteedEffect(Pokemon p, int statusId, int duration) {
+    public static void canApplyEffect(Pokemon p, int statusId, int duration) {
         canBeApplied(p, statusId);
         
         switch (statusId) {
