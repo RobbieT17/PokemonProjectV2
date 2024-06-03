@@ -2,6 +2,7 @@ package pokemon;
 
 import battle.BattleLog;
 import battle.MoveInterruptedException;
+import battle.PokemonCannotActException;
 import battle.PokemonFaintedException;
 import move.Move;
 import stats.Stat;
@@ -35,12 +36,12 @@ public class Pokemon {
     private final Move[] moves; // Up to 4 moves
 
     // Status Conditions
-    private boolean actionable;
     private boolean immobilized;
     private boolean fainted;
     private boolean charged; // Charges moves
     private boolean switchedIn; // Set to true when pokemon first enters the field;
     private boolean hasMoved;
+    private boolean flinched;
 
     private StatusCondition primaryCondition;
 
@@ -69,32 +70,36 @@ public class Pokemon {
         this.stats = stats;
 
         this.moves = moves;
-        this.actionable = true;
     }
 
     // Methods
-    public void applyEffects(boolean before) {
+    public void checkFlinched() {
+        if (!this.flinched) return;
+
+        this.charged = false;
+        this.flinched = false;
+        throw new PokemonCannotActException(String.format("%s flinched and couldn't move!", this));    
+    }
+
+    public void checkConditions(boolean before) {
         if (this.primaryCondition != null)
             if (this.primaryCondition.beforeMove() == before) this.primaryCondition.action().apply(this);
+        this.checkFlinched();
     }
 
     public void useMove(Move move, Pokemon defender) {
-        if (!this.actionable) return;
-
         BattleLog.add(String.format("%s used %s!", this, move));
         move.pp().decrement();
-
-        try {
-            move.action().act(this, defender, move);
-        } catch (MoveInterruptedException e) {
-            BattleLog.add(e.getMessage());
-        }
-       
+        move.action().act(this, defender, move);
     }
 
     public void useTurn(Move move, Pokemon defender){
-        this.applyEffects(true);
-        this.useMove(move, defender);
+        try {
+            this.checkConditions(true);
+            this.useMove(move, defender);
+        } catch (PokemonCannotActException | MoveInterruptedException e) {
+            BattleLog.add(e.getMessage());
+        }
         this.hasMoved = true;
     }
 
@@ -180,10 +185,6 @@ public class Pokemon {
     }
  
     // Setters
-    public void setActionable(boolean a) {
-        this.actionable = a;
-    }
-
     public void setImmobilized(boolean i) {
         this.immobilized = i;
     }
@@ -198,6 +199,10 @@ public class Pokemon {
 
     public void setHasMoved(boolean h) {
         this.hasMoved = h;
+    }
+
+    public void setFlinched(boolean f) {
+        this.flinched = f;
     }
 
     public void setPrimaryCondition(StatusCondition c) {
@@ -230,10 +235,8 @@ public class Pokemon {
         this.charged = false;
         this.switchedIn = false;
         this.immobilized = false;
-        this.actionable = true;
         this.moveSelected = null;
     }
-
 
     // Getters
     public int level() {
@@ -292,10 +295,6 @@ public class Pokemon {
 		return this.weight;
 	}
 
-    public boolean actionable() {
-        return this.actionable;
-    }
-
     public boolean immobilized() {
         return this.immobilized;
     }
@@ -314,6 +313,10 @@ public class Pokemon {
 
     public boolean hasMoved() {
         return this.hasMoved;
+    }
+
+    public boolean flinched() {
+        return this.flinched;
     }
 
     public Move[] moves() {
