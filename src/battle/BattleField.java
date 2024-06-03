@@ -13,18 +13,16 @@ public class BattleField {
     private static void weatherUpdate(){
         if (weatherCount != null){
             weatherCount.inc();
-            if (weatherCount.terminated()){
-                Weather.change(Weather.CLEAR);
-                BattleLog.add(Weather.weatherStopped(currentWeather));
-            }
+            if (weatherCount.terminated()) Weather.change(Weather.CLEAR);
         }
     }
 
     private static void pokemonAfterEffects(Pokemon p) {
         try {
-            p.applyEffects(false);
             p.setSwitchedIn(false);
+            p.setHasMoved(false);
             p.resetDamageDealt();
+            p.applyEffects(false);
         } catch (PokemonFaintedException e) {
             BattleLog.add(e.getMessage());
         }
@@ -32,6 +30,7 @@ public class BattleField {
     }
 
     public static void endOfRound(Pokemon p1, Pokemon p2) {
+        BattleLog.addLine();
         weatherUpdate();
         pokemonAfterEffects(p1);
         pokemonAfterEffects(p2);

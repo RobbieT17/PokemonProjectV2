@@ -1,12 +1,14 @@
 package battle;
 
 import java.util.InputMismatchException;
+import java.util.Random;
 import java.util.Scanner;
 import move.Move;
 import move.MoveList;
 import player.*;
 import pokemon.Pokemon;
 import pokemon.PokemonList;
+import stats.StatusCondition;
 
 public class Battle {
 
@@ -92,14 +94,66 @@ public class Battle {
         p.setMove(move);
     }
 
-    public static void pokemonTurn(PokemonTrainer a, PokemonTrainer b) {
-        Pokemon attacker = a.pokemonInBattle();
-        Pokemon defender = b.pokemonInBattle();
+    
+    public static Pokemon[] turnOrder(Pokemon p1, Pokemon p2) {
+        Pokemon[] order = new Pokemon[2];
 
-        if (attacker.moveSelected() == null) return;
+        Move m1 = p1.moveSelected();
+        Move m2 = p2.moveSelected();
+
+        int speed1 = (int) (p1.hasPrimaryCondition(StatusCondition.PARALYSIS) ? p1.speed().power() * 0.5 : p1.speed().power());
+        int speed2 = (int) (p2.hasPrimaryCondition(StatusCondition.PARALYSIS) ? p2.speed().power() * 0.5 : p2.speed().power());
+
+        // Handles null moves (pokemon may not always have selected a move)
+        if (m2 == null) {
+            order[0] = p1;
+            order[1] = p2;
+            return order;
+        }
+        else if (m1 == null) {
+            order[0] = p2;
+            order[1] = p1;
+            return order;
+        }
+
+        // Higher Priority Moves act first
+        if (m1.priority() > m2.priority()) {
+            order[0] = p1; 
+            order[1] = p2;
+        }
+        else if (m1.priority() < m2.priority()) {
+            order[0] = p2; 
+            order[1] = p1;
+        }
+        // Pokemon with higher speed acts firsts
+        else if (speed1 > speed2) {
+            order[0] = p1;
+            order[1] = p2;
+        }
+        else if (speed1 < speed2) {
+            order[0] = p2;
+            order[1] = p1;
+        }
+        // Speed Tie, move order is random
+        else {
+            if (new Random().nextDouble() < 0.5){
+                order[0] = p1;
+                order[1] = p2;
+            }
+            else {
+                order[0] = p2;
+                order[1] = p1;
+            }
+        }
+
+        return order;
+    }
+    
+    public static void pokemonTurn(Pokemon a, Pokemon b) {
+        if (a.moveSelected() == null) return;
 
         BattleLog.addLine();
-        attacker.useTurn(attacker.moveSelected(), defender);
+        a.useTurn(a.moveSelected(), b);
     }
 
     public static void moveSelection(PokemonTrainer pt1, PokemonTrainer pt2) {
@@ -107,8 +161,13 @@ public class Battle {
             chooseMove(pt1);
             chooseMove(pt2);
 
-            pokemonTurn(pt1, pt2);
-            pokemonTurn(pt2, pt1);
+            Pokemon[] order = turnOrder(pt1.pokemonInBattle(), pt2.pokemonInBattle());
+
+            Pokemon p1 = order[0];
+            Pokemon p2 = order[1];
+
+            pokemonTurn(p1, p2);
+            pokemonTurn(p2, p1);
         } catch (PokemonFaintedException e) {
             BattleLog.add(e.getMessage());
         } 

@@ -17,7 +17,7 @@ public class Pokemon {
     // Pokemon Level, higher level means stronger pokemon
     private final int level;
 
-
+    // Pokemon's Name (Given by the player)
     private final String pokemonName;
 
     // Pokemon have one or two types
@@ -40,6 +40,7 @@ public class Pokemon {
     private boolean fainted;
     private boolean charged; // Charges moves
     private boolean switchedIn; // Set to true when pokemon first enters the field;
+    private boolean hasMoved;
 
     private StatusCondition primaryCondition;
 
@@ -84,7 +85,7 @@ public class Pokemon {
         move.pp().decrement();
 
         try {
-            move.action().useMove(this, defender, move);
+            move.action().act(this, defender, move);
         } catch (MoveInterruptedException e) {
             BattleLog.add(e.getMessage());
         }
@@ -94,6 +95,7 @@ public class Pokemon {
     public void useTurn(Move move, Pokemon defender){
         this.applyEffects(true);
         this.useMove(move, defender);
+        this.hasMoved = true;
     }
 
     public void takeDamage(int value) {
@@ -167,6 +169,7 @@ public class Pokemon {
     }
 
     public boolean hasPrimaryCondition(int i) {
+        if (this.primaryCondition == null) return false;
         return this.primaryCondition.id() == i;
     }
 
@@ -191,6 +194,10 @@ public class Pokemon {
 
     public void setSwitchedIn(boolean s) {
         this.switchedIn = s;
+    }
+
+    public void setHasMoved(boolean h) {
+        this.hasMoved = h;
     }
 
     public void setPrimaryCondition(StatusCondition c) {
@@ -303,6 +310,10 @@ public class Pokemon {
 
     public boolean switchedIn() {
         return this.switchedIn;
+    }
+
+    public boolean hasMoved() {
+        return this.hasMoved;
     }
 
     public Move[] moves() {

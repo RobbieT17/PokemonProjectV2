@@ -1,4 +1,5 @@
 package move;
+
 import battle.BattleField;
 import battle.BattleLog;
 import battle.MoveInterruptedException;
@@ -18,7 +19,7 @@ public interface MoveAction {
     public static final MoveAction DEFAULT_ACTION = (a, d, m) -> MoveAction.dealDamage(a, d, m);
 
     // Function
-    void useMove(Pokemon attacker, Pokemon defender, Move move);
+    void act(Pokemon attacker, Pokemon defender, Move move);
 
     // Accuracy Methods
     public static void moveHits(Pokemon attacker, Pokemon defender, Move move) {
