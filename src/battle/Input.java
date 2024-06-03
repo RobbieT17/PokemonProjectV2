@@ -2,7 +2,7 @@ package battle;
 
 import java.util.Random;
 
-public class Input {
+public interface Input {
     
     public static boolean isNumeric(String s) {
         try {
