@@ -38,7 +38,7 @@ public interface Weather {
         BattleField.currentWeather = change;
 
         if (change == CLEAR) BattleField.weatherCount = null;
-        else BattleField.weatherCount = new Counter(2);
+        else BattleField.weatherCount = new Counter(5);
     }
 
 }
