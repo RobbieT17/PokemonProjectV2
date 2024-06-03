@@ -17,12 +17,9 @@ public interface Weather {
     // Private Method
     private static String weatherReport(int i) {
         return switch (i) {
-            case CLEAR -> weatherStopped(BattleField.currentWeather);
-            
-            case SUNNY -> "The sunlight light grew harsh.";
-            
-            case RAIN -> "It began to rain!";
-            
+            case CLEAR -> weatherStopped(BattleField.currentWeather);        
+            case SUNNY -> "The sunlight light grew harsh.";    
+            case RAIN -> "It began to rain!";  
             default -> throw new IllegalArgumentException("Invalid weather id");
         };
     }
@@ -37,12 +34,11 @@ public interface Weather {
     }
 
     public static void change(int change) {
+        BattleLog.add(weatherReport(change));
         BattleField.currentWeather = change;
 
         if (change == CLEAR) BattleField.weatherCount = null;
-        else BattleField.weatherCount = new Counter(5);
-
-        BattleLog.add(weatherReport(change));
+        else BattleField.weatherCount = new Counter(2);
     }
 
 }
