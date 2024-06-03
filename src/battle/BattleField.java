@@ -22,7 +22,7 @@ public class BattleField {
             p.setSwitchedIn(false);
             p.setHasMoved(false);
             p.resetDamageDealt();
-            p.applyEffects(false);
+            p.checkConditions(false);
         } catch (PokemonFaintedException e) {
             BattleLog.add(e.getMessage());
         }
