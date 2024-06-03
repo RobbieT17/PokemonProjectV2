@@ -32,7 +32,7 @@ public interface PokemonList {
         .setWeight(18.7)
         .setHp(39)
         .setStats(52, 43, 60, 50, 65)
-        .addMove(MoveList.tackle())
+        .addMove(MoveList.bite())
         .addMove(MoveList.ember())
         .addMove(MoveList.smokescreen())
         .addMove(MoveList.sunnyDay())
