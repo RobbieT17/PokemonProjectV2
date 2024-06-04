@@ -47,7 +47,7 @@ public interface MoveList {
     public static Move bite() {
         MoveAction action = (a, d, m) -> {
             MoveAction.dealDamage(a, d, m);
-            MoveAction.applyFlinch(d, 100);
+            MoveAction.applyFlinch(d, 30);
         };
 
         return new MoveBuilder()
