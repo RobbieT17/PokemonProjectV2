@@ -368,19 +368,34 @@ public interface MoveAction {
         BattleLog.add(message);
     }
 
+    private static boolean typeImmunity(Pokemon p, int id) {
+        return switch (id) {
+            case StatusCondition.BURN -> p.isType(GameType.FIRE);
+            case StatusCondition.FREEZE -> p.isType(GameType.ICE);
+            case StatusCondition.PARALYSIS -> p.isType(GameType.ELECTRIC);
+            case StatusCondition.POISON -> p.isType(GameType.POISON) || p.isType(GameType.STEEL);
+            default -> false;
+        };
+    }
+
     /**
      * Checks if a status condition can be applied to a Pokemon
-     * Nothing happens if it cannot
+     * Cannot apply condition if one of the follow:
+     * 
+     * 1) The Pokemon's typing has an immunity
+     * 2) The Pokemon already has the condition
      * @param id
      */
     private static void canBeApplied(Pokemon p, int id) {
-        if (p.hasPrimaryCondition()) throw new MoveInterruptedException(String.format(p.hasPrimaryCondition(id) 
+        if (typeImmunity(p, id)) throw new MoveInterruptedException(String.format("But it doesn't affect %s...", p));
+        
+        if (p.hasPrimaryCondition()) throw new MoveInterruptedException(String.format(p.hasPrimaryCondition(id)  
         ? String.format("But %s is already %s!", p, StatusCondition.failMessage(id)) 
         : Move.FAILED));
     }
 
     // Applies Burn Condition
-    private static void applyBurn(Pokemon p, double chance) {
+    private static void applyBurn(Pokemon p, double chance) { 
         applyCondition(p, chance, StatusAction.burn(), p + " was burned!");
     }
 
