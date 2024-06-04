@@ -154,13 +154,13 @@ public class Pokemon {
 // Statistic Methods (All Methods display a Pokemon's information to the console)
     public String listStats() {
         return new StringBuilder()
-        .append(String.format("Attack: %d%n", this.stats[Stat.ATTACK].power()))
-        .append(String.format("Defense: %d%n", this.stats[Stat.DEFENSE].power()))
-        .append(String.format("Special-Attack: %d%n", this.stats[Stat.SPECIAL_ATTACK].power()))
-        .append(String.format("Special-Defense: %d%n", this.stats[Stat.SPECIAL_DEFENSE].power()))
-        .append(String.format("Speed: %d%n", this.stats[Stat.SPEED].power()))
-        .append(String.format("Accuracy: %d%%%n", this.stats[Stat.ACCURACY].power()))
-        .append(String.format("Evasion: %d%%%n", this.stats[Stat.EVASION].power()))
+        .append(this.stats[Stat.ATTACK].showStat())
+        .append(this.stats[Stat.DEFENSE].showStat())
+        .append(this.stats[Stat.SPECIAL_ATTACK].showStat())
+        .append(this.stats[Stat.SPECIAL_DEFENSE].showStat())
+        .append(this.stats[Stat.SPEED].showStat())
+        .append(this.stats[Stat.ACCURACY].showStat())
+        .append(this.stats[Stat.EVASION].showStat())
         .toString();
     }
 

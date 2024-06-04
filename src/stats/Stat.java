@@ -43,6 +43,10 @@ public class Stat {
 	}
 	
 // Class Methods
+	private static String sign(int i) {
+		return String.format("%s%d", (i < 0) ? "-" : "+", Math.abs(i));
+	}
+
 	public static String sizeOfChange(int change) {
 		if (change >= 6) return " to the maximum";
 		if (change > 2) return " drastically";
@@ -54,6 +58,17 @@ public class Stat {
 	}
 
 // Methods
+	// If not a stage 0, shows the difference in power and current stage
+	private String showStage() {
+		return this.stage != 0 
+		? String.format(" (%s) [%s Stage]", sign(this.power - this.base), sign(this.stage)) 
+		: "";
+	}
+
+	private boolean isAccuracyOrEvasion() {
+		return this.statID == Stat.ACCURACY || this.statID == Stat.EVASION;
+	}
+
 	// Changes a stat based on the stage and base stat
 	public void changeStat() {
 		this.power = (int) (this.base * (1 + MULTIPLIER * this.stage));
@@ -71,7 +86,7 @@ public class Stat {
 		if (this.stage < LOWEST_STAT_STAGE) this.stage = LOWEST_STAT_STAGE;
 		else if (this.stage > HIGHEST_STAT_STAGE) this.stage = HIGHEST_STAT_STAGE;
 
-		if (this.statID == Stat.ACCURACY || this.statID == Stat.EVASION) this.changeStatForAccuracyOrEvasion();
+		if (this.isAccuracyOrEvasion()) this.changeStatForAccuracyOrEvasion();
 		else this.changeStat(); 
 
 		return this.stage;
@@ -86,6 +101,16 @@ public class Stat {
 		if (change == 0) throw new IllegalArgumentException("Stage change cannot be zero");
 		return change > 0 ? this.stage == HIGHEST_STAT_STAGE : this.stage == LOWEST_STAT_STAGE;
 	}
+
+	// Displays stat's current power and stage
+	public String showStat() {
+		return isAccuracyOrEvasion()
+		? String.format("%s: %d%%%s%n", this.statName, this.power, this.showStage())
+		: String.format("%s: %d%s%n", this.statName, this.power, this.showStage());
+	}
+
+	// Attack: 52 (-32) [-4 Stage]
+	// Evasion: 80% (-20%) [-2 Stage]
 
 	@Override
 	public String toString() {
