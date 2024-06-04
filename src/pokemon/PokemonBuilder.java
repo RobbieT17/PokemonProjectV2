@@ -58,7 +58,7 @@ public class PokemonBuilder {
         if (this.hp == null) throw new IllegalStateException("Hp not initialized");
         if (this.atk == null) throw new IllegalStateException("Stats not initialized");
         if (this.weight == 0.0) throw new IllegalStateException("Weight not initialized");
-        if (this.moves.size() < 2) throw new IllegalStateException("Move not initialized or not enough moves implemented");
+        if (this.moves.size() < MIN_MOVE_ALLOWED) throw new IllegalStateException("Move not initialized or not enough moves implemented");
 
         this.acc = new Stat(Stat.ACCURACY_NAME, Stat.ACCURACY, 100);
         this.eva = new Stat(Stat.EVASION_NAME, Stat.EVASION, 100);
