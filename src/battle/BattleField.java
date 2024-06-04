@@ -24,8 +24,8 @@ public class BattleField {
     public static void endOfRound(Pokemon p1, Pokemon p2) {
         BattleLog.addLine();
         weatherUpdate();
-        p1.afterEffects();
-        p2.afterEffects();
+        p1.endRound();
+        p2.endRound();
     }
 
 }

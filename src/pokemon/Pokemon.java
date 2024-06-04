@@ -138,6 +138,19 @@ public class Pokemon {
         this.hp.change(value);
     }
 
+    // Executed at the end of each round
+    public void endRound() {
+        try {
+            this.conditions().setSwitchedIn(false);
+            this.conditions().setHasMoved(false);
+            this.conditions().setFlinched(false);
+            this.resetDamageDealt();
+            this.checkConditions(false);
+        } catch (PokemonFaintedException e) {
+            BattleLog.add(e.getMessage());
+        }
+    }
+
 // Statistic Methods (All Methods display a Pokemon's information to the console)
     public String listStats() {
         return new StringBuilder()
@@ -220,11 +233,6 @@ public class Pokemon {
 
     public void resetMove() {
         this.moveSelected = null;
-    }
-
-    // Executed at the end of each round
-    public void endRound() {
-
     }
 
     // Clears any temporary effects
