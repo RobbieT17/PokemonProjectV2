@@ -19,26 +19,13 @@ public class BattleField {
         }
     }
 
-    // Resets some Pokemon attributes then applies after conditions
-    private static void pokemonAfterEffects(Pokemon p) {
-        try {
-            p.conditions().setSwitchedIn(false);
-            p.conditions().setHasMoved(false);
-            p.conditions().setFlinched(false);
-            p.resetDamageDealt();
-            p.checkConditions(false);
-        } catch (PokemonFaintedException e) {
-            BattleLog.add(e.getMessage());
-        }
-      
-    }
 
     // Called at the end of each round
     public static void endOfRound(Pokemon p1, Pokemon p2) {
         BattleLog.addLine();
         weatherUpdate();
-        pokemonAfterEffects(p1);
-        pokemonAfterEffects(p2);
+        p1.afterEffects();
+        p2.afterEffects();
     }
 
 }

@@ -222,6 +222,11 @@ public class Pokemon {
         this.moveSelected = null;
     }
 
+    // Executed at the end of each round
+    public void endRound() {
+
+    }
+
     // Clears any temporary effects
     public void backToTrainer() {
         this.damageDealt = 0;
