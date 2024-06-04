@@ -16,6 +16,12 @@ public class HealthPoints {
     }
 
 // Methods
+
+    // Pokemon's current HP is at the max
+    public boolean atFullHP() {
+        return this.healthPoints == this.maxHealthPoints;
+    }
+
     // Change current HP by some value. Cannot exceed max or drop below 0
     public void change(int value) {
         this.healthPoints += value;
