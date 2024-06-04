@@ -2,8 +2,8 @@ package stats;
 
 public abstract class GameType {
 
-	// Pokemon GameType Names
-	public final static String NO_TYPE = "No Type";
+// Pokemon GameType Names
+	public final static String TYPELESS = "No Type";
 
 	public final static String BUG = "Bug";
 	public final static String DARK = "Dark";
@@ -24,7 +24,7 @@ public abstract class GameType {
 	public final static String STEEL = "Steel";
 	public final static String WATER = "Water";
 
-	// Abstract Methods
+// Abstract Methods
 	public abstract String typeName();
 
 	public abstract String[] resistances();
@@ -33,7 +33,8 @@ public abstract class GameType {
 
 	public abstract String[] immunities();
 
-	// Selector Methods
+
+// Selector Methods
 	public static GameType getType(String type) {
 		return switch (type) {
 			case BUG -> bugType();

@@ -1,5 +1,6 @@
 package move;
 
+// Class designed to create Move objects efficiently
 public class MoveBuilder {
     
     // Must Set
@@ -17,18 +18,36 @@ public class MoveBuilder {
     private double crit = Move.UNIVERSAL_CRIT_RATE;
     private boolean contact = false;
 
+    /**
+     * Converts into a Move
+     * @throws IllegalStateException if required variables are not set
+     * @return a new Move object
+     */
     public Move buildMove() {
-        if (this.category == null) throw new IllegalStateException("Category not initialized");
         if (this.id == 0) throw new IllegalStateException("Id not initialized");
         if (this.name == null) throw new IllegalStateException("Name not initialized");
         if (this.type == null) throw new IllegalStateException("Type not initialized");
+        if (this.category == null) throw new IllegalStateException("Category not initialized");
         if (this.pp == null) throw new IllegalStateException("PP not initialized");
         if (this.action == null) throw new IllegalStateException("Action not initialized");
         if (!this.category.equals(Move.STATUS) && this.pow == 0) throw new IllegalStateException("Power not initialized for physical/special move");
         
-        return new Move(this.id, this.name, this.type, this.category, this.crit, this.pp, this.pow, this.acc, this.prot, this.contact, this.action);
+        return new Move(
+            this.id, 
+            this.name, 
+            this.type, 
+            this.category, 
+            this.crit, 
+            this.pp, 
+            this.pow, 
+            this.acc, 
+            this.prot, 
+            this.contact, 
+            this.action
+            );
     }
 
+// Setters
     public MoveBuilder setId(int i) {
         this.id = i;
         return this;

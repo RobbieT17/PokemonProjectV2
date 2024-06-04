@@ -5,38 +5,24 @@ import java.util.Arrays;
 import stats.GameType;
 
 public class PokemonTypeBuilder {
-    // Object Variables
+
+// Object Variables
     private GameType primaryType = null;
-    private GameType secondaryType = null;
+    private GameType secondaryType = null; // Optional (Not every Pokemon has a second type)
 
     private final ArrayList<String> resistances = new ArrayList<>();
     private final ArrayList<String> weaknesses = new ArrayList<>();
     private final ArrayList<String> immunities = new ArrayList<>();
 
-    boolean hasSetMatchups = false;
-
-    public PokemonTypeBuilder setPrimaryType(String t) {
-        this.primaryType = GameType.getType(t);
-        return this;
-    }
-
-    public PokemonTypeBuilder setSecondaryType(String t) {
-        this.secondaryType = GameType.getType(t);
-        return this;
-    }
-
-    public PokemonTypeBuilder setTypeMatchups() {
-        if (this.primaryType == null) throw new IllegalStateException("primaryType must be initialized");
-        
-        addMatchups(this.primaryType);
-        addMatchups(this.secondaryType);
-
-        return this;
-    }
-
+    /**
+     * Converts to PokemonType
+     * @throws IllegalStateException If required variables are not set
+     * @return new PokemonType object
+     */
     public PokemonType buildPokemonType() {
-        if (this.hasSetMatchups == false) throw new IllegalStateException("Type matchups have not been initialized");
-        if (this.immunities == null) throw new IllegalStateException("immunities has not been initialized");
+        if (this.primaryType == null) throw new IllegalStateException("Primary type has not be initialized");
+
+        this.setTypeMatchups();
 
         return new PokemonType(
             this.primaryType,
@@ -47,10 +33,27 @@ public class PokemonTypeBuilder {
             );
     }
 
+// Setters
+    public PokemonTypeBuilder setPrimaryType(String t) {
+        this.primaryType = GameType.getType(t);
+        return this;
+    }
+
+    public PokemonTypeBuilder setSecondaryType(String t) {
+        this.secondaryType = GameType.getType(t);
+        return this;
+    }
+
+    private PokemonTypeBuilder setTypeMatchups() {
+        this.addMatchups(this.primaryType);
+        this.addMatchups(this.secondaryType);
+        return this;
+    }
+
+    // Adds a type's matchups to resistances/weaknesses/immunities
     private void addMatchups(GameType t) {
         if (t == null) return;
-        
-        this.hasSetMatchups = true;  
+ 
         this.resistances.addAll(Arrays.asList(t.resistances()));
         this.weaknesses.addAll(Arrays.asList(t.weaknesses()));
         this.immunities.addAll(Arrays.asList(t.immunities()));

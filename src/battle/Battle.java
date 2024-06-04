@@ -12,10 +12,12 @@ import stats.StatusCondition;
 
 public class Battle {
 
+    // Can switch pokemon if and only if the Pokemon hasn't fainted and isn't the current one out
     public static boolean validPokemonChoice(PokemonTrainer pt, Pokemon p) {
         return !p.fainted() && (pt.pokemonInBattle() != null) ? !pt.pokemonInBattle().equals(p) : true;
     }
 
+    // Trainer chooses a Pokemon to send out to battle
     public static void choosePokemon(PokemonTrainer trainer) {
         if (trainer.outOfPokemon()) return;
 
@@ -44,20 +46,27 @@ public class Battle {
 
         }
 
+        // Sets trainer's in-battle Pokemon to the one selected
         trainer.returns();
         trainer.sendOut(pokemon);
     }
 
 
+    // Pokemon chooses a move
     public static void chooseMove(PokemonTrainer pt) {
         Pokemon p = pt.pokemonInBattle();
 
+        /*
+         * Unable to choose a move if just switched in
+         * or charging (If changing, the pokemon uses last move selected)
+         */
         if (p.charged() || p.switchedIn()) return;
 
         Scanner scanner = new Scanner(System.in);
         boolean done = false;
         Move move = p.moveSelected();
 
+        // Default to struggle if all the Pokemon's move has no more PP
         if (p.hasNoMoves()) {
             BattleLog.add(String.format("%s has no moves!", p));
             p.setMove(MoveList.struggle());
@@ -72,12 +81,16 @@ public class Battle {
                 BattleLog.addPrint(String.format("What should %s do? ", p)); 
                 String input = scanner.nextLine();
 
-                // Switches pokemon out, not possible if trainer has one pokemon
+                /*
+                 * Switches Pokemon out, not possible if trainer has one pokemon
+                 * or Pokemon is unable to switch
+                 */
                 if (Input.isChar(input, 's') && pt.pokemonAvailable() > 1){ 
                     choosePokemon(pt);
                     return;
                 }
 
+                // Selects one of the Pokemon's move pool to use
                 if (Input.isNumeric(input)) {
                     move = p.moves()[Integer.parseInt(input)];
                     done = !move.pp().depleted();
@@ -91,16 +104,18 @@ public class Battle {
             }
 
         }
+        // Locks in Pokemon's chosen move
         p.setMove(move);
     }
 
-    
+    // Finds the order which the Pokemon in battle will move
     public static Pokemon[] turnOrder(Pokemon p1, Pokemon p2) {
         Pokemon[] order = new Pokemon[2];
 
         Move m1 = p1.moveSelected();
         Move m2 = p2.moveSelected();
 
+        // Paralyzed Pokemons' speed is reduced by half
         int speed1 = (int) (p1.hasPrimaryCondition(StatusCondition.PARALYSIS) ? p1.speed().power() * 0.5 : p1.speed().power());
         int speed2 = (int) (p2.hasPrimaryCondition(StatusCondition.PARALYSIS) ? p2.speed().power() * 0.5 : p2.speed().power());
 
@@ -149,6 +164,7 @@ public class Battle {
         return order;
     }
     
+    // Pokemon uses a turn, nothing happens if the Pokemon did not select a move
     public static void pokemonTurn(Pokemon a, Pokemon b) {
         if (a.moveSelected() == null) return;
 
@@ -156,23 +172,42 @@ public class Battle {
         a.useTurn(a.moveSelected(), b);
     }
 
+    /**
+     * Players select one of two options
+     * 1) Pokemon uses a move
+     * 2) Switch Pokemon in battle
+     * 
+     * After choosing, the round will play out
+     * @param pt1 Player 1
+     * @param pt2 Player 2
+     */
     public static void moveSelection(PokemonTrainer pt1, PokemonTrainer pt2) {
         try {
+            // Player choose their moves
             chooseMove(pt1);
             chooseMove(pt2);
 
+            // Order of Pokemon
             Pokemon[] order = turnOrder(pt1.pokemonInBattle(), pt2.pokemonInBattle());
 
             Pokemon p1 = order[0];
             Pokemon p2 = order[1];
 
+            // Pokemon use their moves, interrupted if one of them faints
             pokemonTurn(p1, p2);
             pokemonTurn(p2, p1);
         } catch (PokemonFaintedException e) {
             BattleLog.add(e.getMessage());
         } 
 
+        /**
+         * Updates Battlefield attributes
+         * Applies an after effects to each Pokemon
+         * Resets any other necessary parameters
+         */
         BattleField.endOfRound(pt1.pokemonInBattle(), pt2.pokemonInBattle());
+
+        // Plays out the round messages
         BattleLog.out();
     }
 
@@ -197,6 +232,7 @@ public class Battle {
 
         BattleLog.out();
 
+        // Game ends when one trainer is out of Pokemon
         while (!player1.outOfPokemon() && !player2.outOfPokemon()) {
             while (!player1.pokemonInBattle().fainted() && !player2.pokemonInBattle().fainted()) 
                 moveSelection(player1, player2);
@@ -205,6 +241,7 @@ public class Battle {
             if (player2.pokemonInBattle().fainted()) choosePokemon(player2);
         }
 
+        // Displays the winner
         if (player1.outOfPokemon()) {
             BattleLog.add(String.format("%n%s is out of Pokemon!", player1));
             BattleLog.add(String.format("%s wins the battle!", player2));

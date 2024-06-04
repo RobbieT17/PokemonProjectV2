@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import move.Move;
 import stats.Stat;
 
+// Class designed to create Pokemon objects efficiently
 public class PokemonBuilder { 
-    private final static int MAX_MOVES_ALLOWED = 4;
+
+    private final static int MIN_MOVE_ALLOWED = 2; // Pokemon must have at least two moves
+    private final static int MAX_MOVES_ALLOWED = 4; // Pokemon can have up to four moves
 
     private int level = Pokemon.DEFAULT_LEVEL;
     private String name = null;
@@ -43,8 +46,37 @@ public class PokemonBuilder {
 		return ((baseStat * 2 * this.level) / 100) + 5;
 	}
 
+    /**
+     * Converts into a Pokemon
+     * @throws IllegalStateException If required variables are not set
+     * @return a new Pokemon object
+     */
+    public Pokemon buildPokemon() {
+        if (this.name == null) throw new IllegalStateException("Pokemon does not have name");
+        if (this.types == null) throw new IllegalStateException("Types have not been initialized");
+        if (this.pokedex == 0) throw new IllegalStateException("Pokedex ID number has not be initialized");
+        if (this.hp == null) throw new IllegalStateException("Hp not initialized");
+        if (this.atk == null) throw new IllegalStateException("Stats not initialized");
+        if (this.weight == 0.0) throw new IllegalStateException("Weight not initialized");
+        if (this.moves.size() < 2) throw new IllegalStateException("Move not initialized or not enough moves implemented");
 
-    // Setters
+        this.acc = new Stat(Stat.ACCURACY_NAME, Stat.ACCURACY, 100);
+        this.eva = new Stat(Stat.EVASION_NAME, Stat.EVASION, 100);
+
+        return new Pokemon(
+            this.level,
+            this.name,
+            this.types, 
+            this.pokedex, 
+            this.weight,
+            this.hp, 
+            new Stat[] {this.atk, this.def, this.spAtk, this.spDef, this.spd, this.acc, this.eva},
+            this.moves.toArray(Move[]::new)
+            );
+    }
+
+
+// Setters
     public PokemonBuilder setLevel(int level) {
         this.level = level;
         return this;
@@ -56,15 +88,17 @@ public class PokemonBuilder {
     }
 
     public PokemonBuilder setTypes(String t) {
-        this.types = new PokemonTypeBuilder().setPrimaryType(t).setTypeMatchups().buildPokemonType();
+        this.types = new PokemonTypeBuilder()
+        .setPrimaryType(t)
+        .buildPokemonType();
         return this;
     }
 
     public PokemonBuilder setTypes(String t1, String t2) {
-        PokemonTypeBuilder pb = new PokemonTypeBuilder().setPrimaryType(t1);
-        if (t2 != null) pb.setSecondaryType(t2);
-        
-        this.types = pb.setTypeMatchups().buildPokemonType();
+        this.types = new PokemonTypeBuilder()
+        .setPrimaryType(t1)
+        .setSecondaryType(t2)
+        .buildPokemonType();
         return this;
     }
 
@@ -100,28 +134,4 @@ public class PokemonBuilder {
         return this;
     }
 
-    // Creates new Pokemon
-    public Pokemon buildPokemon() {
-        if (this.name == null) throw new IllegalStateException("Name has not been initialized");
-        if (this.types == null) throw new IllegalStateException("Types have not been initialized");
-        if (this.pokedex == 0) throw new IllegalStateException("Pokedex has not been initialized");
-        if (this.hp == null) throw new IllegalStateException("Hp not initialized");
-        if (this.atk == null) throw new IllegalStateException("Stats not initialized");
-        if (this.weight == 0.0) throw new IllegalStateException("Weight not initialized");
-        if (this.moves.size() < 2) throw new IllegalStateException("Move not initialized or not enough moves implemented");
-
-        this.acc = new Stat(Stat.ACCURACY_NAME, Stat.ACCURACY, 100);
-        this.eva = new Stat(Stat.EVASION_NAME, Stat.EVASION, 100);
-
-        return new Pokemon(
-            this.level,
-            this.name,
-            this.types, 
-            this.pokedex, 
-            this.weight,
-            this.hp, 
-            new Stat[] {this.atk, this.def, this.spAtk, this.spDef, this.spd, this.acc, this.eva},
-            this.moves.toArray(Move[]::new)
-            );
-    }
 }

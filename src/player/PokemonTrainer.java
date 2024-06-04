@@ -4,23 +4,26 @@ import battle.BattleLog;
 import pokemon.Pokemon;
 
 public class PokemonTrainer {
+        
+// Object Variables
+    private final String playerName; // Player name
+    private final Pokemon[] team; // Pokemon Team to use in battle
 
-    // Class Variables
-    public static final int MAX_PARTY_CAPACITY = 6;
-    
-    // Variables
-    private final String playerName;
-    private final Pokemon[] team;
+    private Pokemon pokemonInBattle; // Current pokemon on the battlefield
 
-    private Pokemon pokemonInBattle;
-
-    // Constructor
+// Constructor
+    /**
+     * Creates a new Pokemon trainer
+     * @param name name given from user
+     * @param team Pokemon team chosen by the user
+     */
     public PokemonTrainer(String name, Pokemon[] team) {
         this.playerName = name;
         this.team = team;
     }
 
-    // Methods
+// Methods
+    // Formats Pokemon team info
     private String listPokemon() {
         StringBuilder sb = new StringBuilder();
 
@@ -30,12 +33,14 @@ public class PokemonTrainer {
         return sb.toString();
     }
 
+    // True when all the trainer's Pokemon have fainted
     public boolean outOfPokemon() {
         for (Pokemon p : this.team)
             if (!p.fainted()) return false;
         return true;
     }
 
+    // Number of Pokemon that are still alive (not fainted)
     public int pokemonAvailable() {
         int count = 0;
 
@@ -45,6 +50,7 @@ public class PokemonTrainer {
         return count;
     }
 
+    // Displays trainer's Pokemon to the console
     public String showPokemon() {
         return new StringBuilder()
         .append(String.format("%s's Pokemon:%n%n", this))
@@ -52,18 +58,14 @@ public class PokemonTrainer {
         .toString();
     }
 
-    @Override
-    public String toString() {
-        return this.playerName;
-    }
-
-    // Setters
+    // Sends a Pokemon to the battle, the Pokemon cannot act until the next turn
     public void sendOut(Pokemon p) {
         this.pokemonInBattle = p;
         this.pokemonInBattle.setSwitchedIn(true);
         BattleLog.add(String.format("%n%s sends out %s!", this, p)); 
     }
 
+    // Returns the Pokemon on the battle
     public void returns() {
         if (this.pokemonInBattle == null) return;
         
@@ -72,7 +74,12 @@ public class PokemonTrainer {
         this.pokemonInBattle = null;
     }
 
-    // Getters
+    @Override
+    public String toString() {
+        return this.playerName;
+    }
+
+// Getters
     public String playerName() {
         return this.playerName;
     }

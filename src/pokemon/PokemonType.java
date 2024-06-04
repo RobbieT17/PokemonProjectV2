@@ -4,16 +4,17 @@ import stats.GameType;
 
 public class PokemonType {
 
-	// Object Variables
-	private final GameType primary;
-	private final GameType secondary;
+// Object Variables
+	private final GameType primary; // Main Type
+	private final GameType secondary; // Secondary Type (not all Pokemon have one)
 
-	private final String[] typeResistances;
-	private final String[] typeWeaknesses;
-	private final String[] typeImmunities;
+	private final String[] typeResistances; // Types the Pokemon resists (receive half damage)
+	private final String[] typeWeaknesses;  // Types the Pokemon is weak to (receive double damage)
+	private final String[] typeImmunities; // Types the Pokemon is immune to (receives no damage)
 	
 	
-	// Constructor	
+// Constructor	
+	// Creates a new PokemonType object, every Pokemon has one
 	public PokemonType(
         GameType type1, 
         GameType type2,
@@ -29,27 +30,22 @@ public class PokemonType {
 		this.typeImmunities = immunities;
 	}
 	
-	// Methods
+// Methods
+	// True if Pokemon has a second type
 	public boolean hasSecondaryType() {
 		return this.secondary != null;
 	}
 
-	// To String Method
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
-
-		sb.append(this.primary.typeName());
-
-		if (this.secondary != null)
-		    sb.append("-").append(this.secondary.typeName());
-
-		sb.append("\n");
-
-		return sb.toString();
+		return new StringBuilder()
+		.append(this.primary.typeName())
+		.append(this.hasSecondaryType() ? String.format("-%s", this.secondary.typeName()) : "")
+		.append("\n")
+		.toString();
 	}
 	
-	// Getters
+// Getters
 	public GameType primaryType() {
 		return this.primary;
 	}

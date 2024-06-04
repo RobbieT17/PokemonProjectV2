@@ -42,7 +42,7 @@ public class Stat {
 		this.stage = 0;
 	}
 	
-	// Class Methods
+// Class Methods
 	public static String sizeOfChange(int change) {
 		if (change >= 6) return " to the maximum";
 		if (change > 2) return " drastically";
@@ -53,7 +53,7 @@ public class Stat {
 		return "";
 	}
 
-	// Methods
+// Methods
 	// Changes a stat based on the stage and base stat
 	public void changeStat() {
 		this.power = (int) (this.base * (1 + MULTIPLIER * this.stage));
@@ -77,6 +77,11 @@ public class Stat {
 		return this.stage;
 	}
 
+	/**
+	 * Checks if the stat's stage is out side the range of the max and min.
+	 * @param change number of stage increases/decreases
+	 * @return true if at highest stage (positive chance) or if at lowest stage (negative change)
+	 */
 	public boolean isAtHighestOrLowestStage(int change) {
 		if (change == 0) throw new IllegalArgumentException("Stage change cannot be zero");
 		return change > 0 ? this.stage == HIGHEST_STAT_STAGE : this.stage == LOWEST_STAT_STAGE;

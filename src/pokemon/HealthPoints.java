@@ -1,21 +1,32 @@
 package pokemon;
 
 public class HealthPoints {
-    
-    private final int maxHealthPoints;
-    private int healthPoints;
+// Object Variables
+    private final int maxHealthPoints; // Max HP
+    private int healthPoints; // Current HP
 
+ // Constructor
+    /**
+     * Creates new HealthPoint object
+     * @param health max HP
+     */
     public HealthPoints(int health) {
         this.maxHealthPoints = health;
         this.healthPoints = health;
     }
 
-    // Methods
+// Methods
+    // Change current HP by some value. Cannot exceed max or drop below 0
     public void change(int value) {
         this.healthPoints += value;
 
         if (this.healthPoints > this.maxHealthPoints) this.healthPoints = this.maxHealthPoints;
         if (this.healthPoints < 0) this.healthPoints = 0;
+    }
+
+    // Out of HP when it reaches 0
+    public boolean depleted() {
+        return this.healthPoints == 0;
     }
 
     @Override
@@ -27,9 +38,4 @@ public class HealthPoints {
     public int max() {
         return this.maxHealthPoints;
     }
-
-    public boolean depleted() {
-        return this.healthPoints == 0;
-    }
-
 }

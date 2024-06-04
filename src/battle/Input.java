@@ -4,6 +4,11 @@ import java.util.Random;
 
 public interface Input {
     
+    /**
+     * Checks for a numeric input
+     * @param s string input
+     * @return true if input is numeric
+     */
     public static boolean isNumeric(String s) {
         try {
             Integer.valueOf(s);
@@ -13,12 +18,22 @@ public interface Input {
         }
     }
 
+    /**
+     * Checks if a input matches a character
+     * @param s string input
+     * @param c character to match
+     * @return true if input matches the character
+     */
     public static boolean isChar(String s, char c) {
         return s.length() == 1 && s.toLowerCase().charAt(0) == c;
     }
 
 
-    
+    /**
+     * @param min int
+     * @param max int
+     * @return random integer between max and min
+     */
     public static int randomInt(int min, int max) {
         if (min > max) throw new IllegalArgumentException("Max must be greater than min");
         return new Random().nextInt((max - min) + 1) + min;

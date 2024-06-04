@@ -15,41 +15,35 @@ public class Pokemon {
 
 
 // Object Variables
-    // Pokemon Level, higher level means stronger pokemon
-    private final int level;
-
-    // Pokemon's Name (Given by the player)
-    private final String pokemonName;
-
-    // Pokemon have one or two types
-    private final PokemonType type;
-
-    // National Pokedex Number
-    private final int pokedexNo;
+    private final int level; // Pokemon Level, higher level means a stronger pokemon 
+    private final String pokemonName; // Pokemon's Name (Given by the player)
+    private final PokemonType type; // Pokemon have one or two types
+    private final int pokedexNo; // National Pokedex Number
 
     // Pokemon Stats
-    private final HealthPoints hp;
+    private final HealthPoints hp; // Amount of HP the Pokemon has
     private final Stat[] stats; // [atk, def, spAtk, spDef, spd, acc, eva]
-    private final double weight;
+    private final double weight; // Weight of the Pokemon
 
     // Moves
-    private final Move[] moves; // Up to 4 moves
+    private final Move[] moves; // Available moves, can have up to four
 
-    // Status Conditions
-    private boolean immobilized;
-    private boolean fainted;
-    private boolean charged; // Charges moves
-    private boolean switchedIn; // Set to true when pokemon first enters the field;
-    private boolean hasMoved;
-    private boolean flinched;
+    // Status Conditions (TODO: Make these booleans into a new Class)
+    private boolean fainted; // When the Pokemon is unable to 
+    private boolean immobilized; // When the pokemon cannot act or dodge attacks
+    private boolean charged; // When the Pokemon charges up a move
+    private boolean switchedIn; // Set to true when the pokemon first enters the field;
+    private boolean hasMoved; // When the Pokemon has moved during the round
+    private boolean flinched; // When the Pokemon cannot act for the turn
 
-    private StatusCondition primaryCondition;
+    private StatusCondition primaryCondition; // Non-Volatile Condition (Does not clear when the Pokemon switches)
 
     // Other Stats
-    private int damageDealt;
-    private Move moveSelected;
+    private int damageDealt; // Amount of damage dealt during the round
+    private Move moveSelected; // Move selected for the round
 
-    // Constructor
+// Constructor
+    // Creates a new Pokemon for trainers to use in battle
     public Pokemon(
         int level,
         String name,
@@ -72,7 +66,11 @@ public class Pokemon {
         this.moves = moves;
     }
 
-    // Methods
+// Methods
+    /**
+     * A Pokemon that flinches cannot act
+     * @throws PokemonCannotActException If the Pokemon flinched
+     */
     public void checkFlinched() {
         if (!this.flinched) return;
 
@@ -81,18 +79,36 @@ public class Pokemon {
         throw new PokemonCannotActException(String.format("%s flinched and couldn't move!", this));    
     }
 
+    /**
+     * Checks all the Pokemon's status effects
+     * @param before If looking at condition that are applied before the Pokemon moves
+     */
     public void checkConditions(boolean before) {
         if (this.primaryCondition != null)
             if (this.primaryCondition.beforeMove() == before) this.primaryCondition.action().apply(this);
         this.checkFlinched();
     }
 
+    /**
+     * Uses a move on a target
+     * Decrements that moves PP
+     * @param move the Move chosen
+     * @param defender the target Pokemon
+     */
     public void useMove(Move move, Pokemon defender) {
         BattleLog.add(String.format("%s used %s!", this, move));
         move.pp().decrement();
         move.action().act(this, defender, move);
     }
 
+    /**
+     * Checks any condition, then
+     * Pokemon uses their move if actionable
+     * Pokemon is considered to have moved (even if they cannot act)
+     * 
+     * @param move the Move chosen
+     * @param defender the target Pokemon
+     */
     public void useTurn(Move move, Pokemon defender){
         try {
             this.checkConditions(true);
@@ -103,22 +119,31 @@ public class Pokemon {
         this.hasMoved = true;
     }
 
+    /**
+     * Takes damage which lowers HP
+     * If HP drops to 0, the pokemon faints
+     * 
+     * @throws IllegalArgumentException if value isn't positive
+     * @param value damage received
+     */ 
     public void takeDamage(int value) {
         if (value <= 0) throw new IllegalArgumentException("Damage must be a positive value");
 
         this.hp.change(-value); 
-        if (this.hp.depleted()) {
-            this.fainted = true; 
-            throw new PokemonFaintedException(this);
-        } 
+        if (this.hp.depleted()) throw new PokemonFaintedException(this);   
     }
 
+    /**
+     * Restores HP
+     * @throws IllegalArgumentException if value isn't positive
+     * @param value health restored
+     */
     public void healDamage(int value) {
         if (value <= 0) throw new IllegalArgumentException("Damage must be a positive value");
         this.hp.change(value);
     }
 
-    // Statistic Methods
+// Statistic Methods (All Methods display a Pokemon's information to the console)
     public String listStats() {
         return new StringBuilder()
         .append(String.format("Attack: %d%n", this.stats[Stat.ATTACK].power()))
@@ -168,7 +193,7 @@ public class Pokemon {
     }
 
 
-    // Boolean Methods
+// Boolean Methods
     public boolean hasPrimaryCondition() {
         return this.primaryCondition != null;
     }
@@ -184,7 +209,10 @@ public class Pokemon {
         return true;
     }
  
-    // Setters
+// Setters
+    public void setFainted(boolean f) {
+        this.fainted = f;
+    }
     public void setImmobilized(boolean i) {
         this.immobilized = i;
     }
@@ -230,6 +258,7 @@ public class Pokemon {
         this.moveSelected = null;
     }
 
+    // Clears any temporary effects
     public void backToTrainer() {
         this.damageDealt = 0;
         this.charged = false;
@@ -238,7 +267,7 @@ public class Pokemon {
         this.moveSelected = null;
     }
 
-    // Getters
+// Getters
     public int level() {
         return this.level;
     }

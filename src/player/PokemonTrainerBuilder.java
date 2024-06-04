@@ -3,25 +3,35 @@ package player;
 import java.util.ArrayList;
 import pokemon.Pokemon;
 
+// // Class designed to create PokemonTrainer objects efficiently
 public class PokemonTrainerBuilder {
-    
+    private static final int MAX_PARTY_CAPACITY = 6; // Trainers can have up to six Pokemon
+
+    // Must Set
     private String name = null;
     private final ArrayList<Pokemon> party = new ArrayList<>();
 
+    /**
+     * Converts into a PokemonTrainer
+     * @throws IllegalStateException if required variables are not set
+     * @return a new PokemonTrainer object
+     */
     public PokemonTrainer buildTrainer() {
-        if (this.name == null) throw new IllegalArgumentException("Name not initialized");
-        if (this.party.isEmpty()) throw new IllegalArgumentException("Party not initialized");
+        if (this.name == null) throw new IllegalStateException("Trainer does not have a name");
+        if (this.party.isEmpty()) throw new IllegalStateException(String.format("%s needs at least one pokemon in their party", this.name));
 
         return new PokemonTrainer(this.name, this.party.toArray(Pokemon[]::new));
     }
 
+    // Setters
     public PokemonTrainerBuilder setName(String n) {
         this.name = n;
         return this;
     }
 
+    // Adds a Pokemon to the party, cannot go over the max allowed
     public PokemonTrainerBuilder addPokemon(Pokemon p) {
-        if (this.party.size() == 6) throw new IllegalStateException("Max party capacity reached");
+        if (this.party.size() == MAX_PARTY_CAPACITY) throw new IllegalStateException("Max party capacity reached");
 
         this.party.add(p);
         return this;

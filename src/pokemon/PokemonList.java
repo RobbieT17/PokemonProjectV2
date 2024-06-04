@@ -3,12 +3,9 @@ package pokemon;
 import move.MoveList;
 import stats.GameType;
 
+// List of Pokemon (Listed in alphabetical order)
 public interface PokemonList {
-
-    private static String defaultName(String a, String b) {
-        return (b.equals("")) ? a : b;
-    }
-    
+ 
     public static Pokemon bulbasaur(String name) {
         return new PokemonBuilder()
         .setName(defaultName("Bulbasaur", name))
@@ -53,5 +50,9 @@ public interface PokemonList {
         .addMove(MoveList.tailWhip())
         .addMove(MoveList.rainDance())
         .buildPokemon();
+    }
+
+    private static String defaultName(String a, String b) {
+        return (b.equals("")) ? a : b;
     }
 }

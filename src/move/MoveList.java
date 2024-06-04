@@ -6,9 +6,11 @@ import battle.Weather;
 import stats.GameType;
 import stats.StatusCondition;
 
+// Interface storing all available Pokemon moves (Moves listed alphabetically)
 public interface MoveList {
 
-// A
+// AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+
     public static Move airSlash() {
         MoveAction action = (a, d, m) -> {
             MoveAction.dealDamage(a, d, m);
@@ -40,7 +42,8 @@ public interface MoveList {
         .buildMove();
     }
 
-// B
+// BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
+
     public static Move bite() {
         MoveAction action = (a, d, m) -> {
             MoveAction.dealDamage(a, d, m);
@@ -58,7 +61,10 @@ public interface MoveList {
         .buildMove();
     }
 
-// D
+// CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+
+
+// DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
     public static Move dragonBreath() {
         MoveAction action = (a, d, m) -> {
             MoveAction.dealDamage(a, d, m);
@@ -88,7 +94,8 @@ public interface MoveList {
         .buildMove();
     }
 
-// E
+// EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+
     public static Move ember() {
         MoveAction action = (a, d, m) -> {
             MoveAction.dealDamage(a, d, m);
@@ -106,7 +113,8 @@ public interface MoveList {
         .buildMove();
     }
 
-// F
+// FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+
     public static Move fireFang() {
         MoveAction action = (a, d, m) -> {
             MoveAction.dealDamage(a, d, m);
@@ -177,7 +185,8 @@ public interface MoveList {
         .buildMove();
     }
 
-// G
+// GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
+
     public static Move growl() {
         MoveAction action = (a, d, m) -> {
             MoveAction.moveHits(a, d, m);
@@ -216,7 +225,8 @@ public interface MoveList {
         .buildMove();
     }
 
-// H
+// HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
+
     public static Move heatWave() {
         MoveAction action = (a, d, m) -> {
             MoveAction.dealDamage(a, d, m);
@@ -248,7 +258,8 @@ public interface MoveList {
         .buildMove();
     }
 
-// I
+// IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
+
     public static Move inferno() {
         MoveAction action = (a, d, m) -> {
             MoveAction.dealDamage(a, d, m);
@@ -278,7 +289,11 @@ public interface MoveList {
         .buildMove();
     }
 
-// L
+// JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ
+// KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+
+// LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL
+
     public static Move leechSeed() {
         MoveAction action = (a, d, m) -> {
             MoveAction.moveHits(a, d, m);
@@ -295,8 +310,13 @@ public interface MoveList {
         .setAction(action)
         .buildMove();
     }
- 
-// P
+
+// MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+// NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+// OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+
+// PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
+
     public static Move petalBlizzard() {
         return new MoveBuilder()
         .setId(572)
@@ -358,7 +378,10 @@ public interface MoveList {
         .buildMove();
     }
 
-// R
+// QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ
+
+// RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
+
     public static Move rainDance() {
         return new MoveBuilder()
         .setId(240)
@@ -403,7 +426,7 @@ public interface MoveList {
         .buildMove();
     }
 
-// S
+// SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
     public static Move scaryFace() {
         MoveAction action = (a, d, m) -> {
             MoveAction.moveHits(a, d, m);
@@ -590,7 +613,7 @@ public interface MoveList {
         .buildMove();
     }
 
-// T
+// TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
     public static Move tackle() {
         return new MoveBuilder()
         .setId(33)
@@ -632,7 +655,10 @@ public interface MoveList {
         .buildMove();
     }
 
-// V
+// UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU
+
+// VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
+
     public static Move vineWhip() {
         return new MoveBuilder()
         .setId(22)
@@ -645,7 +671,8 @@ public interface MoveList {
         .buildMove();
     }
 
-// W
+// WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+
     public static Move waterGun() {
         return new MoveBuilder()
         .setId(55)
@@ -697,12 +724,17 @@ public interface MoveList {
         .buildMove();
     }
 
-// Struggle: Used when pokemon is out of moves
+
+// XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+// YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY
+// ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ
+
+// STRUGGLE: Used when pokemon is out of moves
     public static Move struggle() {
         return new MoveBuilder()
         .setId(165)
         .setName("Struggle")
-        .setType(GameType.NO_TYPE)
+        .setType(GameType.TYPELESS)
         .setCategory(Move.PHYSICAL)
         .setPP(-1)
         .setPower(40)

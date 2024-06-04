@@ -3,6 +3,7 @@ package stats;
 
 public class StatusCondition {
 
+// Public Class Variables
     // Status Conditions IDs
     public static final int BURN = 0;
     public static final int FREEZE = 1;
@@ -12,19 +13,20 @@ public class StatusCondition {
 
     public static final int FLINCH = 5;
 
-    // Object Variables
-    private final int id;
-    private final StatusAction action;
-    private final boolean beforeMove;
+// Object Variables
+    private final int id; // Unique Identifier 
+    private final StatusAction action; // The effect
+    private final boolean beforeMove; // If the effect is applied before the Pokemon moves
 
-    // Constructor
-    public StatusCondition(int id, StatusAction action, boolean before) {
+// Constructor
+    public StatusCondition(int id, StatusAction action, boolean beforeMove) {
         this.id = id;
-        this.beforeMove = before;
+        this.beforeMove = beforeMove;
         this.action = action;
     }
 
-    // Methods
+// Methods
+    // Message displayed if the Pokemon already has a condition
     public static String failMessage(int id) {
         return switch (id) {
             case BURN -> "burned";
@@ -48,7 +50,7 @@ public class StatusCondition {
         };
     }
 
-    // Getters
+// Getters
     public int id() {
         return this.id;
     }
