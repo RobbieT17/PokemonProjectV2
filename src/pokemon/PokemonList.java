@@ -5,6 +5,10 @@ import stats.GameType;
 
 // List of Pokemon (Listed in alphabetical order)
 public interface PokemonList {
+
+    private static String defaultName(String a, String b) {
+        return (b.equals("")) ? a : b;
+    }
  
     public static Pokemon bulbasaur(String name) {
         return new PokemonBuilder()
@@ -52,7 +56,18 @@ public interface PokemonList {
         .buildPokemon();
     }
 
-    private static String defaultName(String a, String b) {
-        return (b.equals("")) ? a : b;
+    public static Pokemon venusaur(String name) {
+        return new PokemonBuilder()
+        .setName(defaultName("Venusaur", name))
+        .setTypes(GameType.GRASS, GameType.POISON)
+        .setPokedexNo(3)
+        .setWeight(100.0)
+        .setHp(80)
+        .setStats(82, 83, 100, 100, 80)
+        .addMove(MoveList.petalBlizzard())
+        .addMove(MoveList.poisonPowder())
+        .addMove(MoveList.sunnyDay())
+        .addMove(MoveList.synthesis())
+        .buildPokemon();
     }
 }

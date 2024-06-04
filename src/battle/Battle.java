@@ -216,6 +216,7 @@ public class Battle {
         .addPokemon(PokemonList.bulbasaur("Bobby"))
         .addPokemon(PokemonList.charmander("Charlie"))
         .addPokemon(PokemonList.squirtle("Squirt"))
+        .addPokemon(PokemonList.venusaur("Val"))
         .buildTrainer();
 
         PokemonTrainer player2 = new PokemonTrainerBuilder()
