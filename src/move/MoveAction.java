@@ -23,10 +23,13 @@ public interface MoveAction {
 
 // Accuracy Function
     public static void moveHits(Pokemon attacker, Pokemon defender, Move move) {
-        if (move.accuracy() == Move.INF || defender.immobilized()) return;
+        if (move.accuracy() == Move.INF || defender.conditions().immobilized()) return;
 		
-        double modifiedAccuracy = 0.01 * move.accuracy() * ((double) attacker.accuracy().power() / (double) defender.evasion().power());
-        if (new Random().nextDouble() > modifiedAccuracy) throw new MoveInterruptedException(String.format("But %s avoided the attack!", defender));   
+        double modifiedAccuracy = 0.01 * move.accuracy() 
+        * ((double) attacker.accuracy().power() / (double) defender.evasion().power());
+
+        if (new Random().nextDouble() > modifiedAccuracy) 
+            throw new MoveInterruptedException(String.format("But %s avoided the attack!", defender));   
     } 
 
 // Damaging Functions
@@ -151,14 +154,26 @@ public interface MoveAction {
      * 
      * @return calculated damage
      */
-    private static int calculateDamage(Pokemon attacker, Pokemon defender, Move move, double effectiveness, boolean isCritical) {
+    private static int calculateDamage(
+        Pokemon attacker, 
+        Pokemon defender, 
+        Move move, 
+        double effectiveness, 
+        boolean isCritical
+        ) {   
+
         double stab = sameTypeAttackBonus(attacker, move);
         double crit = isCritical ? 1.5 : 1.0;
         double random = random();
         double weather = weatherBonus(move);
 
-        double attack = move.category().equals(Move.SPECIAL) ? calculateAttack(attacker.specialAttack(), isCritical) : calculateAttack(attacker.attack(), isCritical);
-        double defense = move.category().equals(Move.SPECIAL) ? calculateDefense(defender.specialDefense(), isCritical) : calculateDefense(defender.defense(), isCritical);
+        double attack = move.category().equals(Move.SPECIAL) 
+        ? calculateAttack(attacker.specialAttack(), isCritical) 
+        : calculateAttack(attacker.attack(), isCritical);
+
+        double defense = move.category().equals(Move.SPECIAL) 
+        ? calculateDefense(defender.specialDefense(), isCritical) 
+        : calculateDefense(defender.defense(), isCritical);
 
         double additional = move.category().equals(Move.SPECIAL) ? specialMoveBonus(attacker) : physicalMoveBonus(attacker);
         
@@ -189,7 +204,9 @@ public interface MoveAction {
          * No damage is dealt if defending is immune to the attack
          */
         double effectiveness = typeEffectiveness(move.moveType(), defender.pokemonType());
-        if (effectiveness == 0) throw new MoveInterruptedException(String.format("But it doesn't affect %s...", defender)); 
+
+        if (effectiveness == 0) 
+            throw new MoveInterruptedException(String.format("But it doesn't affect %s...", defender)); 
         
         moveHits(attacker, defender, move); // Deals no damage if move misses
         
@@ -230,13 +247,13 @@ public interface MoveAction {
      * Can be interrupted by status effects
      */
     public static void chargeMove(Pokemon p1, Pokemon p2, Move move ) {
-        if (!p1.charged()) {
+        if (!p1.conditions().charged()) {
             move.pp().increment(); // Done bc pp is decremented every move call
-            p1.setCharge(true);       
+            p1.conditions().setCharge(true);       
             BattleLog.add(String.format("%s begins charging!", p1));
         }
         else {
-            p1.setCharge(false);
+            p1.conditions().setCharge(false);
             dealDamage(p1, p2, move);
         }
     }
@@ -345,7 +362,7 @@ public interface MoveAction {
     private static void applyCondition(Pokemon p, double chance, StatusCondition condition, String message) {
         if (new Random().nextDouble() > chance * 0.01) return;
 
-        p.setPrimaryCondition(condition);
+        p.conditions().setPrimaryCondition(condition);
         BattleLog.add(message);
     }
 
@@ -368,7 +385,7 @@ public interface MoveAction {
     // Applies Freeze Condition
     private static void applyFreeze(Pokemon p, double chance) {
         applyCondition(p, chance, StatusAction.freeze(), p + " froze!");
-        p.setCharge(false);
+        p.conditions().setCharge(false);
     }
 
     // Applies Paralysis Condition
@@ -416,7 +433,7 @@ public interface MoveAction {
 
     // Pokemon flinches if it hasn't moved yet
     public static void applyFlinch(Pokemon p, double chance) {
-        if (p.hasMoved() || new Random().nextDouble() > chance * 0.01) return;
-        p.setFlinched(true);
+        if (p.conditions().hasMoved() || new Random().nextDouble() > chance * 0.01) return;
+        p.conditions().setFlinched(true);
     }
 }

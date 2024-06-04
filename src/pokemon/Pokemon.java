@@ -6,7 +6,6 @@ import battle.PokemonCannotActException;
 import battle.PokemonFaintedException;
 import move.Move;
 import stats.Stat;
-import stats.StatusCondition;
 
 public class Pokemon {
 // Class Variables
@@ -28,15 +27,8 @@ public class Pokemon {
     // Moves
     private final Move[] moves; // Available moves, can have up to four
 
-    // Status Conditions (TODO: Make these booleans into a new Class)
-    private boolean fainted; // When the Pokemon is unable to 
-    private boolean immobilized; // When the pokemon cannot act or dodge attacks
-    private boolean charged; // When the Pokemon charges up a move
-    private boolean switchedIn; // Set to true when the pokemon first enters the field;
-    private boolean hasMoved; // When the Pokemon has moved during the round
-    private boolean flinched; // When the Pokemon cannot act for the turn
-
-    private StatusCondition primaryCondition; // Non-Volatile Condition (Does not clear when the Pokemon switches)
+    //Conditions
+    private final PokemonConditions conditions; 
 
     // Other Stats
     private int damageDealt; // Amount of damage dealt during the round
@@ -52,7 +44,8 @@ public class Pokemon {
         double weight,
         HealthPoints hp,
         Stat[] stats, 
-        Move[] moves
+        Move[] moves,
+        PokemonConditions conditions
     ) {
         this.level = level;
         this.pokemonName = name;
@@ -64,6 +57,7 @@ public class Pokemon {
         this.stats = stats;
 
         this.moves = moves;
+        this.conditions = conditions;
     }
 
 // Methods
@@ -72,10 +66,10 @@ public class Pokemon {
      * @throws PokemonCannotActException If the Pokemon flinched
      */
     public void checkFlinched() {
-        if (!this.flinched) return;
+        if (!this.conditions.flinched()) return;
 
-        this.charged = false;
-        this.flinched = false;
+        this.conditions.setCharge(false);
+        this.conditions.setFlinched(false);
         throw new PokemonCannotActException(String.format("%s flinched and couldn't move!", this));    
     }
 
@@ -84,8 +78,9 @@ public class Pokemon {
      * @param before If looking at condition that are applied before the Pokemon moves
      */
     public void checkConditions(boolean before) {
-        if (this.primaryCondition != null)
-            if (this.primaryCondition.beforeMove() == before) this.primaryCondition.action().apply(this);
+        if (this.hasPrimaryCondition())
+            if (this.conditions.primaryCondition().beforeMove() == before) 
+                this.conditions.primaryCondition().action().apply(this);
         this.checkFlinched();
     }
 
@@ -116,7 +111,7 @@ public class Pokemon {
         } catch (PokemonCannotActException | MoveInterruptedException e) {
             BattleLog.add(e.getMessage());
         }
-        this.hasMoved = true;
+        this.conditions.setHasMoved(true);
     }
 
     /**
@@ -177,9 +172,9 @@ public class Pokemon {
 	}
 
     public String showCondition() {
-        if (this.fainted) return "FAINTED";
+        if (this.conditions.fainted()) return "FAINTED";
         if (!this.hasPrimaryCondition()) return "";
-        return this.primaryCondition.toString();
+        return this.conditions.primaryCondition().toString();
     }
 
     public String showPartyStats() {
@@ -195,12 +190,12 @@ public class Pokemon {
 
 // Boolean Methods
     public boolean hasPrimaryCondition() {
-        return this.primaryCondition != null;
+        return this.conditions.primaryCondition() != null;
     }
 
     public boolean hasPrimaryCondition(int i) {
-        if (this.primaryCondition == null) return false;
-        return this.primaryCondition.id() == i;
+        if (this.conditions.primaryCondition() == null) return false;
+        return this.conditions.primaryCondition().id() == i;
     }
 
     public boolean hasNoMoves() {
@@ -210,37 +205,6 @@ public class Pokemon {
     }
  
 // Setters
-    public void setFainted(boolean f) {
-        this.fainted = f;
-    }
-    public void setImmobilized(boolean i) {
-        this.immobilized = i;
-    }
-
-    public void setCharge(boolean c) {
-        this.charged = c;
-    }
-
-    public void setSwitchedIn(boolean s) {
-        this.switchedIn = s;
-    }
-
-    public void setHasMoved(boolean h) {
-        this.hasMoved = h;
-    }
-
-    public void setFlinched(boolean f) {
-        this.flinched = f;
-    }
-
-    public void setPrimaryCondition(StatusCondition c) {
-        this.primaryCondition = c;
-    }
-
-    public void clearPrimaryCondition() {
-        this.primaryCondition = null;
-    }
-
     public void addDealtDamage(int d) {
         if (d <= 0) throw new IllegalArgumentException("Damage must be positive");
         this.damageDealt += d;
@@ -261,9 +225,9 @@ public class Pokemon {
     // Clears any temporary effects
     public void backToTrainer() {
         this.damageDealt = 0;
-        this.charged = false;
-        this.switchedIn = false;
-        this.immobilized = false;
+        this.conditions.setCharge(false);
+        this.conditions.setSwitchedIn(false);
+        this.conditions.setImmobilized(false);
         this.moveSelected = null;
     }
 
@@ -324,36 +288,12 @@ public class Pokemon {
 		return this.weight;
 	}
 
-    public boolean immobilized() {
-        return this.immobilized;
-    }
-
-    public boolean fainted() {
-        return this.fainted;
-    }
-
-    public boolean charged() {
-        return this.charged;
-    }
-
-    public boolean switchedIn() {
-        return this.switchedIn;
-    }
-
-    public boolean hasMoved() {
-        return this.hasMoved;
-    }
-
-    public boolean flinched() {
-        return this.flinched;
-    }
-
     public Move[] moves() {
         return this.moves;
     }
 
-    public StatusCondition primaryCondition() {
-        return this.primaryCondition;
+    public PokemonConditions conditions() {
+        return this.conditions;
     }
 
     public int damageDealt() {

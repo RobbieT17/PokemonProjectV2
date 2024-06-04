@@ -71,7 +71,8 @@ public class PokemonBuilder {
             this.weight,
             this.hp, 
             new Stat[] {this.atk, this.def, this.spAtk, this.spDef, this.spd, this.acc, this.eva},
-            this.moves.toArray(Move[]::new)
+            this.moves.toArray(Move[]::new),
+            new PokemonConditions()
             );
     }
 

@@ -14,7 +14,7 @@ public class PokemonFaintedException extends RuntimeException{
      */
     public PokemonFaintedException(Pokemon p) {
         super(String.format("%s fainted!", p));
-        p.setFainted(true);
-        p.clearPrimaryCondition();
+        p.conditions().setFainted(true);
+        p.conditions().clearPrimaryCondition();
     }
 }

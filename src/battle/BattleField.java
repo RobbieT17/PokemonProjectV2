@@ -22,9 +22,9 @@ public class BattleField {
     // Resets some Pokemon attributes then applies after conditions
     private static void pokemonAfterEffects(Pokemon p) {
         try {
-            p.setSwitchedIn(false);
-            p.setHasMoved(false);
-            p.setFlinched(false);
+            p.conditions().setSwitchedIn(false);
+            p.conditions().setHasMoved(false);
+            p.conditions().setFlinched(false);
             p.resetDamageDealt();
             p.checkConditions(false);
         } catch (PokemonFaintedException e) {

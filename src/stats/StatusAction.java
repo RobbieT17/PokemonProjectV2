@@ -37,14 +37,14 @@ public interface StatusAction {
     public static StatusCondition freeze() {
         StatusAction action = p -> {
             if (new Random().nextDouble() <= 0.2) {
-                p.setImmobilized(false);
-                p.clearPrimaryCondition();
+                p.conditions().setImmobilized(false);
+                p.conditions().clearPrimaryCondition();
                 BattleLog.add(String.format("%s thawed!", p));
                 return;
             }
 
-            p.setImmobilized(true);
-            p.setCharge(false);
+            p.conditions().setImmobilized(true);
+            p.conditions().setCharge(false);
             throw new PokemonCannotActException(String.format("%s is frozen solid!", p));
         };
         
@@ -97,14 +97,14 @@ public interface StatusAction {
         StatusAction action = p -> {
             counter.inc();
             if (counter.terminated()) {
-                p.setImmobilized(false);
-                p.clearPrimaryCondition();
+                p.conditions().setImmobilized(false);
+                p.conditions().clearPrimaryCondition();
                 BattleLog.add(String.format("%s woke up!", p));
                 return;
             } 
 
-            p.setImmobilized(true);
-            p.setCharge(false);
+            p.conditions().setImmobilized(true);
+            p.conditions().setCharge(false);
             throw new PokemonCannotActException(String.format("%s is fast asleep...", p));    
         };
 

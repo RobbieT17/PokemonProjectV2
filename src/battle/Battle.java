@@ -14,7 +14,7 @@ public class Battle {
 
     // Can switch pokemon if and only if the Pokemon hasn't fainted and isn't the current one out
     public static boolean validPokemonChoice(PokemonTrainer pt, Pokemon p) {
-        return !p.fainted() && (pt.pokemonInBattle() != null) ? !pt.pokemonInBattle().equals(p) : true;
+        return !p.conditions().fainted() && (pt.pokemonInBattle() != null) ? !pt.pokemonInBattle().equals(p) : true;
     }
 
     // Trainer chooses a Pokemon to send out to battle
@@ -60,7 +60,7 @@ public class Battle {
          * Unable to choose a move if just switched in
          * or charging (If changing, the pokemon uses last move selected)
          */
-        if (p.charged() || p.switchedIn()) return;
+        if (p.conditions().charged() || p.conditions().switchedIn()) return;
 
         Scanner scanner = new Scanner(System.in);
         boolean done = false;
@@ -116,8 +116,13 @@ public class Battle {
         Move m2 = p2.moveSelected();
 
         // Paralyzed Pokemons' speed is reduced by half
-        int speed1 = (int) (p1.hasPrimaryCondition(StatusCondition.PARALYSIS) ? p1.speed().power() * 0.5 : p1.speed().power());
-        int speed2 = (int) (p2.hasPrimaryCondition(StatusCondition.PARALYSIS) ? p2.speed().power() * 0.5 : p2.speed().power());
+        int speed1 = (int) (p1.hasPrimaryCondition(StatusCondition.PARALYSIS) 
+        ? p1.speed().power() * 0.5 
+        : p1.speed().power());
+
+        int speed2 = (int) (p2.hasPrimaryCondition(StatusCondition.PARALYSIS) 
+        ? p2.speed().power() * 0.5 
+        : p2.speed().power());
 
         // Handles null moves (pokemon may not always have selected a move)
         if (m2 == null) {
@@ -234,11 +239,11 @@ public class Battle {
 
         // Game ends when one trainer is out of Pokemon
         while (!player1.outOfPokemon() && !player2.outOfPokemon()) {
-            while (!player1.pokemonInBattle().fainted() && !player2.pokemonInBattle().fainted()) 
+            while (!player1.pokemonInBattle().conditions().fainted() && !player2.pokemonInBattle().conditions().fainted()) 
                 moveSelection(player1, player2);
             
-            if (player1.pokemonInBattle().fainted()) choosePokemon(player1);
-            if (player2.pokemonInBattle().fainted()) choosePokemon(player2);
+            if (player1.pokemonInBattle().conditions().fainted()) choosePokemon(player1);
+            if (player2.pokemonInBattle().conditions().fainted()) choosePokemon(player2);
         }
 
         // Displays the winner

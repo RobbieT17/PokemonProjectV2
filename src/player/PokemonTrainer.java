@@ -36,7 +36,7 @@ public class PokemonTrainer {
     // True when all the trainer's Pokemon have fainted
     public boolean outOfPokemon() {
         for (Pokemon p : this.team)
-            if (!p.fainted()) return false;
+            if (!p.conditions().fainted()) return false;
         return true;
     }
 
@@ -45,7 +45,7 @@ public class PokemonTrainer {
         int count = 0;
 
         for (Pokemon p : this.team)
-            if (!p.fainted()) count++;
+            if (!p.conditions().fainted()) count++;
 
         return count;
     }
@@ -61,7 +61,7 @@ public class PokemonTrainer {
     // Sends a Pokemon to the battle, the Pokemon cannot act until the next turn
     public void sendOut(Pokemon p) {
         this.pokemonInBattle = p;
-        this.pokemonInBattle.setSwitchedIn(true);
+        this.pokemonInBattle.conditions().setSwitchedIn(true);
         BattleLog.add(String.format("%n%s sends out %s!", this, p)); 
     }
 
