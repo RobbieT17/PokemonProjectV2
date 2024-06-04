@@ -46,6 +46,13 @@ public class PokemonBuilder {
 		return ((baseStat * 2 * this.level) / 100) + 5;
 	}
 
+    // Has two or more of the same moves in the move array
+    private boolean duplicateMove(Move m) {
+        for (Move move : this.moves)
+            if (move.moveID() == m.moveID()) return true;
+        return false;
+    }
+
     /**
      * Converts into a Pokemon
      * @throws IllegalStateException If required variables are not set
@@ -130,6 +137,7 @@ public class PokemonBuilder {
     // Adds move to moveset, cannot have more than four moves or duplicates moves
     public PokemonBuilder addMove(Move m) {
         if (this.moves.size() == MAX_MOVES_ALLOWED) throw new IllegalStateException("Cannot have more than four moves");
+        if (this.duplicateMove(m)) throw new IllegalArgumentException(String.format("Duplicate move: %s", m));
 
         this.moves.add(m);
         return this;
