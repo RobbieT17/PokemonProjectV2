@@ -12,6 +12,8 @@ import stats.StatusCondition;
 
 public class Battle {
 
+    public static boolean skipRound; // Switched in Pokemon after a faint don't get attacked for the round
+
     // Can switch pokemon if and only if the Pokemon hasn't fainted and isn't the current one out
     public static boolean validPokemonChoice(PokemonTrainer pt, Pokemon p) {
         return !p.conditions().fainted() && (pt.pokemonInBattle() != null) ? !pt.pokemonInBattle().equals(p) : true;
@@ -187,6 +189,7 @@ public class Battle {
      * @param pt2 Player 2
      */
     public static void moveSelection(PokemonTrainer pt1, PokemonTrainer pt2) {
+        if (Battle.skipRound) return;
         try {
             // Player choose their moves
             chooseMove(pt1);
@@ -204,16 +207,6 @@ public class Battle {
         } catch (PokemonFaintedException e) {
             BattleLog.add(e.getMessage());
         } 
-
-        /**
-         * Updates Battlefield attributes
-         * Applies an after effects to each Pokemon
-         * Resets any other necessary parameters
-         */
-        BattleField.endOfRound(pt1.pokemonInBattle(), pt2.pokemonInBattle());
-
-        // Plays out the round messages
-        BattleLog.out();
     }
 
     public static void main(String[] args) {
@@ -236,14 +229,20 @@ public class Battle {
         choosePokemon(player2);
 
         BattleLog.out();
+        Battle.skipRound = true;
 
         // Game ends when one trainer is out of Pokemon
         while (!player1.outOfPokemon() && !player2.outOfPokemon()) {
-            while (!player1.pokemonInBattle().conditions().fainted() && !player2.pokemonInBattle().conditions().fainted()) 
-                moveSelection(player1, player2);
+            while (!player1.pokemonInBattle().conditions().fainted() && !player2.pokemonInBattle().conditions().fainted()) {     
+                moveSelection(player1, player2);    
+                BattleField.endOfRound(player1.pokemonInBattle(), player2.pokemonInBattle());      
+                BattleLog.out();  // Plays out the round messages
+            }
             
+            Battle.skipRound = true;
             if (player1.pokemonInBattle().conditions().fainted()) choosePokemon(player1);
-            if (player2.pokemonInBattle().conditions().fainted()) choosePokemon(player2);
+            else if (player2.pokemonInBattle().conditions().fainted()) choosePokemon(player2);
+            else throw new IllegalStateException("Pokemon must've fainted, what happened???");
         }
 
         // Displays the winner

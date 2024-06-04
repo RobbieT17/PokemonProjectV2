@@ -26,6 +26,7 @@ public class BattleField {
         weatherUpdate();
         p1.endRound();
         p2.endRound();
+        Battle.skipRound = false;
     }
 
 }
