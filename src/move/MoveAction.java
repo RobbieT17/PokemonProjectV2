@@ -235,8 +235,10 @@ public interface MoveAction {
 
     // Restores a percentage of a Pokemon's maximum HP
     public static void restoreHp(Pokemon p, double percent) {
+        if (p.hp().atFullHP()) throw new MoveInterruptedException(String.format("But %s is already at full health!", p));
+
         int heal = (int) (0.01 * percent * p.hp().max());
-        BattleLog.add(String.format("%s restored %d HP", p, heal));
+        BattleLog.add(String.format("%s restored %d HP!", p, heal));
         p.healDamage(heal);
     }
 
