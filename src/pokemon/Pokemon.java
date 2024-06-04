@@ -216,6 +216,12 @@ public class Pokemon {
             if (!m.pp().depleted()) return false;
         return true;
     }
+
+    public boolean isType(String type) {
+        return (this.type.hasSecondaryType())
+        ? this.type.primaryType().typeName().equals(type) || this.type.secondaryType().typeName().equals(type)
+        : this.type.primaryType().typeName().equals(type);
+    }
  
 // Setters
     public void addDealtDamage(int d) {
