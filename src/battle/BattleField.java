@@ -24,6 +24,7 @@ public class BattleField {
         try {
             p.setSwitchedIn(false);
             p.setHasMoved(false);
+            p.setFlinched(false);
             p.resetDamageDealt();
             p.checkConditions(false);
         } catch (PokemonFaintedException e) {
