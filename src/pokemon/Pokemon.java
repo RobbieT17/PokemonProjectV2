@@ -17,7 +17,7 @@ public class Pokemon {
     private final int level; // Pokemon Level, higher level means a stronger pokemon 
     private final String pokemonName; // Pokemon's Name (Given by the player)
     private final PokemonType type; // Pokemon have one or two types
-    private final int pokedexNo; // National Pokedex Number
+    private final int pokedexID; // National Pokedex Number
 
     // Pokemon Stats
     private final HealthPoints hp; // Amount of HP the Pokemon has
@@ -51,7 +51,7 @@ public class Pokemon {
         this.pokemonName = name;
         this.type = types;
 
-        this.pokedexNo = pokedex;
+        this.pokedexID = pokedex;
         this.weight = weight;
         this.hp = hp;
         this.stats = stats;
@@ -177,7 +177,7 @@ public class Pokemon {
 		.append(String.format("Name: %s%n", this.pokemonName))
 		.append(String.format("Type: %s", this.type.toString()))
         .append(String.format("LEVEL %d%n", this.level))
-		.append(String.format("%nPokedex Number: %d%n", this.pokedexNo))
+		.append(String.format("%nPokedex Number: %d%n", this.pokedexID))
 		.append(String.format("%nSTATS:%nHP: %s%n", this.hp.toString()))
 		.append(String.format("%s", this.listStats()))
         .append(String.format("%nMOVES: %n%s", this.listMoves()))
@@ -263,8 +263,8 @@ public class Pokemon {
         return this.type;
     }
 
-    public int pokedexNo() {
-        return this.pokedexNo;
+    public int pokedexID() {
+        return this.pokedexID;
     }
 
     public HealthPoints hp() {
