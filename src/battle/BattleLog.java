@@ -1,6 +1,7 @@
 package battle;
 import java.util.Deque;
 import java.util.LinkedList;
+import utility.Time;
 
 public interface BattleLog {
 

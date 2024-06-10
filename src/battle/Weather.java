@@ -1,6 +1,6 @@
 package battle;
 
-import stats.Counter;
+import utility.Counter;
 
 public interface Weather {
 
