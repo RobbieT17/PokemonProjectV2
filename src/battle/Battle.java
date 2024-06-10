@@ -1,5 +1,6 @@
 package battle;
 
+import exceptions.PokemonFaintedException;
 import java.util.InputMismatchException;
 import java.util.Random;
 import java.util.Scanner;
@@ -9,6 +10,7 @@ import player.*;
 import pokemon.Pokemon;
 import pokemon.PokemonList;
 import stats.StatusCondition;
+import utility.Input;
 
 public class Battle {
 
@@ -213,17 +215,16 @@ public class Battle {
 
         PokemonTrainer player1 = new PokemonTrainerBuilder()
         .setName("Robbie")
-        .addPokemon(PokemonList.bulbasaur("Bobby"))
-        .addPokemon(PokemonList.charmander("Charlie"))
-        .addPokemon(PokemonList.squirtle("Squirt"))
-        .addPokemon(PokemonList.venusaur("Val"))
+        .addPokemon(PokemonList.venusaur("Bobby"))
+        .addPokemon(PokemonList.charizard("Charlie"))
+        .addPokemon(PokemonList.blastoise("Squirt"))
         .buildTrainer();
 
         PokemonTrainer player2 = new PokemonTrainerBuilder()
         .setName("Sammi")
-        .addPokemon(PokemonList.bulbasaur("Bub"))
-        .addPokemon(PokemonList.charmander("Chandler"))
-        .addPokemon(PokemonList.squirtle("Tim"))
+        .addPokemon(PokemonList.venusaur("Bub"))
+        .addPokemon(PokemonList.charizard("Chandler"))
+        .addPokemon(PokemonList.blastoise("Tim"))
         .buildTrainer();
 
         choosePokemon(player1);
