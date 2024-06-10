@@ -1,4 +1,4 @@
-package battle;
+package exceptions;
 
 /*
  * Exception is thrown when a move cannot be completed

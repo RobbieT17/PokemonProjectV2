@@ -1,4 +1,4 @@
-package battle;
+package exceptions;
 
 import pokemon.Pokemon;
 
