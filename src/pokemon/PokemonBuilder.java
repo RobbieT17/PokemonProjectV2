@@ -116,16 +116,16 @@ public class PokemonBuilder {
     }
 
     public PokemonBuilder setHp(int value) {
-        this.hp = new HealthPoints(calculateHp(value));
+        this.hp = new HealthPoints(this.calculateHp(value));
         return this;
     }
 
     public PokemonBuilder setStats(int atk, int def, int spAtk, int spDef, int spd) {
-        this.atk = new Stat(Stat.ATTACK_NAME, Stat.ATTACK, calculate(atk));
-        this.def = new Stat(Stat.DEFENSE_NAME, Stat.DEFENSE, calculate(def));
-        this.spAtk = new Stat(Stat.SPECIAL_ATTACK_NAME, Stat.SPECIAL_ATTACK, calculate(spAtk));
-        this.spDef = new Stat(Stat.SPECIAL_DEFENSE_NAME, Stat.SPECIAL_DEFENSE, calculate(spDef));
-        this.spd = new Stat(Stat.SPEED_NAME, Stat.SPEED, calculate(spd));
+        this.atk = new Stat(Stat.ATTACK_NAME, Stat.ATTACK, this.calculate(atk));
+        this.def = new Stat(Stat.DEFENSE_NAME, Stat.DEFENSE, this.calculate(def));
+        this.spAtk = new Stat(Stat.SPECIAL_ATTACK_NAME, Stat.SPECIAL_ATTACK, this.calculate(spAtk));
+        this.spDef = new Stat(Stat.SPECIAL_DEFENSE_NAME, Stat.SPECIAL_DEFENSE, this.calculate(spDef));
+        this.spd = new Stat(Stat.SPEED_NAME, Stat.SPEED, this.calculate(spd));
         return this;
     }
 
