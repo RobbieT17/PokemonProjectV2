@@ -1,18 +1,43 @@
 package pokemon;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.stream.Stream;
 import stats.StatusCondition;
 
 public class PokemonConditions {
     
 // Object Variables
-    private boolean fainted; // When the Pokemon is unable to 
+    private boolean fainted; // When the Pokemon is unable to battle
     private boolean immobilized; // When the pokemon cannot act or dodge attacks
     private boolean charged; // When the Pokemon charges up a move
     private boolean switchedIn; // Set to true when the pokemon first enters the field;
     private boolean hasMoved; // When the Pokemon has moved during the round
     private boolean flinched; // When the Pokemon cannot act for the turn
 
-    private StatusCondition primaryCondition; // Non-Volatile Condition (Does not clear when the Pokemon switches)
+    private StatusCondition primaryCondition; // Non-Volatile Condition (Burn, Freeze, Paralysis, Poison, Sleep)
+    private final HashMap<Integer, StatusCondition> volatileConditions;
+
+// Constructor
+    public PokemonConditions() {
+        this.volatileConditions = new HashMap<>();
+    }
+
+// Methods
+    public boolean hasCondition(int key) {
+        return this.volatileConditions.containsKey(key);
+    }
+
+    public StatusCondition filterPrimaryCondition(boolean b) {
+        return this.primaryCondition != null && this.primaryCondition.beforeMove() == b
+        ? this.primaryCondition
+        : null;
+    }
+
+    public Stream<StatusCondition> filterVolatileConditions(boolean b) {
+        return Arrays.stream(this.volatileConditions.values().toArray(StatusCondition[]::new))
+        .filter(c -> c.beforeMove() == b);
+    }
 
 // Setters
     public void setFainted(boolean f) {
@@ -46,6 +71,14 @@ public class PokemonConditions {
         this.primaryCondition = null;
     }
 
+    public void add(StatusCondition condition) {
+        this.volatileConditions.put(condition.id(), condition);
+    }
+
+    public void remove(int key) {
+        this.volatileConditions.remove(key);
+    }
+
 // Getters
     public boolean immobilized() {
         return this.immobilized;
@@ -74,4 +107,9 @@ public class PokemonConditions {
     public StatusCondition primaryCondition() {
         return this.primaryCondition;
     }
+
+    public HashMap<Integer, StatusCondition> volatileConditions() {
+        return this.volatileConditions;
+    }
+
 }
