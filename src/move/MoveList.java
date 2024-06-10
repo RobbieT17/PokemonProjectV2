@@ -687,7 +687,7 @@ public interface MoveList {
     public static Move waterPulse() {
         MoveAction action = (a, d, m) -> {
             MoveAction.dealDamage(a, d, m);
-            MoveAction.volatileStatusEffect(d, StatusCondition.CONFUSION, 50);
+            MoveAction.volatileStatusEffect(d, StatusCondition.CONFUSION, 20);
         };
 
         return new MoveBuilder()
@@ -741,7 +741,5 @@ public interface MoveList {
         .setAction((a, d, m) -> MoveAction.dealDamageRecoil(a, d, m, 25))
         .buildMove();
     }
-
-
 
 }
