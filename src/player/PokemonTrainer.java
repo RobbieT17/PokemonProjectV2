@@ -2,6 +2,7 @@ package player;
 
 import battle.BattleLog;
 import pokemon.Pokemon;
+import pokemon.PokemonStats;
 
 public class PokemonTrainer {
         
@@ -28,7 +29,7 @@ public class PokemonTrainer {
         StringBuilder sb = new StringBuilder();
 
         for (int i = 0; i < this.team.length; i++)
-            sb.append(String.format("[%d] %s", i, this.team[i].showPartyStats()));
+            sb.append(String.format("[%d] %s", i, PokemonStats.showPartyStats(this.team[i])));
 
         return sb.toString();
     }
