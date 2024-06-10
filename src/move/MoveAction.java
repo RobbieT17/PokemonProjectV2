@@ -2,9 +2,9 @@ package move;
 
 import battle.BattleField;
 import battle.BattleLog;
-import battle.MoveInterruptedException;
-import battle.PokemonFaintedException;
 import battle.Weather;
+import exceptions.MoveInterruptedException;
+import exceptions.PokemonFaintedException;
 import java.util.Random;
 import pokemon.Pokemon;
 import pokemon.PokemonType;
@@ -12,6 +12,7 @@ import stats.GameType;
 import stats.Stat;
 import stats.StatusAction;
 import stats.StatusCondition;
+import utility.RandomValues;
 
 @FunctionalInterface
 public interface MoveAction {
@@ -231,6 +232,16 @@ public interface MoveAction {
         recoilDamage(attacker, percent);
     }
 
+    /**
+     * Confusion damage is calculated as if it were a typeless physical move with a power of 40
+     * It cannot score a critical hit, and does not receive STAB
+     */
+    public static void takeConfusionDamage(Pokemon p) {
+        int damage = (int) (((((2 * p.level()) / 5.0 + 2) * 40 * (p.attack().power() / (double) p.defense().power())) / 50.0 + 2)); 
+        BattleLog.add(String.format("%s took %d damage from their own confusion!", p, damage));
+        p.takeDamage(damage);
+    }
+
 // Restore HP Functions
 
     // Restores a percentage of a Pokemon's maximum HP
@@ -362,9 +373,16 @@ public interface MoveAction {
      * @param message application message
      */
     private static void applyCondition(Pokemon p, double chance, StatusCondition condition, String message) {
-        if (new Random().nextDouble() > chance * 0.01) return;
+        if (!RandomValues.chance(chance)) return;
 
         p.conditions().setPrimaryCondition(condition);
+        BattleLog.add(message);
+    }
+
+    private static void applyVolatileCondition(Pokemon p, double chance, StatusCondition condition, String message) {
+        if (!RandomValues.chance(chance)) return;
+
+        p.conditions().add(condition);
         BattleLog.add(message);
     }
 
@@ -416,8 +434,13 @@ public interface MoveAction {
     }
 
     // Applies Sleep Condition
-    private static void applySleep(Pokemon p, int turns) {
-        applyCondition(p, 100, StatusAction.sleep(turns), p + " fell asleep!");
+    private static void applySleep(Pokemon p) {
+        applyCondition(p, 100, StatusAction.sleep(), p + " fell asleep!");
+    }
+
+    // Applies Confusion Condition
+    private static void applyConfusion(Pokemon p, double chance) {
+        applyVolatileCondition(p, chance, StatusAction.confusion(), p + " became confused!");
     }
 
     // Check if a condition can be applied. Displays a message if it cannot
@@ -426,16 +449,7 @@ public interface MoveAction {
         statusEffect(p, statusId, 100);
     }
 
-    public static void canApplyEffect(Pokemon p, int statusId, int duration) {
-        canBeApplied(p, statusId);
-        
-        switch (statusId) {
-            case StatusCondition.SLEEP ->  applySleep(p, duration);
-            default -> throw new IllegalArgumentException("Invalid condition id");
-        }
-    }
-
-    // Checks if a condition can be applied. 
+    // Checks if a non-volatile condition can be applied. 
     public static void statusEffect(Pokemon p, int statusId, double chance) {
         if (p.hasPrimaryCondition()) throw new MoveInterruptedException();
 
@@ -444,6 +458,16 @@ public interface MoveAction {
             case StatusCondition.FREEZE -> applyFreeze(p, chance);  
             case StatusCondition.PARALYSIS -> applyParalysis(p, chance);   
             case StatusCondition.POISON -> applyPoison(p, chance); 
+            case StatusCondition.SLEEP -> applySleep(p);
+            default -> throw new IllegalArgumentException("Invalid condition id");
+        }
+    }
+
+    public static void volatileStatusEffect(Pokemon p, int statusId, double chance) {
+        if (p.conditions().hasCondition(statusId)) throw new MoveInterruptedException();
+
+        switch (statusId) {
+            case StatusCondition.CONFUSION -> applyConfusion(p, chance);
             default -> throw new IllegalArgumentException("Invalid condition id");
         }
     }

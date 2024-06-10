@@ -1,7 +1,6 @@
 package move;
 
 import battle.BattleField;
-import battle.Input;
 import battle.Weather;
 import stats.GameType;
 import stats.StatusCondition;
@@ -503,7 +502,7 @@ public interface MoveList {
     public static Move sleepPowder() {
         MoveAction action = (a, d, m) -> {
             MoveAction.moveHits(a, d, m);
-            MoveAction.canApplyEffect(d, StatusCondition.SLEEP, Input.randomInt(1, 3));
+            MoveAction.canApplyEffect(d, StatusCondition.SLEEP);
         };
 
         return new MoveBuilder()
@@ -688,7 +687,7 @@ public interface MoveList {
     public static Move waterPulse() {
         MoveAction action = (a, d, m) -> {
             MoveAction.dealDamage(a, d, m);
-            // TODO: Add Confusion Effect
+            MoveAction.volatileStatusEffect(d, StatusCondition.CONFUSION, 50);
         };
 
         return new MoveBuilder()
@@ -697,6 +696,7 @@ public interface MoveList {
         .setType(GameType.WATER)
         .setCategory(Move.SPECIAL)
         .setPP(20)
+        .setPower(60)
         .setAction(action)
         .buildMove();
     }
