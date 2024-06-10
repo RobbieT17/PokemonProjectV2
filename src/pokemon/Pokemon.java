@@ -1,9 +1,7 @@
 package pokemon;
 
 import battle.BattleLog;
-import battle.MoveInterruptedException;
-import battle.PokemonCannotActException;
-import battle.PokemonFaintedException;
+import exceptions.*;
 import move.Move;
 import stats.Stat;
 
@@ -16,7 +14,7 @@ public class Pokemon {
 // Object Variables
     private final int level; // Pokemon Level, higher level means a stronger pokemon 
     private final String pokemonName; // Pokemon's Name (Given by the player)
-    private final PokemonType type; // Pokemon have one or two types
+    private final PokemonType pokemonType; // Pokemon have one or two types
     private final int pokedexID; // National Pokedex Number
 
     // Pokemon Stats
@@ -49,7 +47,7 @@ public class Pokemon {
     ) {
         this.level = level;
         this.pokemonName = name;
-        this.type = types;
+        this.pokemonType = types;
 
         this.pokedexID = pokedex;
         this.weight = weight;
@@ -62,26 +60,42 @@ public class Pokemon {
 
 // Methods
     /**
+     * Checks a Pokemon's primary condition if it has one
+     * @param before If the effect goes before the move
+     */
+    private void checkPrimaryCondition(boolean before) {
+        if (this.conditions.filterPrimaryCondition(before) == null) return;
+        this.conditions.filterPrimaryCondition(before).action().apply(this);
+    }
+
+    /**
      * A Pokemon that flinches cannot act
      * @throws PokemonCannotActException If the Pokemon flinched
      */
-    public void checkFlinched() {
+    private void checkFlinched() {
         if (!this.conditions.flinched()) return;
 
         this.conditions.setCharge(false);
-        this.conditions.setFlinched(false);
         throw new PokemonCannotActException(String.format("%s flinched and couldn't move!", this));    
     }
+
+    /**
+     * Applies all other before/after move conditions
+     * @param before
+     */
+    private void checkVolatileConditions(boolean before) {
+        this.conditions.filterVolatileConditions(before).forEach(c -> c.action().apply(this));
+    }
+
 
     /**
      * Checks all the Pokemon's status effects
      * @param before If looking at condition that are applied before the Pokemon moves
      */
     public void checkConditions(boolean before) {
-        if (this.hasPrimaryCondition())
-            if (this.conditions.primaryCondition().beforeMove() == before) 
-                this.conditions.primaryCondition().action().apply(this);
+        this.checkPrimaryCondition(before);
         this.checkFlinched();
+        this.checkVolatileConditions(before);
     }
 
     /**
@@ -138,62 +152,18 @@ public class Pokemon {
         this.hp.change(value);
     }
 
-    // Executed at the end of each round
-    public void endRound() {
-        try {
-            this.conditions().setSwitchedIn(false);
-            this.conditions().setHasMoved(false);
-            this.conditions().setFlinched(false);
-            this.resetDamageDealt();
-            this.checkConditions(false);
-        } catch (PokemonFaintedException e) {
-            BattleLog.add(e.getMessage());
-        }
-    }
-
-// Statistic Methods (All Methods display a Pokemon's information to the console)
-    public String listStats() {
-        return new StringBuilder()
-        .append(this.stats[Stat.ATTACK].showStat())
-        .append(this.stats[Stat.DEFENSE].showStat())
-        .append(this.stats[Stat.SPECIAL_ATTACK].showStat())
-        .append(this.stats[Stat.SPECIAL_DEFENSE].showStat())
-        .append(this.stats[Stat.SPEED].showStat())
-        .append(this.stats[Stat.ACCURACY].showStat())
-        .append(this.stats[Stat.EVASION].showStat())
-        .toString();
-    }
-
-    public String listMoves() {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < this.moves.length; i++) 
-            sb.append(String.format("[%d] %s", i, this.moves[i].moveStats())); 
-            
-        return sb.toString();
-    }
-
+    // List Pokemon's stats
     public String showAllStats() {
 		return new StringBuilder()
 		.append(String.format("Name: %s%n", this.pokemonName))
-		.append(String.format("Type: %s", this.type.toString()))
+		.append(String.format("Type: %s", this.pokemonType.toString()))
         .append(String.format("LEVEL %d%n", this.level))
 		.append(String.format("%nPokedex Number: %d%n", this.pokedexID))
 		.append(String.format("%nSTATS:%nHP: %s%n", this.hp.toString()))
-		.append(String.format("%s", this.listStats()))
-        .append(String.format("%nMOVES: %n%s", this.listMoves()))
+		.append(String.format("%s", PokemonStats.listStats(this)))
+        .append(String.format("%nMOVES: %n%s", PokemonStats.listMoves(this)))
         .toString();
 	}
-
-    public String showCondition() {
-        if (this.conditions.fainted()) return "FAINTED";
-        if (!this.hasPrimaryCondition()) return "";
-        return this.conditions.primaryCondition().toString();
-    }
-
-    public String showPartyStats() {
-        return String.format("%s (HP: %s) %s%n", this, this.hp, this.showCondition());
-    }
-
 
     @Override
     public String toString() {
@@ -218,9 +188,9 @@ public class Pokemon {
     }
 
     public boolean isType(String type) {
-        return (this.type.hasSecondaryType())
-        ? this.type.primaryType().typeName().equals(type) || this.type.secondaryType().typeName().equals(type)
-        : this.type.primaryType().typeName().equals(type);
+        return (this.pokemonType.hasSecondaryType())
+        ? this.pokemonType.primaryType().typeName().equals(type) || this.pokemonType.secondaryType().typeName().equals(type)
+        : this.pokemonType.primaryType().typeName().equals(type);
     }
  
 // Setters
@@ -244,10 +214,10 @@ public class Pokemon {
     // Clears any temporary effects
     public void backToTrainer() {
         this.damageDealt = 0;
+        this.moveSelected = null;
         this.conditions.setCharge(false);
         this.conditions.setSwitchedIn(false);
         this.conditions.setImmobilized(false);
-        this.moveSelected = null;
     }
 
 // Getters
@@ -260,7 +230,7 @@ public class Pokemon {
     }
 
     public PokemonType pokemonType() {
-        return this.type;
+        return this.pokemonType;
     }
 
     public int pokedexID() {
