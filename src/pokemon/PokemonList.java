@@ -3,57 +3,11 @@ package pokemon;
 import move.MoveList;
 import stats.GameType;
 
-// List of Pokemon (Listed in alphabetical order)
+// List of Pokemon (Listed in pokedex order)
 public interface PokemonList {
 
     private static String defaultName(String a, String b) {
         return (b.equals("")) ? a : b;
-    }
- 
-    public static Pokemon bulbasaur(String name) {
-        return new PokemonBuilder()
-        .setName(defaultName("Bulbasaur", name))
-        .setTypes(GameType.GRASS, GameType.POISON)
-        .setPokedexNo(1)
-        .setWeight(15.2)
-        .setHp(45)
-        .setStats(49, 49, 65, 65, 45)
-        .addMove(MoveList.vineWhip())
-        .addMove(MoveList.solarBeam())
-        .addMove(MoveList.growth())
-        .addMove(MoveList.sleepPowder())
-        .buildPokemon();
-    }
-
-    public static Pokemon charmander(String name) {
-        return new PokemonBuilder()
-        .setName(defaultName("Charmander", name))
-        .setTypes(GameType.FIRE)
-        .setPokedexNo(4)
-        .setWeight(18.7)
-        .setHp(39)
-        .setStats(52, 43, 60, 50, 65)
-        .addMove(MoveList.bite())
-        .addMove(MoveList.ember())
-        .addMove(MoveList.smokescreen())
-        .addMove(MoveList.sunnyDay())
-        .buildPokemon();
-    }
-
-
-    public static Pokemon squirtle(String name) {
-        return new PokemonBuilder()
-        .setName(defaultName("Squirtle", name))
-        .setTypes(GameType.WATER)
-        .setPokedexNo(7)
-        .setWeight(19.8)
-        .setHp(44)
-        .setStats(48, 65, 50, 64, 43)
-        .addMove(MoveList.takeDown())
-        .addMove(MoveList.waterGun())
-        .addMove(MoveList.tailWhip())
-        .addMove(MoveList.rainDance())
-        .buildPokemon();
     }
 
     public static Pokemon venusaur(String name) {
@@ -70,4 +24,37 @@ public interface PokemonList {
         .addMove(MoveList.synthesis())
         .buildPokemon();
     }
+
+    public static Pokemon charizard(String name) {
+        return new PokemonBuilder()
+        .setName(defaultName("Charizard", name))
+        .setTypes(GameType.FIRE, GameType.FLYING)
+        .setPokedexNo(6)
+        .setWeight(199.5)
+        .setHp(78)
+        .setStats(84, 78, 109, 85, 100)
+        .addMove(MoveList.flareBlitz())
+        .addMove(MoveList.dragonBreath())
+        .addMove(MoveList.airSlash())
+        .addMove(MoveList.fireFang())
+        .buildPokemon();
+    }    
+
+
+    public static Pokemon blastoise(String name) {
+        return new PokemonBuilder()
+        .setName(defaultName("Blastoise", name))
+        .setTypes(GameType.WATER)
+        .setPokedexNo(9)
+        .setWeight(188.5)
+        .setHp(79)
+        .setStats(83, 100, 85, 105, 78)
+        .addMove(MoveList.waterPulse())
+        .addMove(MoveList.flashCannon())
+        .addMove(MoveList.shellSmash())
+        .addMove(MoveList.ironDefense())
+        .buildPokemon();
+    }
+
+   
 }
