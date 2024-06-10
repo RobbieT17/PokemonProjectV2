@@ -1,9 +1,11 @@
 package stats;
 
 import battle.BattleLog;
-import battle.PokemonCannotActException;
-import java.util.Random;
+import exceptions.PokemonCannotActException;
+import move.MoveAction;
 import pokemon.Pokemon;
+import utility.Counter;
+import utility.RandomValues;
 
 @FunctionalInterface
 public interface StatusAction {
@@ -36,7 +38,7 @@ public interface StatusAction {
      */
     public static StatusCondition freeze() {
         StatusAction action = p -> {
-            if (new Random().nextDouble() <= 0.2) {
+            if (RandomValues.chance(20)) {
                 p.conditions().setImmobilized(false);
                 p.conditions().clearPrimaryCondition();
                 BattleLog.add(String.format("%s thawed!", p));
@@ -53,14 +55,14 @@ public interface StatusAction {
 
     /**
      * Paralyzed Pokemon have reduced speed (50% decrease) 
-     * and have a 33% chance to be unactionable for the turn.
+     * and have a 50% chance to be unactionable for the turn.
      * The effect is indefinite.
      * @return new Paralysis StatusCondition
      */
     public static StatusCondition paralysis() {
         StatusAction action = p -> {
             BattleLog.add(String.format("%s is paralyzed!", p));
-            if (new Random().nextDouble() > 0.33) return;   
+            if (RandomValues.chance(50)) return;   
             throw new PokemonCannotActException(String.format("%s cannot move!", p));                 
         };
         return new StatusCondition(StatusCondition.PARALYSIS, action, true);
@@ -91,8 +93,8 @@ public interface StatusAction {
      * @param duration rounds effect lasts for
      * @return new Sleep StatusCondition
      */
-    public static StatusCondition sleep(int duration) {
-        Counter counter = new Counter(duration);
+    public static StatusCondition sleep() {
+        Counter counter = new Counter(RandomValues.generateInt(1, 3));
 
         StatusAction action = p -> {
             counter.inc();
@@ -111,13 +113,42 @@ public interface StatusAction {
         return new StatusCondition(StatusCondition.SLEEP, action, true);
     }
 
+    /**
+     * Confused Pokemon have a 50% chance to damage themselves
+     * Confusion last for 2-4 rounds.
+     * @param duration rounds effect lasts for
+     * @return new Confusion StatusCondition
+     */
+    public static StatusCondition confusion() {
+        Counter counter = new Counter(RandomValues.generateInt(2, 4));
+
+        StatusAction action = p -> {
+            counter.inc();
+            if (counter.terminated()){
+                p.conditions().remove(StatusCondition.CONFUSION);
+                BattleLog.add(String.format("%s snapped out of confusion!", p));
+                return;
+            }
+
+            BattleLog.add(String.format("%s is confused!", p));
+            if (RandomValues.chance(50)) return;
+
+            MoveAction.takeConfusionDamage(p);
+            throw new PokemonCannotActException();
+        };
+
+        return new StatusCondition(StatusCondition.CONFUSION, action, true);
+    }
+
     // Gets the StatusAction based on the condition's ID number
-    public static StatusCondition getId(int i) {
+    public static StatusCondition getCondition(int i) {
         return switch (i) {
             case StatusCondition.BURN -> burn();   
             case StatusCondition.FREEZE -> freeze();        
             case StatusCondition.PARALYSIS -> paralysis();   
             case StatusCondition.POISON -> poison();
+            case StatusCondition.SLEEP -> sleep();
+            case StatusCondition.CONFUSION -> confusion();
             default -> throw new IllegalArgumentException("Invalid condition id");
         };
     }

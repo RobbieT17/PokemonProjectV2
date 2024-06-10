@@ -12,6 +12,7 @@ public class StatusCondition {
     public static final int SLEEP = 4;
 
     public static final int FLINCH = 5;
+    public static final int CONFUSION = 6;
 
 // Object Variables
     private final int id; // Unique Identifier 
