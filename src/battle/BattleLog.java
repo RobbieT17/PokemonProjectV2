@@ -6,19 +6,28 @@ import utility.Time;
 public interface BattleLog {
 
 	// Currently prints all message to the terminal, soon will print into actual application
-	public Deque<String> MESSAGE_LIST = new LinkedList<>();
+	public Deque<String> MESSAGE_QUEUE = new LinkedList<>();
 	
 	/**
 	 * Adds a message to the queue
 	 * @param message supplied as a String
 	 */
 	public static void add(String message) {
-		MESSAGE_LIST.offer(message);
+		MESSAGE_QUEUE.offer(message);
+	}
+
+	/**
+	 * Adds a formatted message to the queue
+	 * @param message supplied as a String
+	 * @param args formatted arguments
+	 */
+	public static void addF(String message, Object... args) {
+		MESSAGE_QUEUE.offer(String.format(message, args));
 	}
 
 	// Adds a new line to the queue
 	public static void addLine() {
-		MESSAGE_LIST.offer("\n");
+		MESSAGE_QUEUE.offer("\n");
 	}
 	
 	/**
@@ -42,8 +51,8 @@ public interface BattleLog {
 	 * The queue is cleared
 	 */
 	public static void out() {
-		while (!MESSAGE_LIST.isEmpty()) {
-			String message = MESSAGE_LIST.poll();
+		while (!MESSAGE_QUEUE.isEmpty()) {
+			String message = MESSAGE_QUEUE.poll();
 			if (message.equals("")|| message.equals("\n")) 
 				System.out.print(message);
 			else {
