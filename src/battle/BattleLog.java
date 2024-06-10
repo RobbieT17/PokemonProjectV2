@@ -39,6 +39,15 @@ public interface BattleLog {
 	}
 
 	/**
+	 * Prints out a formatted message, does not add it to the queue
+	 * @param message supplied as a String
+	 * @param args formatter arguments
+	 */
+	public static void addPrintf(String message, Object... args) {
+		System.out.printf(String.format(message, args));
+	}
+
+	/**
 	 * Prints out a message line, does not add it to the queue
 	 * @param message supplied as a String
 	 */
