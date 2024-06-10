@@ -1,4 +1,4 @@
-package stats;
+package utility;
 
 public class Counter {
 

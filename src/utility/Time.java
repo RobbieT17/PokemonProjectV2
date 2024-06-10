@@ -1,4 +1,4 @@
-package battle;
+package utility;
 
 public interface Time {
 

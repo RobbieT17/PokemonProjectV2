@@ -1,6 +1,4 @@
-package battle;
-
-import java.util.Random;
+package utility;
 
 public interface Input {
     
@@ -28,14 +26,4 @@ public interface Input {
         return s.length() == 1 && s.toLowerCase().charAt(0) == c;
     }
 
-
-    /**
-     * @param min int
-     * @param max int
-     * @return random integer between max and min
-     */
-    public static int randomInt(int min, int max) {
-        if (min > max) throw new IllegalArgumentException("Max must be greater than min");
-        return new Random().nextInt((max - min) + 1) + min;
-    }
 }
