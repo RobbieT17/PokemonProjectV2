@@ -63,14 +63,14 @@ public class PokemonTrainer {
     public void sendOut(Pokemon p) {
         this.pokemonInBattle = p;
         this.pokemonInBattle.conditions().setSwitchedIn(true);
-        BattleLog.add(String.format("%n%s sends out %s!", this, p)); 
+        BattleLog.add("%n%s sends out %s!", this, p);
     }
 
     // Returns the Pokemon on the battle
     public void returns() {
         if (this.pokemonInBattle == null) return;
         
-        BattleLog.add(String.format("%n%s returns %s!", this, this.pokemonInBattle));
+        BattleLog.add("%n%s returns %s!", this, this.pokemonInBattle);
         this.pokemonInBattle.backToTrainer();
         this.pokemonInBattle = null;
     }

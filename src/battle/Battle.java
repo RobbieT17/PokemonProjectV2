@@ -33,7 +33,7 @@ public class Battle {
 
         while (!done) {
             try {
-                BattleLog.addPrint(String.format("%s, choose a Pokemon: ", trainer));
+                BattleLog.addPrintf("%s, choose a Pokemon: ", trainer);
                 int i = scanner.nextInt();
 
                 pokemon = trainer.team()[i];
@@ -72,7 +72,7 @@ public class Battle {
 
         // Default to struggle if all the Pokemon's move has no more PP
         if (p.hasNoMoves()) {
-            BattleLog.add(String.format("%s has no moves!", p));
+            BattleLog.add("%s has no moves!", p);
             p.setMove(MoveList.struggle());
             return;
         }
@@ -82,7 +82,7 @@ public class Battle {
 
         while (!done) {
             try {
-                BattleLog.addPrint(String.format("What should %s do? ", p)); 
+                BattleLog.addPrintf("What should %s do? ", p); 
                 String input = scanner.nextLine();
 
                 /*
@@ -249,12 +249,12 @@ public class Battle {
 
         // Displays the winner
         if (player1.outOfPokemon()) {
-            BattleLog.add(String.format("%n%s is out of Pokemon!", player1));
-            BattleLog.add(String.format("%s wins the battle!", player2));
+            BattleLog.add("%n%s is out of Pokemon!", player1);
+            BattleLog.add("%s wins the battle!", player2);
         }
         else {
-            BattleLog.add(String.format("%n%s is out of Pokemon!", player2));
-            BattleLog.add(String.format("%s wins the battle!", player1));
+            BattleLog.add("%n%s is out of Pokemon!", player2);
+            BattleLog.add("%s wins the battle!", player1);
         }
 
         BattleLog.out();

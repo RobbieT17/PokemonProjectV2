@@ -23,7 +23,7 @@ public interface StatusAction {
     public static StatusCondition burn() {
         StatusAction action = p -> {
             int damage = (int) (p.hp().max() / 16.0);
-            BattleLog.add(String.format("%s took %d damage from the burn!", p, damage));
+            BattleLog.add("%s took %d damage from the burn!", p, damage);
             p.takeDamage(damage);
         };
         return new StatusCondition(StatusCondition.BURN, action, false);
@@ -41,13 +41,13 @@ public interface StatusAction {
             if (RandomValues.chance(20)) {
                 p.conditions().setImmobilized(false);
                 p.conditions().clearPrimaryCondition();
-                BattleLog.add(String.format("%s thawed!", p));
+                BattleLog.add("%s thawed!", p);
                 return;
             }
 
             p.conditions().setImmobilized(true);
             p.conditions().setCharge(false);
-            throw new PokemonCannotActException(String.format("%s is frozen solid!", p));
+            throw new PokemonCannotActException("%s is frozen solid!", p);
         };
         
         return new StatusCondition(StatusCondition.FREEZE, action, true);
@@ -61,9 +61,9 @@ public interface StatusAction {
      */
     public static StatusCondition paralysis() {
         StatusAction action = p -> {
-            BattleLog.add(String.format("%s is paralyzed!", p));
+            BattleLog.add("%s is paralyzed!", p);
             if (RandomValues.chance(50)) return;   
-            throw new PokemonCannotActException(String.format("%s cannot move!", p));                 
+            throw new PokemonCannotActException("%s cannot move!", p);                 
         };
         return new StatusCondition(StatusCondition.PARALYSIS, action, true);
     }
@@ -80,7 +80,7 @@ public interface StatusAction {
         StatusAction action = p -> {
             counter.inc();
             int damage = (int) (p.hp().max() * (counter.count() / 16.0));
-            BattleLog.add(String.format("%s took %d damage from the poison!", p, damage));
+            BattleLog.add("%s took %d damage from the poison!", p, damage);
             p.takeDamage(damage);
         };
         return new StatusCondition(StatusCondition.POISON, action, false);
@@ -101,13 +101,13 @@ public interface StatusAction {
             if (counter.terminated()) {
                 p.conditions().setImmobilized(false);
                 p.conditions().clearPrimaryCondition();
-                BattleLog.add(String.format("%s woke up!", p));
+                BattleLog.add("%s woke up!", p);
                 return;
             } 
 
             p.conditions().setImmobilized(true);
             p.conditions().setCharge(false);
-            throw new PokemonCannotActException(String.format("%s is fast asleep...", p));    
+            throw new PokemonCannotActException("%s is fast asleep...", p);    
         };
 
         return new StatusCondition(StatusCondition.SLEEP, action, true);
@@ -126,11 +126,11 @@ public interface StatusAction {
             counter.inc();
             if (counter.terminated()){
                 p.conditions().remove(StatusCondition.CONFUSION);
-                BattleLog.add(String.format("%s snapped out of confusion!", p));
+                BattleLog.add("%s snapped out of confusion!", p);
                 return;
             }
 
-            BattleLog.add(String.format("%s is confused!", p));
+            BattleLog.add("%s is confused!", p);
             if (RandomValues.chance(50)) return;
 
             MoveAction.takeConfusionDamage(p);

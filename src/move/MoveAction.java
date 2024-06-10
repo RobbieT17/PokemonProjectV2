@@ -30,7 +30,7 @@ public interface MoveAction {
         * ((double) attacker.accuracy().power() / (double) defender.evasion().power());
 
         if (new Random().nextDouble() > modifiedAccuracy) 
-            throw new MoveInterruptedException(String.format("But %s avoided the attack!", defender));   
+            throw new MoveInterruptedException("But %s avoided the attack!", defender);   
     } 
 
 // Damaging Functions
@@ -188,7 +188,7 @@ public interface MoveAction {
         if (p.damageDealt() == 0) return;
 
         int damage = (int) (0.01 * recoil * p.damageDealt()); 
-        BattleLog.add(String.format("%s took %d from the recoil!", p, damage));
+        BattleLog.add("%s took %d from the recoil!", p, damage);
         p.takeDamage(damage);
     }
 
@@ -207,14 +207,14 @@ public interface MoveAction {
         double effectiveness = typeEffectiveness(move.moveType(), defender.pokemonType());
 
         if (effectiveness == 0) 
-            throw new MoveInterruptedException(String.format("But it doesn't affect %s...", defender)); 
+            throw new MoveInterruptedException("But it doesn't affect %s...", defender); 
         
         moveHits(attacker, defender, move); // Deals no damage if move misses
         
         boolean isCritical = criticalHit(move.critRate()); // Rolls for a critical hit
         int damage = calculateDamage(attacker, defender, move, effectiveness, isCritical); // Calculates damage
       
-        BattleLog.add(String.format("%s took %d damage!", defender, damage));
+        BattleLog.add("%s took %d damage!", defender, damage);
         BattleLog.add(isSuperEffective(effectiveness));
         BattleLog.add((isCritical) ? "Critical hit!" : "");
 
@@ -238,7 +238,7 @@ public interface MoveAction {
      */
     public static void takeConfusionDamage(Pokemon p) {
         int damage = (int) (((((2 * p.level()) / 5.0 + 2) * 40 * (p.attack().power() / (double) p.defense().power())) / 50.0 + 2)); 
-        BattleLog.add(String.format("%s took %d damage from their own confusion!", p, damage));
+        BattleLog.add("%s took %d damage from their own confusion!", p, damage);
         p.takeDamage(damage);
     }
 
@@ -246,10 +246,10 @@ public interface MoveAction {
 
     // Restores a percentage of a Pokemon's maximum HP
     public static void restoreHp(Pokemon p, double percent) {
-        if (p.hp().atFullHP()) throw new MoveInterruptedException(String.format("But %s is already at full health!", p));
+        if (p.hp().atFullHP()) throw new MoveInterruptedException("But %s is already at full health!", p);
 
         int heal = (int) (0.01 * percent * p.hp().max());
-        BattleLog.add(String.format("%s restored %d HP!", p, heal));
+        BattleLog.add("%s restored %d HP!", p, heal);
         p.healDamage(heal);
     }
 
@@ -263,7 +263,7 @@ public interface MoveAction {
         if (!p1.conditions().charged()) {
             move.pp().increment(); // Done bc pp is decremented every move call
             p1.conditions().setCharge(true);       
-            BattleLog.add(String.format("%s begins charging!", p1));
+            BattleLog.add("%s begins charging!", p1);
         }
         else {
             p1.conditions().setCharge(false);
@@ -293,11 +293,11 @@ public interface MoveAction {
 
         Stat s = p.stats()[id];
         if (s.isAtHighestOrLowestStage(change)) {
-            BattleLog.add(String.format("But %s's %s won't go any %s!", p, s, (change > 0) ? "higher" : "lower"));
+            BattleLog.add("But %s's %s won't go any %s!", p, s, (change > 0) ? "higher" : "lower");
             return;
         }
         p.stats()[id].changeStage(change);
-        BattleLog.add(String.format("%s's %s %s%s!", p, s, (change > 0) ? "rose" : "fell", Stat.sizeOfChange(change)));
+        BattleLog.add("%s's %s %s%s!", p, s, (change > 0) ? "rose" : "fell", Stat.sizeOfChange(change));
     }
 
     // Changes a Pokemon's Attack Stat 
@@ -405,11 +405,11 @@ public interface MoveAction {
      * @param id
      */
     private static void canBeApplied(Pokemon p, int id) {
-        if (typeImmunity(p, id)) throw new MoveInterruptedException(String.format("But it doesn't affect %s...", p));
+        if (typeImmunity(p, id)) throw new MoveInterruptedException("But it doesn't affect %s...", p);
         
-        if (p.hasPrimaryCondition()) throw new MoveInterruptedException(String.format(p.hasPrimaryCondition(id)  
+        if (p.hasPrimaryCondition()) throw new MoveInterruptedException(p.hasPrimaryCondition(id)  
         ? String.format("But %s is already %s!", p, StatusCondition.failMessage(id)) 
-        : Move.FAILED));
+        : Move.FAILED);
     }
 
     // Applies Burn Condition

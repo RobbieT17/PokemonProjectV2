@@ -19,4 +19,8 @@ public class MoveInterruptedException extends RuntimeException {
         super(message);
     }
 
+    public MoveInterruptedException(String message, Object... args) {
+        super(String.format(message, args));
+    }
+
 }

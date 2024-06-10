@@ -76,7 +76,7 @@ public class Pokemon {
         if (!this.conditions.flinched()) return;
 
         this.conditions.setCharge(false);
-        throw new PokemonCannotActException(String.format("%s flinched and couldn't move!", this));    
+        throw new PokemonCannotActException("%s flinched and couldn't move!", this);    
     }
 
     /**
@@ -105,7 +105,7 @@ public class Pokemon {
      * @param defender the target Pokemon
      */
     public void useMove(Move move, Pokemon defender) {
-        BattleLog.add(String.format("%s used %s!", this, move));
+        BattleLog.add("%s used %s!", this, move);
         move.pp().decrement();
         move.action().act(this, defender, move);
     }

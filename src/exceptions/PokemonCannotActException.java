@@ -12,4 +12,8 @@ public class PokemonCannotActException extends RuntimeException {
     public PokemonCannotActException(String message){
         super(message);
     }
+
+    public PokemonCannotActException(String message, Object... args) {
+        super(String.format(message, args));
+    }
 }

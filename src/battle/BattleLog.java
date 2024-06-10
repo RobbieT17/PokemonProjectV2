@@ -21,7 +21,7 @@ public interface BattleLog {
 	 * @param message supplied as a String
 	 * @param args formatted arguments
 	 */
-	public static void addF(String message, Object... args) {
+	public static void add(String message, Object... args) {
 		MESSAGE_QUEUE.offer(String.format(message, args));
 	}
 
