@@ -62,7 +62,7 @@ public interface StatusAction {
     public static StatusCondition paralysis() {
         StatusAction action = p -> {
             BattleLog.add("%s is paralyzed!", p);
-            if (RandomValues.chance(50)) return;   
+            if (!RandomValues.chance(50)) return;   
             throw new PokemonCannotActException("%s cannot move!", p);                 
         };
         return new StatusCondition(StatusCondition.PARALYSIS, action, true);
@@ -131,7 +131,7 @@ public interface StatusAction {
             }
 
             BattleLog.add("%s is confused!", p);
-            if (RandomValues.chance(50)) return;
+            if (!RandomValues.chance(50)) return;
 
             MoveAction.takeConfusionDamage(p);
             throw new PokemonCannotActException();
