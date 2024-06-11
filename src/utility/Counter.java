@@ -8,10 +8,12 @@ public class Counter {
     private boolean terminated; // Once count exceeds the duration
 
 // Constructor
+    public Counter() {
+        this.duration = -1;
+    }
+
     public Counter(int duration) {
         this.duration = duration;
-        this.count = 0;
-        this.terminated = false;
     }
 
 // Methods
