@@ -28,6 +28,7 @@ public interface StatusAction {
             p.takeDamage(damage);
             if (p.conditions().fainted()) throw new PokemonFaintedException();
         };
+
         return new StatusCondition(StatusCondition.BURN, action, false);
     }
 
@@ -46,9 +47,7 @@ public interface StatusAction {
                 BattleLog.add("%s thawed!", p);
                 return;
             }
-
             p.conditions().setImmobilized(true);
-            p.conditions().setCharge(false);
             throw new PokemonCannotActException("%s is frozen solid!", p);
         };
         
@@ -63,10 +62,10 @@ public interface StatusAction {
      */
     public static StatusCondition paralysis() {
         StatusAction action = p -> {
-            BattleLog.add("%s is paralyzed!", p);
-            if (!RandomValues.chance(50)) return;   
-            throw new PokemonCannotActException("%s cannot move!", p);                 
+            if (!RandomValues.chance(50)) return;
+            throw new PokemonCannotActException("%s is paralyzed and cannot move!", p);                 
         };
+
         return new StatusCondition(StatusCondition.PARALYSIS, action, true);
     }
 
@@ -77,7 +76,7 @@ public interface StatusAction {
      * @return new Poison StatusCondition
      */
     public static StatusCondition poison() {
-        Counter counter = new Counter(-1);
+        Counter counter = new Counter();
 
         StatusAction action = p -> {
             counter.inc();
@@ -86,6 +85,7 @@ public interface StatusAction {
             p.takeDamage(damage);
             if (p.conditions().fainted()) throw new PokemonFaintedException();
         };
+
         return new StatusCondition(StatusCondition.POISON, action, false);
     }
 
@@ -109,7 +109,6 @@ public interface StatusAction {
             } 
 
             p.conditions().setImmobilized(true);
-            p.conditions().setCharge(false);
             throw new PokemonCannotActException("%s is fast asleep...", p);    
         };
 
@@ -141,10 +140,17 @@ public interface StatusAction {
 
             throw new PokemonCannotActException();
         };
-
         return new StatusCondition(StatusCondition.CONFUSION, action, true);
     }
 
+    /**
+     * Plants a seeded on the target which drains HP (1/8 Max HP) each turn
+     * Pokemon who planted receives any damage dealt to the target. The
+     * effect is indefinite. 
+     * 
+     * @param r Pokemon receiving the HP
+     * @return new Seeded StatusCondition
+     */
     public static StatusCondition seeded(Pokemon r) {
         StatusAction action = p -> {
             int damage = (int) (p.hp().max() / 8.0);
