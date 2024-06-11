@@ -27,7 +27,7 @@ public class Move {
     private final double critRate; // Chance of a critical hit
 
     private final PowerPoints pp; // Power Points (The number of uses a move has)
-	private final int power; // Strength of the move
+	private final Power power; // Strength of the move
 	private final int accuracy; // Hit rate of the move
 	private final int priority; // Moves with higher priority always move first
     private final boolean makesContact;
@@ -43,7 +43,8 @@ public class Move {
         String category,
         double crit,
         PowerPoints pp,
-        int pow, int acc, int prot,
+        Power pow, 
+        int acc, int prot,
         boolean contact,
         MoveAction action
         ) {
@@ -61,6 +62,11 @@ public class Move {
     }
 
 // Methods
+    // Doubles current power
+    public void doublePower() {
+        this.power.doubled();
+    }
+
     /**
      * @param t A Pokemon's typing
      * @return true if the move type is one of the Pokemon's types
@@ -117,7 +123,7 @@ public class Move {
     }
 
     public int power() {
-        return this.power;
+        return this.power.value();
     }
 
     public int accuracy() {

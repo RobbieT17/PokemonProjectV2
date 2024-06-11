@@ -9,6 +9,23 @@ import stats.StatusCondition;
 public interface MoveList {
 
 // AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+    
+    public static Move acidSpray() {
+        MoveAction action = (a, d, m) -> {
+            MoveAction.dealDamage(a, d, m);
+            MoveAction.spDefenseStat(d, -2);
+        };
+
+        return new MoveBuilder()
+        .setId(491)
+        .setName("Acid Spray")
+        .setType(GameType.POISON)
+        .setCategory(Move.SPECIAL)
+        .setPP(20)
+        .setPower(40)
+        .setAction(action)
+        .buildMove();
+    }
 
     public static Move airSlash() {
         MoveAction action = (a, d, m) -> {
@@ -61,9 +78,25 @@ public interface MoveList {
     }
 
 // CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+    
+    public static Move charm() {
+        MoveAction action = (a, d, m) -> {
+            MoveAction.moveHits(a, d, m);
+            MoveAction.attackStat(d, -2);
+        };
 
+        return new MoveBuilder()
+        .setId(204)
+        .setName("Charm")
+        .setType(GameType.FAIRY)
+        .setCategory(Move.STATUS)
+        .setPP(20)
+        .setAction(action)
+        .buildMove();
+    }
 
 // DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
+    
     public static Move dragonBreath() {
         MoveAction action = (a, d, m) -> {
             MoveAction.dealDamage(a, d, m);
@@ -114,6 +147,27 @@ public interface MoveList {
 
 // FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
 
+    public static Move facade() {
+        MoveAction action = (a, d, m) -> {
+            // Double power (140) if user is burned, paralyzed, or poisoned
+            if (a.hasPrimaryCondition(StatusCondition.BURN) |
+            a.hasPrimaryCondition(StatusCondition.PARALYSIS) |
+            a.hasPrimaryCondition(StatusCondition.POISON))
+                m.doublePower();
+                
+            MoveAction.dealDamage(a, d, m);
+        };
+
+        return new MoveBuilder()
+        .setId(263)
+        .setName("Facade")
+        .setType(GameType.NORMAL)
+        .setCategory(Move.PHYSICAL)
+        .setPP(20)
+        .setPower(70)
+        .setAction(action)
+        .buildMove();
+    }
     public static Move fireFang() {
         MoveAction action = (a, d, m) -> {
             MoveAction.dealDamage(a, d, m);
@@ -676,6 +730,23 @@ public interface MoveList {
         .setPower(90)
         .setAccuracy(85)
         .setAction((a, d, m) -> MoveAction.dealDamageRecoil(a, d, m, 25))
+        .buildMove();
+    }
+
+    public static Move trailblaze() {
+        MoveAction action = (a, d, m) -> {
+            MoveAction.dealDamage(a, d, m);
+            MoveAction.speedStat(a, 1);
+        };
+
+        return new MoveBuilder()
+        .setId(885)
+        .setName("Trailblaze")
+        .setType(GameType.GRASS)
+        .setCategory(Move.PHYSICAL)
+        .setPP(20)
+        .setPower(50)
+        .setAction(action)
         .buildMove();
     }
 

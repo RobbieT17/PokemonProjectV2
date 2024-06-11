@@ -34,7 +34,7 @@ public interface PokemonList {
         .setHp(78)
         .setStats(84, 78, 109, 85, 100)
         .addMove(MoveList.flameCharge())
-        .addMove(MoveList.dragonBreath())
+        .addMove(MoveList.facade())
         .addMove(MoveList.bite())
         .addMove(MoveList.scaryFace())
         .buildPokemon();

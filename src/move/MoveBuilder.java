@@ -12,7 +12,7 @@ public class MoveBuilder {
     private MoveAction action = null;
 
     // Optional (pow only if status moves)
-    private int pow = 0;
+    private Power pow = null;
     private int acc = 100;
     private int prot = 0;
     private double crit = Move.UNIVERSAL_CRIT_RATE;
@@ -30,7 +30,7 @@ public class MoveBuilder {
         if (this.category == null) throw new IllegalStateException("Category not initialized");
         if (this.pp == null) throw new IllegalStateException("PP not initialized");
         if (this.action == null) throw new IllegalStateException("Action not initialized");
-        if (!this.category.equals(Move.STATUS) && this.pow == 0) throw new IllegalStateException("Power not initialized for physical/special move");
+        if (!this.category.equals(Move.STATUS) && this.pow == null) throw new IllegalStateException("Power not initialized for physical/special move");
         
         return new Move(
             this.id, 
@@ -78,7 +78,7 @@ public class MoveBuilder {
     }
 
     public MoveBuilder setPower(int p) {
-        this.pow = p;
+        this.pow = new Power(p);
         return this;
     }
 
