@@ -201,6 +201,23 @@ public interface MoveList {
         .buildMove();
     }
 
+    public static Move furyAttack() {
+        MoveAction action = (a, d, m) -> {
+            MoveAction.multiHit(a, d, m);
+        };
+
+        return new MoveBuilder()
+        .setId(31)
+        .setName("Fury Attack")
+        .setType(GameType.NORMAL)
+        .setCategory(Move.PHYSICAL)
+        .setPP(15)
+        .setPower(15)
+        .setAccuracy(85)
+        .setAction(action)
+        .buildMove();
+    }
+
 // GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
 
     public static Move growl() {

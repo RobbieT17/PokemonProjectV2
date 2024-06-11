@@ -53,6 +53,16 @@ public interface MoveAction {
 
         return effect;
     }
+
+    /*
+    * Calculates effectiveness of the move on the defender
+    * No damage is dealt if defending is immune to the attack
+    */
+    private static double moveEffectiveness(Move move, Pokemon p) {
+        double effectiveness = typeEffectiveness(move.moveType(), p.pokemonType());
+        if (effectiveness == 0) throw new MoveInterruptedException("But it doesn't affect %s...", p);     
+        return effectiveness;
+    }
  
     // A message to be displayed indicating if the move was super effective or not
     private static String isSuperEffective(double effect) {
@@ -133,6 +143,27 @@ public interface MoveAction {
     }
 
     /**
+     * Number of times a multi-hit damages the opponent
+     * 
+     * 2 turns: 35% chance
+     * 3 turns: 35% chance
+     * 4 turns: 15% chance
+     * 5 turns: 15% chance
+     * 
+     * @return # of hits
+     */
+    private static int randomHits() {
+        double value = new Random().nextDouble();
+        return value <= 0.35 
+        ? 2
+        : value <= 0.7
+            ? 3
+            : value <= 0.85
+                ? 4
+                : 5;
+    }
+
+    /**
      * Calculates the amount of damage a Pokemon receives. 
      * Damage depends on many different factors such as:
      * 
@@ -191,6 +222,18 @@ public interface MoveAction {
         p.takeDamage(damage);
     }
 
+    private static void dealMultiDamage(Pokemon attacker, Pokemon defender, Move move) {
+        double effectiveness = moveEffectiveness(move, defender);
+        boolean isCritical = criticalHit(move.critRate());
+        int damage = calculateDamage(attacker, defender, move, effectiveness, isCritical);
+
+        BattleLog.add("%s took %d damage!", defender, damage);
+        BattleLog.add(isCritical ? "Critical hit!" : "");
+
+        attacker.addDealtDamage(damage);
+        defender.takeDamage(damage);
+    }
+    
 
     /**
      * Deals damage to an opponent.
@@ -198,16 +241,8 @@ public interface MoveAction {
      * @param defender Defending Pokemon
      * @param move Move used by the attacker
      */
-    public static void dealDamage(Pokemon attacker, Pokemon defender, Move move) {  
-        /*
-         * Calculates effectiveness of the move on the defender
-         * No damage is dealt if defending is immune to the attack
-         */
-        double effectiveness = typeEffectiveness(move.moveType(), defender.pokemonType());
-
-        if (effectiveness == 0) 
-            throw new MoveInterruptedException("But it doesn't affect %s...", defender); 
-        
+    public static void dealDamage(Pokemon attacker, Pokemon defender, Move move) {     
+        double effectiveness = moveEffectiveness(move, defender); 
         moveHits(attacker, defender, move); // Deals no damage if move misses
         
         boolean isCritical = criticalHit(move.critRate()); // Rolls for a critical hit
@@ -215,10 +250,26 @@ public interface MoveAction {
       
         BattleLog.add("%s took %d damage!", defender, damage);
         BattleLog.add(isSuperEffective(effectiveness));
-        BattleLog.add((isCritical) ? "Critical hit!" : "");
+        BattleLog.add(isCritical ? "Critical hit!" : "");
 
         attacker.addDealtDamage(damage); 
         defender.takeDamage(damage);
+    }
+
+    // Deals multiple hits of damage
+    public static void multiHit(Pokemon attacker, Pokemon defender, Move move) {
+        moveHits(attacker, defender, move);
+
+        int hits = randomHits();
+        for (int i = 0; i < hits; i++) {
+            dealMultiDamage(attacker, defender, move);
+            if (defender.conditions().fainted()) {
+                hits = i + 1;
+                break;
+            }
+        }
+        BattleLog.add("It hit %d times!", hits);
+        BattleLog.add(isSuperEffective(moveEffectiveness(move, defender)));
     }
 
     // Deals damage, attacking Pokemon receives a percentage of the damage dealt
@@ -236,6 +287,8 @@ public interface MoveAction {
         BattleLog.add("%s took %d damage from their own confusion!", p, damage);
         p.takeDamage(damage);
     }
+
+    
 
 // Restore HP Functions
 

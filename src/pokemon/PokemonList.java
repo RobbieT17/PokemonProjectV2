@@ -50,7 +50,7 @@ public interface PokemonList {
         .setHp(79)
         .setStats(83, 100, 85, 105, 78)
         .addMove(MoveList.waterPulse())
-        .addMove(MoveList.flashCannon())
+        .addMove(MoveList.furyAttack())
         .addMove(MoveList.shellSmash())
         .addMove(MoveList.ironDefense())
         .buildPokemon();
