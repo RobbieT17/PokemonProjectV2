@@ -78,7 +78,7 @@ public class Move {
     }
 
     /**
-     * @param t a Type
+     * @param t a type name
      * @return true if the move matches the type
      */
     public boolean isType(String t) {
