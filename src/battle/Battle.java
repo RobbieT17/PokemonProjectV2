@@ -64,22 +64,28 @@ public class Battle {
          * Unable to choose a move if just switched in
          * or charging (If changing, the pokemon uses last move selected)
          */
-        if (p.conditions().charged() || p.conditions().switchedIn()) return;
-
-        Scanner scanner = new Scanner(System.in);
-        boolean done = false;
-        Move move = p.moveSelected();
+        if (p.conditions().switchedIn()) return; 
 
         // Default to struggle if all the Pokemon's move has no more PP
         if (p.hasNoMoves()) {
             BattleLog.add("%s has no moves!", p);
             p.setMove(MoveList.struggle());
+        }
+
+        // Uses last move used if forced to
+        Move move = p.conditions().forcedMove() ? p.lastMove() : null;
+
+        if (move != null) {
+            p.setMove(move);
             return;
         }
 
         BattleLog.addPrintln("=====================================");
         BattleLog.addPrintln(p.showSomeStats());
         BattleLog.addPrintln("[S] Switch Pokemon");
+
+        Scanner scanner = new Scanner(System.in);
+        boolean done = false;
 
         while (!done) {
             try {
@@ -179,7 +185,7 @@ public class Battle {
         if (a.conditions().fainted() || b.conditions().fainted() || a.moveSelected() == null) return;
 
         BattleLog.addLine();
-        a.useTurn(a.moveSelected(), b);
+        a.useTurn(b);
     }
 
     /**

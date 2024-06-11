@@ -24,9 +24,13 @@ public class BattleField {
     private static void afterEffects(Pokemon p) {
         try {
             p.conditions().setSwitchedIn(false);
+
+            if (Battle.skipRound) return;
+            
+            p.resetMove();
+            p.resetDamageDealt();
             p.conditions().setHasMoved(false);
             p.conditions().setFlinched(false);
-            p.resetDamageDealt();
             p.checkConditions(false);
         } catch (PokemonFaintedException e) {
         }
