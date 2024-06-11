@@ -1,4 +1,7 @@
 package move;
+
+import pokemon.Pokemon;
+
 public class PowerPoints {
 
 // Object Variables
@@ -16,14 +19,12 @@ public class PowerPoints {
     }
 
 // Methods
-    // Increments PP (cannot exceed max)
-    public void increment() {
-        this.powerPoints++;
-        if (this.powerPoints > this.maxPowerPoints) this.powerPoints = this.maxPowerPoints;
-    }
-
-    // Decrements PP (cannot go below 0)
-    public void decrement() {
+    /**
+     *  Decrements PP (cannot go below 0)
+     *  Doesn't decrement if Pokemon is in the charging phase
+     */
+    public void decrement(Pokemon p) {
+        if (p.conditions().forcedMove()) return;
         this.powerPoints--;
         if (this.powerPoints < 0) this.powerPoints = 0;
     }
