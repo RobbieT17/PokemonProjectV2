@@ -307,16 +307,41 @@ public interface MoveAction {
      * Charges move first round, then unleashes it on the second
      * Can be interrupted by status effects
      */
-    public static void chargeMove(Pokemon p1, Pokemon p2, Move move ) {
-        if (!p1.conditions().charged()) {
-            move.pp().increment(); // Done bc pp is decremented every move call
-            p1.conditions().setCharge(true);       
-            BattleLog.add("%s begins charging!", p1);
+    public static void chargeMove(Pokemon attacker, Pokemon defender, Move move) {
+        if (!attacker.conditions().forcedMove()) {
+            attacker.conditions().setForcedMove(true);       
+            BattleLog.add("%s begins charging!", attacker);
         }
         else {
-            p1.conditions().setCharge(false);
-            dealDamage(p1, p2, move);
+            attacker.conditions().setForcedMove(false);
+            dealDamage(attacker, defender, move);
         }
+    }
+
+    /**
+     * Forces Pokemon to use the same move for 2-3 turns
+     * Rampage is disrupt if the move misses or the Pokemon
+     * cannot act due to a status condition
+     */
+    public static void rampageMove(Pokemon attacker, Pokemon defender, Move move) {
+        // Starts rampage
+        if (!attacker.conditions().onRampage()) 
+            attacker.conditions().startRampage(RandomValues.generateInt(1, 2));
+        
+        // On rampage
+        attacker.conditions().rampage().inc();
+        if (attacker.conditions().rampage().terminated()) { // After rampage ends, user becomes confused
+            dealDamage(defender, defender, move);
+            attacker.conditions().stopRampage();
+            attacker.conditions().setForcedMove(false);
+
+            BattleLog.add("%s's rampage ended!", attacker);
+            volatileStatusEffect(attacker, StatusCondition.CONFUSION, 100);
+            return;
+        }
+
+        attacker.conditions().setForcedMove(true);
+        dealDamage(attacker, defender, move);
     }
 
 // Weather Change Functions
@@ -474,7 +499,7 @@ public interface MoveAction {
     // Applies Freeze Condition
     private static void applyFreeze(Pokemon p, double chance) {
         applyCondition(p, chance, StatusAction.freeze(), p + " froze!");
-        p.conditions().setCharge(false);
+        p.conditions().setForcedMove(false);
     }
 
     // Applies Paralysis Condition

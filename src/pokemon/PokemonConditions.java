@@ -4,16 +4,19 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.stream.Stream;
 import stats.StatusCondition;
+import utility.Counter;
 
 public class PokemonConditions {
     
 // Object Variables
     private boolean fainted; // When the Pokemon is unable to battle
     private boolean immobilized; // When the pokemon cannot act or dodge attacks
-    private boolean charged; // When the Pokemon charges up a move
+    private boolean forcedMove; // When the Pokemon charges up a move
     private boolean switchedIn; // Set to true when the pokemon first enters the field;
     private boolean hasMoved; // When the Pokemon has moved during the round
     private boolean flinched; // When the Pokemon cannot act for the turn
+
+    private Counter rampageCount; // Count for rampage
 
     private StatusCondition primaryCondition; // Non-Volatile Condition (Burn, Freeze, Paralysis, Poison, Sleep)
     private final HashMap<Integer, StatusCondition> volatileConditions;
@@ -39,6 +42,10 @@ public class PokemonConditions {
         .filter(c -> c.beforeMove() == b);
     }
 
+    public boolean onRampage() {
+        return this.rampageCount != null;
+    }
+
 // Setters
     public void setFainted(boolean f) {
         this.fainted = f;
@@ -47,8 +54,8 @@ public class PokemonConditions {
         this.immobilized = i;
     }
 
-    public void setCharge(boolean c) {
-        this.charged = c;
+    public void setForcedMove(boolean c) {
+        this.forcedMove = c;
     }
 
     public void setSwitchedIn(boolean s) {
@@ -61,6 +68,14 @@ public class PokemonConditions {
 
     public void setFlinched(boolean f) {
         this.flinched = f;
+    }
+
+    public void startRampage(int duration) {
+        this.rampageCount = new Counter(duration);
+    }
+
+    public void stopRampage() {
+        this.rampageCount = null;
     }
 
     public void setPrimaryCondition(StatusCondition c) {
@@ -92,8 +107,8 @@ public class PokemonConditions {
         return this.fainted;
     }
 
-    public boolean charged() {
-        return this.charged;
+    public boolean forcedMove() {
+        return this.forcedMove;
     }
 
     public boolean switchedIn() {
@@ -106,6 +121,10 @@ public class PokemonConditions {
 
     public boolean flinched() {
         return this.flinched;
+    }
+
+    public Counter rampage() {
+        return this.rampageCount;
     }
    
     public StatusCondition primaryCondition() {
