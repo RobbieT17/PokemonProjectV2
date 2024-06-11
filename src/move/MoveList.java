@@ -202,10 +202,6 @@ public interface MoveList {
     }
 
     public static Move furyAttack() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.multiHit(a, d, m);
-        };
-
         return new MoveBuilder()
         .setId(31)
         .setName("Fury Attack")
@@ -214,7 +210,7 @@ public interface MoveList {
         .setPP(15)
         .setPower(15)
         .setAccuracy(85)
-        .setAction(action)
+        .setAction((a, d, m) -> MoveAction.multiHit(a, d, m))
         .buildMove();
     }
 
@@ -364,11 +360,6 @@ public interface MoveList {
     }
 
     public static Move petalDance() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.dealDamage(a, d, m);
-            // TODO: Add Rampage Effect
-        };
-
         return new MoveBuilder()
         .setId(80)
         .setName("Petal Dance")
@@ -377,7 +368,7 @@ public interface MoveList {
         .setPP(10)
         .setPower(120)
         .setContact(true)
-        .setAction(action)
+        .setAction((a, d, m) -> MoveAction.rampageMove(a, d, m))
         .buildMove();
     }
 
@@ -721,7 +712,7 @@ public interface MoveList {
     public static Move waterPulse() {
         MoveAction action = (a, d, m) -> {
             MoveAction.dealDamage(a, d, m);
-            MoveAction.volatileStatusEffect(d, StatusCondition.CONFUSION, 100);
+            MoveAction.volatileStatusEffect(d, StatusCondition.CONFUSION, 20);
         };
 
         return new MoveBuilder()
