@@ -31,6 +31,7 @@ public class Pokemon {
     // Other Stats
     private int damageDealt; // Amount of damage dealt during the round
     private Move moveSelected; // Move selected for the round
+    private Move lastMove; // Move used the last turn
 
 // Constructor
     // Creates a new Pokemon for trainers to use in battle
@@ -75,7 +76,7 @@ public class Pokemon {
     private void checkFlinched() {
         if (!this.conditions.flinched()) return;
 
-        this.conditions.setCharge(false);
+        this.conditions.setForcedMove(false);
         throw new PokemonCannotActException("%s flinched and couldn't move!", this);    
     }
 
@@ -104,10 +105,10 @@ public class Pokemon {
      * @param move the Move chosen
      * @param defender the target Pokemon
      */
-    public void useMove(Move move, Pokemon defender) {
-        BattleLog.add("%s used %s!", this, move);
-        move.pp().decrement();
-        move.action().act(this, defender, move);
+    public void useMove(Pokemon defender) {
+        BattleLog.add("%s used %s!", this, this.moveSelected);
+        this.moveSelected.pp().decrement(this);
+        this.moveSelected.action().act(this, defender, this.moveSelected);
     }
 
     /**
@@ -118,14 +119,17 @@ public class Pokemon {
      * @param move the Move chosen
      * @param defender the target Pokemon
      */
-    public void useTurn(Move move, Pokemon defender){
+    public void useTurn(Pokemon defender){
+ 
         try {
             this.checkConditions(true);
-            this.useMove(move, defender);
-        } catch (PokemonCannotActException | MoveInterruptedException e) {
+            this.useMove(defender);
+        } catch (MoveInterruptedException | PokemonCannotActException e) {
             BattleLog.add(e.getMessage());
+            this.conditions.setForcedMove(false);
+            this.conditions.stopRampage();
         }
-        this.conditions.setHasMoved(true);
+        this.conditions.setHasMoved(true); 
     }
 
     /**
@@ -231,6 +235,7 @@ public class Pokemon {
     }
 
     public void resetMove() {
+        this.lastMove = this.moveSelected;
         this.moveSelected = null;
     }
 
@@ -238,7 +243,8 @@ public class Pokemon {
     public void backToTrainer() {
         this.damageDealt = 0;
         this.moveSelected = null;
-        this.conditions.setCharge(false);
+        this.lastMove = null;
+        this.conditions.setForcedMove(false);
         this.conditions.setSwitchedIn(false);
         this.conditions.setImmobilized(false);
         this.conditions.clearVolatileConditions();
@@ -315,6 +321,10 @@ public class Pokemon {
 
     public Move moveSelected() {
         return this.moveSelected;
+    }
+
+    public Move lastMove() {
+        return this.lastMove;
     }
 
 }
