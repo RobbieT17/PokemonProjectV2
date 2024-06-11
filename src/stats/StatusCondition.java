@@ -13,6 +13,7 @@ public class StatusCondition {
 
     public static final int FLINCH = 5;
     public static final int CONFUSION = 6;
+    public static final int SEEDED = 7;
 
 // Object Variables
     private final int id; // Unique Identifier 
@@ -47,6 +48,8 @@ public class StatusCondition {
             case PARALYSIS -> "PARALYZED";
             case POISON -> "POISONED";
             case SLEEP -> "ASLEEP";
+            case CONFUSION -> "Confused";
+            case SEEDED -> "Seeded";
             default -> throw new IllegalArgumentException("Invalid status condition id");
         };
     }

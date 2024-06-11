@@ -41,7 +41,6 @@ public class PokemonType {
 		return new StringBuilder()
 		.append(this.primary.typeName())
 		.append(this.hasSecondaryType() ? String.format("-%s", this.secondary.typeName()) : "")
-		.append("\n")
 		.toString();
 	}
 	

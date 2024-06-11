@@ -1,5 +1,7 @@
 package pokemon;
 
+import stats.StatusCondition;
+
 public interface PokemonStats {
     
     public static String listStats(Pokemon p) {
@@ -26,6 +28,19 @@ public interface PokemonStats {
         if (p.conditions().fainted()) return "FAINTED";
         if (!p.hasPrimaryCondition()) return "";
         return p.conditions().primaryCondition().toString();
+    }
+
+    public static String showVolatileConditions(Pokemon p) {
+        StringBuilder sb = new StringBuilder();
+
+
+        for (StatusCondition c : p.conditions().volatileConditions().values()) 
+            sb.append(c.toString())
+            .append(", ");
+        
+        String s = sb.toString();
+        return s.length() > 2 ? s.substring(0, s.length() - 2) : s;    
+      
     }
 
     public static String showPartyStats(Pokemon p) {

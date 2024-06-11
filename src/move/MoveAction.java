@@ -4,7 +4,6 @@ import battle.BattleField;
 import battle.BattleLog;
 import battle.Weather;
 import exceptions.MoveInterruptedException;
-import exceptions.PokemonFaintedException;
 import java.util.Random;
 import pokemon.Pokemon;
 import pokemon.PokemonType;
@@ -73,7 +72,7 @@ public interface MoveAction {
     }
 
     /**
-     * Calculates the attack power from the attacker Pokemon
+     * Calculates the attack power from the attacker Pokemon     
      * Critical Hits ignore any attack stage drops.
      * 
      * @param atkStat attack stat 
@@ -188,7 +187,7 @@ public interface MoveAction {
         if (p.damageDealt() == 0) return;
 
         int damage = (int) (0.01 * recoil * p.damageDealt()); 
-        BattleLog.add("%s took %d from the recoil!", p, damage);
+        BattleLog.add("%s took %d damage from the recoil!", p, damage);
         p.takeDamage(damage);
     }
 
@@ -224,11 +223,7 @@ public interface MoveAction {
 
     // Deals damage, attacking Pokemon receives a percentage of the damage dealt
     public static void dealDamageRecoil(Pokemon attacker, Pokemon defender, Move move, double percent) {
-        try {
-            dealDamage(attacker, defender, move);
-        } catch (MoveInterruptedException | PokemonFaintedException e) {
-            BattleLog.add(e.getMessage());
-        }
+        dealDamage(attacker, defender, move);
         recoilDamage(attacker, percent);
     }
 
@@ -289,7 +284,7 @@ public interface MoveAction {
      * @param chance The stat change success rate
      */
     private static void changeStat(Pokemon p, int change, int id, double chance) {
-        if (new Random().nextDouble() > chance * 0.01) return;
+        if (p.conditions().fainted() || new Random().nextDouble() > chance * 0.01) return;
 
         Stat s = p.stats()[id];
         if (s.isAtHighestOrLowestStage(change)) {
@@ -392,6 +387,7 @@ public interface MoveAction {
             case StatusCondition.FREEZE -> p.isType(GameType.ICE);
             case StatusCondition.PARALYSIS -> p.isType(GameType.ELECTRIC);
             case StatusCondition.POISON -> p.isType(GameType.POISON) || p.isType(GameType.STEEL);
+            case StatusCondition.SEEDED -> p.isType(GameType.GRASS);
             default -> false;
         };
     }
@@ -410,6 +406,11 @@ public interface MoveAction {
         if (p.hasPrimaryCondition()) throw new MoveInterruptedException(p.hasPrimaryCondition(id)  
         ? String.format("But %s is already %s!", p, StatusCondition.failMessage(id)) 
         : Move.FAILED);
+    }
+
+    private static void canBeAppliedV(Pokemon p, int id) {
+        if (typeImmunity(p, id)) throw new MoveInterruptedException("But it doesn't affect %s...", p);
+        if (p.hasCondition(id)) throw new MoveInterruptedException(Move.FAILED);
     }
 
     // Applies Burn Condition
@@ -443,14 +444,21 @@ public interface MoveAction {
         applyVolatileCondition(p, chance, StatusAction.confusion(), p + " became confused!");
     }
 
+
     // Check if a condition can be applied. Displays a message if it cannot
     public static void canApplyEffect(Pokemon p, int statusId) {
         canBeApplied(p, statusId);
         statusEffect(p, statusId, 100);
     }
 
+    public static void canApplyVolatileEffect(Pokemon p, int statusId) {
+        canBeAppliedV(p, statusId);
+        volatileStatusEffect(p, statusId, 100);
+    }
+
     // Checks if a non-volatile condition can be applied. 
     public static void statusEffect(Pokemon p, int statusId, double chance) {
+        if (p.conditions().fainted()) return;
         if (p.hasPrimaryCondition()) throw new MoveInterruptedException();
 
         switch (statusId) {
@@ -464,7 +472,8 @@ public interface MoveAction {
     }
 
     public static void volatileStatusEffect(Pokemon p, int statusId, double chance) {
-        if (p.conditions().hasCondition(statusId)) throw new MoveInterruptedException();
+        if (p.conditions().fainted()) return;
+        if (p.hasCondition(statusId)) throw new MoveInterruptedException();
 
         switch (statusId) {
             case StatusCondition.CONFUSION -> applyConfusion(p, chance);
@@ -474,7 +483,13 @@ public interface MoveAction {
 
     // Pokemon flinches if it hasn't moved yet
     public static void applyFlinch(Pokemon p, double chance) {
-        if (p.conditions().hasMoved() || new Random().nextDouble() > chance * 0.01) return;
+        if (p.conditions().fainted() || p.conditions().hasMoved() || new Random().nextDouble() > chance * 0.01) return;
         p.conditions().setFlinched(true);
+    }
+
+    public static void applySeeded(Pokemon receiver, Pokemon seeded) {
+        if (typeImmunity(seeded, StatusCondition.SEEDED)) throw new MoveInterruptedException(Move.FAILED);
+        seeded.conditions().add(StatusAction.seeded(receiver));
+        BattleLog.add("%s was grew sprouts!", seeded);
     }
 }

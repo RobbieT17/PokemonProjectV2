@@ -19,7 +19,7 @@ public interface PokemonList {
         .setHp(80)
         .setStats(82, 83, 100, 100, 80)
         .addMove(MoveList.petalBlizzard())
-        .addMove(MoveList.poisonPowder())
+        .addMove(MoveList.leechSeed())
         .addMove(MoveList.sunnyDay())
         .addMove(MoveList.synthesis())
         .buildPokemon();
@@ -33,10 +33,10 @@ public interface PokemonList {
         .setWeight(199.5)
         .setHp(78)
         .setStats(84, 78, 109, 85, 100)
-        .addMove(MoveList.flareBlitz())
+        .addMove(MoveList.flameCharge())
         .addMove(MoveList.dragonBreath())
         .addMove(MoveList.airSlash())
-        .addMove(MoveList.fireFang())
+        .addMove(MoveList.scaryFace())
         .buildPokemon();
     }    
 

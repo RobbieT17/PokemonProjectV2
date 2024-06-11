@@ -77,8 +77,9 @@ public class Battle {
             return;
         }
 
-        BattleLog.addPrintln("\n" + p.showAllStats());
-        BattleLog.addPrintln("[S]: Switch Pokemon");
+        BattleLog.addPrintln("=====================================");
+        BattleLog.addPrintln(p.showSomeStats());
+        BattleLog.addPrintln("[S] Switch Pokemon");
 
         while (!done) {
             try {
@@ -175,7 +176,7 @@ public class Battle {
     
     // Pokemon uses a turn, nothing happens if the Pokemon did not select a move
     public static void pokemonTurn(Pokemon a, Pokemon b) {
-        if (a.moveSelected() == null) return;
+        if (a.conditions().fainted() || b.conditions().fainted() || a.moveSelected() == null) return;
 
         BattleLog.addLine();
         a.useTurn(a.moveSelected(), b);
@@ -207,7 +208,6 @@ public class Battle {
             pokemonTurn(p1, p2);
             pokemonTurn(p2, p1);
         } catch (PokemonFaintedException e) {
-            BattleLog.add(e.getMessage());
         } 
     }
 

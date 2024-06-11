@@ -139,7 +139,7 @@ public class Pokemon {
         if (value <= 0) throw new IllegalArgumentException("Damage must be a positive value");
 
         this.hp.change(-value); 
-        if (this.hp.depleted()) throw new PokemonFaintedException(this);   
+        if (this.hp.depleted()) this.faints();   
     }
 
     /**
@@ -155,15 +155,26 @@ public class Pokemon {
     // List Pokemon's stats
     public String showAllStats() {
 		return new StringBuilder()
-		.append(String.format("Name: %s%n", this.pokemonName))
-		.append(String.format("Type: %s", this.pokemonType.toString()))
-        .append(String.format("LEVEL %d%n", this.level))
-		.append(String.format("%nPokedex Number: %d%n", this.pokedexID))
-		.append(String.format("%nSTATS:%nHP: %s%n", this.hp.toString()))
-		.append(String.format("%s", PokemonStats.listStats(this)))
+		.append(String.format("Name: %s  |  ", this.pokemonName))
+		.append(String.format("Type: %s  |  ", this.pokemonType.toString()))
+        .append(String.format("LEVEL %d  |  ", this.level))
+		.append(String.format("Pokedex #: %d%n", this.pokedexID))
+		.append(String.format("%nHP: %s%n", this.hp.toString()))
+		.append(String.format("%n%s", PokemonStats.listStats(this)))
         .append(String.format("%nMOVES: %n%s", PokemonStats.listMoves(this)))
         .toString();
 	}
+
+    public String showSomeStats() {
+        return new StringBuilder()
+        .append(String.format("Name: %s  |  ", this.pokemonName))
+        .append(String.format("Type: %s%n", this.pokemonType.toString()))
+        .append(String.format("%nHP: %s%n", this.hp.toString()))
+        .append(String.format("Status Effect: %s%n", PokemonStats.showCondition(this)))
+        .append(String.format("Other Effects: %s%n", PokemonStats.showVolatileConditions(this)))
+        .append(String.format("%nMOVES: %n%s", PokemonStats.listMoves(this)))
+        .toString();
+    }
 
     @Override
     public String toString() {
@@ -177,8 +188,13 @@ public class Pokemon {
     }
 
     public boolean hasPrimaryCondition(int i) {
-        if (this.conditions.primaryCondition() == null) return false;
-        return this.conditions.primaryCondition().id() == i;
+        return this.conditions.primaryCondition() != null
+        ? this.conditions.primaryCondition().id() == i
+        : false;
+    }
+
+    public boolean hasCondition(int i) {
+        return this.conditions.hasKey(i);
     }
 
     public boolean hasNoMoves() {
@@ -194,6 +210,13 @@ public class Pokemon {
     }
  
 // Setters
+    private void faints() {
+        this.conditions.setFainted(true);
+        this.conditions.clearPrimaryCondition();
+        this.conditions.clearVolatileConditions();
+        BattleLog.add("%s fainted!", this);
+    }   
+
     public void addDealtDamage(int d) {
         if (d <= 0) throw new IllegalArgumentException("Damage must be positive");
         this.damageDealt += d;
@@ -211,13 +234,14 @@ public class Pokemon {
         this.moveSelected = null;
     }
 
-    // Clears any temporary effects
+    // Clears any temporary effects and volatile conditions
     public void backToTrainer() {
         this.damageDealt = 0;
         this.moveSelected = null;
         this.conditions.setCharge(false);
         this.conditions.setSwitchedIn(false);
         this.conditions.setImmobilized(false);
+        this.conditions.clearVolatileConditions();
     }
 
 // Getters

@@ -29,7 +29,6 @@ public class BattleField {
             p.resetDamageDealt();
             p.checkConditions(false);
         } catch (PokemonFaintedException e) {
-            BattleLog.add(e.getMessage());
         }
     }
 

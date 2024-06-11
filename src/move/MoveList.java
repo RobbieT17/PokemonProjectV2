@@ -118,7 +118,7 @@ public interface MoveList {
         MoveAction action = (a, d, m) -> {
             MoveAction.dealDamage(a, d, m);
             MoveAction.statusEffect(d, StatusCondition.BURN, 10);
-            MoveAction.applyFlinch(d, 10);
+            MoveAction.applyFlinch(d, 30);
         };
 
         return new MoveBuilder()
@@ -129,6 +129,23 @@ public interface MoveList {
         .setPP(15)
         .setPower(65)
         .setAccuracy(95)
+        .setAction(action)
+        .buildMove();
+    }
+
+    public static Move flameCharge() {
+        MoveAction action = (a, d, m) -> {
+            MoveAction.dealDamage(a, d, m);
+            MoveAction.speedStat(a, 1);
+        };
+
+        return new MoveBuilder()
+        .setId(488)
+        .setName("Flame Charge")
+        .setType(GameType.FIRE)
+        .setCategory(Move.PHYSICAL)
+        .setPP(20)
+        .setPower(50)
         .setAction(action)
         .buildMove();
     }
@@ -296,7 +313,7 @@ public interface MoveList {
     public static Move leechSeed() {
         MoveAction action = (a, d, m) -> {
             MoveAction.moveHits(a, d, m);
-            // TODO: Add Seeded Effect
+            MoveAction.applySeeded(a, d);
         };
 
         return new MoveBuilder()
@@ -687,7 +704,7 @@ public interface MoveList {
     public static Move waterPulse() {
         MoveAction action = (a, d, m) -> {
             MoveAction.dealDamage(a, d, m);
-            MoveAction.volatileStatusEffect(d, StatusCondition.CONFUSION, 20);
+            MoveAction.volatileStatusEffect(d, StatusCondition.CONFUSION, 100);
         };
 
         return new MoveBuilder()

@@ -1,20 +1,16 @@
 package exceptions;
 
-import pokemon.Pokemon;
-
 /*
  * Exception is thrown when a Pokemon's HP drops to 0
  * The turn immediately, some effects such as recoil damage
  * still happen
  */
-public class PokemonFaintedException extends RuntimeException{
+public class PokemonFaintedException extends RuntimeException {
     /**
      * Creates a new exception to be thrown
      * @param p Pokemon who fainted
      */
-    public PokemonFaintedException(Pokemon p) {
-        super(String.format("%s fainted!", p));
-        p.conditions().setFainted(true);
-        p.conditions().clearPrimaryCondition();
+    public PokemonFaintedException() {
+        super();
     }
 }

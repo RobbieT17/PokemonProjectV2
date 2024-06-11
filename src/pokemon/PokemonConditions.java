@@ -14,7 +14,6 @@ public class PokemonConditions {
     private boolean switchedIn; // Set to true when the pokemon first enters the field;
     private boolean hasMoved; // When the Pokemon has moved during the round
     private boolean flinched; // When the Pokemon cannot act for the turn
-    private boolean recoiled; // When Pokemon hits the opponent so hard it harms itself too!
 
     private StatusCondition primaryCondition; // Non-Volatile Condition (Burn, Freeze, Paralysis, Poison, Sleep)
     private final HashMap<Integer, StatusCondition> volatileConditions;
@@ -25,7 +24,7 @@ public class PokemonConditions {
     }
 
 // Methods
-    public boolean hasCondition(int key) {
+    public boolean hasKey(int key) {
         return this.volatileConditions.containsKey(key);
     }
 
@@ -64,10 +63,6 @@ public class PokemonConditions {
         this.flinched = f;
     }
 
-    public void setRecoiled(boolean r) {
-        this.recoiled = r;
-    }
-
     public void setPrimaryCondition(StatusCondition c) {
         this.primaryCondition = c;
     }
@@ -82,6 +77,10 @@ public class PokemonConditions {
 
     public void remove(int key) {
         this.volatileConditions.remove(key);
+    }
+
+    public void clearVolatileConditions() {
+        this.volatileConditions.clear();
     }
 
 // Getters
@@ -107,10 +106,6 @@ public class PokemonConditions {
 
     public boolean flinched() {
         return this.flinched;
-    }
-
-    public boolean recoiled() {
-        return this.recoiled;
     }
    
     public StatusCondition primaryCondition() {

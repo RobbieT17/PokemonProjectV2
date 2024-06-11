@@ -2,6 +2,7 @@ package stats;
 
 import battle.BattleLog;
 import exceptions.PokemonCannotActException;
+import exceptions.PokemonFaintedException;
 import move.MoveAction;
 import pokemon.Pokemon;
 import utility.Counter;
@@ -25,6 +26,7 @@ public interface StatusAction {
             int damage = (int) (p.hp().max() / 16.0);
             BattleLog.add("%s took %d damage from the burn!", p, damage);
             p.takeDamage(damage);
+            if (p.conditions().fainted()) throw new PokemonFaintedException();
         };
         return new StatusCondition(StatusCondition.BURN, action, false);
     }
@@ -82,6 +84,7 @@ public interface StatusAction {
             int damage = (int) (p.hp().max() * (counter.count() / 16.0));
             BattleLog.add("%s took %d damage from the poison!", p, damage);
             p.takeDamage(damage);
+            if (p.conditions().fainted()) throw new PokemonFaintedException();
         };
         return new StatusCondition(StatusCondition.POISON, action, false);
     }
@@ -134,23 +137,24 @@ public interface StatusAction {
             if (!RandomValues.chance(50)) return;
 
             MoveAction.takeConfusionDamage(p);
+            if (p.conditions().fainted()) throw new PokemonFaintedException();
+
             throw new PokemonCannotActException();
         };
 
         return new StatusCondition(StatusCondition.CONFUSION, action, true);
     }
 
-    // Gets the StatusAction based on the condition's ID number
-    public static StatusCondition getCondition(int i) {
-        return switch (i) {
-            case StatusCondition.BURN -> burn();   
-            case StatusCondition.FREEZE -> freeze();        
-            case StatusCondition.PARALYSIS -> paralysis();   
-            case StatusCondition.POISON -> poison();
-            case StatusCondition.SLEEP -> sleep();
-            case StatusCondition.CONFUSION -> confusion();
-            default -> throw new IllegalArgumentException("Invalid condition id");
+    public static StatusCondition seeded(Pokemon r) {
+        StatusAction action = p -> {
+            int damage = (int) (p.hp().max() / 8.0);
+            BattleLog.add("%s drained %d HP from %s!", r, damage, p);
+
+            r.healDamage(damage);
+            p.takeDamage(damage);
         };
+
+        return new StatusCondition(StatusCondition.SEEDED, action, false);
     }
 
 }
