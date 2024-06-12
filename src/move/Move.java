@@ -11,7 +11,9 @@ public class Move {
     public static final double UNIVERSAL_CRIT_RATE = 0.04;
     public static final double HIGH_CRIT = 0.125;
     public static final double ALWAYS_CRIT = 1.0;
-    public static final int INF = 101; // Moves that always hit
+    
+    // Moves that always hit
+    public static final int ALWAYS_HITS = 101; 
     
     // Move Categories
     public static final String PHYSICAL = "Physical";
@@ -90,6 +92,12 @@ public class Move {
         return new StringBuilder()
         .append(String.format("%s <%s>: %s%n", this.moveName, this.moveType.toUpperCase(), this.pp))
         .toString();
+    }
+
+    public boolean equals(Move m) {
+        return m != null 
+        ? this.moveID == m.moveID
+        : false;
     }
 
     @Override

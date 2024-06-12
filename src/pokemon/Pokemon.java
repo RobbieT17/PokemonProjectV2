@@ -147,6 +147,21 @@ public class Pokemon {
     }
 
     /**
+     * Takes damage, but prevents HP from dropping to zero
+     * @throws IllegalArgumentException if value isn't positive
+     * @param value damage received
+     */
+    public void takeDamageEndure(int value) {
+        if (value <= 0) throw new IllegalArgumentException("Damage must be a positive value");
+
+        this.hp.change(-value);
+        if (this.hp.depleted()) {
+            this.hp.change(1);
+            BattleLog.add("%s endured the hit!", this);
+        }
+    }
+
+    /**
      * Restores HP
      * @throws IllegalArgumentException if value isn't positive
      * @param value health restored
@@ -244,10 +259,7 @@ public class Pokemon {
         this.damageDealt = 0;
         this.moveSelected = null;
         this.lastMove = null;
-        this.conditions.setForcedMove(false);
-        this.conditions.setSwitchedIn(false);
-        this.conditions.setImmobilized(false);
-        this.conditions.clearVolatileConditions();
+        this.conditions.clearAtReturn();
     }
 
 // Getters

@@ -77,6 +77,24 @@ public interface MoveList {
         .buildMove();
     }
 
+    public static Move bulldoze() {
+        MoveAction action = (a, d, m) -> {
+            MoveAction.dealDamage(a, d, m);
+            MoveAction.speedStat(d, -1);
+        };
+
+        return new MoveBuilder()
+        .setId(523)
+        .setName("Bulldoze")
+        .setType(GameType.GROUND)
+        .setCategory(Move.PHYSICAL)
+        .setPP(20)
+        .setPower(60)
+        .setContact(false)
+        .setAction(action)
+        .buildMove();
+    }
+
 // CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
     
     public static Move charm() {
@@ -145,6 +163,18 @@ public interface MoveList {
         .buildMove();
     }
 
+    public static Move endure() {
+        return new MoveBuilder()
+        .setId(203)
+        .setName("Endure")
+        .setType(GameType.NORMAL)
+        .setCategory(Move.STATUS)
+        .setPP(10)
+        .setPriority(4)
+        .setAction((a, d, m) -> MoveAction.pokemonEndures(a))
+        .buildMove();
+    }
+
 // FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
 
     public static Move facade() {
@@ -154,7 +184,7 @@ public interface MoveList {
             a.hasPrimaryCondition(StatusCondition.PARALYSIS) |
             a.hasPrimaryCondition(StatusCondition.POISON))
                 m.doublePower();
-                
+
             MoveAction.dealDamage(a, d, m);
         };
 
@@ -395,6 +425,23 @@ public interface MoveList {
     }
 
 // MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+
+    public static Move magicalLeaf() {
+        MoveAction action = (a, d, m) -> {
+
+        };
+
+        return new MoveBuilder()
+        .setId(345)
+        .setName("Magical Leaf")
+        .setType(GameType.GRASS)
+        .setCategory(Move.SPECIAL)
+        .setPP(20)
+        .setPower(60)
+        .setAccuracy(Move.ALWAYS_HITS)
+        .setAction(action)
+        .buildMove();
+    }
 // NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
 // OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
 
@@ -453,6 +500,18 @@ public interface MoveList {
         .setPower(120)
         .setAccuracy(85)
         .setAction(MoveAction.DEFAULT_ACTION)
+        .buildMove();
+    }
+
+    public static Move protect() {
+        return new MoveBuilder()
+        .setId(182)
+        .setName("Protect")
+        .setType(GameType.NORMAL)
+        .setCategory(Move.STATUS)
+        .setPP(10)
+        .setPriority(4)
+        .setAction((a, d, m) -> MoveAction.pokemonProtects(a))
         .buildMove();
     }
 
@@ -753,6 +812,23 @@ public interface MoveList {
 // UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU
 
 // VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
+
+    public static Move venoshock() {
+        MoveAction action = (a, d, m) -> {
+            if (d.hasPrimaryCondition(StatusCondition.POISON)) m.doublePower();
+            MoveAction.dealDamage(a, d, m);
+        };
+
+        return new MoveBuilder()
+        .setId(474)
+        .setName("Venoshock")
+        .setType(GameType.POISON)
+        .setCategory(Move.SPECIAL)
+        .setPP(10)
+        .setPower(65)
+        .setAction(action)
+        .buildMove();
+    }
 
     public static Move vineWhip() {
         return new MoveBuilder()

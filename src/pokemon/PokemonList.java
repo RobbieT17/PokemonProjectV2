@@ -18,10 +18,10 @@ public interface PokemonList {
         .setWeight(100.0)
         .setHp(80)
         .setStats(82, 83, 100, 100, 80)
-        .addMove(MoveList.solarBeam())
         .addMove(MoveList.petalDance())
         .addMove(MoveList.poisonPowder())
-        .addMove(MoveList.synthesis())
+        .addMove(MoveList.endure())
+        .addMove(MoveList.protect())
         .buildPokemon();
     }
 

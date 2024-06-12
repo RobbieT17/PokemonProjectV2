@@ -14,7 +14,6 @@ public interface  RandomValues {
         return new Random().nextInt((max - min) + 1) + min;
     }
 
-
     public static boolean chance(double value) {
         if (value > 100 || value <= 0) throw new IllegalArgumentException("Chance must be between 1-100%");
         return (new Random().nextDouble() <= value * 0.01);

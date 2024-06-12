@@ -11,6 +11,7 @@ import stats.GameType;
 import stats.Stat;
 import stats.StatusAction;
 import stats.StatusCondition;
+import utility.Bracing;
 import utility.RandomValues;
 
 @FunctionalInterface
@@ -23,7 +24,9 @@ public interface MoveAction {
 
 // Accuracy Function
     public static void moveHits(Pokemon attacker, Pokemon defender, Move move) {
-        if (move.accuracy() == Move.INF || defender.conditions().immobilized()) return;
+        defenderProtects(defender);
+
+        if (move.accuracy() == Move.ALWAYS_HITS || defender.conditions().immobilized()) return;
 		
         double modifiedAccuracy = 0.01 * move.accuracy() 
         * ((double) attacker.accuracy().power() / (double) defender.evasion().power());
@@ -31,6 +34,12 @@ public interface MoveAction {
         if (new Random().nextDouble() > modifiedAccuracy) 
             throw new MoveInterruptedException("But %s avoided the attack!", defender);   
     } 
+
+// Protection Functions
+    public static void defenderProtects(Pokemon p) {
+        if (p.conditions().protect().active()) 
+            throw new MoveInterruptedException("But %s protected itself!", p);
+    }
 
 // Damaging Functions
 
@@ -231,7 +240,9 @@ public interface MoveAction {
         BattleLog.add(isCritical ? "Critical hit!" : "");
 
         attacker.addDealtDamage(damage);
-        defender.takeDamage(damage);
+
+        if (defender.conditions().endured().active()) defender.takeDamageEndure(damage);
+        else defender.takeDamage(damage);
     }
     
 
@@ -242,7 +253,7 @@ public interface MoveAction {
      * @param move Move used by the attacker
      */
     public static void dealDamage(Pokemon attacker, Pokemon defender, Move move) {     
-        double effectiveness = moveEffectiveness(move, defender); 
+        double effectiveness = moveEffectiveness(move, defender);
         moveHits(attacker, defender, move); // Deals no damage if move misses
         
         boolean isCritical = criticalHit(move.critRate()); // Rolls for a critical hit
@@ -253,7 +264,9 @@ public interface MoveAction {
         BattleLog.add(isCritical ? "Critical hit!" : "");
 
         attacker.addDealtDamage(damage); 
-        defender.takeDamage(damage);
+
+        if (defender.conditions().endured().active()) defender.takeDamageEndure(damage);
+        else defender.takeDamage(damage);
     }
 
     // Deals multiple hits of damage
@@ -299,6 +312,26 @@ public interface MoveAction {
         int heal = (int) (0.01 * percent * p.hp().max());
         BattleLog.add("%s restored %d HP!", p, heal);
         p.healDamage(heal);
+    }
+
+// Bracing Functions
+    private static void pokemonBraces(Pokemon p, Bracing b) {
+        if (p.moveSelected().equals(p.lastMove())) b.set();
+        else {
+            b.reset();
+            b.set();   
+        }
+        BattleLog.add(b.active() ? "Success!" : Move.FAILED);
+    }
+
+    // Pokemon uses protect, the chance of success decreases by 33% each consecutive use
+    public static void pokemonProtects(Pokemon p) {
+        pokemonBraces(p, p.conditions().protect());
+    }
+
+    // Pokemon uses endure, the chance of success decreases by 33% each consecutive use
+    public static void pokemonEndures(Pokemon p) {
+        pokemonBraces(p, p.conditions().endured());
     }
 
 // Charge Functions
@@ -479,6 +512,7 @@ public interface MoveAction {
      * @param id
      */
     private static void canBeApplied(Pokemon p, int id) {
+        defenderProtects(p);
         if (typeImmunity(p, id)) throw new MoveInterruptedException("But it doesn't affect %s...", p);
         
         if (p.hasPrimaryCondition()) throw new MoveInterruptedException(p.hasPrimaryCondition(id)  
@@ -487,6 +521,7 @@ public interface MoveAction {
     }
 
     private static void canBeAppliedV(Pokemon p, int id) {
+        defenderProtects(p);
         if (typeImmunity(p, id)) throw new MoveInterruptedException("But it doesn't affect %s...", p);
         if (p.hasCondition(id)) throw new MoveInterruptedException(Move.FAILED);
     }

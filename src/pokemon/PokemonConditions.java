@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.stream.Stream;
 import stats.StatusCondition;
+import utility.Bracing;
 import utility.Counter;
 
 public class PokemonConditions {
@@ -16,7 +17,11 @@ public class PokemonConditions {
     private boolean hasMoved; // When the Pokemon has moved during the round
     private boolean flinched; // When the Pokemon cannot act for the turn
 
-    private Counter rampageCount; // Count for rampage
+    // Likely fails when used consecutively
+    private final Bracing protect; // Protects Pokemon from incoming attacks
+    private final Bracing endured; // Prevents knocking Pokemon's HP to 0
+
+    private Counter rampage; // Count for rampage
 
     private StatusCondition primaryCondition; // Non-Volatile Condition (Burn, Freeze, Paralysis, Poison, Sleep)
     private final HashMap<Integer, StatusCondition> volatileConditions;
@@ -24,6 +29,8 @@ public class PokemonConditions {
 // Constructor
     public PokemonConditions() {
         this.volatileConditions = new HashMap<>();
+        this.protect = new Bracing();
+        this.endured = new Bracing();
     }
 
 // Methods
@@ -43,7 +50,7 @@ public class PokemonConditions {
     }
 
     public boolean onRampage() {
-        return this.rampageCount != null;
+        return this.rampage != null;
     }
 
 // Setters
@@ -68,14 +75,14 @@ public class PokemonConditions {
 
     public void setFlinched(boolean f) {
         this.flinched = f;
-    }
+    } 
 
     public void startRampage(int duration) {
-        this.rampageCount = new Counter(duration);
+        this.rampage = new Counter(duration);
     }
 
     public void stopRampage() {
-        this.rampageCount = null;
+        this.rampage = null;
     }
 
     public void setPrimaryCondition(StatusCondition c) {
@@ -96,6 +103,21 @@ public class PokemonConditions {
 
     public void clearVolatileConditions() {
         this.volatileConditions.clear();
+    }
+
+    public void clearAtEndRound() {
+        this.hasMoved = false;
+        this.flinched = false;
+        this.protect.setActive(false);
+        this.endured.setActive(false);
+    }
+
+    public void clearAtReturn() {
+        this.setForcedMove(false);
+        this.setSwitchedIn(false);
+        this.protect.reset();
+        this.endured.reset();
+        this.clearVolatileConditions();
     }
 
 // Getters
@@ -123,8 +145,16 @@ public class PokemonConditions {
         return this.flinched;
     }
 
+    public Bracing protect() {
+        return this.protect;
+    }
+
+    public Bracing endured() {
+        return this.endured;
+    }
+
     public Counter rampage() {
-        return this.rampageCount;
+        return this.rampage;
     }
    
     public StatusCondition primaryCondition() {
