@@ -37,8 +37,18 @@ public interface MoveAction {
 
 // Protection Functions
     public static void defenderProtects(Pokemon p) {
-        if (p.conditions().protect().active()) 
-            throw new MoveInterruptedException("But %s protected itself!", p);
+        if (!p.conditions().protect().active()) return;
+            
+        p.conditions().protect().setActive(false);
+        throw new MoveInterruptedException("But %s protected itself!", p);
+    }
+
+    public static void defenderTakesHit(Pokemon p, int damage) {
+        if (p.conditions().endured().active()) {
+            p.takeDamageEndure(damage);
+            p.conditions().endured().setActive(false);
+        }
+        else p.takeDamage(damage);     
     }
 
 // Damaging Functions
@@ -231,6 +241,15 @@ public interface MoveAction {
         p.takeDamage(damage);
     }
 
+    private static void drainHP(Pokemon p, double drain) {
+        if (p.damageDealt() == 0) return;
+
+        int heal = (int) (0.01 * drain * p.damageDealt()); 
+        BattleLog.add("%s restored %d HP!", p, heal);
+        p.healDamage(heal);
+    }
+
+    // Pokemon takes damage from a multi-hit move
     private static void dealMultiDamage(Pokemon attacker, Pokemon defender, Move move) {
         double effectiveness = moveEffectiveness(move, defender);
         boolean isCritical = criticalHit(move.critRate());
@@ -241,7 +260,7 @@ public interface MoveAction {
 
         attacker.addDealtDamage(damage);
 
-        if (defender.conditions().endured().active()) defender.takeDamageEndure(damage);
+        if (defender.conditions().endured().active()) defenderTakesHit(defender, damage);
         else defender.takeDamage(damage);
     }
     
@@ -265,7 +284,7 @@ public interface MoveAction {
 
         attacker.addDealtDamage(damage); 
 
-        if (defender.conditions().endured().active()) defender.takeDamageEndure(damage);
+        if (defender.conditions().endured().active()) defenderTakesHit(defender, damage);
         else defender.takeDamage(damage);
     }
 
@@ -289,6 +308,12 @@ public interface MoveAction {
     public static void dealDamageRecoil(Pokemon attacker, Pokemon defender, Move move, double percent) {
         dealDamage(attacker, defender, move);
         recoilDamage(attacker, percent);
+    }
+
+    // Deals damage, attacking Pokemon heals from percentage of the damage dealt
+    public static void dealDamageDrain(Pokemon attacker, Pokemon defender, Move move, double percent) {
+        dealDamage(attacker, defender, move);
+        drainHP(attacker, percent);
     }
 
     /**
@@ -315,23 +340,13 @@ public interface MoveAction {
     }
 
 // Bracing Functions
-    private static void pokemonBraces(Pokemon p, Bracing b) {
+    public static void pokemonBraces(Pokemon p, Bracing b, String success) {
         if (p.moveSelected().equals(p.lastMove())) b.set();
         else {
             b.reset();
             b.set();   
         }
-        BattleLog.add(b.active() ? "Success!" : Move.FAILED);
-    }
-
-    // Pokemon uses protect, the chance of success decreases by 33% each consecutive use
-    public static void pokemonProtects(Pokemon p) {
-        pokemonBraces(p, p.conditions().protect());
-    }
-
-    // Pokemon uses endure, the chance of success decreases by 33% each consecutive use
-    public static void pokemonEndures(Pokemon p) {
-        pokemonBraces(p, p.conditions().endured());
+        BattleLog.add(b.active() ? success : Move.FAILED);
     }
 
 // Charge Functions
@@ -349,6 +364,10 @@ public interface MoveAction {
             attacker.conditions().setForcedMove(false);
             dealDamage(attacker, defender, move);
         }
+    }
+
+    public static void rechargeMove(Pokemon p) {
+        p.conditions().setRecharging(true);
     }
 
     /**
@@ -571,8 +590,7 @@ public interface MoveAction {
 
     // Checks if a non-volatile condition can be applied. 
     public static void statusEffect(Pokemon p, int statusId, double chance) {
-        if (p.conditions().fainted()) return;
-        if (p.hasPrimaryCondition()) throw new MoveInterruptedException();
+        if (p.conditions().fainted() | p.hasPrimaryCondition() | typeImmunity(p, statusId)) return;
 
         switch (statusId) {
             case StatusCondition.BURN -> applyBurn(p, chance);  
@@ -585,9 +603,9 @@ public interface MoveAction {
     }
 
     public static void volatileStatusEffect(Pokemon p, int statusId, double chance) {
-        if (p.conditions().fainted()) return;
-        if (p.hasCondition(statusId)) throw new MoveInterruptedException();
-
+        // TODO: Code Duplication, unneeded condition check 
+        if (p.conditions().fainted() | p.hasCondition(statusId) | typeImmunity(p, statusId)) return;
+    
         switch (statusId) {
             case StatusCondition.CONFUSION -> applyConfusion(p, chance);
             default -> throw new IllegalArgumentException("Invalid condition id");

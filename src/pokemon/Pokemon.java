@@ -120,12 +120,14 @@ public class Pokemon {
      * @param defender the target Pokemon
      */
     public void useTurn(Pokemon defender){
- 
         try {
             this.checkConditions(true);
             this.useMove(defender);
+            this.conditions.setMoveInterrupted(false); // Successful Move
         } catch (MoveInterruptedException | PokemonCannotActException e) {
             BattleLog.add(e.getMessage());
+            this.moveSelected().power(); // Resets any move modifications
+            this.conditions.setMoveInterrupted(true); // Move failed
             this.conditions.setForcedMove(false);
             this.conditions.stopRampage();
         }
@@ -256,10 +258,10 @@ public class Pokemon {
 
     // Clears any temporary effects and volatile conditions
     public void backToTrainer() {
-        this.damageDealt = 0;
-        this.moveSelected = null;
-        this.lastMove = null;
+        this.resetMove();
         this.conditions.clearAtReturn();
+        this.damageDealt = 0;
+        this.lastMove = null;     
     }
 
 // Getters

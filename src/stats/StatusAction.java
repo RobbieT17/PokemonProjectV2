@@ -93,6 +93,9 @@ public interface StatusAction {
      * Asleep Pokemon cannot act or dodge incoming attacks.
      * Sleep last for 1-3 rounds before the Pokemon wakes up.
      * 
+     * Some moves only activate it the Pokemon is asleep such
+     * as Sleep Talk and Snore
+     * 
      * @param duration rounds effect lasts for
      * @return new Sleep StatusCondition
      */
@@ -107,8 +110,8 @@ public interface StatusAction {
                 BattleLog.add("%s woke up!", p);
                 return;
             } 
-
             p.conditions().setImmobilized(true);
+            if (p.moveSelected().moveID() == 214) return; // 214: Sleep Talk
             throw new PokemonCannotActException("%s is fast asleep...", p);    
         };
 

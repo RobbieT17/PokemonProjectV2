@@ -62,10 +62,12 @@ public class Battle {
 
         /*
          * Unable to choose a move if just switched in
-         * or charging (If changing, the pokemon uses last move selected)
+         * or needs to recharge 
          */
-        if (p.conditions().switchedIn()) return; 
-
+        if (p.conditions().switchedIn() | p.conditions().recharging()) {
+            p.conditions().setRecharging(false);
+            return; 
+        }
         // Default to struggle if all the Pokemon's move has no more PP
         if (p.hasNoMoves()) {
             BattleLog.add("%s has no moves!", p);

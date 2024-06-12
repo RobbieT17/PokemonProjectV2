@@ -64,11 +64,6 @@ public class Move {
     }
 
 // Methods
-    // Doubles current power
-    public void doublePower() {
-        this.power.doubled();
-    }
-
     /**
      * @param t A Pokemon's typing
      * @return true if the move type is one of the Pokemon's types
@@ -105,6 +100,17 @@ public class Move {
         return this.moveName;
     }
 
+// Setters
+    // Doubles current power
+    public void doublePower() {
+        this.power.doubled();
+    }
+
+    public void setPower(int pow) {
+        this.power.set(pow);
+    }
+
+
 // Getters
     public int moveID() {
         return this.moveID;
@@ -131,7 +137,9 @@ public class Move {
     }
 
     public int power() {
-        return this.power.value();
+        return this.power != null
+        ? this.power.value()
+        : 0;
     }
 
     public int accuracy() {
@@ -149,4 +157,5 @@ public class Move {
     public MoveAction action() {
         return this.action;
     }
+
 }

@@ -12,11 +12,13 @@ public class PokemonConditions {
 // Object Variables
     private boolean fainted; // When the Pokemon is unable to battle
     private boolean immobilized; // When the pokemon cannot act or dodge attacks
-    private boolean forcedMove; // When the Pokemon charges up a move
-    private boolean switchedIn; // Set to true when the pokemon first enters the field;
+    private boolean forcedMove; // When the Pokemon is forced to use their last move
+    private boolean recharging; // Pokemon waits a turn before acting again
+    private boolean switchedIn; // Set to true when the pokemon first enters the field
     private boolean hasMoved; // When the Pokemon has moved during the round
+    private boolean moveInterrupted; // When Pokemon's last move was interrupted
     private boolean flinched; // When the Pokemon cannot act for the turn
-
+  
     // Likely fails when used consecutively
     private final Bracing protect; // Protects Pokemon from incoming attacks
     private final Bracing endured; // Prevents knocking Pokemon's HP to 0
@@ -65,12 +67,20 @@ public class PokemonConditions {
         this.forcedMove = c;
     }
 
+    public void setRecharging(boolean r) {
+        this.recharging = r;
+    }
+
     public void setSwitchedIn(boolean s) {
         this.switchedIn = s;
     }
 
     public void setHasMoved(boolean h) {
         this.hasMoved = h;
+    }
+
+    public void setMoveInterrupted(boolean i) {
+        this.moveInterrupted = i;
     }
 
     public void setFlinched(boolean f) {
@@ -108,8 +118,6 @@ public class PokemonConditions {
     public void clearAtEndRound() {
         this.hasMoved = false;
         this.flinched = false;
-        this.protect.setActive(false);
-        this.endured.setActive(false);
     }
 
     public void clearAtReturn() {
@@ -133,12 +141,20 @@ public class PokemonConditions {
         return this.forcedMove;
     }
 
+    public boolean recharging() {
+        return this.recharging;
+    }
+
     public boolean switchedIn() {
         return this.switchedIn;
     }
 
     public boolean hasMoved() {
         return this.hasMoved;
+    }
+
+    public boolean moveInterrupted() {
+        return this.moveInterrupted;
     }
 
     public boolean flinched() {
