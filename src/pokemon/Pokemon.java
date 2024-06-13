@@ -5,7 +5,7 @@ import battle.BattleLog;
 import battle.Weather;
 import exceptions.*;
 import move.Move;
-import stats.GameType;
+import stats.Type;
 import stats.Stat;
 
 public class Pokemon {
@@ -181,7 +181,7 @@ public class Pokemon {
         switch (BattleField.currentWeather) {
             case Weather.SANDSTORM ->  {
                 // Ground, Rock, and Steel types are immune to sandstorm
-                if (this.isType(GameType.GROUND) || this.isType(GameType.ROCK) || this.isType(GameType.STEEL)) return;
+                if (this.isType(Type.GROUND) || this.isType(Type.ROCK) || this.isType(Type.STEEL)) return;
 
                 int damage = (int) (this.hp().max() / 8.0);
                 BattleLog.add("%s took %d damage from the sandstorm!", this, damage);
@@ -189,7 +189,7 @@ public class Pokemon {
             }
             case Weather.HAIL ->  {
                 // Ice types are immune to hail
-                if (this.isType(GameType.ICE)) return;
+                if (this.isType(Type.ICE)) return;
 
      
                 int damage = (int) (this.hp().max() / 16.0);  

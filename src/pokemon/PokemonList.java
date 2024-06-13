@@ -1,7 +1,7 @@
 package pokemon;
 
 import move.MoveList;
-import stats.GameType;
+import stats.Type;
 
 // List of Pokemon (Listed in pokedex order)
 public interface PokemonList {
@@ -13,7 +13,7 @@ public interface PokemonList {
     public static Pokemon venusaur(String name) {
         return new PokemonBuilder()
         .setName(defaultName("Venusaur", name))
-        .setTypes(GameType.GRASS, GameType.POISON)
+        .setTypes(Type.GRASS, Type.POISON)
         .setPokedexNo(3)
         .setWeight(100.0)
         .setHp(80)
@@ -28,7 +28,7 @@ public interface PokemonList {
     public static Pokemon charizard(String name) {
         return new PokemonBuilder()
         .setName(defaultName("Charizard", name))
-        .setTypes(GameType.FIRE, GameType.FLYING)
+        .setTypes(Type.FIRE, Type.FLYING)
         .setPokedexNo(6)
         .setWeight(199.5)
         .setHp(78)
@@ -44,7 +44,7 @@ public interface PokemonList {
     public static Pokemon blastoise(String name) {
         return new PokemonBuilder()
         .setName(defaultName("Blastoise", name))
-        .setTypes(GameType.WATER)
+        .setTypes(Type.WATER)
         .setPokedexNo(9)
         .setWeight(188.5)
         .setHp(79)

@@ -7,10 +7,10 @@ import exceptions.MoveInterruptedException;
 import java.util.Random;
 import pokemon.Pokemon;
 import pokemon.PokemonType;
-import stats.GameType;
 import stats.Stat;
 import stats.StatusAction;
 import stats.StatusCondition;
+import stats.Type;
 import utility.Bracing;
 import utility.RandomValues;
 
@@ -159,9 +159,9 @@ public interface MoveAction {
      */
     private static double weatherBonus(Move m) {
         return (BattleField.currentWeather == Weather.SUNNY) 
-        ? (m.isType(GameType.FIRE)) ? 1.5 : (m.isType(GameType.WATER)) ? 0.5 : 1.0
+        ? (m.isType(Type.FIRE)) ? 1.5 : (m.isType(Type.WATER)) ? 0.5 : 1.0
         :  (BattleField.currentWeather == Weather.RAIN) 
-            ? (m.isType(GameType.WATER)) ? 1.5 : (m.isType(GameType.FIRE)) ? 0.5 : 1.0
+            ? (m.isType(Type.WATER)) ? 1.5 : (m.isType(Type.FIRE)) ? 0.5 : 1.0
             : 1.0
         ;
     }
@@ -555,11 +555,11 @@ public interface MoveAction {
 
     private static boolean typeImmunity(Pokemon p, int id) {
         return switch (id) {
-            case StatusCondition.BURN -> p.isType(GameType.FIRE);
-            case StatusCondition.FREEZE -> p.isType(GameType.ICE);
-            case StatusCondition.PARALYSIS -> p.isType(GameType.ELECTRIC);
-            case StatusCondition.POISON -> p.isType(GameType.POISON) || p.isType(GameType.STEEL);
-            case StatusCondition.SEEDED -> p.isType(GameType.GRASS);
+            case StatusCondition.BURN -> p.isType(Type.FIRE);
+            case StatusCondition.FREEZE -> p.isType(Type.ICE);
+            case StatusCondition.PARALYSIS -> p.isType(Type.ELECTRIC);
+            case StatusCondition.POISON -> p.isType(Type.POISON) || p.isType(Type.STEEL);
+            case StatusCondition.SEEDED -> p.isType(Type.GRASS);
             default -> false;
         };
     }

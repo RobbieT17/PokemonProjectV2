@@ -2,13 +2,13 @@ package pokemon;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import stats.GameType;
+import stats.Type;
 
 public class PokemonTypeBuilder {
 
 // Object Variables
-    private GameType primaryType = null;
-    private GameType secondaryType = null; // Optional (Not every Pokemon has a second type)
+    private Type primaryType = null;
+    private Type secondaryType = null; // Optional (Not every Pokemon has a second type)
 
     private final ArrayList<String> resistances = new ArrayList<>();
     private final ArrayList<String> weaknesses = new ArrayList<>();
@@ -35,12 +35,12 @@ public class PokemonTypeBuilder {
 
 // Setters
     public PokemonTypeBuilder setPrimaryType(String t) {
-        this.primaryType = GameType.getType(t);
+        this.primaryType = Type.getType(t);
         return this;
     }
 
     public PokemonTypeBuilder setSecondaryType(String t) {
-        this.secondaryType = GameType.getType(t);
+        this.secondaryType = Type.getType(t);
         return this;
     }
 
@@ -51,7 +51,7 @@ public class PokemonTypeBuilder {
     }
 
     // Adds a type's matchups to resistances/weaknesses/immunities
-    private void addMatchups(GameType t) {
+    private void addMatchups(Type t) {
         if (t == null) return;
  
         this.resistances.addAll(Arrays.asList(t.resistances()));
