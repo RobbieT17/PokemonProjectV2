@@ -1,8 +1,11 @@
 package pokemon;
 
+import battle.BattleField;
 import battle.BattleLog;
+import battle.Weather;
 import exceptions.*;
 import move.Move;
+import stats.GameType;
 import stats.Stat;
 
 public class Pokemon {
@@ -85,7 +88,7 @@ public class Pokemon {
      * @param before
      */
     private void checkVolatileConditions(boolean before) {
-        this.conditions.filterVolatileConditions(before).forEach(c -> c.action().apply(this));
+        this.conditions.filterVolatileConditions(before).forEach(c -> c.action().apply(this)); 
     }
 
 
@@ -171,6 +174,30 @@ public class Pokemon {
     public void healDamage(int value) {
         if (value <= 0) throw new IllegalArgumentException("Damage must be a positive value");
         this.hp.change(value);
+    }
+
+    // Takes damage from Sandstorm / Hail Weather
+    public void weatherEffect() {
+        switch (BattleField.currentWeather) {
+            case Weather.SANDSTORM ->  {
+                // Ground, Rock, and Steel types are immune to sandstorm
+                if (this.isType(GameType.GROUND) || this.isType(GameType.ROCK) || this.isType(GameType.STEEL)) return;
+
+                int damage = (int) (this.hp().max() / 8.0);
+                BattleLog.add("%s took %d damage from the sandstorm!", this, damage);
+                this.takeDamage(damage);
+            }
+            case Weather.HAIL ->  {
+                // Ice types are immune to hail
+                if (this.isType(GameType.ICE)) return;
+
+     
+                int damage = (int) (this.hp().max() / 16.0);  
+                BattleLog.add("%s took %d damage from the hail!", this, damage);
+                this.takeDamage(damage);
+            }
+        }
+        if (this.conditions.fainted()) throw new PokemonFaintedException();
     }
 
     // List Pokemon's stats
