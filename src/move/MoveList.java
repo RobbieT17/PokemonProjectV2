@@ -638,6 +638,17 @@ public interface MoveList {
 
 // HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
 
+    public static Move hail() {
+        return new MoveBuilder()
+        .setId(258)
+        .setName("Hail")
+        .setType(GameType.ICE)
+        .setCategory(Move.STATUS)
+        .setPP(10)
+        .setAction((a, d, m) -> MoveAction.changeWeather(Weather.HAIL))
+        .buildMove();
+    }
+
     public static Move heatWave() {
         MoveAction action = (a, d, m) -> {
             MoveAction.dealDamage(a, d, m);
@@ -966,6 +977,18 @@ public interface MoveList {
     }
 
 // SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+    
+    public static Move sandstorm() {
+        return new MoveBuilder()
+        .setId(201)
+        .setName("Sandstorm")
+        .setType(GameType.ROCK)
+        .setCategory(Move.STATUS)
+        .setPP(10)
+        .setAction((a, d, m) -> MoveAction.changeWeather(Weather.SANDSTORM))
+        .buildMove();
+    }
+
     public static Move scaryFace() {
         MoveAction action = (a, d, m) -> {
             MoveAction.moveHits(a, d, m);

@@ -36,7 +36,7 @@ public interface PokemonList {
         .addMove(MoveList.flareBlitz())
         .addMove(MoveList.facade())
         .addMove(MoveList.bite())
-        .addMove(MoveList.scaryFace())
+        .addMove(MoveList.sandstorm())
         .buildPokemon();
     }    
 
@@ -52,7 +52,7 @@ public interface PokemonList {
         .addMove(MoveList.waterPulse())
         .addMove(MoveList.furyAttack())
         .addMove(MoveList.shellSmash())
-        .addMove(MoveList.sleepTalk())
+        .addMove(MoveList.hail())
         .buildPokemon();
     }
 
