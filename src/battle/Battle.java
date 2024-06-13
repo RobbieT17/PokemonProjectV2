@@ -222,16 +222,16 @@ public class Battle {
 
         PokemonTrainer player1 = new PokemonTrainerBuilder()
         .setName("Robbie")
-        // .addPokemon(PokemonList.venusaur("Bobby"))
+        .addPokemon(PokemonList.venusaur("Bobby"))
         .addPokemon(PokemonList.charizard("Charlie"))
-        // .addPokemon(PokemonList.blastoise("Squirt"))
+        .addPokemon(PokemonList.blastoise("Squirt"))
         .buildTrainer();
 
         PokemonTrainer player2 = new PokemonTrainerBuilder()
         .setName("Sammi")
-        // .addPokemon(PokemonList.venusaur("Bub"))
+        .addPokemon(PokemonList.venusaur("Bub"))
         .addPokemon(PokemonList.charizard("Chandler"))
-        // .addPokemon(PokemonList.blastoise("Tim"))
+        .addPokemon(PokemonList.blastoise("Tim"))
         .buildTrainer();
 
         choosePokemon(player1);

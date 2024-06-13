@@ -15,6 +15,12 @@ public class StatusCondition {
     public static final int CONFUSION = 6;
     public static final int SEEDED = 7;
 
+
+    // Semi-Invulnerable IDs
+    public static final int NO_INVUL = -1;
+    public static final int FLY = -2;
+    public static final int DIG = -3;
+
 // Object Variables
     private final int id; // Unique Identifier 
     private final StatusAction action; // The effect

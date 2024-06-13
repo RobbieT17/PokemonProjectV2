@@ -35,7 +35,7 @@ public interface PokemonList {
         .setStats(84, 78, 109, 85, 100)
         .addMove(MoveList.flareBlitz())
         .addMove(MoveList.facade())
-        .addMove(MoveList.bite())
+        .addMove(MoveList.dig())
         .addMove(MoveList.sandstorm())
         .buildPokemon();
     }    

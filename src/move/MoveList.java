@@ -232,6 +232,18 @@ public interface MoveList {
 
 // DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
     
+    public static Move dig() {
+        return new MoveBuilder()
+        .setId(91)
+        .setName("Dig")
+        .setType(GameType.GROUND)
+        .setCategory(Move.PHYSICAL)
+        .setPP(10)
+        .setPower(80)
+        .setAction((a, d, m) -> MoveAction.enterImmuneState(a, d, m, StatusCondition.DIG, a + " dug into the ground!"))
+        .buildMove();
+    }
+
     public static Move doubleEdge() {
         return new MoveBuilder()
         .setId(38)

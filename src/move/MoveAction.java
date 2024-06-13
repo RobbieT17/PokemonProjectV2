@@ -24,6 +24,9 @@ public interface MoveAction {
 
 // Accuracy Function
     public static void moveHits(Pokemon attacker, Pokemon defender, Move move) {
+        if (defender.conditions().inImmuneState()) 
+            throw new MoveInterruptedException("But %s is out of sight!", defender);
+
         defenderProtects(defender);
 
         if (move.accuracy() == Move.ALWAYS_HITS || defender.conditions().immobilized()) return;
@@ -403,6 +406,26 @@ public interface MoveAction {
         if (BattleField.currentWeather == c) throw new MoveInterruptedException(Move.FAILED);
         Weather.change(c);
     }
+
+// Semi-Immune State Function
+
+    /*
+     * Pokemon enters a semi-invulnerable state the first turn
+     * Pokemon leaves the state and attacks on the second turn
+     */
+    public static void enterImmuneState(Pokemon a, Pokemon d, Move m, int state, String message) {
+        if (!a.conditions().inImmuneState()) {
+            a.conditions().setImmuneState(state);
+            a.conditions().setForcedMove(true);
+            BattleLog.add(message);
+            return;
+        }
+
+        a.conditions().setImmuneState(StatusCondition.NO_INVUL);
+        a.conditions().setForcedMove(false);
+        dealDamage(a, d, m);
+    }
+
 
 // Stat Change Functions
 

@@ -18,6 +18,8 @@ public class PokemonConditions {
     private boolean hasMoved; // When the Pokemon has moved during the round
     private boolean moveInterrupted; // When Pokemon's last move was interrupted
     private boolean flinched; // When the Pokemon cannot act for the turn
+
+    private int immuneState; // Pokemon is immune from most attacks for a turn
   
     // Likely fails when used consecutively
     private final Bracing protect; // Protects Pokemon from incoming attacks
@@ -30,12 +32,21 @@ public class PokemonConditions {
 
 // Constructor
     public PokemonConditions() {
+        this.immuneState = StatusCondition.NO_INVUL;
         this.volatileConditions = new HashMap<>();
         this.protect = new Bracing();
         this.endured = new Bracing();
     }
 
 // Methods
+    public boolean inImmuneState() {
+        return this.immuneState != StatusCondition.NO_INVUL;
+    }
+
+    public boolean hasImmuneState(int s) {
+        return this.immuneState == s;
+    }
+
     public boolean hasKey(int key) {
         return this.volatileConditions.containsKey(key);
     }
@@ -86,6 +97,10 @@ public class PokemonConditions {
     public void setFlinched(boolean f) {
         this.flinched = f;
     } 
+
+    public void setImmuneState(int s) {
+        this.immuneState = s;
+    }
 
     public void startRampage(int duration) {
         this.rampage = new Counter(duration);
@@ -159,6 +174,10 @@ public class PokemonConditions {
 
     public boolean flinched() {
         return this.flinched;
+    }
+
+    public int immuneState() {
+        return this.immuneState;
     }
 
     public Bracing protect() {
