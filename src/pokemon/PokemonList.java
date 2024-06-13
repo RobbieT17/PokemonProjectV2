@@ -18,7 +18,7 @@ public interface PokemonList {
         .setWeight(100.0)
         .setHp(80)
         .setStats(82, 83, 100, 100, 80)
-        .addMove(MoveList.dig())
+        .addMove(MoveList.vineWhip())
         .addMove(MoveList.solarBeam())
         .addMove(MoveList.willOWisp())
         .addMove(MoveList.sleepPowder())
@@ -34,8 +34,8 @@ public interface PokemonList {
         .setHp(78)
         .setStats(84, 78, 109, 85, 100)
         .addMove(MoveList.flareBlitz())
-        .addMove(MoveList.fly())
-        .addMove(MoveList.overheat())
+        .addMove(MoveList.scorchingSands())
+        .addMove(MoveList.focusPunch())
         .addMove(MoveList.sandstorm())
         .buildPokemon();
     }    
@@ -52,7 +52,7 @@ public interface PokemonList {
         .addMove(MoveList.waterPulse())
         .addMove(MoveList.furyAttack())
         .addMove(MoveList.shellSmash())
-        .addMove(MoveList.hail())
+        .addMove(MoveList.rainDance())
         .buildPokemon();
     }
 

@@ -13,7 +13,7 @@ public class MoveBuilder {
 
     // Optional (pow only if status moves)
     private Power pow = null;
-    private int acc = 100;
+    private Accuracy acc = new Accuracy(100);
     private int prot = 0;
     private double crit = Move.UNIVERSAL_CRIT_RATE;
     private boolean contact = false;
@@ -83,7 +83,7 @@ public class MoveBuilder {
     }
 
     public MoveBuilder setAccuracy(int a) {
-        this.acc = a;
+        this.acc = new Accuracy(a);
         return this;
     }
 

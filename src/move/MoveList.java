@@ -164,6 +164,24 @@ public interface MoveList {
         .buildMove();
     }
 
+    public static Move breakingSwipe() {
+        MoveAction action = (a, d, m) -> {
+            MoveAction.dealDamage(a, d, m);
+            MoveAction.attackStat(a, -1);
+            MoveAction.attackStat(d, -1);
+        };
+
+        return new MoveBuilder()
+        .setId(784)
+        .setName("Breaking Swipe")
+        .setType(Type.DRAGON)
+        .setCategory(Move.PHYSICAL)
+        .setPP(15)
+        .setPower(60)
+        .setAction(action)
+        .buildMove();
+    }
+
     public static Move brickBreak() {
         MoveAction action = (a, d, m) -> {
             MoveAction.dealDamage(a, d, m);
@@ -661,16 +679,16 @@ public interface MoveList {
         .buildMove();
     }
 
-    public static Move furyAttack() {
+    public static Move focusPunch() {
         return new MoveBuilder()
-        .setId(31)
-        .setName("Fury Attack")
-        .setType(Type.NORMAL)
+        .setId(264)
+        .setName("Focus Punch")
+        .setType(Type.FIGHTING)
         .setCategory(Move.PHYSICAL)
-        .setPP(15)
-        .setPower(15)
-        .setAccuracy(85)
-        .setAction((a, d, m) -> MoveAction.multiHit(a, d, m))
+        .setPP(20)
+        .setPower(150)
+        .setPriority(-3)
+        .setAction((a, d, m) -> MoveAction.focusMove(a, d, m))
         .buildMove();
     }
 
@@ -691,6 +709,21 @@ public interface MoveList {
         .setAction(action)
         .buildMove();
     }
+
+    public static Move furyAttack() {
+        return new MoveBuilder()
+        .setId(31)
+        .setName("Fury Attack")
+        .setType(Type.NORMAL)
+        .setCategory(Move.PHYSICAL)
+        .setPP(15)
+        .setPower(15)
+        .setAccuracy(85)
+        .setAction((a, d, m) -> MoveAction.multiHit(a, d, m))
+        .buildMove();
+    }
+
+    
 
 // GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
 
@@ -726,21 +759,19 @@ public interface MoveList {
 
     public static Move grassKnot() {
         MoveAction action = (a, d, m) -> {
-            // Move power varies based on weight
-            int power =
+            // Move power varies based on weight 
+            m.setPower(
             d.weight() <= 21.8
-            ? 20
-            : d.weight() <= 54.9
-                ? 40
-                : d.weight() <= 110
-                    ? 60
-                    : d.weight() < 220.2
-                        ? 80
-                        : d.weight() < 440.7
-                            ? 100
-                            : m.power();
-            
-            m.setPower(power);
+                ? 20
+                : d.weight() <= 54.9
+                    ? 40
+                    : d.weight() <= 110
+                        ? 60
+                        : d.weight() < 220.2
+                            ? 80
+                            : d.weight() < 440.7
+                                ? 100
+                                : 120);
             MoveAction.dealDamage(a, d, m);
         };
 
@@ -807,6 +838,39 @@ public interface MoveList {
         .buildMove();
     }
 
+    public static Move heatCrash() {
+        MoveAction action = (a, d, m) -> {
+            /*
+             * Power varies based on the weight of both user and the target
+             * The greater the difference, the greater the power
+             */
+            double ratio = a.weight() / d.weight();
+
+            m.setPower(
+            ratio < 2
+                ? 40
+                : ratio < 3
+                    ? 60
+                    : ratio < 4
+                        ? 80
+                        : ratio < 5 
+                            ? 100
+                            : 120);
+            // TODO: Deals double damage to minimized opponents
+            MoveAction.dealDamage(a, d, m);
+        };
+
+        return new MoveBuilder()
+        .setId(535)
+        .setName("Heat Crash")
+        .setType(Type.FIRE)
+        .setCategory(Move.PHYSICAL)
+        .setPP(10)
+        .setPower(120) // Varies
+        .setAction(action)
+        .buildMove();
+    }
+
     public static Move heatWave() {
         MoveAction action = (a, d, m) -> {
             MoveAction.dealDamage(a, d, m);
@@ -821,6 +885,28 @@ public interface MoveList {
         .setPP(10)
         .setPower(95)
         .setAccuracy(90)
+        .setAction(action)
+        .buildMove();
+    }
+
+    public static Move hurricane() {
+        MoveAction action = (a, d, m) -> {
+            // Perfect accuracy in the rain, 50% accuracy in harsh sunlight
+            if (BattleField.currentWeather == Weather.RAIN) m.perfectAccuracy();
+            else if (BattleField.currentWeather == Weather.SUNNY) m.setAccuracy(50);
+
+           MoveAction.dealDamage(a, d, m);
+           MoveAction.volatileStatusEffect(d, StatusCondition.CONFUSION, 30);
+        };
+
+        return new MoveBuilder()
+        .setId(542)
+        .setName("Hurricane")
+        .setType(Type.FLYING)
+        .setCategory(Move.SPECIAL)
+        .setPP(10)
+        .setPower(110)
+        .setAccuracy(70)
         .setAction(action)
         .buildMove();
     }
@@ -1225,6 +1311,24 @@ public interface MoveList {
         .buildMove();
     }
 
+    public static Move scorchingSands() {
+        MoveAction action = (a, d, m) -> {
+            MoveAction.removeStatusEffect(a, StatusCondition.FREEZE);
+            MoveAction.dealDamage(a, d, m);
+            MoveAction.statusEffect(d, StatusCondition.BURN, 30);
+        };
+
+        return new MoveBuilder()
+        .setId(815)
+        .setName("Scorching Sands")
+        .setType(Type.GROUND)
+        .setCategory(Move.SPECIAL)
+        .setPP(10)
+        .setPower(70)
+        .setAction(action)
+        .buildMove();
+    }
+
     public static Move seedBomb() {
         return new MoveBuilder()
         .setId(402)
@@ -1364,7 +1468,7 @@ public interface MoveList {
 
     public static Move stompingTantrum() {
         MoveAction action = (a, d, m) -> {
-            if (a.conditions().moveInterrupted()) m.doublePower();
+            if (a.conditions().interrupted()) m.doublePower();
             MoveAction.dealDamage(a, d, m);
         };
 
@@ -1505,6 +1609,23 @@ public interface MoveList {
         .setPower(90)
         .setAccuracy(85)
         .setAction((a, d, m) -> MoveAction.dealDamageRecoil(a, d, m, 25))
+        .buildMove();
+    }
+
+    public static Move temperFlare() {
+        MoveAction action = (a, d, m) -> {
+            if (a.conditions().interrupted()) m.doublePower();
+            MoveAction.dealDamage(a, d, m);
+        };
+
+        return new MoveBuilder()
+        .setId(915)
+        .setName("Temper Flare")
+        .setType(Type.FIRE)
+        .setCategory(Move.PHYSICAL)
+        .setPP(10)
+        .setPower(75)
+        .setAction(action)
         .buildMove();
     }
 

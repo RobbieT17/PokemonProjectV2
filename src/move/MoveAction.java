@@ -36,9 +36,9 @@ public interface MoveAction {
 
         boolean exceptionFound = false;
         switch (p.conditions().immuneState()) {
-            case StatusCondition.DIG -> {
-                exceptionFound = m.moveID() == 89; // Earthquake
-            }
+            case StatusCondition.FLY -> exceptionFound = m.moveID() == 542;     
+            case StatusCondition.DIG -> exceptionFound = m.moveID() == 89; // Earthquake
+          
         }
 
         if (!exceptionFound) throw new MoveInterruptedException("But %s is out of sight!", p);
@@ -48,9 +48,11 @@ public interface MoveAction {
         checkInvulnerabilityExceptions(defender, move);
         defenderProtects(defender);
 
-        if (move.accuracy() == Move.ALWAYS_HITS || defender.conditions().immobilized()) return;
+        int accuracy = move.accuracy();
+
+        if (accuracy == Move.ALWAYS_HITS || defender.conditions().immobilized()) return;
 		
-        double modifiedAccuracy = 0.01 * move.accuracy() 
+        double modifiedAccuracy = 0.01 * accuracy
         * ((double) attacker.accuracy().power() / (double) defender.evasion().power());
 
         if (new Random().nextDouble() > modifiedAccuracy) 
@@ -308,6 +310,9 @@ public interface MoveAction {
 
         if (defender.conditions().endured().active()) defenderTakesHit(defender, damage);
         else defender.takeDamage(damage);
+
+        // Defender loses focus
+        if (defender.conditions().focused()) defender.conditions().setInterrupted(true);
     }
 
     // Deals multiple hits of damage
@@ -324,6 +329,8 @@ public interface MoveAction {
         }
         BattleLog.add("It hit %d times!", hits);
         BattleLog.add(isSuperEffective(moveEffectiveness(move, defender)));
+
+        if (defender.conditions().focused()) defender.conditions().setInterrupted(true);
     }
 
     // Deals damage, attacking Pokemon receives a percentage of the damage dealt
@@ -386,6 +393,23 @@ public interface MoveAction {
             attacker.conditions().setForcedMove(false);
             dealDamage(attacker, defender, move);
         }
+    }
+
+
+    public static void focusMove(Pokemon attacker, Pokemon defender, Move move) {
+        if (!attacker.conditions().focused()){
+            attacker.conditions().setFocused(true);
+            attacker.conditions().setForcedMove(true);
+            BattleLog.add("%s concentrates its energy!", attacker);
+            return;
+        }
+        attacker.conditions().setFocused(false);
+        attacker.conditions().setForcedMove(false);
+
+        if (attacker.conditions().interrupted()) 
+            throw new MoveInterruptedException("%s lost its focus and couldn't move!", attacker);
+
+        dealDamage(attacker, defender, move);
     }
 
     public static void rechargeMove(Pokemon p) {
@@ -664,5 +688,11 @@ public interface MoveAction {
         if (typeImmunity(seeded, StatusCondition.SEEDED)) throw new MoveInterruptedException(Move.FAILED);
         seeded.conditions().add(StatusAction.seeded(receiver));
         BattleLog.add("%s was grew sprouts!", seeded);
+    }
+
+    // Pokemon removes status condition
+    public static void removeStatusEffect(Pokemon p, int statusId) {
+        if (!p.hasPrimaryCondition(statusId)) return;
+        p.clearPrimaryCondition(statusId);
     }
 }

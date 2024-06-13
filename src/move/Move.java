@@ -30,7 +30,7 @@ public class Move {
 
     private final PowerPoints pp; // Power Points (The number of uses a move has)
 	private final Power power; // Strength of the move
-	private final int accuracy; // Hit rate of the move
+	private final Accuracy accuracy; // Hit rate of the move
 	private final int priority; // Moves with higher priority always move first
     private final boolean makesContact;
     
@@ -45,8 +45,8 @@ public class Move {
         String category,
         double crit,
         PowerPoints pp,
-        Power pow, 
-        int acc, int prot,
+        Power pow, Accuracy acc, 
+        int prot,
         boolean contact,
         MoveAction action
         ) {
@@ -101,13 +101,22 @@ public class Move {
     }
 
 // Setters
-    // Doubles current power
+    // Doubles current power for the turn
     public void doublePower() {
         this.power.doubled();
     }
 
     public void setPower(int pow) {
         this.power.set(pow);
+    }
+
+    // Perfect accuracy for the turn
+    public void perfectAccuracy() {
+        this.accuracy.perfect();
+    }
+
+    public void setAccuracy(int acc) {
+        this.accuracy.set(acc);
     }
 
 
@@ -143,7 +152,7 @@ public class Move {
     }
 
     public int accuracy() {
-        return this.accuracy;
+        return this.accuracy.value();
     }
 
     public int priority() {

@@ -5,8 +5,9 @@ import battle.BattleLog;
 import battle.Weather;
 import exceptions.*;
 import move.Move;
-import stats.Type;
 import stats.Stat;
+import stats.StatusCondition;
+import stats.Type;
 
 public class Pokemon {
 // Class Variables
@@ -126,12 +127,18 @@ public class Pokemon {
         try {
             this.checkConditions(true);
             this.useMove(defender);
-            this.conditions.setMoveInterrupted(false); // Successful Move
+            this.conditions.setInterrupted(false); // Successful Move
         } catch (MoveInterruptedException | PokemonCannotActException e) {
             BattleLog.add(e.getMessage());
-            this.moveSelected().power(); // Resets any move modifications
-            this.conditions.setMoveInterrupted(true); // Move failed
+    
+            // Resets any move modifications
+            this.moveSelected().power(); 
+            this.moveSelected().accuracy();
+
+            // Stops any ongoing moves
             this.conditions.setForcedMove(false);
+            this.conditions.setFocused(false);
+            this.conditions.setInterrupted(true);
             this.conditions.stopRampage();
         }
         this.conditions.setHasMoved(true); 
@@ -272,6 +279,16 @@ public class Pokemon {
 
     public void resetDamageDealt() {
         this.damageDealt = 0;
+    }
+
+    public void clearPrimaryCondition(int c) {
+        this.conditions.clearPrimaryCondition();
+        BattleLog.add(this + StatusCondition.expireMessage(c));
+    }
+
+    public void clearCondition(int c) {
+        this.conditions.remove(c);
+        BattleLog.add(this + StatusCondition.expireMessage(c));
     }
 
     public void setMove(Move m) {

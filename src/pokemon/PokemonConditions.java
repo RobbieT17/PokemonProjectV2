@@ -9,15 +9,18 @@ import utility.Counter;
 
 public class PokemonConditions {
     
-// Object Variables
-    private boolean fainted; // When the Pokemon is unable to battle
-    private boolean immobilized; // When the pokemon cannot act or dodge attacks
-    private boolean forcedMove; // When the Pokemon is forced to use their last move
+// Object Variables 
+
+    // TODO: Put in alphabetical order
+    private boolean fainted; // Pokemon is unable to battle
+    private boolean immobilized; // Pokemon cannot act or dodge attacks
+    private boolean forcedMove; // Pokemon is forced to use their last move
+    private boolean focused; // Pokemon concentrates, resets if disrupted
     private boolean recharging; // Pokemon waits a turn before acting again
-    private boolean switchedIn; // Set to true when the pokemon first enters the field
-    private boolean hasMoved; // When the Pokemon has moved during the round
-    private boolean moveInterrupted; // When Pokemon's last move was interrupted
-    private boolean flinched; // When the Pokemon cannot act for the turn
+    private boolean switchedIn; // Pokemon first enters the field
+    private boolean hasMoved; // Pokemon has moved during the round
+    private boolean interrupted; // Pokemon's last move was interrupted
+    private boolean flinched; // Pokemon cannot act for the turn
 
     private int immuneState; // Pokemon is immune from most attacks for a turn
   
@@ -29,6 +32,7 @@ public class PokemonConditions {
 
     private StatusCondition primaryCondition; // Non-Volatile Condition (Burn, Freeze, Paralysis, Poison, Sleep)
     private final HashMap<Integer, StatusCondition> volatileConditions;
+
 
 // Constructor
     public PokemonConditions() {
@@ -78,6 +82,10 @@ public class PokemonConditions {
         this.forcedMove = c;
     }
 
+    public void setFocused(boolean f) {
+        this.focused = f;
+    }
+
     public void setRecharging(boolean r) {
         this.recharging = r;
     }
@@ -90,8 +98,8 @@ public class PokemonConditions {
         this.hasMoved = h;
     }
 
-    public void setMoveInterrupted(boolean i) {
-        this.moveInterrupted = i;
+    public void setInterrupted(boolean i) {
+        this.interrupted = i;
     }
 
     public void setFlinched(boolean f) {
@@ -156,6 +164,10 @@ public class PokemonConditions {
         return this.forcedMove;
     }
 
+    public boolean focused() {
+        return this.focused;
+    }
+
     public boolean recharging() {
         return this.recharging;
     }
@@ -168,8 +180,8 @@ public class PokemonConditions {
         return this.hasMoved;
     }
 
-    public boolean moveInterrupted() {
-        return this.moveInterrupted;
+    public boolean interrupted() {
+        return this.interrupted;
     }
 
     public boolean flinched() {

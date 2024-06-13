@@ -2,19 +2,19 @@ package move;
 
 public class Power {
     
-    private final int basePower;
+    private final int base;
     private int modified;
     private boolean doubled;
 
     public Power(int base) {
-        this.basePower = base;
+        this.base = base;
     }
 
     // Gets power and resets any modifications
     public int value() {
         int pow = this.modified != 0 
         ?  this.modified
-        :  this.basePower;
+        :  this.base;
 
         if (this.doubled) pow *= 2;
 

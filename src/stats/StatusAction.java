@@ -37,14 +37,18 @@ public interface StatusAction {
      * Frozen Pokemon have a 20% chance to thaw before
      * they use a move. The effect is indefinite, but end 
      * once the Pokemon thaws.
+     * 
+     * Some moves removed the freeze effect such as
+     * Scorching Sands
      * @return new Freeze StatusCondition
      */
     public static StatusCondition freeze() {
         StatusAction action = p -> {
+            if (p.moveSelected().moveID() == 815) return;
+
             if (RandomValues.chance(20)) {
                 p.conditions().setImmobilized(false);
-                p.conditions().clearPrimaryCondition();
-                BattleLog.add("%s thawed!", p);
+                p.clearPrimaryCondition(StatusCondition.FREEZE);
                 return;
             }
             p.conditions().setImmobilized(true);
@@ -106,8 +110,7 @@ public interface StatusAction {
             counter.inc();
             if (counter.terminated()) {
                 p.conditions().setImmobilized(false);
-                p.conditions().clearPrimaryCondition();
-                BattleLog.add("%s woke up!", p);
+                p.clearPrimaryCondition(StatusCondition.SLEEP);
                 return;
             } 
             p.conditions().setImmobilized(true);
@@ -130,8 +133,7 @@ public interface StatusAction {
         StatusAction action = p -> {
             counter.inc();
             if (counter.terminated()){
-                p.conditions().remove(StatusCondition.CONFUSION);
-                BattleLog.add("%s snapped out of confusion!", p);
+                p.clearCondition(StatusCondition.CONFUSION);
                 return;
             }
 
