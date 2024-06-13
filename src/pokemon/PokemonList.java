@@ -18,9 +18,9 @@ public interface PokemonList {
         .setWeight(100.0)
         .setHp(80)
         .setStats(82, 83, 100, 100, 80)
-        .addMove(MoveList.frenzyPlant())
-        .addMove(MoveList.stompingTantrum())
-        .addMove(MoveList.poisonPowder())
+        .addMove(MoveList.dig())
+        .addMove(MoveList.solarBeam())
+        .addMove(MoveList.willOWisp())
         .addMove(MoveList.sleepPowder())
         .buildPokemon();
     }
@@ -34,8 +34,8 @@ public interface PokemonList {
         .setHp(78)
         .setStats(84, 78, 109, 85, 100)
         .addMove(MoveList.flareBlitz())
-        .addMove(MoveList.facade())
-        .addMove(MoveList.dig())
+        .addMove(MoveList.fly())
+        .addMove(MoveList.overheat())
         .addMove(MoveList.sandstorm())
         .buildPokemon();
     }    

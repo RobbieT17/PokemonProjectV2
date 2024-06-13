@@ -23,10 +23,29 @@ public interface MoveAction {
     void act(Pokemon attacker, Pokemon defender, Move move);
 
 // Accuracy Function
-    public static void moveHits(Pokemon attacker, Pokemon defender, Move move) {
-        if (defender.conditions().inImmuneState()) 
-            throw new MoveInterruptedException("But %s is out of sight!", defender);
 
+    /* 
+     * Some moves can hit opponents through their 
+     * semi-invulnerable state.
+     * 
+     * Exceptions:
+     * Earthquake hits DIG
+     */
+    public static void checkInvulnerabilityExceptions(Pokemon p, Move m) {
+        if (!p.conditions().inImmuneState()) return;
+
+        boolean exceptionFound = false;
+        switch (p.conditions().immuneState()) {
+            case StatusCondition.DIG -> {
+                exceptionFound = m.moveID() == 89; // Earthquake
+            }
+        }
+
+        if (!exceptionFound) throw new MoveInterruptedException("But %s is out of sight!", p);
+    }
+
+    public static void moveHits(Pokemon attacker, Pokemon defender, Move move) {
+        checkInvulnerabilityExceptions(defender, move);
         defenderProtects(defender);
 
         if (move.accuracy() == Move.ALWAYS_HITS || defender.conditions().immobilized()) return;
