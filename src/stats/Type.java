@@ -37,24 +37,24 @@ public abstract class Type {
 // Selector Methods
 	public static Type getType(String type) {
 		return switch (type) {
-			case BUG -> bugType();
-			case DARK -> darkType();
-            case DRAGON -> dragonType();
-			case ELECTRIC -> electricType();
-			case FAIRY -> fairyType();
-			case FIGHTING -> fightingType();
-			case FIRE -> fireType();
-			case FLYING -> flyingType();
-			case GHOST -> ghostType();
-			case GRASS -> grassType();
-			case GROUND -> groundType();
-			case ICE -> iceType();
-			case NORMAL -> normalType();
-			case POISON -> poisonType();
-			case PSYCHIC -> psychicType();
-			case ROCK -> rockType();
-			case STEEL -> steelType();
-			case WATER ->  waterType();
+			case Type.BUG -> bugType();
+			case Type.DARK -> darkType();
+            case Type.DRAGON -> dragonType();
+			case Type.ELECTRIC -> electricType();
+			case Type.FAIRY -> fairyType();
+			case Type.FIGHTING -> fightingType();
+			case Type.FIRE -> fireType();
+			case Type.FLYING -> flyingType();
+			case Type.GHOST -> ghostType();
+			case Type.GRASS -> grassType();
+			case Type.GROUND -> groundType();
+			case Type.ICE -> iceType();
+			case Type.NORMAL -> normalType();
+			case Type.POISON -> poisonType();
+			case Type.PSYCHIC -> psychicType();
+			case Type.ROCK -> rockType();
+			case Type.STEEL -> steelType();
+			case Type.WATER ->  waterType();
 			default -> throw new IllegalArgumentException("Type inputted does not exist");
 		};
 	}
@@ -137,17 +137,17 @@ public abstract class Type {
 
 		@Override
 		public String typeName() {
-			return BUG;
+			return Type.BUG;
 		}
 
 		@Override
 		public String[] resistances() {
-			return new String[] { FIGHTING, GRASS, GROUND };
+			return new String[] { Type.FIGHTING, Type.GRASS, Type.GROUND };
 		}
 
 		@Override
 		public String[] weaknesses() {
-			return new String[] { FIRE, FLYING, ROCK };
+			return new String[] { Type.FIRE, Type.FLYING, Type.ROCK };
 		}
 
 		@Override
@@ -161,22 +161,22 @@ public abstract class Type {
 
 		@Override
 		public String typeName() {
-			return DARK;
+			return Type.DARK;
 		}
 
 		@Override
 		public String[] resistances() {
-			return new String[] { DARK, GHOST };
+			return new String[] { Type.DARK, Type.GHOST };
 		}
 
 		@Override
 		public String[] weaknesses() {
-			return new String[] { BUG, FAIRY, FIGHTING };
+			return new String[] { Type.BUG, Type.FAIRY, Type.FIGHTING };
 		}
 
 		@Override
 		public String[] immunities() {
-			return new String[] { PSYCHIC };
+			return new String[] { Type.PSYCHIC };
 		}
 
 	}
@@ -185,17 +185,17 @@ public abstract class Type {
 
 		@Override
 		public String typeName() {
-			return DRAGON;
+			return Type.DRAGON;
 		}
 
 		@Override
 		public String[] resistances() {
-			return new String[] { ELECTRIC, FIRE, GRASS, WATER };
+			return new String[] { Type.ELECTRIC, Type.FIRE, Type.GRASS, Type.WATER };
 		}
 
 		@Override
 		public String[] weaknesses() {
-			return new String[] { DRAGON, FAIRY, ICE };
+			return new String[] { Type.DRAGON, Type.FAIRY, Type.ICE };
 		}
 
 		@Override
@@ -209,17 +209,17 @@ public abstract class Type {
 
 		@Override
 		public String typeName() {
-			return ELECTRIC;
+			return Type.ELECTRIC;
 		}
 
 		@Override
 		public String[] resistances() {
-			return new String[] { ELECTRIC, FLYING, STEEL };
+			return new String[] { Type.ELECTRIC, Type.FLYING, Type.STEEL };
 		}
 
 		@Override
 		public String[] weaknesses() {
-			return new String[] { GROUND };
+			return new String[] { Type.GROUND };
 		}
 
 		@Override
@@ -233,22 +233,22 @@ public abstract class Type {
 
 		@Override
 		public String typeName() {
-			return FAIRY;
+			return Type.FAIRY;
 		}
 
 		@Override
 		public String[] resistances() {
-			return new String[] { BUG, DARK, FIGHTING };
+			return new String[] { Type.BUG, Type.DARK, Type.FIGHTING };
 		}
 
 		@Override
 		public String[] weaknesses() {
-			return new String[] { POISON, STEEL };
+			return new String[] { Type.POISON, Type.STEEL };
 		}
 
 		@Override
 		public String[] immunities() {
-			return new String[] { DRAGON };
+			return new String[] { Type.DRAGON };
 		}
 
 	}
@@ -257,17 +257,17 @@ public abstract class Type {
 
 		@Override
 		public String typeName() {
-			return FIGHTING;
+			return Type.FIGHTING;
 		}
 
 		@Override
 		public String[] resistances() {
-			return new String[] { BUG, DARK, ROCK };
+			return new String[] { Type.BUG, Type.DARK, Type.ROCK };
 		}
 
 		@Override
 		public String[] weaknesses() {
-			return new String[] { FAIRY, FLYING, PSYCHIC };
+			return new String[] { Type.FAIRY, Type.FLYING, Type.PSYCHIC };
 		}
 
 		@Override
@@ -281,17 +281,17 @@ public abstract class Type {
 
 		@Override
 		public String typeName() {
-			return FIRE;
+			return Type.FIRE;
 		}
 
 		@Override
 		public String[] resistances() {
-			return new String[] { BUG, FIRE, FAIRY, GRASS };
+			return new String[] { Type.BUG, Type.FIRE, Type.FAIRY, Type.GRASS };
 		}
 
 		@Override
 		public String[] weaknesses() {
-			return new String[] { GROUND, ROCK, WATER };
+			return new String[] { Type.GROUND, Type.ROCK, Type.WATER };
 		}
 
 		@Override
@@ -305,22 +305,22 @@ public abstract class Type {
 
 		@Override
 		public String typeName() {
-			return FLYING;
+			return Type.FLYING;
 		}
 
 		@Override
 		public String[] resistances() {
-			return new String[] { BUG, FIGHTING, GRASS };
+			return new String[] { Type.BUG, Type.FIGHTING, Type.GRASS };
 		}
 
 		@Override
 		public String[] weaknesses() {
-			return new String[] { ELECTRIC, ICE, ROCK };
+			return new String[] { Type.ELECTRIC, Type.ICE, Type.ROCK };
 		}
 
 		@Override
 		public String[] immunities() {
-			return new String[] { GROUND };
+			return new String[] { Type.GROUND };
 		}
 
 	}
@@ -334,17 +334,17 @@ public abstract class Type {
 
 		@Override
 		public String[] resistances() {
-			return new String[] { BUG, POISON };
+			return new String[] { Type.BUG, Type.POISON };
 		}
 
 		@Override
 		public String[] weaknesses() {
-			return new String[] { DARK, GHOST };
+			return new String[] { Type.DARK, Type.GHOST };
 		}
 
 		@Override
 		public String[] immunities() {
-			return new String[] { FIGHTING, NORMAL };
+			return new String[] { Type.FIGHTING, Type.NORMAL };
 		}
 
 	}
@@ -353,17 +353,17 @@ public abstract class Type {
 
 		@Override
 		public String typeName() {
-			return GRASS;
+			return Type.GRASS;
 		}
 
 		@Override
 		public String[] resistances() {
-			return new String[] { ELECTRIC, GRASS, GROUND, WATER };
+			return new String[] { Type.ELECTRIC, Type.GRASS, Type.GROUND, Type.WATER };
 		}
 
 		@Override
 		public String[] weaknesses() {
-			return new String[] { BUG, FIRE, FLYING, ICE, POISON };
+			return new String[] { Type.BUG, Type.FIRE, Type.FLYING, Type.ICE, Type.POISON };
 		}
 
 		@Override
@@ -377,22 +377,22 @@ public abstract class Type {
 
 		@Override
 		public String typeName() {
-			return GROUND;
+			return Type.GROUND;
 		}
 
 		@Override
 		public String[] resistances() {
-			return new String[] { POISON, ROCK };
+			return new String[] { Type.POISON, Type.ROCK };
 		}
 
 		@Override
 		public String[] weaknesses() {
-			return new String[] { GRASS, ICE, WATER };
+			return new String[] { Type.GRASS, Type.ICE, Type.WATER };
 		}
 
 		@Override
 		public String[] immunities() {
-			return new String[] { ELECTRIC };
+			return new String[] { Type.ELECTRIC };
 		}
 
 	}
@@ -401,17 +401,17 @@ public abstract class Type {
 
 		@Override
 		public String typeName() {
-			return ICE;
+			return Type.ICE;
 		}
 
 		@Override
 		public String[] resistances() {
-			return new String[] { ICE };
+			return new String[] { Type.ICE };
 		}
 
 		@Override
 		public String[] weaknesses() {
-			return new String[] { FIGHTING, FIRE, ROCK, STEEL };
+			return new String[] { Type.FIGHTING, Type.FIRE, Type.ROCK, Type.STEEL };
 		}
 
 		@Override
@@ -425,7 +425,7 @@ public abstract class Type {
 
 		@Override
 		public String typeName() {
-			return NORMAL;
+			return Type.NORMAL;
 		}
 
 		@Override
@@ -435,12 +435,12 @@ public abstract class Type {
 
 		@Override
 		public String[] weaknesses() {
-			return new String[] { FIGHTING };
+			return new String[] { Type.FIGHTING };
 		}
 
 		@Override
 		public String[] immunities() {
-			return new String[] { GHOST };
+			return new String[] { Type.GHOST };
 		}
 
 	}
@@ -449,17 +449,17 @@ public abstract class Type {
 
 		@Override
 		public String typeName() {
-			return POISON;
+			return Type.POISON;
 		}
 
 		@Override
 		public String[] resistances() {
-			return new String[] { BUG, FAIRY, FIGHTING, GRASS, POISON };
+			return new String[] { Type.BUG, Type.FAIRY, Type.FIGHTING, Type.GRASS, Type.POISON };
 		}
 
 		@Override
 		public String[] weaknesses() {
-			return new String[] { GROUND, PSYCHIC };
+			return new String[] { Type.GROUND, Type.PSYCHIC };
 		}
 
 		@Override
@@ -473,17 +473,17 @@ public abstract class Type {
 
 		@Override
 		public String typeName() {
-			return PSYCHIC;
+			return Type.PSYCHIC;
 		}
 
 		@Override
 		public String[] resistances() {
-			return new String[] { FIGHTING, PSYCHIC };
+			return new String[] { Type.FIGHTING, Type.PSYCHIC };
 		}
 
 		@Override
 		public String[] weaknesses() {
-			return new String[] { BUG, DARK, GHOST };
+			return new String[] { Type.BUG, Type.DARK, Type.GHOST };
 		}
 
 		@Override
@@ -497,17 +497,17 @@ public abstract class Type {
 
 		@Override
 		public String typeName() {
-			return ROCK;
+			return Type.ROCK;
 		}
 
 		@Override
 		public String[] resistances() {
-			return new String[] { FIRE, FLYING, NORMAL, POISON };
+			return new String[] { Type.FIRE, Type.FLYING, Type.NORMAL, Type.POISON };
 		}
 
 		@Override
 		public String[] weaknesses() {
-			return new String[] { FIGHTING, GRASS, GROUND, WATER };
+			return new String[] { Type.FIGHTING, Type.GRASS, Type.GROUND, Type.WATER };
 		}
 
 		@Override
@@ -521,22 +521,22 @@ public abstract class Type {
 
 		@Override
 		public String typeName() {
-			return STEEL;
+			return Type.STEEL;
 		}
 
 		@Override
 		public String[] resistances() {
-			return new String[] { BUG, DRAGON, FAIRY, FLYING, GRASS, ICE, NORMAL, PSYCHIC, ROCK, STEEL };
+			return new String[] { Type.BUG, Type.DRAGON, Type.FAIRY, Type.FLYING, Type.GRASS, Type.ICE, Type.NORMAL, Type.PSYCHIC, Type.ROCK, Type.STEEL };
 		}
 
 		@Override
 		public String[] weaknesses() {
-			return new String[] { FIRE, FIGHTING, GROUND };
+			return new String[] { Type.FIRE, Type.FIGHTING, Type.GROUND };
 		}
 
 		@Override
 		public String[] immunities() {
-			return new String[] { POISON };
+			return new String[] { Type.POISON };
 		}
 
 	}
@@ -550,12 +550,12 @@ public abstract class Type {
 
 		@Override
 		public String[] resistances() {
-			return new String[] { FIRE, ICE, STEEL, WATER };
+			return new String[] { Type.FIRE, Type.ICE, Type.STEEL, Type.WATER };
 		}
 
 		@Override
 		public String[] weaknesses() {
-			return new String[] { ELECTRIC, GRASS };
+			return new String[] { Type.ELECTRIC, Type.GRASS };
 		}
 
 		@Override
