@@ -1,6 +1,6 @@
 package battle;
 
-import exceptions.PokemonFaintedException;
+import exceptions.BattleEndedException;
 import java.util.InputMismatchException;
 import java.util.Random;
 import java.util.Scanner;
@@ -201,38 +201,37 @@ public class Battle {
      */
     public static void moveSelection(PokemonTrainer pt1, PokemonTrainer pt2) {
         if (Battle.skipRound) return;
-        try {
-            // Player choose their moves
-            chooseMove(pt1);
-            chooseMove(pt2);
+        
+        // Player choose their moves
+        chooseMove(pt1);
+        chooseMove(pt2);
 
-            // Order of Pokemon
-            Pokemon[] order = turnOrder(pt1.pokemonInBattle(), pt2.pokemonInBattle());
+        // Order of Pokemon
+        Pokemon[] order = turnOrder(pt1.pokemonInBattle(), pt2.pokemonInBattle());
 
-            Pokemon p1 = order[0];
-            Pokemon p2 = order[1];
+        Pokemon p1 = order[0];
+        Pokemon p2 = order[1];
 
             // Pokemon use their moves, interrupted if one of them faints
-            pokemonTurn(p1, p2);
-            pokemonTurn(p2, p1);
-        } catch (PokemonFaintedException e) {
-        } 
+        pokemonTurn(p1, p2);
+        pokemonTurn(p2, p1);
+       
     }
 
     public static void main(String[] args) {
 
         PokemonTrainer player1 = new PokemonTrainerBuilder()
         .setName("Robbie")
-        .addPokemon(PokemonList.venusaur("Bobby"))
+        // .addPokemon(PokemonList.venusaur("Bobby"))
         .addPokemon(PokemonList.charizard("Charlie"))
-        .addPokemon(PokemonList.blastoise("Squirt"))
+        // .addPokemon(PokemonList.blastoise("Squirt"))
         .buildTrainer();
 
         PokemonTrainer player2 = new PokemonTrainerBuilder()
         .setName("Sammi")
-        .addPokemon(PokemonList.venusaur("Bub"))
+        // .addPokemon(PokemonList.venusaur("Bub"))
         .addPokemon(PokemonList.charizard("Chandler"))
-        .addPokemon(PokemonList.blastoise("Tim"))
+        // .addPokemon(PokemonList.blastoise("Tim"))
         .buildTrainer();
 
         choosePokemon(player1);
@@ -242,27 +241,21 @@ public class Battle {
         Battle.skipRound = true;
 
         // Game ends when one trainer is out of Pokemon
-        while (!player1.outOfPokemon() && !player2.outOfPokemon()) {
-            while (!player1.pokemonInBattle().conditions().fainted() && !player2.pokemonInBattle().conditions().fainted()) {     
-                moveSelection(player1, player2);    
-                BattleField.endOfRound(player1.pokemonInBattle(), player2.pokemonInBattle());      
-                BattleLog.out();  // Plays out the round messages
+        try {
+            while (true) { // Continues forever
+                while (!player1.pokemonInBattle().conditions().fainted() && !player2.pokemonInBattle().conditions().fainted()) {     
+                    moveSelection(player1, player2);    
+                    BattleField.endOfRound(player1, player2);      
+                    BattleLog.out();  // Plays out the round messages
+                }
+                
+                Battle.skipRound = true;
+                if (player1.pokemonInBattle().conditions().fainted()) choosePokemon(player1);
+                else if (player2.pokemonInBattle().conditions().fainted()) choosePokemon(player2);
+                else throw new IllegalStateException("Pokemon must've fainted, what happened???");
             }
-            
-            Battle.skipRound = true;
-            if (player1.pokemonInBattle().conditions().fainted()) choosePokemon(player1);
-            else if (player2.pokemonInBattle().conditions().fainted()) choosePokemon(player2);
-            else throw new IllegalStateException("Pokemon must've fainted, what happened???");
-        }
-
-        // Displays the winner
-        if (player1.outOfPokemon()) {
-            BattleLog.add("%n%s is out of Pokemon!", player1);
-            BattleLog.add("%s wins the battle!", player2);
-        }
-        else {
-            BattleLog.add("%n%s is out of Pokemon!", player2);
-            BattleLog.add("%s wins the battle!", player1);
+        } catch (BattleEndedException e) {
+            BattleLog.add(e.getMessage());
         }
 
         BattleLog.out();
