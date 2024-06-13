@@ -8,11 +8,15 @@ public interface Weather {
     public static final String NO_WEATHER = "No Weather";
     public static final String SUNNY_NAME = "Sunny";
     public static final String RAIN_NAME = "Raining";
+    public static final String SANDSTORM_NAME = "Sandstorm";
+    public static final String HAIL_NAME = "Hailing";
 
  // Weather IDs
     public static final int CLEAR = 0;
     public static final int SUNNY = 1;
     public static final int RAIN = 2;
+    public static final int SANDSTORM = 3;
+    public static final int HAIL = 4;
 
 // Private Method
     /**
@@ -22,9 +26,11 @@ public interface Weather {
      */
     private static String weatherReport(int i) {
         return switch (i) {
-            case CLEAR -> weatherStopped(BattleField.currentWeather);        
-            case SUNNY -> "The sunlight light grew harsh.";    
-            case RAIN -> "It began to rain!";  
+            case Weather.CLEAR -> weatherStopped(BattleField.currentWeather);        
+            case Weather.SUNNY -> "The sunlight light grew harsh.";    
+            case Weather.RAIN -> "It began to rain!"; 
+            case Weather.SANDSTORM -> "A sandstorm kicked up!";
+            case Weather.HAIL -> "It began to hail!"; 
             default -> throw new IllegalArgumentException("Invalid weather id");
         };
     }
@@ -38,8 +44,10 @@ public interface Weather {
      */
     public static String weatherStopped(int i) {
         return switch (i) {
-            case Weather.SUNNY -> "The harsh sunlight faded!";
+            case Weather.SUNNY -> "The harsh sunlight faded...";
             case Weather.RAIN -> "It stopped raining!";
+            case Weather.SANDSTORM -> "The sandstorm has calmed...";
+            case Weather.HAIL -> "The hail stopped!"; 
             default -> "";
         };
     }
@@ -53,7 +61,7 @@ public interface Weather {
         BattleLog.add(weatherReport(change));
         BattleField.currentWeather = change;
 
-        if (change == CLEAR) BattleField.weatherCount = null; // Clear weather last indefinitely
+        if (change == Weather.CLEAR) BattleField.weatherCount = null; // Clear weather last indefinitely
         else BattleField.weatherCount = new Counter(5);
     }
 
