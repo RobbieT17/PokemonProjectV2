@@ -51,7 +51,7 @@ public interface PokemonList {
         .setStats(83, 100, 85, 105, 78)
         .addMove(MoveList.waterPulse())
         .addMove(MoveList.furyAttack())
-        .addMove(MoveList.shellSmash())
+        .addMove(MoveList.avalanche())
         .addMove(MoveList.rainDance())
         .buildPokemon();
     }

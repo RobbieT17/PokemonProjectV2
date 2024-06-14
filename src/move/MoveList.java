@@ -109,6 +109,25 @@ public interface MoveList {
         .buildMove();
     }
 
+    public static Move avalanche() {
+        MoveAction action = (a, d, m) -> {
+            if (a.hasTakenDamage()) m.doublePower();
+            MoveAction.dealDamage(a, d, m);
+        };
+
+        return new MoveBuilder()
+        .setId(419)
+        .setName("Avalanche")
+        .setType(Type.ICE)
+        .setCategory(Move.PHYSICAL)
+        .setPP(10)
+        .setPower(60)
+        .setPriority(-4)
+        .setAction(action)
+        .buildMove();
+    }
+
+    
 // BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
 
     public static Move bite() {
@@ -248,6 +267,24 @@ public interface MoveList {
         .buildMove();
     }
 
+    public static Move chillingWater() {
+        MoveAction action = (a, d, m) -> {
+            MoveAction.dealDamage(a, d, m);
+            MoveAction.attackStat(d, -1);
+        };
+
+        return new MoveBuilder()
+        .setId(886)
+        .setName("Chilling Water")
+        .setType(Type.WATER)
+        .setCategory(Move.SPECIAL)
+        .setPP(20)
+        .setPower(50)
+        .setAction(action)
+        .buildMove();
+    }
+
+
     public static Move crunch() {
         MoveAction action = (a, d, m) -> {
             MoveAction.dealDamage(a, d, m);
@@ -288,6 +325,23 @@ public interface MoveList {
 
 // DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
     
+    public static Move darkPulse() {
+        MoveAction action = (a, d, m) -> {
+            MoveAction.dealDamage(a, d, m);
+            MoveAction.applyFlinch(d, 20);
+        };
+
+        return new MoveBuilder()
+        .setId(399)
+        .setName("Dark Pulse")
+        .setType(Type.DARK)
+        .setCategory(Move.SPECIAL)
+        .setPP(80)
+        .setAction(action)
+        .buildMove();
+    }
+
+
     public static Move dig() {
         return new MoveBuilder()
         .setId(91)
@@ -944,6 +998,43 @@ public interface MoveList {
 
 // IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
 
+    public static Move icePunch() {
+        MoveAction action = (a, d, m) -> {
+            MoveAction.dealDamage(a, d, m);
+            MoveAction.statusEffect(d, StatusCondition.FREEZE, 10);
+        };
+
+        return new MoveBuilder()
+        .setId(8)
+        .setName("Ice Punch")
+        .setType(Type.ICE)
+        .setCategory(Move.PHYSICAL)
+        .setPP(15)
+        .setPower(75)
+        .setAction(action)
+        .buildMove();
+    }
+
+
+    public static Move icyWind() {
+        MoveAction action = (a, d, m) -> {
+            MoveAction.dealDamage(a, d, m);
+            MoveAction.speedStat(d, -1);
+        };
+
+        return new MoveBuilder()
+        .setId(196)
+        .setName("Icy Wind")
+        .setType(Type.ICE)
+        .setCategory(Move.SPECIAL)
+        .setPP(15)
+        .setPower(55)
+        .setAccuracy(95)
+        .setAction(action)
+        .buildMove();
+    }
+
+
     public static Move inferno() {
         MoveAction action = (a, d, m) -> {
             MoveAction.dealDamage(a, d, m);
@@ -1013,6 +1104,24 @@ public interface MoveList {
         .buildMove();
     }
 
+    public static Move liquidation() {
+        MoveAction action = (a, d, m) -> {
+            MoveAction.dealDamage(a, d, m);
+            MoveAction.defenseStat(d, -1, 20);
+        };
+
+        return new MoveBuilder()
+        .setId(710)
+        .setName("Liquidation")
+        .setType(Type.WATER)
+        .setCategory(Move.PHYSICAL)
+        .setPP(10)
+        .setPower(85)
+        .setAction(action)
+        .buildMove();
+    }
+
+
 // MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
 
     public static Move magicalLeaf() {
@@ -1031,6 +1140,27 @@ public interface MoveList {
         .setAction(action)
         .buildMove();
     }
+
+    public static Move mudShot() {
+        MoveAction action = (a, d, m) -> {
+            MoveAction.dealDamage(a, d, m);
+            MoveAction.speedStat(d, -1);
+        };
+
+        return new MoveBuilder()
+        .setId(341)
+        .setName("Mud Shot")
+        .setType(Type.GROUND)
+        .setCategory(Move.SPECIAL)
+        .setPP(15)
+        .setPower(55)
+        .setAccuracy(95)
+        .setAction(action)
+        .buildMove();
+    }
+
+
+
 // NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
 
 // OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
@@ -1788,6 +1918,26 @@ public interface MoveList {
 // XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 // YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY
 // ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ
+
+    public static Move zenHeadbutt() {
+        MoveAction action = (a, d, m) -> {
+            MoveAction.dealDamage(a, d, m);
+            MoveAction.applyFlinch(d, 20);
+        };
+
+        return new MoveBuilder()
+        .setId(428)
+        .setName("Zen Headbutt")
+        .setType(Type.PSYCHIC)
+        .setCategory(Move.PHYSICAL)
+        .setPP(15)
+        .setPower(80)
+        .setAccuracy(90)
+        .setAction(action)
+        .buildMove();
+    }
+
+
 
 // STRUGGLE: Used when pokemon is out of moves
     public static Move struggle() {

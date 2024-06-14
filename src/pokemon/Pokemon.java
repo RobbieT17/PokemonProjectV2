@@ -1,5 +1,6 @@
 package pokemon;
 
+import battle.Battle;
 import battle.BattleField;
 import battle.BattleLog;
 import battle.Weather;
@@ -10,7 +11,13 @@ import stats.StatusCondition;
 import stats.Type;
 
 public class Pokemon {
+
+// Error Messages
+    public static final String INVALID_DAMAGE_ERR = "Damage value must be positive";
+
 // Class Variables
+
+
     // Default Level
     public static final int DEFAULT_LEVEL = 50;
 
@@ -34,6 +41,7 @@ public class Pokemon {
 
     // Other Stats
     private int damageDealt; // Amount of damage dealt during the round
+    private int damageReceived; // Amount of damage received from opposing Pokemon
     private Move moveSelected; // Move selected for the round
     private Move lastMove; // Move used the last turn
 
@@ -152,7 +160,7 @@ public class Pokemon {
      * @param value damage received
      */ 
     public void takeDamage(int value) {
-        if (value <= 0) throw new IllegalArgumentException("Damage must be a positive value");
+        if (value <= 0) throw new IllegalArgumentException(Pokemon.INVALID_DAMAGE_ERR);
 
         this.hp.change(-value); 
         if (this.hp.depleted()) this.faints();   
@@ -164,7 +172,7 @@ public class Pokemon {
      * @param value damage received
      */
     public void takeDamageEndure(int value) {
-        if (value <= 0) throw new IllegalArgumentException("Damage must be a positive value");
+        if (value <= 0) throw new IllegalArgumentException(Pokemon.INVALID_DAMAGE_ERR);
 
         this.hp.change(-value);
         if (this.hp.depleted()) {
@@ -179,7 +187,7 @@ public class Pokemon {
      * @param value health restored
      */
     public void healDamage(int value) {
-        if (value <= 0) throw new IllegalArgumentException("Damage must be a positive value");
+        if (value <= 0) throw new IllegalArgumentException(Pokemon.INVALID_DAMAGE_ERR);
         this.hp.change(value);
     }
 
@@ -263,6 +271,10 @@ public class Pokemon {
         ? this.pokemonType.primaryType().typeName().equals(type) || this.pokemonType.secondaryType().typeName().equals(type)
         : this.pokemonType.primaryType().typeName().equals(type);
     }
+
+    public boolean hasTakenDamage() {
+        return this.damageReceived != 0;
+    }
  
 // Setters
     private void faints() {
@@ -270,11 +282,16 @@ public class Pokemon {
         this.conditions.clearPrimaryCondition();
         this.conditions.clearVolatileConditions();
         BattleLog.add("%s fainted!", this);
-    }   
-
+    } 
+    
     public void addDealtDamage(int d) {
-        if (d <= 0) throw new IllegalArgumentException("Damage must be positive");
+        if (d <= 0) throw new IllegalArgumentException(Pokemon.INVALID_DAMAGE_ERR);
         this.damageDealt += d;
+    }
+
+    public void addDamageReceived(int d) {
+        if (d <= 0) throw new IllegalArgumentException(Pokemon.INVALID_DAMAGE_ERR);
+        this.damageReceived += d;
     }
 
     public void resetDamageDealt() {
@@ -300,11 +317,28 @@ public class Pokemon {
         this.moveSelected = null;
     }
 
+    public void afterEffects() {
+        this.conditions.setSwitchedIn(false);
+        if (Battle.skipRound || this.conditions.fainted()) return;
+            
+        this.resetMove();
+        this.damageDealt = 0;
+        this.damageReceived = 0;
+        this.conditions.clearAtEndRound();
+
+        try {
+            this.weatherEffect();
+            this.checkConditions(false);
+        } catch (PokemonFaintedException e) {
+        }   
+    }
+
     // Clears any temporary effects and volatile conditions
     public void backToTrainer() {
         this.resetMove();
         this.conditions.clearAtReturn();
         this.damageDealt = 0;
+        this.damageReceived = 0;
         this.lastMove = null;     
     }
 
@@ -375,6 +409,10 @@ public class Pokemon {
 
     public int damageDealt() {
         return this.damageDealt;
+    }
+
+    public int damageReceived() {
+        return this.damageReceived;
     }
 
     public Move moveSelected() {

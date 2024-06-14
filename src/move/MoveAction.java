@@ -274,8 +274,7 @@ public interface MoveAction {
     }
 
     // Pokemon takes damage from a multi-hit move
-    private static void dealMultiDamage(Pokemon attacker, Pokemon defender, Move move) {
-        double effectiveness = moveEffectiveness(move, defender);
+    private static void dealMultiDamage(Pokemon attacker, Pokemon defender, Move move, double effectiveness) {
         boolean isCritical = criticalHit(move.critRate());
         int damage = calculateDamage(attacker, defender, move, effectiveness, isCritical);
 
@@ -283,6 +282,7 @@ public interface MoveAction {
         BattleLog.add(isCritical ? "Critical hit!" : "");
 
         attacker.addDealtDamage(damage);
+        defender.addDamageReceived(damage);
 
         if (defender.conditions().endured().active()) defenderTakesHit(defender, damage);
         else defender.takeDamage(damage);
@@ -307,6 +307,7 @@ public interface MoveAction {
         BattleLog.add(isCritical ? "Critical hit!" : "");
 
         attacker.addDealtDamage(damage); 
+        defender.addDamageReceived(damage);
 
         if (defender.conditions().endured().active()) defenderTakesHit(defender, damage);
         else defender.takeDamage(damage);
@@ -317,11 +318,12 @@ public interface MoveAction {
 
     // Deals multiple hits of damage
     public static void multiHit(Pokemon attacker, Pokemon defender, Move move) {
+        double effectiveness = moveEffectiveness(move, defender);
         moveHits(attacker, defender, move);
 
         int hits = randomHits();
         for (int i = 0; i < hits; i++) {
-            dealMultiDamage(attacker, defender, move);
+            dealMultiDamage(attacker, defender, move, effectiveness);
             if (defender.conditions().fainted()) {
                 hits = i + 1;
                 break;
@@ -352,7 +354,7 @@ public interface MoveAction {
     public static void takeConfusionDamage(Pokemon p) {
         int damage = (int) (((((2 * p.level()) / 5.0 + 2) * 40 * (p.attack().power() / (double) p.defense().power())) / 50.0 + 2)); 
         BattleLog.add("%s took %d damage from their own confusion!", p, damage);
-        p.takeDamage(damage);
+        p.takeDamage(damage); 
     }
 
     

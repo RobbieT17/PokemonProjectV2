@@ -1,9 +1,7 @@
 package battle;
 
 import exceptions.BattleEndedException;
-import exceptions.PokemonFaintedException;
 import player.PokemonTrainer;
-import pokemon.Pokemon;
 import utility.Counter;
 
 public class BattleField {
@@ -32,30 +30,13 @@ public class BattleField {
         }
     }
 
-    
-    private static void afterEffects(Pokemon p) {
-        p.conditions().setSwitchedIn(false);
-        if (Battle.skipRound || p.conditions().fainted()) return;
-            
-        p.resetMove();
-        p.resetDamageDealt();
-        p.conditions().clearAtEndRound();
-
-        try {
-            p.weatherEffect();
-            p.checkConditions(false);
-        } catch (PokemonFaintedException e) {
-        }   
-    }
-
-
     // Called at the end of each round
     public static void endOfRound(PokemonTrainer pt1, PokemonTrainer pt2) {
         BattleLog.addLine();
         isBattleOver(pt1, pt2);
         weatherUpdate();
-        afterEffects(pt1.pokemonInBattle());
-        afterEffects(pt2.pokemonInBattle());
+        pt1.pokemonInBattle().afterEffects();
+        pt2.pokemonInBattle().afterEffects();
         isBattleOver(pt1, pt2);
         Battle.skipRound = false;
     }
