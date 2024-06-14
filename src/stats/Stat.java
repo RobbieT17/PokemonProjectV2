@@ -71,25 +71,23 @@ public class Stat {
 
 	// Changes a stat based on the stage and base stat
 	public void changeStat() {
-		this.power = (int) (this.base * (1 + MULTIPLIER * this.stage));
+		this.power = (int) (this.base * (1 + Stat.MULTIPLIER * this.stage));
 	}
 
 	// Changes a stat based on an accuracy/evasion of 100%
 	public void changeStatForAccuracyOrEvasion() {
-		this.power = (int) (100 + MULTIPLIER * 100 * this.stage);
+		this.power = (int) (100 + Stat.MULTIPLIER * 100 * this.stage);
 	}
 
 	// Changes stage of a stat. The stage should never be outside the range of -6 and 6
-	public int changeStage(int change) {
+	public void changeStage(int change) {
 		this.stage += change;
 
-		if (this.stage < LOWEST_STAT_STAGE) this.stage = LOWEST_STAT_STAGE;
-		else if (this.stage > HIGHEST_STAT_STAGE) this.stage = HIGHEST_STAT_STAGE;
+		if (this.stage < Stat.LOWEST_STAT_STAGE) this.stage = Stat.LOWEST_STAT_STAGE;
+		else if (this.stage > Stat.HIGHEST_STAT_STAGE) this.stage = Stat.HIGHEST_STAT_STAGE;
 
 		if (this.isAccuracyOrEvasion()) this.changeStatForAccuracyOrEvasion();
 		else this.changeStat(); 
-
-		return this.stage;
 	}
 
 	/**
@@ -99,7 +97,7 @@ public class Stat {
 	 */
 	public boolean isAtHighestOrLowestStage(int change) {
 		if (change == 0) throw new IllegalArgumentException("Stage change cannot be zero");
-		return change > 0 ? this.stage == HIGHEST_STAT_STAGE : this.stage == LOWEST_STAT_STAGE;
+		return change > 0 ? this.stage == Stat.HIGHEST_STAT_STAGE : this.stage == Stat.LOWEST_STAT_STAGE;
 	}
 
 	// Displays stat's current power and stage
@@ -116,6 +114,14 @@ public class Stat {
 	public String toString() {
 		return this.statName;
 	}
+
+// Setters
+	public void setStage(int stage) {
+		this.stage = stage;
+
+		if (this.isAccuracyOrEvasion()) this.changeStatForAccuracyOrEvasion();
+		else this.changeStat(); 
+	}	
 
 // Getters
 	public String statName() {

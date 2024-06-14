@@ -15,6 +15,11 @@ public interface StatusAction {
     public void apply(Pokemon p);
 
 // Class Functions
+    private static void checkIfFaints(Pokemon p) {
+        if (p.conditions().fainted()) throw new PokemonFaintedException();
+    }
+
+
     /**
      * Burned Pokemon take damage equal to 1/16 of the maximum HP
      * at the end of each round. Physical attack power is decreased
@@ -26,7 +31,7 @@ public interface StatusAction {
             int damage = (int) (p.hp().max() / 16.0);
             BattleLog.add("%s took %d damage from the burn!", p, damage);
             p.takeDamage(damage);
-            if (p.conditions().fainted()) throw new PokemonFaintedException();
+            checkIfFaints(p);
         };
 
         return new StatusCondition(StatusCondition.BURN, action, false);
@@ -87,7 +92,7 @@ public interface StatusAction {
             int damage = (int) (p.hp().max() * (counter.count() / 16.0));
             BattleLog.add("%s took %d damage from the poison!", p, damage);
             p.takeDamage(damage);
-            if (p.conditions().fainted()) throw new PokemonFaintedException();
+            checkIfFaints(p);
         };
 
         return new StatusCondition(StatusCondition.POISON, action, false);
@@ -121,6 +126,30 @@ public interface StatusAction {
         return new StatusCondition(StatusCondition.SLEEP, action, true);
     }
 
+    /*
+     * Traps Pokemon for 2-5 turns. Bounded Pokemon cannot switch out
+     * and take damage equal to 1/16 of the maximum HP each round.
+     */
+    public static StatusCondition bound() {
+        Counter counter = new Counter(RandomValues.generateInt(2, 5));
+
+        StatusAction action = p -> {
+            counter.inc();
+            if (counter.terminated()){
+                p.clearCondition(StatusCondition.BOUND);
+                return;
+            }
+
+            int damage = (int) (p.hp().max() / 16.0);
+            BattleLog.add("%s took %d damage from the bound!", p, damage);
+            p.takeDamage(damage);
+            checkIfFaints(p);
+
+        };
+
+        return new StatusCondition(StatusCondition.BOUND, action, false);
+    }
+
     /**
      * Confused Pokemon have a 50% chance to damage themselves
      * Confusion last for 2-4 rounds.
@@ -141,7 +170,7 @@ public interface StatusAction {
             if (!RandomValues.chance(50)) return;
 
             MoveAction.takeConfusionDamage(p);
-            if (p.conditions().fainted()) throw new PokemonFaintedException();
+            checkIfFaints(p);
 
             throw new PokemonCannotActException();
         };
@@ -163,6 +192,7 @@ public interface StatusAction {
 
             r.healDamage(damage);
             p.takeDamage(damage);
+            checkIfFaints(p);
         };
 
         return new StatusCondition(StatusCondition.SEEDED, action, false);

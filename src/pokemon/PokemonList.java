@@ -34,7 +34,7 @@ public interface PokemonList {
         .setHp(78)
         .setStats(84, 78, 109, 85, 100)
         .addMove(MoveList.flareBlitz())
-        .addMove(MoveList.scorchingSands())
+        .addMove(MoveList.dive())
         .addMove(MoveList.focusPunch())
         .addMove(MoveList.sandstorm())
         .buildPokemon();
@@ -50,9 +50,9 @@ public interface PokemonList {
         .setHp(79)
         .setStats(83, 100, 85, 105, 78)
         .addMove(MoveList.waterPulse())
-        .addMove(MoveList.furyAttack())
-        .addMove(MoveList.avalanche())
-        .addMove(MoveList.rainDance())
+        .addMove(MoveList.dive())
+        .addMove(MoveList.whirlpool())
+        .addMove(MoveList.smackDown())
         .buildPokemon();
     }
 

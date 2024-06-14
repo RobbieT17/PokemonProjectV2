@@ -6,7 +6,6 @@ import battle.Weather;
 import exceptions.MoveInterruptedException;
 import java.util.Random;
 import pokemon.Pokemon;
-import pokemon.PokemonType;
 import stats.Stat;
 import stats.StatusAction;
 import stats.StatusCondition;
@@ -28,17 +27,19 @@ public interface MoveAction {
      * Some moves can hit opponents through their 
      * semi-invulnerable state.
      * 
-     * Exceptions:
-     * Earthquake hits DIG
+     * Exceptions
+     * FLY: Smack Down, Hurricane
+     * DIG: Earthquake
+     * DIVE: Surf, Whirlpool
      */
     public static void checkInvulnerabilityExceptions(Pokemon p, Move m) {
         if (!p.conditions().inImmuneState()) return;
 
         boolean exceptionFound = false;
         switch (p.conditions().immuneState()) {
-            case StatusCondition.FLY -> exceptionFound = m.moveID() == 542;     
+            case StatusCondition.FLY -> exceptionFound = m.moveID() == 479 ||  m.moveID() == 542; // Smack Down, Hurricane   
             case StatusCondition.DIG -> exceptionFound = m.moveID() == 89; // Earthquake
-          
+            case StatusCondition.DIVE -> exceptionFound = m.moveID() == 57 || m.moveID() == 250; // Surf, Whirlpool    
         }
 
         if (!exceptionFound) throw new MoveInterruptedException("But %s is out of sight!", p);
@@ -77,23 +78,30 @@ public interface MoveAction {
 
 // Damaging Functions
 
+    // Grounded Pokemon are vulnerable to Ground-Type moves
+    private static boolean immunityExceptionFound(String type, Pokemon p) {
+        return p.conditions().grounded() && type.equals(Type.GROUND);
+    }
+
     /**
      * Calculates the effectiveness of a move on a Pokemon
      * @param type the move's type
      * @param p the pokemon's types
      */
-    private static double typeEffectiveness(String type, PokemonType p){
+    private static double typeEffectiveness(String type, Pokemon p){
         double effect = 1.0; // Default type effectiveness
 
-        for (String t : p.typeResistances()) // Pokemon resists type, halves damage
+        for (String t : p.pokemonType().typeResistances()) // Pokemon resists type, halves damage
             if (t.equals(type)) effect *= 0.5;
         
-        for (String t : p.typeWeaknesses()) // Pokemon weak to type, doubles damage
+        for (String t : p.pokemonType().typeWeaknesses()) // Pokemon weak to type, doubles damage
             if (t.equals(type)) effect *= 2;
 
-        for (String t : p.typeImmunities()) // Pokemon immune to type, nullifies damage
+        for (String t : p.pokemonType().typeImmunities()) { // Pokemon immune to type, nullifies damage
+            if (immunityExceptionFound(type, p)) break;
             if (t.equals(type)) effect = 0;
-
+        } 
+        
         return effect;
     }
 
@@ -102,7 +110,7 @@ public interface MoveAction {
     * No damage is dealt if defending is immune to the attack
     */
     private static double moveEffectiveness(Move move, Pokemon p) {
-        double effectiveness = typeEffectiveness(move.moveType(), p.pokemonType());
+        double effectiveness = typeEffectiveness(move.moveType(), p);
         if (effectiveness == 0) throw new MoveInterruptedException("But it doesn't affect %s...", p);     
         return effectiveness;
     }
@@ -471,6 +479,18 @@ public interface MoveAction {
         dealDamage(a, d, m);
     }
 
+    /*
+     * Pokemon is knocked out of their semi-invulnerable state, interrupted
+     */
+    public static void leaveImmuneState(Pokemon p, int state, String message) {
+        if (p.conditions().fainted() || !p.conditions().hasImmuneState(state)) return;
+        p.conditions().setImmuneState(StatusCondition.NO_INVUL);
+        p.conditions().setForcedMove(false);
+        p.conditions().setInterrupted(true);
+        p.resetMove();
+        BattleLog.add(message);
+    }
+
 
 // Stat Change Functions
 
@@ -491,6 +511,12 @@ public interface MoveAction {
         }
         p.stats()[id].changeStage(change);
         BattleLog.add("%s's %s %s%s!", p, s, (change > 0) ? "rose" : "fell", Stat.sizeOfChange(change));
+    }
+
+    // Resets all stat changes back to neutral
+    public static void resetStats(Pokemon p) {
+        for (Stat s : p.stats()) s.setStage(0);
+        BattleLog.add("%s stat changes were cleared...", p);
     }
 
     // Changes a Pokemon's Attack Stat 
@@ -640,6 +666,10 @@ public interface MoveAction {
     }
 
     // Applies Confusion Condition
+    private static void applyBound(Pokemon p, double chance) {
+        applyVolatileCondition(p, chance, StatusAction.bound(), p + " was trapped in a bound!");
+    }
+
     private static void applyConfusion(Pokemon p, double chance) {
         applyVolatileCondition(p, chance, StatusAction.confusion(), p + " became confused!");
     }
@@ -675,6 +705,7 @@ public interface MoveAction {
         if (p.conditions().fainted() | p.hasCondition(statusId) | typeImmunity(p, statusId)) return;
     
         switch (statusId) {
+            case StatusCondition.BOUND -> applyBound(p, chance);
             case StatusCondition.CONFUSION -> applyConfusion(p, chance);
             default -> throw new IllegalArgumentException("Invalid condition id");
         }
@@ -690,6 +721,15 @@ public interface MoveAction {
         if (typeImmunity(seeded, StatusCondition.SEEDED)) throw new MoveInterruptedException(Move.FAILED);
         seeded.conditions().add(StatusAction.seeded(receiver));
         BattleLog.add("%s was grew sprouts!", seeded);
+    }
+
+    /*
+     * Grounds a Pokemon, any Flying-Type Pokemon are vulnerable to Ground-Type moves
+     */
+    public static void groundedPokemon(Pokemon p) {
+        if (p.conditions().fainted()) return;
+        p.conditions().setGrounded(true);
+        BattleLog.add("%s was grounded!", p);
     }
 
     // Pokemon removes status condition

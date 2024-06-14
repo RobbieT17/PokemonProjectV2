@@ -20,6 +20,7 @@ public class PokemonConditions {
     private boolean switchedIn; // Pokemon first enters the field
     private boolean hasMoved; // Pokemon has moved during the round
     private boolean interrupted; // Pokemon's last move was interrupted
+    private boolean grounded; // Pokemon is grounded, vulnerable to Ground-Type moves 
     private boolean flinched; // Pokemon cannot act for the turn
 
     private int immuneState; // Pokemon is immune from most attacks for a turn
@@ -36,7 +37,6 @@ public class PokemonConditions {
 
 // Constructor
     public PokemonConditions() {
-        this.immuneState = StatusCondition.NO_INVUL;
         this.volatileConditions = new HashMap<>();
         this.protect = new Bracing();
         this.endured = new Bracing();
@@ -100,6 +100,10 @@ public class PokemonConditions {
 
     public void setInterrupted(boolean i) {
         this.interrupted = i;
+    }
+
+    public void setGrounded(boolean g) {
+        this.grounded = g;
     }
 
     public void setFlinched(boolean f) {
@@ -182,6 +186,10 @@ public class PokemonConditions {
 
     public boolean interrupted() {
         return this.interrupted;
+    }
+
+    public boolean grounded() {
+        return this.grounded;
     }
 
     public boolean flinched() {

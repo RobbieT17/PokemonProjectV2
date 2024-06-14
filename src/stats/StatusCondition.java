@@ -8,21 +8,23 @@ public class StatusCondition {
     public static final String ID_ERR = "Invalid status condition ID";
 
     // Status Conditions IDs
-    public static final int BURN = 0;
-    public static final int FREEZE = 1;
-    public static final int PARALYSIS = 2;
-    public static final int POISON = 3;
-    public static final int SLEEP = 4;
+    public static final int BURN = -1;
+    public static final int FREEZE = -2;
+    public static final int PARALYSIS = -3;
+    public static final int POISON = -4;
+    public static final int SLEEP = -5;
 
-    public static final int FLINCH = 5;
-    public static final int CONFUSION = 6;
-    public static final int SEEDED = 7;
+    public static final int FLINCH = -6;
+    public static final int BOUND = -7;
+    public static final int CONFUSION = -8;
+    public static final int SEEDED = -9;
 
 
     // Semi-Invulnerable IDs
-    public static final int NO_INVUL = -1;
-    public static final int FLY = -2;
-    public static final int DIG = -3;
+    public static final int NO_INVUL = 0;
+    public static final int FLY = 1;
+    public static final int DIG = 2;
+    public static final int DIVE = 3;
 
 // Object Variables
     private final int id; // Unique Identifier 
@@ -54,6 +56,7 @@ public class StatusCondition {
         return switch (id) {
             case StatusCondition.FREEZE -> " thawed!";
             case StatusCondition.SLEEP -> " woke up!";
+            case StatusCondition.BOUND -> " was freed!";
             case StatusCondition.CONFUSION -> " snapped out of confusion!";
             default -> throw new IllegalArgumentException(StatusCondition.ID_ERR);
         };

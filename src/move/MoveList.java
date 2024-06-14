@@ -109,6 +109,19 @@ public interface MoveList {
         .buildMove();
     }
 
+    public static Move auraSphere() {
+        return new MoveBuilder()
+        .setId(396)
+        .setName("Aura Sphere")
+        .setType(Type.FIGHTING)
+        .setCategory(Move.SPECIAL)
+        .setPP(20)
+        .setPower(80)
+        .setAccuracy(Move.ALWAYS_HITS)
+        .setAction(MoveAction.DEFAULT_ACTION)
+        .buildMove();
+    }
+
     public static Move avalanche() {
         MoveAction action = (a, d, m) -> {
             if (a.hasTakenDamage()) m.doublePower();
@@ -161,6 +174,24 @@ public interface MoveList {
         .setPP(5)
         .setPower(150)
         .setAccuracy(90)
+        .setAction(action)
+        .buildMove();
+    }
+
+    public static Move blizzard() {
+        MoveAction action = (a, d, m) -> {
+            MoveAction.dealDamage(a, d, m);
+            MoveAction.statusEffect(d, StatusCondition.FREEZE, 10);
+        };
+
+        return new MoveBuilder()
+        .setId(59)
+        .setName("Blizzard")
+        .setType(Type.ICE)
+        .setCategory(Move.SPECIAL)
+        .setPP(5)
+        .setPower(110)
+        .setAccuracy(70)
         .setAction(action)
         .buildMove();
     }
@@ -351,6 +382,18 @@ public interface MoveList {
         .setPP(10)
         .setPower(80)
         .setAction((a, d, m) -> MoveAction.enterImmuneState(a, d, m, StatusCondition.DIG, a + " dug into the ground!"))
+        .buildMove();
+    }
+
+    public static Move dive() {
+        return new MoveBuilder()
+        .setId(291)
+        .setName("Dive")
+        .setType(Type.WATER)
+        .setCategory(Move.PHYSICAL)
+        .setPP(10)
+        .setPower(80)
+        .setAction((a, d, m) -> MoveAction.enterImmuneState(a, d, m, StatusCondition.DIVE, a + " dove underwater!"))
         .buildMove();
     }
 
@@ -702,6 +745,23 @@ public interface MoveList {
         .buildMove();
     }
 
+    public static Move flipTurn() {
+        MoveAction action = (a, d, m) -> {
+            MoveAction.dealDamage(a, d, m);
+            // TODO: Switch User out
+        };
+
+        return new MoveBuilder()
+        .setId(812)
+        .setName("Flip Turn")
+        .setType(Type.WATER)
+        .setCategory(Move.PHYSICAL)
+        .setPP(20)
+        .setPower(60)
+        .setAction(action)
+        .buildMove();
+    }
+
     public static Move fly() {
         return new MoveBuilder()
         .setId(19)
@@ -879,6 +939,23 @@ public interface MoveList {
         .buildMove();
     }
 
+    public static Move gyroBall() {
+        MoveAction action = (a, d, m) -> {
+            m.setPower((int) (25.0 * d.speed().power() / (double) a.speed().power() + 1));
+            MoveAction.dealDamage(a, d, m);
+        };
+
+        return new MoveBuilder()
+        .setId(360)
+        .setName("Gyro Ball")
+        .setType(Type.STEEL)
+        .setCategory(Move.PHYSICAL)
+        .setPP(5)
+        .setPower(-1) // Varies
+        .setAction(action)
+        .buildMove();
+    }
+
 // HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
 
     public static Move hail() {
@@ -889,6 +966,22 @@ public interface MoveList {
         .setCategory(Move.STATUS)
         .setPP(10)
         .setAction((a, d, m) -> MoveAction.changeWeather(Weather.HAIL))
+        .buildMove();
+    }
+
+    public static Move haze() {
+        MoveAction action = (a, d, m) -> {
+            MoveAction.resetStats(a);
+            MoveAction.resetStats(d);
+        };
+
+        return new MoveBuilder()
+        .setId(114)
+        .setName("Haze")
+        .setType(Type.ICE)
+        .setCategory(Move.STATUS)
+        .setPP(30)
+        .setAction(action)
         .buildMove();
     }
 
@@ -965,6 +1058,24 @@ public interface MoveList {
         .buildMove();
     }
 
+    public static Move hydroCannon() {
+        MoveAction action = (a, d, m) -> {
+            MoveAction.dealDamage(a, d, m);
+            MoveAction.rechargeMove(a);
+        };
+
+        return new MoveBuilder()
+        .setId(308)
+        .setName("Hydro Cannon")
+        .setType(Type.WATER)
+        .setCategory(Move.SPECIAL)
+        .setPP(5)
+        .setPower(150)
+        .setAccuracy(90)
+        .setAction(action)
+        .buildMove();
+    }
+
     public static Move hydroPump() {
         return new MoveBuilder()
         .setId(56)
@@ -998,6 +1109,23 @@ public interface MoveList {
 
 // IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
 
+    public static Move iceBeam() {
+        MoveAction action = (a, d, m) -> {
+            MoveAction.dealDamage(a, d, m);
+            MoveAction.statusEffect(d, StatusCondition.FREEZE, 10);
+        };
+
+        return new MoveBuilder()
+        .setId(58)
+        .setName("Ice Beam")
+        .setType(Type.ICE)
+        .setCategory(Move.SPECIAL)
+        .setPP(10)
+        .setPower(90)
+        .setAction(action)
+        .buildMove();
+    }
+
     public static Move icePunch() {
         MoveAction action = (a, d, m) -> {
             MoveAction.dealDamage(a, d, m);
@@ -1011,6 +1139,22 @@ public interface MoveList {
         .setCategory(Move.PHYSICAL)
         .setPP(15)
         .setPower(75)
+        .setAction(action)
+        .buildMove();
+    }
+
+    public static Move iceSpinner() {
+        MoveAction action = (a, d, m) -> {
+            MoveAction.dealDamage(a, d, m);
+            // TODO: Clears Terrain effect
+        };
+
+        return new MoveBuilder()
+        .setId(861)
+        .setName("Ice Spinner")
+        .setType(Type.ICE)
+        .setCategory(Move.PHYSICAL)
+        .setPP(15)
         .setAction(action)
         .buildMove();
     }
@@ -1137,6 +1281,24 @@ public interface MoveList {
         .setPP(20)
         .setPower(60)
         .setAccuracy(Move.ALWAYS_HITS)
+        .setAction(action)
+        .buildMove();
+    }
+
+    public static Move muddyWater() {
+        MoveAction action = (a, d, m) -> {
+            MoveAction.dealDamage(a, d, m);
+            MoveAction.accuracyStat(d, -1, 30);
+        };
+
+        return new MoveBuilder()
+        .setId(330)
+        .setName("Muddy Water")
+        .setType(Type.WATER)
+        .setCategory(Move.SPECIAL)
+        .setPP(10)
+        .setPower(90)
+        .setAccuracy(85)
         .setAction(action)
         .buildMove();
     }
@@ -1563,6 +1725,25 @@ public interface MoveList {
         .buildMove();
     }
 
+    public static Move smackDown() {
+        MoveAction action = (a, d, m) -> {
+            MoveAction.dealDamage(a, d, m);
+            MoveAction.leaveImmuneState(d, StatusCondition.FLY, "Fell from the sky!");
+            MoveAction.groundedPokemon(d);
+        };
+
+        return new MoveBuilder()
+        .setId(479)
+        .setName("Smack Down")
+        .setType(Type.ROCK)
+        .setCategory(Move.PHYSICAL)
+        .setPP(15)
+        .setPower(50)
+        .setContact(false)
+        .setAction(action)
+        .buildMove();
+    }
+
     public static Move smokescreen() {
         MoveAction action = (a, d, m) -> {
             MoveAction.moveHits(a, d, m);
@@ -1638,6 +1819,18 @@ public interface MoveList {
         .setCategory(Move.STATUS)
         .setPP(5)
         .setAction((a, d, m) -> MoveAction.changeWeather(Weather.SUNNY))
+        .buildMove();
+    }
+
+    public static Move surf() {
+        return new MoveBuilder()
+        .setId(57)
+        .setName("Surf")
+        .setType(Type.WATER)
+        .setCategory(Move.SPECIAL)
+        .setPP(15)
+        .setPower(90)
+        .setAction(MoveAction.DEFAULT_ACTION)
         .buildMove();
     }
 
@@ -1857,6 +2050,18 @@ public interface MoveList {
         .buildMove();
     }
 
+    public static Move waterPledge() {
+        return new MoveBuilder()
+        .setId(518)
+        .setName("Water Pledge")
+        .setType(Type.WATER)
+        .setCategory(Move.SPECIAL)
+        .setPP(10)
+        .setPower(80)
+        .setAction(MoveAction.DEFAULT_ACTION)
+        .buildMove();
+    }
+
     public static Move waterPulse() {
         MoveAction action = (a, d, m) -> {
             MoveAction.dealDamage(a, d, m);
@@ -1883,6 +2088,25 @@ public interface MoveList {
         .setPP(10)
         .setPower(120)
         .setAction((a, d, m) -> MoveAction.dealDamageRecoil(a, d, m, 33))
+        .buildMove();
+    }
+
+    public static Move whirlpool() {
+        MoveAction action = (a, d, m) -> {
+            if (d.conditions().hasImmuneState(StatusCondition.DIVE)) m.doublePower();
+            MoveAction.dealDamage(a, d, m);
+            MoveAction.volatileStatusEffect(d, StatusCondition.BOUND, 100);
+        };
+
+        return new MoveBuilder()
+        .setId(250)
+        .setName("Whirlpool")
+        .setType(Type.WATER)
+        .setCategory(Move.SPECIAL)
+        .setPP(15)
+        .setPower(35)
+        .setAccuracy(85)
+        .setAction(action)
         .buildMove();
     }
 
