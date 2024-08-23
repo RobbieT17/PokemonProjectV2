@@ -7,6 +7,7 @@ public abstract class Type {
 
 	public final static String BUG = "Bug";
 	public final static String DARK = "Dark";
+	public final static String DIGITAL = "Digital";
 	public final static String DRAGON = "Dragon";
 	public final static String ELECTRIC = "Electric";
 	public final static String FAIRY = "Fairy";
@@ -21,8 +22,11 @@ public abstract class Type {
 	public final static String POISON = "Poison";
 	public final static String PSYCHIC = "Psychic";
 	public final static String ROCK = "Rock";
+	public final static String SOUND = "Sound";
+	public final static String SPACE = "Space";
 	public final static String STEEL = "Steel";
 	public final static String WATER = "Water";
+	public final static String ZOMBIE = "Zombie";
 
 // Abstract Methods
 	public abstract String typeName();
@@ -39,6 +43,7 @@ public abstract class Type {
 		return switch (type) {
 			case Type.BUG -> bugType();
 			case Type.DARK -> darkType();
+			case Type.DIGITAL -> digitalType();
             case Type.DRAGON -> dragonType();
 			case Type.ELECTRIC -> electricType();
 			case Type.FAIRY -> fairyType();
@@ -53,8 +58,11 @@ public abstract class Type {
 			case Type.POISON -> poisonType();
 			case Type.PSYCHIC -> psychicType();
 			case Type.ROCK -> rockType();
+			case Type.SOUND -> soundType();
+			case Type.SPACE -> spaceType();
 			case Type.STEEL -> steelType();
-			case Type.WATER ->  waterType();
+			case Type.WATER -> waterType();
+			case Type.ZOMBIE -> zombieType();
 			default -> throw new IllegalArgumentException("Type inputted does not exist");
 		};
 	}
@@ -66,6 +74,10 @@ public abstract class Type {
 
 	public static Type darkType() {
 		return new DarkType();
+	}
+
+	public static Type digitalType() {
+		return new DigitalType();
 	}
 
 	public static Type dragonType() {
@@ -124,12 +136,24 @@ public abstract class Type {
 		return new RockType();
 	}
 
+	public static Type soundType() {
+		return new SoundType();
+	}
+
+	public static Type spaceType() {
+		return new SpaceType();
+	}
+
 	public static Type steelType() {
 		return new SteelType();
 	}
 
 	public static Type waterType() {
 		return new WaterType();
+	}
+
+	public static Type zombieType() {
+		return new ZombieType();
 	}
 
 	// Child Classes
@@ -171,7 +195,7 @@ public abstract class Type {
 
 		@Override
 		public String[] weaknesses() {
-			return new String[] { Type.BUG, Type.FAIRY, Type.FIGHTING };
+			return new String[] { Type.BUG, Type.DIGITAL, Type.FAIRY, Type.FIGHTING, Type.ZOMBIE };
 		}
 
 		@Override
@@ -179,6 +203,30 @@ public abstract class Type {
 			return new String[] { Type.PSYCHIC };
 		}
 
+	}
+
+	private static class DigitalType extends Type {
+
+		@Override
+		public String typeName() {
+			return Type.DIGITAL;
+		}
+
+		@Override
+		public String[] resistances() {
+			return new String[] {Type.ELECTRIC, Type.PSYCHIC, Type.STEEL};
+		}
+
+		@Override
+		public String[] weaknesses() {
+			return new String[] {Type.BUG, Type.DARK, Type.GROUND, Type.ICE, Type.POISON};
+		}
+
+		@Override
+		public String[] immunities() {
+			return new String[] {Type.FAIRY};
+		}
+		
 	}
 
 	private static class DragonType extends Type {
@@ -219,7 +267,7 @@ public abstract class Type {
 
 		@Override
 		public String[] weaknesses() {
-			return new String[] { Type.GROUND };
+			return new String[] { Type.DIGITAL, Type.GROUND };
 		}
 
 		@Override
@@ -243,7 +291,7 @@ public abstract class Type {
 
 		@Override
 		public String[] weaknesses() {
-			return new String[] { Type.POISON, Type.STEEL };
+			return new String[] {Type.DIGITAL, Type.POISON, Type.SOUND, Type.STEEL };
 		}
 
 		@Override
@@ -267,7 +315,7 @@ public abstract class Type {
 
 		@Override
 		public String[] weaknesses() {
-			return new String[] { Type.FAIRY, Type.FLYING, Type.PSYCHIC };
+			return new String[] { Type.FAIRY, Type.FLYING, Type.PSYCHIC, Type.ZOMBIE };
 		}
 
 		@Override
@@ -286,7 +334,7 @@ public abstract class Type {
 
 		@Override
 		public String[] resistances() {
-			return new String[] { Type.BUG, Type.FIRE, Type.FAIRY, Type.GRASS };
+			return new String[] { Type.BUG, Type.FIRE, Type.FAIRY, Type.GRASS, Type.ZOMBIE };
 		}
 
 		@Override
@@ -310,7 +358,7 @@ public abstract class Type {
 
 		@Override
 		public String[] resistances() {
-			return new String[] { Type.BUG, Type.FIGHTING, Type.GRASS };
+			return new String[] { Type.BUG, Type.DIGITAL, Type.FIGHTING, Type.GRASS, Type.ZOMBIE};
 		}
 
 		@Override
@@ -334,12 +382,12 @@ public abstract class Type {
 
 		@Override
 		public String[] resistances() {
-			return new String[] { Type.BUG, Type.POISON };
+			return new String[] { Type.BUG, Type.POISON, Type.ZOMBIE };
 		}
 
 		@Override
 		public String[] weaknesses() {
-			return new String[] { Type.DARK, Type.GHOST };
+			return new String[] { Type.DARK, Type.DIGITAL, Type.GHOST };
 		}
 
 		@Override
@@ -382,7 +430,7 @@ public abstract class Type {
 
 		@Override
 		public String[] resistances() {
-			return new String[] { Type.POISON, Type.ROCK };
+			return new String[] {Type.DIGITAL, Type.POISON, Type.ROCK, Type.SOUND };
 		}
 
 		@Override
@@ -406,12 +454,12 @@ public abstract class Type {
 
 		@Override
 		public String[] resistances() {
-			return new String[] { Type.ICE };
+			return new String[] { Type.ICE, Type.SPACE };
 		}
 
 		@Override
 		public String[] weaknesses() {
-			return new String[] { Type.FIGHTING, Type.FIRE, Type.ROCK, Type.STEEL };
+			return new String[] { Type.FIGHTING, Type.FIRE, Type.ROCK, Type.SOUND, Type.STEEL };
 		}
 
 		@Override
@@ -435,7 +483,7 @@ public abstract class Type {
 
 		@Override
 		public String[] weaknesses() {
-			return new String[] { Type.FIGHTING };
+			return new String[] { Type.FIGHTING, Type.ZOMBIE};
 		}
 
 		@Override
@@ -454,7 +502,7 @@ public abstract class Type {
 
 		@Override
 		public String[] resistances() {
-			return new String[] { Type.BUG, Type.FAIRY, Type.FIGHTING, Type.GRASS, Type.POISON };
+			return new String[] { Type.BUG, Type.DIGITAL, Type.FAIRY, Type.FIGHTING, Type.GRASS, Type.POISON };
 		}
 
 		@Override
@@ -483,7 +531,7 @@ public abstract class Type {
 
 		@Override
 		public String[] weaknesses() {
-			return new String[] { Type.BUG, Type.DARK, Type.GHOST };
+			return new String[] { Type.BUG, Type.DARK, Type.GHOST, Type.ZOMBIE };
 		}
 
 		@Override
@@ -502,12 +550,12 @@ public abstract class Type {
 
 		@Override
 		public String[] resistances() {
-			return new String[] { Type.FIRE, Type.FLYING, Type.NORMAL, Type.POISON };
+			return new String[] { Type.FIRE, Type.FLYING, Type.NORMAL, Type.POISON, Type.SPACE };
 		}
 
 		@Override
 		public String[] weaknesses() {
-			return new String[] { Type.FIGHTING, Type.GRASS, Type.GROUND, Type.WATER };
+			return new String[] { Type.FIGHTING, Type.GRASS, Type.GROUND, Type.STEEL, Type.WATER };
 		}
 
 		@Override
@@ -515,6 +563,54 @@ public abstract class Type {
 			return new String[] {};
 		}
 
+	}
+
+	private static class SoundType extends Type {
+
+		@Override
+		public String typeName() {
+			return Type.SOUND;
+		}
+
+		@Override
+		public String[] resistances() {
+			return new String[] {Type.DARK, Type.FAIRY, Type.SOUND, Type.WATER};
+		}
+
+		@Override
+		public String[] weaknesses() {
+			return new String[] {Type.GROUND, Type.PSYCHIC, Type.SPACE};
+		}
+
+		@Override
+		public String[] immunities() {
+			return new String[] {};
+		}
+		
+	}
+
+	private static class SpaceType extends Type {
+
+		@Override
+		public String typeName() {
+			return Type.SPACE;
+		}
+
+		@Override
+		public String[] resistances() {
+			return new String[] {Type.BUG, Type.FIGHTING, Type.GRASS, Type.SPACE, Type.WATER};
+		}
+
+		@Override
+		public String[] weaknesses() {
+			return new String[] {Type.ICE, Type.PSYCHIC, Type.ROCK};
+		}
+
+		@Override
+		public String[] immunities() {
+			return new String[] {Type.FLYING, Type.SOUND};
+		}
+		
 	}
 
 	private static class SteelType extends Type {
@@ -526,12 +622,12 @@ public abstract class Type {
 
 		@Override
 		public String[] resistances() {
-			return new String[] { Type.BUG, Type.DRAGON, Type.FAIRY, Type.FLYING, Type.GRASS, Type.ICE, Type.NORMAL, Type.PSYCHIC, Type.ROCK, Type.STEEL };
+			return new String[] { Type.BUG, Type.DRAGON, Type.FAIRY, Type.FLYING, Type.GRASS, Type.ICE, Type.NORMAL, Type.PSYCHIC, Type.ROCK, Type.SPACE, Type.STEEL };
 		}
 
 		@Override
 		public String[] weaknesses() {
-			return new String[] { Type.FIRE, Type.FIGHTING, Type.GROUND };
+			return new String[] { Type.FIRE, Type.FIGHTING, Type.GROUND, Type.DIGITAL };
 		}
 
 		@Override
@@ -555,7 +651,7 @@ public abstract class Type {
 
 		@Override
 		public String[] weaknesses() {
-			return new String[] { Type.ELECTRIC, Type.GRASS };
+			return new String[] { Type.ELECTRIC, Type.GRASS, Type.SOUND, Type.SPACE };
 		}
 
 		@Override
@@ -563,5 +659,29 @@ public abstract class Type {
 			return new String[] {};
 		}
 
+	}
+
+	private static class ZombieType extends Type {
+
+		@Override
+		public String typeName() {
+			return Type.ZOMBIE;
+		}
+
+		@Override
+		public String[] resistances() {
+			return new String[] {Type.BUG, Type.DARK, Type.FIGHTING, Type.GHOST, Type.GROUND, Type.ICE, Type.NORMAL, Type.POISON, Type.PSYCHIC, Type.ZOMBIE};
+		}
+
+		@Override
+		public String[] weaknesses() {
+			return new String[] {Type.ELECTRIC, Type.FIRE, Type.GRASS, Type.STEEL};
+		}
+
+		@Override
+		public String[] immunities() {
+			return new String[] {};
+		}
+		
 	}
 }
