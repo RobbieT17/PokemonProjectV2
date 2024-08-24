@@ -166,7 +166,7 @@ public abstract class Type {
 
 		@Override
 		public String[] resistances() {
-			return new String[] { Type.FIGHTING, Type.GRASS, Type.GROUND };
+			return new String[] { Type.FIGHTING, Type.GRASS, Type.GROUND, Type.SOUND };
 		}
 
 		@Override
@@ -214,7 +214,7 @@ public abstract class Type {
 
 		@Override
 		public String[] resistances() {
-			return new String[] {Type.ELECTRIC, Type.PSYCHIC, Type.STEEL};
+			return new String[] {Type.DRAGON, Type.ELECTRIC, Type.PSYCHIC, Type.STEEL};
 		}
 
 		@Override
@@ -526,7 +526,7 @@ public abstract class Type {
 
 		@Override
 		public String[] resistances() {
-			return new String[] { Type.FIGHTING, Type.PSYCHIC };
+			return new String[] { Type.FIGHTING, Type.PSYCHIC, Type.SOUND };
 		}
 
 		@Override
@@ -598,7 +598,7 @@ public abstract class Type {
 
 		@Override
 		public String[] resistances() {
-			return new String[] {Type.BUG, Type.FIGHTING, Type.GRASS, Type.SPACE, Type.WATER};
+			return new String[] {Type.BUG, Type.FIGHTING, Type.GRASS, Type.NORMAL, Type.SPACE, Type.WATER};
 		}
 
 		@Override
