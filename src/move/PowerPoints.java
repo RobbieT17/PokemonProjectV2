@@ -21,7 +21,7 @@ public class PowerPoints {
 // Methods
     /**
      *  Decrements PP (cannot go below 0)
-     *  Doesn't decrement if Pokemon is in the charging phase
+     *  Doesn't decrement if Pokemon is in the charging phase or move is multi-turn
      */
     public void decrement(Pokemon p) {
         if (p.conditions().forcedMove()) return;
