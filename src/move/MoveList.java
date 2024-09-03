@@ -1516,7 +1516,7 @@ public interface MoveList {
         return new MoveBuilder()
         .setId(46)
         .setName("Roar")
-        .setType(Type.NORMAL)
+        .setType(Type.SOUND)
         .setCategory(Move.STATUS)
         .setPP(20)
         .setPriority(-6)
