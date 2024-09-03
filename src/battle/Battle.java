@@ -33,7 +33,7 @@ public class Battle {
 
         while (!done) {
             try {
-                BattleLog.addPrintf("%s, choose a Pokemon: ", trainer);
+                BattleLog.addPrint("%s, choose a Pokemon: ", trainer);
                 int i = scanner.nextInt();
 
                 pokemon = trainer.team()[i];
@@ -91,7 +91,7 @@ public class Battle {
 
         while (!done) {
             try {
-                BattleLog.addPrintf("What should %s do? ", p); 
+                BattleLog.addPrint("What should %s do? ", p); 
                 String input = scanner.nextLine();
 
                 /*
@@ -182,7 +182,7 @@ public class Battle {
         return order;
     }
     
-    // Pokemon uses a turn, nothing happens if the Pokemon did not select a move
+    // Pokemon uses a turn, nothing happens if the Pokemon did not select a move or one fainted
     public static void pokemonTurn(Pokemon a, Pokemon b) {
         if (a.conditions().fainted() || b.conditions().fainted() || a.moveSelected() == null) return;
 
@@ -212,7 +212,7 @@ public class Battle {
         Pokemon p1 = order[0];
         Pokemon p2 = order[1];
 
-            // Pokemon use their moves, interrupted if one of them faints
+        // Pokemon use their moves, interrupted if one of them faints
         pokemonTurn(p1, p2);
         pokemonTurn(p2, p1);
        
