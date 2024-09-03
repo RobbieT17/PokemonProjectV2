@@ -51,7 +51,7 @@ public class Pokemon {
         int level,
         String name,
         PokemonType types,
-        int pokedex,
+        int id,
         double weight,
         HealthPoints hp,
         Stat[] stats, 
@@ -62,7 +62,7 @@ public class Pokemon {
         this.pokemonName = name;
         this.pokemonType = types;
 
-        this.pokedexID = pokedex;
+        this.pokedexID = id;
         this.weight = weight;
         this.hp = hp;
         this.stats = stats;
@@ -195,18 +195,20 @@ public class Pokemon {
     public void weatherEffect() {
         switch (BattleField.currentWeather) {
             case Weather.SANDSTORM ->  {
-                // Ground, Rock, and Steel types are immune to sandstorm
-                if (this.isType(Type.GROUND) || this.isType(Type.ROCK) || this.isType(Type.STEEL)) return;
+                // Digital, Ground, Rock, and Steel types are immune to sandstorm
+                if (this.isType(Type.DIGITAL) || 
+                    this.isType(Type.GROUND) || 
+                    this.isType(Type.ROCK) || 
+                    this.isType(Type.STEEL)) return;
 
                 int damage = (int) (this.hp().max() / 8.0);
                 BattleLog.add("%s took %d damage from the sandstorm!", this, damage);
                 this.takeDamage(damage);
             }
             case Weather.HAIL ->  {
-                // Ice types are immune to hail
-                if (this.isType(Type.ICE)) return;
+                // Digital and Ice types are immune to hail
+                if (this.isType(Type.DIGITAL) || this.isType(Type.ICE)) return;
 
-     
                 int damage = (int) (this.hp().max() / 16.0);  
                 BattleLog.add("%s took %d damage from the hail!", this, damage);
                 this.takeDamage(damage);
