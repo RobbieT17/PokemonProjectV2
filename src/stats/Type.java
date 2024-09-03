@@ -207,7 +207,7 @@ public abstract class Type {
 
 		@Override
 		public String[] resistances() {
-			return new String[] { Type.DARK, Type.DIGITAL, Type.GHOST, Type.ZOMBIE };
+			return new String[] { Type.DARK, Type.DIGITAL, Type.GHOST };
 		}
 
 		@Override
@@ -241,7 +241,7 @@ public abstract class Type {
 
 		@Override
 		public String[] weaknesses() {
-			return new String[] { Type.BUG, Type.DARK, Type.GROUND, Type.ICE, Type.POISON };
+			return new String[] { Type.BUG, Type.GROUND, Type.ICE, Type.POISON };
 		}
 
 		@Override
@@ -676,7 +676,7 @@ public abstract class Type {
 
 		@Override
 		public String[] weaknesses() {
-			return new String[] { Type.GROUND, Type.PSYCHIC, Type.SPACE };
+			return new String[] { Type.GROUND, Type.SPACE };
 		}
 
 		@Override
@@ -730,7 +730,7 @@ public abstract class Type {
 		@Override
 		public String[] resistances() {
 			return new String[] { Type.BUG, Type.DRAGON, Type.FAIRY, Type.FLYING, Type.GRASS, Type.ICE, Type.NORMAL,
-					Type.PSYCHIC, Type.ROCK, Type.SPACE, Type.STEEL };
+					Type.PSYCHIC, Type.ROCK, Type.SPACE, Type.STEEL, Type.ZOMBIE };
 		}
 
 		@Override
@@ -788,13 +788,13 @@ public abstract class Type {
 
 		@Override
 		public String[] resistances() {
-			return new String[] { Type.BUG, Type.DARK, Type.FIGHTING, Type.GHOST, Type.GROUND, Type.ICE, Type.NORMAL,
+			return new String[] { Type.BUG, Type.DARK, Type.ELECTRIC, Type.FIGHTING, Type.GHOST, Type.GROUND, Type.ICE, Type.NORMAL,
 					Type.POISON, Type.PSYCHIC, Type.ZOMBIE };
 		}
 
 		@Override
 		public String[] weaknesses() {
-			return new String[] { Type.ELECTRIC, Type.FIRE, Type.GRASS, Type.STEEL };
+			return new String[] { Type.FIRE, Type.GRASS, Type.STEEL };
 		}
 
 		@Override
