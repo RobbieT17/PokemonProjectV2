@@ -43,7 +43,7 @@ public interface BattleLog {
 	 * @param message supplied as a String
 	 * @param args formatter arguments
 	 */
-	public static void addPrintf(String message, Object... args) {
+	public static void addPrint(String message, Object... args) {
 		System.out.printf(String.format(message, args));
 	}
 
