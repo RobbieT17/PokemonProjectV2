@@ -32,15 +32,6 @@ public class TypeMatchCalculator {
         return newArray;
     }
 
-    private static boolean inputYesOrNo(String message) {
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.print(message);
-        String input = scanner.nextLine();
-
-        return input.toLowerCase().equals("y");
-    }
-
     private static double effectiveness(Type t1, String t2) {
         return 
         Arrays.asList(t1.immunities()).contains(t2) 
@@ -59,9 +50,9 @@ public class TypeMatchCalculator {
             
             sb.append(String.format("[%2d] %-20s", i, set[i].toUpperCase()));
     
-            if (i + 1 < set.length) {
+            if (i + 1 < set.length) 
                 sb.append(String.format("[%2d] %s", i + 1, set[i + 1].toUpperCase()));
-            }
+            
             sb.append(System.lineSeparator());
         }
 
@@ -102,7 +93,7 @@ public class TypeMatchCalculator {
         double[] values1 = calculateMatchups(type1);
         double[] values2 = calculateMatchups(type2);
 
-        double[] combinedValues = new double[Type.ALL_TYPES.length];
+        double[] combinedValues = new double[values1.length];
 
         for (int i = 0; i < values1.length; i++) combinedValues[i] = values1[i] * values2[i];   
         return combinedValues;
@@ -148,6 +139,5 @@ public class TypeMatchCalculator {
             
         System.out.printf("%nType: %s-%s%n%n", type1.typeName().toUpperCase(), type2.typeName().toUpperCase());
         showMatchups(calculateMatchups(type1, type2));
-        
     }
 }
