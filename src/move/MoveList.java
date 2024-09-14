@@ -3,6 +3,8 @@ package move;
 import battle.BattleField;
 import battle.BattleLog;
 import battle.Weather;
+import event.EventData;
+import pokemon.Pokemon;
 import stats.StatusCondition;
 import stats.Type;
 import utility.RandomValues;
@@ -10,12 +12,16 @@ import utility.RandomValues;
 // Interface storing all available Pokemon moves (Moves listed alphabetically)
 public interface MoveList {
 
+    private static int[] stats(int atk, int def, int spAtk, int spDef, int spd, int acc, int eva, int target) {
+        return new int[] {atk, def, spAtk, spDef, spd, acc, eva, target};
+    }
+
 // AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
     
     public static Move acidSpray() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.dealDamage(a, d, m);
-            MoveAction.spDefenseStat(d, -2);
+        MoveAction action = e -> {
+            MoveAction.dealDamage(e);
+            MoveAction.changeStats(e, stats(0, 0, 0, -2, 0, 0, 0, 1));
         };
 
         return new MoveBuilder()
@@ -68,9 +74,9 @@ public interface MoveList {
     }
 
     public static Move airSlash() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.dealDamage(a, d, m);
-            MoveAction.applyFlinch(d, 30);
+        MoveAction action = e -> {
+            MoveAction.dealDamage(e);
+            MoveAction.applyFlinch(e.attackerPokemon(), 30);
         };
 
         return new MoveBuilder()
@@ -92,7 +98,7 @@ public interface MoveList {
         .setType(Type.PSYCHIC)
         .setCategory(Move.STATUS)
         .setPP(20)
-        .setAction((a, d, m) -> MoveAction.spDefenseStat(a, 1))
+        .setAction(e -> MoveAction.changeStats(e, stats(0, 0, 0, 1, 0, 0, 0, 0)))
         .buildMove();
     }
 
@@ -123,9 +129,9 @@ public interface MoveList {
     }
 
     public static Move avalanche() {
-        MoveAction action = (a, d, m) -> {
-            if (a.hasTakenDamage()) m.doublePower();
-            MoveAction.dealDamage(a, d, m);
+        MoveAction action =  e -> {
+            if (e.attackerPokemon().hasTakenDamage()) e.moveUsed().doublePower();
+            MoveAction.dealDamage(e);
         };
 
         return new MoveBuilder()
@@ -144,9 +150,9 @@ public interface MoveList {
 // BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
 
     public static Move bite() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.dealDamage(a, d, m);
-            MoveAction.applyFlinch(d, 30);
+        MoveAction action = e -> {
+            MoveAction.dealDamage(e);
+            MoveAction.applyFlinch(e.targetPokemon() ,30);
         };
 
         return new MoveBuilder()
@@ -161,9 +167,9 @@ public interface MoveList {
     }
 
     public static Move blastBurn() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.moveHits(a, d, m);
-            MoveAction.rechargeMove(a);
+        MoveAction action = e -> {
+            MoveAction.moveHits(e);
+            MoveAction.rechargeMove(e);
         };
 
         return new MoveBuilder()
@@ -179,9 +185,9 @@ public interface MoveList {
     }
 
     public static Move blizzard() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.dealDamage(a, d, m);
-            MoveAction.statusEffect(d, StatusCondition.FREEZE, 10);
+        MoveAction action = e -> {
+            MoveAction.dealDamage(e);
+            MoveAction.statusEffect(e.targetPokemon(), StatusCondition.FREEZE, 10);
         };
 
         return new MoveBuilder()
@@ -197,10 +203,10 @@ public interface MoveList {
     }
 
     public static Move bodySlam() {
-        MoveAction action = (a, d, m) -> {
+        MoveAction action = e -> {
             // TODO: Double Damage when Pokemon has minimized condition
-            MoveAction.dealDamage(a, d, m);
-            MoveAction.statusEffect(d, StatusCondition.PARALYSIS, 30);
+            MoveAction.dealDamage(e);
+            MoveAction.statusEffect(e.targetPokemon(), StatusCondition.PARALYSIS, 30);
         };
 
         return new MoveBuilder()
@@ -215,10 +221,9 @@ public interface MoveList {
     }
 
     public static Move breakingSwipe() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.dealDamage(a, d, m);
-            MoveAction.attackStat(a, -1);
-            MoveAction.attackStat(d, -1);
+        MoveAction action = e -> {
+            MoveAction.dealDamage(e);
+            MoveAction.changeStats(e, stats(-1, 0, 0, 0, 0, 0, 0, 1));
         };
 
         return new MoveBuilder()
@@ -233,8 +238,8 @@ public interface MoveList {
     }
 
     public static Move brickBreak() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.dealDamage(a, d, m);
+        MoveAction action = e -> {
+            MoveAction.dealDamage(e);
             // TODO: Disables Light Screen / Reflect
         };
 
@@ -250,9 +255,9 @@ public interface MoveList {
     }
 
     public static Move bulldoze() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.dealDamage(a, d, m);
-            MoveAction.speedStat(d, -1);
+        MoveAction action = e -> {
+            MoveAction.dealDamage(e);
+            MoveAction.changeStats(e, stats(0, 0, 0, 0, -1, 0, 0, 1));
         };
 
         return new MoveBuilder()
@@ -276,16 +281,16 @@ public interface MoveList {
         .setPP(30)
         .setPower(25)
         .setContact(false)
-        .setAction((a, d, m) -> MoveAction.multiHit(a, d, m))
+        .setAction(e -> MoveAction.multiHit(e))
         .buildMove();
     }
 
 // CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
     
     public static Move charm() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.moveHits(a, d, m);
-            MoveAction.attackStat(d, -2);
+        MoveAction action = e -> {
+            MoveAction.moveHits(e);
+            MoveAction.changeStats(e, stats(-2, 0, 0, 0, 0, 0, 0, 1));
         };
 
         return new MoveBuilder()
@@ -299,9 +304,9 @@ public interface MoveList {
     }
 
     public static Move chillingWater() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.dealDamage(a, d, m);
-            MoveAction.attackStat(d, -1);
+        MoveAction action = e -> {
+            MoveAction.dealDamage(e);
+            MoveAction.changeStats(e, stats(-1, 0, 0, 0, 0, 0, 0, 1));
         };
 
         return new MoveBuilder()
@@ -317,12 +322,9 @@ public interface MoveList {
 
 
     public static Move crunch() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.dealDamage(a, d, m);
-            
-            if (!RandomValues.chance(20)) return;
-            MoveAction.defenseStat(d, -1);
-            MoveAction.spDefenseStat(d, -1);
+        MoveAction action = e -> {
+            MoveAction.dealDamage(e);
+            MoveAction.changeStats(e, stats(0, -1, 0, 0, 0, 0, 0, 1), 20);
         };
 
         return new MoveBuilder()
@@ -338,10 +340,8 @@ public interface MoveList {
 
     public static Move curse() {
         // TODO: Two Verison of move, Ghost-Type, and Non-Ghost-Type
-        MoveAction action = (a, d, m) -> {
-            MoveAction.speedStat(a, -1);
-            MoveAction.attackStat(a, 1);
-            MoveAction.defenseStat(a, 1);
+        MoveAction action = e -> {
+            MoveAction.changeStats(e, stats(1, 1, 0, 0, -1, 0, 0, 0));
         };
 
         return new MoveBuilder()
@@ -357,9 +357,9 @@ public interface MoveList {
 // DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
     
     public static Move darkPulse() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.dealDamage(a, d, m);
-            MoveAction.applyFlinch(d, 20);
+        MoveAction action = e -> {
+            MoveAction.dealDamage(e);
+            MoveAction.applyFlinch(e.targetPokemon(), 20);
         };
 
         return new MoveBuilder()
@@ -381,7 +381,7 @@ public interface MoveList {
         .setCategory(Move.PHYSICAL)
         .setPP(10)
         .setPower(80)
-        .setAction((a, d, m) -> MoveAction.enterImmuneState(a, d, m, StatusCondition.DIG, a + " dug into the ground!"))
+        .setAction(e -> MoveAction.enterImmuneState(e, StatusCondition.DIG, e.attackerPokemon() + " dug into the ground!"))
         .buildMove();
     }
 
@@ -393,7 +393,7 @@ public interface MoveList {
         .setCategory(Move.PHYSICAL)
         .setPP(10)
         .setPower(80)
-        .setAction((a, d, m) -> MoveAction.enterImmuneState(a, d, m, StatusCondition.DIVE, a + " dove underwater!"))
+        .setAction(e -> MoveAction.enterImmuneState(e, StatusCondition.DIVE, e.attackerPokemon() + " dove underwater!"))
         .buildMove();
     }
 
@@ -405,14 +405,14 @@ public interface MoveList {
         .setCategory(Move.PHYSICAL)
         .setPP(15)
         .setPower(120)
-        .setAction((a, d, m) -> MoveAction.dealDamageRecoil(a, d, m, 33))
+        .setAction(e -> MoveAction.dealDamageRecoil(e, 33))
         .buildMove();
     }
 
     public static Move dragonBreath() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.dealDamage(a, d, m);
-            MoveAction.statusEffect(d, StatusCondition.PARALYSIS, 30);
+        MoveAction action = e -> {
+            MoveAction.dealDamage(e);
+            MoveAction.statusEffect(e.targetPokemon(), StatusCondition.PARALYSIS, 30);
         };
 
         return new MoveBuilder()
@@ -439,18 +439,13 @@ public interface MoveList {
     }
 
     public static Move dragonDance() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.attackStat(a, 1);
-            MoveAction.speedStat(a, 1);
-        };
-
         return new MoveBuilder()
         .setId(349)
         .setName("Dragon Dance")
         .setType(Type.DRAGON)
         .setCategory(Move.STATUS)
         .setPP(20)
-        .setAction(action)
+        .setAction(e -> MoveAction.changeStats(e, stats(1, 0, 0, 0, 1, 0, 0, 0)))
         .buildMove();
     }
 
@@ -467,8 +462,8 @@ public interface MoveList {
     }
 
     public static Move dragonTail() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.dealDamage(a, d, m);
+        MoveAction action = e -> {
+            MoveAction.dealDamage(e);
             // TODO: Force Switch
         };
 
@@ -488,10 +483,10 @@ public interface MoveList {
 // EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
 
     public static Move earthquake() {
-        MoveAction action = (a, d, m) -> {
+        MoveAction action = e -> {
             // Deals double power to opponents digging
-            if (d.conditions().hasImmuneState(StatusCondition.DIG)) m.doublePower(); 
-            MoveAction.dealDamage(a, d, m);
+            if (e.targetPokemon().conditions().hasImmuneState(StatusCondition.DIG)) e.moveUsed().doublePower(); 
+            MoveAction.dealDamage(e);
         };
 
         return new MoveBuilder()
@@ -507,9 +502,9 @@ public interface MoveList {
     }
 
     public static Move earthPower() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.dealDamage(a, d, m);
-            MoveAction.spDefenseStat(d, -1, 10);
+        MoveAction action = e -> {
+            MoveAction.dealDamage(e);
+            MoveAction.changeStats(e, stats(0, 0, 0, -1, 0, 0, 0, 1), 10);
         };
 
         return new MoveBuilder()
@@ -524,9 +519,9 @@ public interface MoveList {
     }
 
     public static Move ember() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.dealDamage(a, d, m);
-            MoveAction.statusEffect(d, StatusCondition.BURN, 10); 
+        MoveAction action = e -> {
+            MoveAction.dealDamage(e);
+            MoveAction.statusEffect(e.targetPokemon(), StatusCondition.BURN, 10); 
         };
 
         return new MoveBuilder()
@@ -548,14 +543,14 @@ public interface MoveList {
         .setCategory(Move.STATUS)
         .setPP(10)
         .setPriority(4)
-        .setAction((a, d, m) -> MoveAction.pokemonBraces(a, a.conditions().endured(), a + " braced itself!"))
+        .setAction(e -> MoveAction.pokemonProtects(e, e.attackerPokemon().conditions().endured(), e.attackerPokemon() + " braced itself!"))
         .buildMove();
     }
 
     public static Move energyBall() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.dealDamage(a, d, m);
-            MoveAction.spDefenseStat(d, -1, 10);
+        MoveAction action = e -> {
+            MoveAction.dealDamage(e);
+            MoveAction.changeStats(e, stats(0, 0, 0, -1, 0, 0, 0, 1), 10);
         };
 
         return new MoveBuilder()
@@ -572,14 +567,15 @@ public interface MoveList {
 // FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
 
     public static Move facade() {
-        MoveAction action = (a, d, m) -> {
+        MoveAction action = e -> {
+            Pokemon a = e.attackerPokemon();
             // Double power (140) if user is burned, paralyzed, or poisoned
             if (a.hasPrimaryCondition(StatusCondition.BURN) |
             a.hasPrimaryCondition(StatusCondition.PARALYSIS) |
             a.hasPrimaryCondition(StatusCondition.POISON))
-                m.doublePower();
+                e.moveUsed().doublePower();
 
-            MoveAction.dealDamage(a, d, m);
+            MoveAction.dealDamage(e);
         };
 
         return new MoveBuilder()
@@ -594,10 +590,10 @@ public interface MoveList {
     }
 
     public static Move falseSwipe() {
-        MoveAction action = (a, d, m) -> {
+        MoveAction action = e -> {
             // Leaves opponent with at least 1 HP
-            d.conditions().endured().setActive(true);
-            MoveAction.dealDamage(a, d, m);
+            e.targetPokemon().conditions().endured().setActive(true);
+            MoveAction.dealDamage(e);
         };
 
         return new MoveBuilder()
@@ -612,9 +608,9 @@ public interface MoveList {
     }
 
     public static Move fireBlast() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.dealDamage(a, d, m);
-            MoveAction.statusEffect(d, StatusCondition.BURN, 30);
+        MoveAction action = e -> {
+            MoveAction.dealDamage(e);
+            MoveAction.statusEffect(e.targetPokemon(), StatusCondition.BURN, 30);
         };
 
         return new MoveBuilder()
@@ -630,10 +626,10 @@ public interface MoveList {
     }
 
     public static Move fireFang() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.dealDamage(a, d, m);
-            MoveAction.statusEffect(d, StatusCondition.BURN, 10);
-            MoveAction.applyFlinch(d, 30);
+        MoveAction action = e -> {
+            MoveAction.dealDamage(e);
+            MoveAction.statusEffect(e.targetPokemon(), StatusCondition.BURN, 10);
+            MoveAction.applyFlinch(e.targetPokemon(), 30);
         };
 
         return new MoveBuilder()
@@ -661,9 +657,9 @@ public interface MoveList {
     }
 
     public static Move firePunch() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.dealDamage(a, d, m);
-            MoveAction.statusEffect(d, StatusCondition.BURN, 10);
+        MoveAction action = e -> {
+            MoveAction.dealDamage(e);
+            MoveAction.statusEffect(e.targetPokemon(), StatusCondition.BURN, 10);
         };
 
         return new MoveBuilder()
@@ -678,9 +674,9 @@ public interface MoveList {
     }
 
     public static Move flameCharge() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.dealDamage(a, d, m);
-            MoveAction.speedStat(a, 1);
+        MoveAction action = e -> {
+            MoveAction.dealDamage(e);
+            MoveAction.changeStats(e, stats(0, 0, 0, 0, 1, 0, 0, 0));
         };
 
         return new MoveBuilder()
@@ -695,9 +691,9 @@ public interface MoveList {
     }
 
     public static Move flamethrower() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.dealDamage(a, d, m);
-            MoveAction.statusEffect(d, StatusCondition.BURN, 10);
+        MoveAction action = e -> {
+            MoveAction.dealDamage(e);
+            MoveAction.statusEffect(e.targetPokemon(), StatusCondition.BURN, 10);
         };
 
         return new MoveBuilder()
@@ -712,9 +708,9 @@ public interface MoveList {
     }
 
     public static Move flareBlitz() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.dealDamageRecoil(a, d, m, 33);
-            MoveAction.statusEffect(d, StatusCondition.BURN, 10);
+        MoveAction action = e -> {
+            MoveAction.dealDamageRecoil(e, 33);
+            MoveAction.statusEffect(e.targetPokemon(), StatusCondition.BURN, 10);
         };
 
         return new MoveBuilder()
@@ -729,9 +725,9 @@ public interface MoveList {
     }
 
     public static Move flashCannon() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.dealDamage(a, d, m);
-            MoveAction.spDefenseStat(d, -1, 10);
+        MoveAction action = e -> {
+            MoveAction.dealDamage(e);
+            MoveAction.changeStats(e, stats(0, 0, 0, -1, 0, 0, 0, 1), 10);
         };
 
         return new MoveBuilder()
@@ -746,8 +742,8 @@ public interface MoveList {
     }
 
     public static Move flipTurn() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.dealDamage(a, d, m);
+        MoveAction action = e -> {
+            MoveAction.dealDamage(e);
             // TODO: Switch User out
         };
 
@@ -771,14 +767,14 @@ public interface MoveList {
         .setPP(15)
         .setPower(90)
         .setAccuracy(95)
-        .setAction((a, d, m) -> MoveAction.enterImmuneState(a, d, m, StatusCondition.FLY, a + " flew high into the sky!"))
+        .setAction(e -> MoveAction.enterImmuneState(e, StatusCondition.FLY, e.attackerPokemon() + " flew high into the sky!"))
         .buildMove();
     }
 
     public static Move focusBlast() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.dealDamage(a, d, m);
-            MoveAction.spDefenseStat(d, -1, 10);
+        MoveAction action = e -> {
+            MoveAction.dealDamage(e);
+            MoveAction.changeStats(e, stats(0, 0, 0, -1, 0, 0, 0, 1), 10);
         };
 
         return new MoveBuilder()
@@ -802,14 +798,14 @@ public interface MoveList {
         .setPP(20)
         .setPower(150)
         .setPriority(-3)
-        .setAction((a, d, m) -> MoveAction.focusMove(a, d, m))
+        .setAction(e -> MoveAction.focusMove(e))
         .buildMove();
     }
 
     public static Move frenzyPlant() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.dealDamage(a, d, m);
-            MoveAction.rechargeMove(a);
+        MoveAction action = e -> {
+            MoveAction.dealDamage(e);
+            MoveAction.rechargeMove(e);
         };
 
         return new MoveBuilder()
@@ -833,7 +829,7 @@ public interface MoveList {
         .setPP(15)
         .setPower(15)
         .setAccuracy(85)
-        .setAction((a, d, m) -> MoveAction.multiHit(a, d, m))
+        .setAction(e -> MoveAction.multiHit(e))
         .buildMove();
     }
 
@@ -849,14 +845,14 @@ public interface MoveList {
         .setCategory(Move.SPECIAL)
         .setPP(10)
         .setPower(75)
-        .setAction((a, d, m) -> MoveAction.dealDamageDrain(a, d, m, 50))
+        .setAction(e -> MoveAction.dealDamageDrain(e, 50))
         .buildMove();
     }
 
     public static Move gigaImpact() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.dealDamage(a, d, m);
-            MoveAction.rechargeMove(a);
+        MoveAction action = e -> {
+            MoveAction.dealDamage(e);
+            MoveAction.rechargeMove(e);
         };
 
         return new MoveBuilder()
@@ -872,9 +868,10 @@ public interface MoveList {
     }
 
     public static Move grassKnot() {
-        MoveAction action = (a, d, m) -> {
+        MoveAction action = e -> {
+            Pokemon d = e.targetPokemon();
             // Move power varies based on weight 
-            m.setPower(
+            e.moveUsed().setPower(
             d.weight() <= 21.8
                 ? 20
                 : d.weight() <= 54.9
@@ -886,7 +883,7 @@ public interface MoveList {
                             : d.weight() < 440.7
                                 ? 100
                                 : 120);
-            MoveAction.dealDamage(a, d, m);
+            MoveAction.dealDamage(e);
         };
 
         return new MoveBuilder()
@@ -902,9 +899,9 @@ public interface MoveList {
     }
 
     public static Move growl() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.moveHits(a, d, m);
-            MoveAction.attackStat(d, -1);
+        MoveAction action = e -> {
+            MoveAction.moveHits(e);
+            MoveAction.changeStats(e, stats(0, -1, 0, 0, 0, 0, 0, 1));
         };
 
         return new MoveBuilder()
@@ -918,15 +915,13 @@ public interface MoveList {
     }
 
     public static Move growth() {
-        MoveAction action = (a, d, m) -> {   
+        MoveAction action = e -> {   
             if (BattleField.currentWeather == Weather.SUNNY) {
-                MoveAction.attackStat(a, 2);
-                MoveAction.spAttackStat(a, 2);
+                MoveAction.changeStats(e, stats(2, 0, 2, 0, 0, 0, 0, 0));
                 return;
             }
           
-            MoveAction.attackStat(a, 1);
-            MoveAction.spAttackStat(a, 1);
+            MoveAction.changeStats(e, stats(1, 0, 1, 0, 0, 0, 0, 0));
         };
 
         return new MoveBuilder()
@@ -940,9 +935,9 @@ public interface MoveList {
     }
 
     public static Move gyroBall() {
-        MoveAction action = (a, d, m) -> {
-            m.setPower((int) (25.0 * d.speed().power() / (double) a.speed().power() + 1));
-            MoveAction.dealDamage(a, d, m);
+        MoveAction action = e -> {
+            e.moveUsed().setPower((int) (25.0 * e.targetPokemon().speed().power() / (double) e.attackerPokemon().speed().power() + 1));
+            MoveAction.dealDamage(e);
         };
 
         return new MoveBuilder()
@@ -965,14 +960,14 @@ public interface MoveList {
         .setType(Type.ICE)
         .setCategory(Move.STATUS)
         .setPP(10)
-        .setAction((a, d, m) -> MoveAction.changeWeather(Weather.HAIL))
+        .setAction(e -> MoveAction.changeWeather(e, Weather.HAIL))
         .buildMove();
     }
 
     public static Move haze() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.resetStats(a);
-            MoveAction.resetStats(d);
+        MoveAction action = e -> {
+            MoveAction.resetStats(e, e.attackerPokemon());
+            MoveAction.resetStats(e, e.targetPokemon());
         };
 
         return new MoveBuilder()
@@ -986,14 +981,14 @@ public interface MoveList {
     }
 
     public static Move heatCrash() {
-        MoveAction action = (a, d, m) -> {
+        MoveAction action = e -> {
             /*
              * Power varies based on the weight of both user and the target
              * The greater the difference, the greater the power
              */
-            double ratio = a.weight() / d.weight();
+            double ratio = e.attackerPokemon().weight() / e.targetPokemon().weight();
 
-            m.setPower(
+            e.moveUsed().setPower(
             ratio < 2
                 ? 40
                 : ratio < 3
@@ -1004,7 +999,7 @@ public interface MoveList {
                             ? 100
                             : 120);
             // TODO: Deals double damage to minimized opponents
-            MoveAction.dealDamage(a, d, m);
+            MoveAction.dealDamage(e);
         };
 
         return new MoveBuilder()
@@ -1019,9 +1014,9 @@ public interface MoveList {
     }
 
     public static Move heatWave() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.dealDamage(a, d, m);
-            MoveAction.statusEffect(d, StatusCondition.BURN, 10);
+        MoveAction action = e -> {
+            MoveAction.dealDamage(e);
+            MoveAction.statusEffect(e.targetPokemon(), StatusCondition.BURN, 10);
         };
 
         return new MoveBuilder()
@@ -1037,13 +1032,14 @@ public interface MoveList {
     }
 
     public static Move hurricane() {
-        MoveAction action = (a, d, m) -> {
+        MoveAction action = e -> {
+            Move m = e.moveUsed();
             // Perfect accuracy in the rain, 50% accuracy in harsh sunlight
             if (BattleField.currentWeather == Weather.RAIN) m.perfectAccuracy();
             else if (BattleField.currentWeather == Weather.SUNNY) m.setAccuracy(50);
 
-           MoveAction.dealDamage(a, d, m);
-           MoveAction.volatileStatusEffect(d, StatusCondition.CONFUSION, 30);
+           MoveAction.dealDamage(e);
+           MoveAction.volatileStatusEffect(e.targetPokemon(), StatusCondition.CONFUSION, 30);
         };
 
         return new MoveBuilder()
@@ -1059,9 +1055,9 @@ public interface MoveList {
     }
 
     public static Move hydroCannon() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.dealDamage(a, d, m);
-            MoveAction.rechargeMove(a);
+        MoveAction action = e -> {
+            MoveAction.dealDamage(e);
+            MoveAction.rechargeMove(e);
         };
 
         return new MoveBuilder()
@@ -1090,9 +1086,9 @@ public interface MoveList {
     }
 
     public static Move hyperBeam() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.dealDamage(a, d, m);
-            MoveAction.rechargeMove(a);
+        MoveAction action = e -> {
+            MoveAction.dealDamage(e);
+            MoveAction.rechargeMove(e);
         };
 
         return new MoveBuilder()
@@ -1110,9 +1106,9 @@ public interface MoveList {
 // IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
 
     public static Move iceBeam() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.dealDamage(a, d, m);
-            MoveAction.statusEffect(d, StatusCondition.FREEZE, 10);
+        MoveAction action = e -> {
+            MoveAction.dealDamage(e);
+            MoveAction.statusEffect(e.targetPokemon(), StatusCondition.FREEZE, 10);
         };
 
         return new MoveBuilder()
@@ -1127,9 +1123,9 @@ public interface MoveList {
     }
 
     public static Move icePunch() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.dealDamage(a, d, m);
-            MoveAction.statusEffect(d, StatusCondition.FREEZE, 10);
+        MoveAction action = e -> {
+            MoveAction.dealDamage(e);
+            MoveAction.statusEffect(e.targetPokemon(), StatusCondition.FREEZE, 10);
         };
 
         return new MoveBuilder()
@@ -1144,8 +1140,8 @@ public interface MoveList {
     }
 
     public static Move iceSpinner() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.dealDamage(a, d, m);
+        MoveAction action = e -> {
+            MoveAction.dealDamage(e);
             // TODO: Clears Terrain effect
         };
 
@@ -1161,9 +1157,9 @@ public interface MoveList {
 
 
     public static Move icyWind() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.dealDamage(a, d, m);
-            MoveAction.speedStat(d, -1);
+        MoveAction action = e -> {
+            MoveAction.dealDamage(e);
+            MoveAction.changeStats(e, stats(0, 0, 0, 0, -1, 0, 0, 1));
         };
 
         return new MoveBuilder()
@@ -1180,9 +1176,9 @@ public interface MoveList {
 
 
     public static Move inferno() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.dealDamage(a, d, m);
-            MoveAction.statusEffect(d, StatusCondition.BURN, 100);
+        MoveAction action = e -> {
+            MoveAction.dealDamage(e);
+            MoveAction.statusEffect(e.targetPokemon(), StatusCondition.BURN, 100);
         };
 
         return new MoveBuilder()
@@ -1204,7 +1200,7 @@ public interface MoveList {
         .setType(Type.STEEL)
         .setCategory(Move.STATUS)
         .setPP(15)
-        .setAction((a, d, m) -> MoveAction.defenseStat(a, 2))
+        .setAction(e -> MoveAction.changeStats(e, stats(0, 2, 0, 0, 0, 0, 0, 0)))
         .buildMove();
     }
 
@@ -1214,9 +1210,9 @@ public interface MoveList {
 // LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL
 
     public static Move leafStorm() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.dealDamage(a, d, m);
-            MoveAction.spAttackStat(a, -2);
+        MoveAction action = e -> {
+            MoveAction.dealDamage(e);
+            MoveAction.changeStats(e, stats(0, 0, -2, 0, 0, 0, 0, 0));
         };
 
         return new MoveBuilder()
@@ -1232,9 +1228,9 @@ public interface MoveList {
     }
 
     public static Move leechSeed() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.moveHits(a, d, m);
-            MoveAction.applySeeded(a, d);
+        MoveAction action = e -> {
+            MoveAction.moveHits(e);
+            MoveAction.applySeeded(e.attackerPokemon(), e.targetPokemon());
         };
 
         return new MoveBuilder()
@@ -1249,9 +1245,9 @@ public interface MoveList {
     }
 
     public static Move liquidation() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.dealDamage(a, d, m);
-            MoveAction.defenseStat(d, -1, 20);
+        MoveAction action = e -> {
+            MoveAction.dealDamage(e);
+            MoveAction.changeStats(e, stats(0, -1, 0, 0, 0, 0, 0, 1), 20);
         };
 
         return new MoveBuilder()
@@ -1269,10 +1265,6 @@ public interface MoveList {
 // MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
 
     public static Move magicalLeaf() {
-        MoveAction action = (a, d, m) -> {
-
-        };
-
         return new MoveBuilder()
         .setId(345)
         .setName("Magical Leaf")
@@ -1281,14 +1273,14 @@ public interface MoveList {
         .setPP(20)
         .setPower(60)
         .setAccuracy(Move.ALWAYS_HITS)
-        .setAction(action)
+        .setAction(MoveAction.DEFAULT_ACTION)
         .buildMove();
     }
 
     public static Move muddyWater() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.dealDamage(a, d, m);
-            MoveAction.accuracyStat(d, -1, 30);
+        MoveAction action = e -> {
+            MoveAction.dealDamage(e);
+            MoveAction.changeStats(e, stats(0, 0, 0, 0, 0, -1, 0, 1), 30);
         };
 
         return new MoveBuilder()
@@ -1304,9 +1296,9 @@ public interface MoveList {
     }
 
     public static Move mudShot() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.dealDamage(a, d, m);
-            MoveAction.speedStat(d, -1);
+        MoveAction action = e -> {
+            MoveAction.dealDamage(e);
+            MoveAction.changeStats(e, stats(0, 0, 0, 0, -1, 0, 0, 1));
         };
 
         return new MoveBuilder()
@@ -1335,14 +1327,14 @@ public interface MoveList {
         .setCategory(Move.PHYSICAL)
         .setPP(10)
         .setPower(120)
-        .setAction((a, d, m) -> MoveAction.rampageMove(a, d, m))
+        .setAction(e -> MoveAction.rampageMove(e))
         .buildMove();
     }
 
     public static Move overheat() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.dealDamage(a, d, m);
-            MoveAction.spAttackStat(a, -2);
+        MoveAction action = e -> {
+            MoveAction.dealDamage(e);
+            MoveAction.changeStats(e, stats(-2, 0, 0, 0, 0, 0, 0, 0));
         };
 
         return new MoveBuilder()
@@ -1381,14 +1373,14 @@ public interface MoveList {
         .setPP(10)
         .setPower(120)
         .setContact(true)
-        .setAction((a, d, m) -> MoveAction.rampageMove(a, d, m))
+        .setAction(e -> MoveAction.rampageMove(e))
         .buildMove();
     }
 
     public static Move poisonJab() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.dealDamage(a, d, m);
-            MoveAction.statusEffect(d, StatusCondition.POISON, 30);
+        MoveAction action = (e) -> {
+            MoveAction.dealDamage(e);
+            MoveAction.statusEffect(e.targetPokemon(), StatusCondition.POISON, 30);
         };
 
         return new MoveBuilder()
@@ -1403,9 +1395,9 @@ public interface MoveList {
     }
 
     public static Move poisonPowder() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.moveHits(a, d, m);
-            MoveAction.canApplyEffect(d, StatusCondition.POISON);
+        MoveAction action = e -> {
+            MoveAction.moveHits(e);
+            MoveAction.canApplyEffect(e.targetPokemon(), StatusCondition.POISON);
         };
 
         return new MoveBuilder()
@@ -1440,7 +1432,7 @@ public interface MoveList {
         .setCategory(Move.STATUS)
         .setPP(10)
         .setPriority(4)
-        .setAction((a, d, m) -> MoveAction.pokemonBraces(a, a.conditions().protect(), a + " protected itself!"))
+        .setAction(e -> MoveAction.pokemonProtects(e, e.attackerPokemon().conditions().protect(), e.attackerPokemon() + " protected itself!"))
         .buildMove();
     }
 
@@ -1455,14 +1447,14 @@ public interface MoveList {
         .setType(Type.WATER)
         .setCategory(Move.STATUS)
         .setPP(5)
-        .setAction((a, d, m) -> MoveAction.changeWeather(Weather.RAIN))
+        .setAction(e -> MoveAction.changeWeather(e, Weather.RAIN))
         .buildMove();
     }
 
     public static Move rapidSpin() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.dealDamage(a, d, m);
-            MoveAction.speedStat(a, 1);
+        MoveAction action = e -> {
+            MoveAction.dealDamage(e);
+            MoveAction.changeStats(e, stats(0, 0, 0, 0, 1, 0, 0, 0));
             // TODO: Removes Trap Effects
         };
 
@@ -1493,9 +1485,9 @@ public interface MoveList {
     }
 
     public static Move rest() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.restoreHp(a, 100);
-            MoveAction.statusEffect(a, StatusCondition.SLEEP, 100);
+        MoveAction action = e -> {
+            MoveAction.restoreHp(e, true, 100);
+            MoveAction.statusEffect(e.attackerPokemon(), StatusCondition.SLEEP, 100);
         };
 
         return new MoveBuilder()
@@ -1509,7 +1501,7 @@ public interface MoveList {
     }
 
     public static Move roar() {
-        MoveAction action = (a, d, m) -> {
+        MoveAction action = e -> {
             // TODO: Implement force switch (need to track Pokemon's owner in Pokemon class)
         };
 
@@ -1525,9 +1517,9 @@ public interface MoveList {
     }
 
     public static Move rockSlide() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.dealDamage(a, d, m);
-            MoveAction.applyFlinch(d, 30);
+        MoveAction action = e -> {
+            MoveAction.dealDamage(e);
+            MoveAction.applyFlinch(e.targetPokemon(), 30);
         };
 
         return new MoveBuilder()
@@ -1544,9 +1536,9 @@ public interface MoveList {
     }
 
     public static Move rockTomb() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.dealDamage(a, d, m);
-            MoveAction.speedStat(d, -1);
+        MoveAction action = e -> {
+            MoveAction.dealDamage(e);
+            MoveAction.changeStats(e, stats(0, -1, 0, 0, 0, 0, 0, 0));
         };
 
         return new MoveBuilder()
@@ -1571,14 +1563,14 @@ public interface MoveList {
         .setType(Type.ROCK)
         .setCategory(Move.STATUS)
         .setPP(10)
-        .setAction((a, d, m) -> MoveAction.changeWeather(Weather.SANDSTORM))
+        .setAction(e -> MoveAction.changeWeather(e, Weather.SANDSTORM))
         .buildMove();
     }
 
     public static Move scaryFace() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.moveHits(a, d, m);
-            MoveAction.speedStat(d, -2);
+        MoveAction action = e -> {
+            MoveAction.moveHits(e);
+            MoveAction.changeStats(e, stats(0, 0, 0, 0, -2, 0, 0, 1));
         };
 
         return new MoveBuilder()
@@ -1604,10 +1596,10 @@ public interface MoveList {
     }
 
     public static Move scorchingSands() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.removeStatusEffect(a, StatusCondition.FREEZE);
-            MoveAction.dealDamage(a, d, m);
-            MoveAction.statusEffect(d, StatusCondition.BURN, 30);
+        MoveAction action = e -> {
+            MoveAction.removeStatusEffect(e.attackerPokemon(), StatusCondition.FREEZE);
+            MoveAction.dealDamage(e);
+            MoveAction.statusEffect(e.targetPokemon(), StatusCondition.BURN, 30);
         };
 
         return new MoveBuilder()
@@ -1648,21 +1640,13 @@ public interface MoveList {
     }
 
     public static Move shellSmash() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.defenseStat(a, -1);
-            MoveAction.spDefenseStat(a, -1);
-            MoveAction.attackStat(a, 2);
-            MoveAction.spAttackStat(a, 2);
-            MoveAction.speedStat(a, 2);
-        };
-
         return new MoveBuilder()
         .setId(504)
         .setName("Shell Smash")
         .setType(Type.NORMAL)
         .setCategory(Move.STATUS)
         .setPP(15)
-        .setAction(action)
+        .setAction(e -> MoveAction.changeStats(e, stats(1, -1, 1, -1, 1, 0, 0, 0)))
         .buildMove();
     }
 
@@ -1680,9 +1664,9 @@ public interface MoveList {
     }
 
     public static Move sleepPowder() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.moveHits(a, d, m);
-            MoveAction.canApplyEffect(d, StatusCondition.SLEEP);
+        MoveAction action = e -> {
+            MoveAction.moveHits(e);
+            MoveAction.canApplyEffect(e.targetPokemon(), StatusCondition.SLEEP);
         };
 
         return new MoveBuilder()
@@ -1697,7 +1681,9 @@ public interface MoveList {
     }
 
     public static Move sleepTalk() {
-        MoveAction action = (a, d, m) -> {
+        MoveAction action = e -> {
+            Pokemon a = e.attackerPokemon();
+            Move m = e.moveUsed();
             // Only works when Pokemon is asleep
             if (!a.hasPrimaryCondition(StatusCondition.SLEEP)){
                 BattleLog.add(Move.FAILED);
@@ -1712,7 +1698,7 @@ public interface MoveList {
             }
 
             BattleLog.add("%s used %s!", a, randomMove);
-            randomMove.action().act(a, d, randomMove);
+            randomMove.action().act(new EventData(a, e.targetPokemon(), m));
         };
 
         return new MoveBuilder()
@@ -1726,10 +1712,10 @@ public interface MoveList {
     }
 
     public static Move smackDown() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.dealDamage(a, d, m);
-            MoveAction.leaveImmuneState(d, StatusCondition.FLY, "Fell from the sky!");
-            MoveAction.groundedPokemon(d);
+        MoveAction action = e -> {
+            MoveAction.dealDamage(e);
+            MoveAction.leaveImmuneState(e, StatusCondition.FLY, "Fell from the sky!");
+            MoveAction.groundedPokemon(e.targetPokemon());
         };
 
         return new MoveBuilder()
@@ -1745,9 +1731,9 @@ public interface MoveList {
     }
 
     public static Move smokescreen() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.moveHits(a, d, m);
-            MoveAction.accuracyStat(d, -1);
+        MoveAction action = e -> {
+            MoveAction.moveHits(e);
+            MoveAction.changeStats(e, stats(0, 0, 0, 0, 0, -1, 0, 1));
         };
 
         return new MoveBuilder()
@@ -1761,9 +1747,9 @@ public interface MoveList {
     }
 
     public static Move solarBeam() {
-        MoveAction action = (a, d, m) -> {
-            if (BattleField.currentWeather == Weather.SUNNY) MoveAction.dealDamage(a, d, m);
-            else MoveAction.chargeMove(a, d, m);
+        MoveAction action = e -> {
+            if (BattleField.currentWeather == Weather.SUNNY) MoveAction.dealDamage(e);
+            else MoveAction.chargeMove(e);
         };
 
         return new MoveBuilder()
@@ -1778,9 +1764,9 @@ public interface MoveList {
     }
 
     public static Move stompingTantrum() {
-        MoveAction action = (a, d, m) -> {
-            if (a.conditions().interrupted()) m.doublePower();
-            MoveAction.dealDamage(a, d, m);
+        MoveAction action = e -> {
+            if (e.attackerPokemon().conditions().interrupted()) e.moveUsed().doublePower();
+            MoveAction.dealDamage(e);
         };
 
         return new MoveBuilder()
@@ -1795,9 +1781,9 @@ public interface MoveList {
     }
 
     public static Move stunSpore() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.moveHits(a, d, m);
-            MoveAction.canApplyEffect(d, StatusCondition.PARALYSIS);
+        MoveAction action = e -> {
+            MoveAction.moveHits(e);
+            MoveAction.canApplyEffect(e.targetPokemon(), StatusCondition.PARALYSIS);
         };
 
         return new MoveBuilder()
@@ -1818,7 +1804,7 @@ public interface MoveList {
         .setType(Type.FIRE)
         .setCategory(Move.STATUS)
         .setPP(5)
-        .setAction((a, d, m) -> MoveAction.changeWeather(Weather.SUNNY))
+        .setAction(e -> MoveAction.changeWeather(e, Weather.SUNNY))
         .buildMove();
     }
 
@@ -1835,9 +1821,9 @@ public interface MoveList {
     }
 
     public static Move sweetScent() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.moveHits(a, d, m);
-            MoveAction.evasionStat(d, -1);
+        MoveAction action = e -> {
+            MoveAction.moveHits(e);
+            MoveAction.changeStats(e, stats(0, 0, 0, 0, 0, 0, -1, 1));
         };
 
         return new MoveBuilder()
@@ -1854,7 +1840,7 @@ public interface MoveList {
         return new MoveBuilder()
         .setId(129)
         .setName("Swift")
-        .setType(Type.NORMAL)
+        .setType(Type.SPACE)
         .setCategory(Move.SPECIAL)
         .setPP(20)
         .setPower(60)
@@ -1870,17 +1856,17 @@ public interface MoveList {
         .setType(Type.NORMAL)
         .setCategory(Move.STATUS)
         .setPP(20)
-        .setAction((a, d, m) -> MoveAction.attackStat(a, 2))
+        .setAction(e -> MoveAction.changeStats(e, stats(2, 0, 0, 0, 0, 0, 0, 0)))
         .buildMove();
     }
 
     public static Move synthesis() {
-        MoveAction action = (a, d, m) -> {
+        MoveAction action = e -> {
             double percent = (BattleField.currentWeather == Weather.SUNNY) 
                 ? 67
                 : (BattleField.currentWeather == Weather.CLEAR) ? 50 : 25;
 
-            MoveAction.restoreHp(a, percent);            
+            MoveAction.restoreHp(e, true, percent);            
         };
 
         return new MoveBuilder()
@@ -1907,9 +1893,9 @@ public interface MoveList {
     }
 
     public static Move tailWhip() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.moveHits(a, d, m);
-            MoveAction.defenseStat(d, -1);
+        MoveAction action = e -> {
+            MoveAction.moveHits(e);
+            MoveAction.changeStats(e, stats(0, -1, 0, 0, 0, 0, 0, 1));
         };
 
         return new MoveBuilder()
@@ -1931,14 +1917,14 @@ public interface MoveList {
         .setPP(20)
         .setPower(90)
         .setAccuracy(85)
-        .setAction((a, d, m) -> MoveAction.dealDamageRecoil(a, d, m, 25))
+        .setAction(e -> MoveAction.dealDamageRecoil(e, 25))
         .buildMove();
     }
 
     public static Move temperFlare() {
-        MoveAction action = (a, d, m) -> {
-            if (a.conditions().interrupted()) m.doublePower();
-            MoveAction.dealDamage(a, d, m);
+        MoveAction action = e -> {
+            if (e.attackerPokemon().conditions().interrupted()) e.moveUsed().doublePower();
+            MoveAction.dealDamage(e);
         };
 
         return new MoveBuilder()
@@ -1953,9 +1939,9 @@ public interface MoveList {
     }
 
     public static Move thunderPunch() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.dealDamage(a, d, m);
-            MoveAction.statusEffect(d, StatusCondition.PARALYSIS, 10);
+        MoveAction action = e -> {
+            MoveAction.dealDamage(e);
+            MoveAction.statusEffect(e.targetPokemon(), StatusCondition.PARALYSIS, 10);
         };
 
         return new MoveBuilder()
@@ -1970,9 +1956,9 @@ public interface MoveList {
     }
 
     public static Move toxic() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.moveHits(a, d, m);
-            MoveAction.canApplyEffect(d, StatusCondition.POISON);
+        MoveAction action = e -> {
+            MoveAction.moveHits(e);
+            MoveAction.canApplyEffect(e.targetPokemon(), StatusCondition.POISON);
         };
 
         return new MoveBuilder()
@@ -1987,9 +1973,9 @@ public interface MoveList {
     }
 
     public static Move trailblaze() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.dealDamage(a, d, m);
-            MoveAction.speedStat(a, 1);
+        MoveAction action = e -> {
+            MoveAction.dealDamage(e);
+            MoveAction.changeStats(e, stats(0, 0, 0, 0, 1, 0, 0, 0));
         };
 
         return new MoveBuilder()
@@ -2008,9 +1994,9 @@ public interface MoveList {
 // VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
 
     public static Move venoshock() {
-        MoveAction action = (a, d, m) -> {
-            if (d.hasPrimaryCondition(StatusCondition.POISON)) m.doublePower();
-            MoveAction.dealDamage(a, d, m);
+        MoveAction action = e -> {
+            if (e.targetPokemon().hasPrimaryCondition(StatusCondition.POISON)) e.moveUsed().doublePower();
+            MoveAction.dealDamage(e);
         };
 
         return new MoveBuilder()
@@ -2063,9 +2049,9 @@ public interface MoveList {
     }
 
     public static Move waterPulse() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.dealDamage(a, d, m);
-            MoveAction.volatileStatusEffect(d, StatusCondition.CONFUSION, 20);
+        MoveAction action = e -> {
+            MoveAction.dealDamage(e);
+            MoveAction.volatileStatusEffect(e.targetPokemon(), StatusCondition.CONFUSION, 20);
         };
 
         return new MoveBuilder()
@@ -2087,15 +2073,15 @@ public interface MoveList {
         .setCategory(Move.PHYSICAL)
         .setPP(10)
         .setPower(120)
-        .setAction((a, d, m) -> MoveAction.dealDamageRecoil(a, d, m, 33))
+        .setAction(e -> MoveAction.dealDamageRecoil(e, 33))
         .buildMove();
     }
 
     public static Move whirlpool() {
-        MoveAction action = (a, d, m) -> {
-            if (d.conditions().hasImmuneState(StatusCondition.DIVE)) m.doublePower();
-            MoveAction.dealDamage(a, d, m);
-            MoveAction.volatileStatusEffect(d, StatusCondition.BOUND, 100);
+        MoveAction action = e -> {
+            if (e.targetPokemon().conditions().hasImmuneState(StatusCondition.DIVE)) e.moveUsed().doublePower();
+            MoveAction.dealDamage(e);
+            MoveAction.volatileStatusEffect(e.targetPokemon(), StatusCondition.BOUND, 100);
         };
 
         return new MoveBuilder()
@@ -2111,9 +2097,9 @@ public interface MoveList {
     }
 
     public static Move willOWisp() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.moveHits(a, d, m);
-            MoveAction.canApplyEffect(d, StatusCondition.BURN);
+        MoveAction action = e -> {
+            MoveAction.moveHits(e);
+            MoveAction.canApplyEffect(e.targetPokemon(), StatusCondition.BURN);
         };
 
         return new MoveBuilder()
@@ -2134,7 +2120,7 @@ public interface MoveList {
         .setType(Type.WATER)
         .setCategory(Move.STATUS)
         .setPP(40)
-        .setAction((a, d, m) -> MoveAction.defenseStat(a, 1))
+        .setAction(e -> MoveAction.changeStats(e, stats(0, 1, 0, 0, 0, 0, 0, 0)))
         .buildMove();
     }
 
@@ -2144,9 +2130,9 @@ public interface MoveList {
 // ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ
 
     public static Move zenHeadbutt() {
-        MoveAction action = (a, d, m) -> {
-            MoveAction.dealDamage(a, d, m);
-            MoveAction.applyFlinch(d, 20);
+        MoveAction action = e -> {
+            MoveAction.dealDamage(e);
+            MoveAction.applyFlinch(e.targetPokemon(), 20);
         };
 
         return new MoveBuilder()
@@ -2172,7 +2158,7 @@ public interface MoveList {
         .setCategory(Move.PHYSICAL)
         .setPP(-1)
         .setPower(40)
-        .setAction((a, d, m) -> MoveAction.dealDamageRecoil(a, d, m, 25))
+        .setAction(e -> MoveAction.dealDamageRecoil(e, 25))
         .buildMove();
     }
 

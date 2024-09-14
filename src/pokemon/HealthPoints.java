@@ -44,4 +44,8 @@ public class HealthPoints {
     public int max() {
         return this.maxHealthPoints;
     }
+
+    public int value() {
+        return this.healthPoints;
+    }
 }

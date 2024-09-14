@@ -1,6 +1,6 @@
 package utility;
 
-public class Bracing {
+public class Protection {
     
 // Variables
     private int count; // Consecutive usage

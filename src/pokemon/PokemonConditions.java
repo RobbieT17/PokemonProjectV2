@@ -4,8 +4,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.stream.Stream;
 import stats.StatusCondition;
-import utility.Bracing;
 import utility.Counter;
+import utility.Protection;
 
 public class PokemonConditions {
     
@@ -26,8 +26,8 @@ public class PokemonConditions {
     private int immuneState; // Pokemon is immune from most attacks for a turn
   
     // Likely fails when used consecutively
-    private final Bracing protect; // Protects Pokemon from incoming attacks
-    private final Bracing endured; // Prevents knocking Pokemon's HP to 0
+    private final Protection protect; // Protects Pokemon from incoming attacks
+    private final Protection endured; // Prevents knocking Pokemon's HP to 0
 
     private Counter rampage; // Count for rampage
 
@@ -38,8 +38,8 @@ public class PokemonConditions {
 // Constructor
     public PokemonConditions() {
         this.volatileConditions = new HashMap<>();
-        this.protect = new Bracing();
-        this.endured = new Bracing();
+        this.protect = new Protection();
+        this.endured = new Protection();
     }
 
 // Methods
@@ -200,11 +200,11 @@ public class PokemonConditions {
         return this.immuneState;
     }
 
-    public Bracing protect() {
+    public Protection protect() {
         return this.protect;
     }
 
-    public Bracing endured() {
+    public Protection endured() {
         return this.endured;
     }
 

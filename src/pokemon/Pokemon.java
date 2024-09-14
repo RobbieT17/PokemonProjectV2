@@ -4,6 +4,7 @@ import battle.Battle;
 import battle.BattleField;
 import battle.BattleLog;
 import battle.Weather;
+import event.EventData;
 import exceptions.*;
 import move.Move;
 import stats.Stat;
@@ -117,10 +118,10 @@ public class Pokemon {
      * @param move the Move chosen
      * @param defender the target Pokemon
      */
-    public void useMove(Pokemon defender) {
+    public void useMove(EventData data) {
         BattleLog.add("%s used %s!", this, this.moveSelected);
         this.moveSelected.pp().decrement(this);
-        this.moveSelected.action().act(this, defender, this.moveSelected);
+        this.moveSelected.action().act(data);
     }
 
     /**
@@ -131,10 +132,10 @@ public class Pokemon {
      * @param move the Move chosen
      * @param defender the target Pokemon
      */
-    public void useTurn(Pokemon defender){
+    public void useTurn(EventData data){
         try {
             this.checkConditions(true);
-            this.useMove(defender);
+            this.useMove(data);
             this.conditions.setInterrupted(false); // Successful Move
         } catch (MoveInterruptedException | PokemonCannotActException e) {
             BattleLog.add(e.getMessage());
@@ -189,6 +190,30 @@ public class Pokemon {
     public void healDamage(int value) {
         if (value <= 0) throw new IllegalArgumentException(Pokemon.INVALID_DAMAGE_ERR);
         this.hp.change(value);
+    }
+
+    public boolean hpLessThanPercent(double percent) {
+        return this.hp.value() / (double) this.hp.max() < 0.01 * percent; 
+    }
+
+    public void modifyAttackByPercent(double percent) {
+        this.attack().setMod(percent);
+    }
+
+    public void modifyDefenseByPercent(double percent) {
+        this.defense().setMod(percent);
+    }
+
+    public void modifySpAttackByPercent(double percent) {
+        this.specialAttack().setMod(percent);
+    }
+
+    public void modifySpDefenseByPercent(double percent) {
+        this.speed().setMod(percent);
+    }
+
+    public void modifySpeedByPercent(double percent) {
+        this.speed().setMod(percent);
     }
 
     // Takes damage from Sandstorm / Hail Weather
@@ -345,84 +370,25 @@ public class Pokemon {
     }
 
 // Getters
-    public int level() {
-        return this.level;
-    }
-
-    public String pokemonName() {
-        return this.pokemonName;
-    }
-
-    public PokemonType pokemonType() {
-        return this.pokemonType;
-    }
-
-    public int pokedexID() {
-        return this.pokedexID;
-    }
-
-    public HealthPoints hp() {
-        return this.hp;
-    }
-
-    public Stat[] stats() {
-        return this.stats;
-    }
-
-    public Stat attack() {
-		return this.stats[Stat.ATTACK];
-	}
-
-	public Stat defense() {
-		return this.stats[Stat.DEFENSE];
-	}
-
-	public Stat specialAttack() {
-		return this.stats[Stat.SPECIAL_ATTACK];
-	}
-
-	public Stat specialDefense() {
-		return this.stats[Stat.SPECIAL_DEFENSE];
-	}
-
-	public Stat speed() {
-		return this.stats[Stat.SPEED];
-	}
-
-	public Stat accuracy() {
-		return this.stats[Stat.ACCURACY];
-	}
-
-	public Stat evasion() {
-		return this.stats[Stat.EVASION];
-	}
-
-	public double weight() {
-		return this.weight;
-	}
-
-    public Move[] moves() {
-        return this.moves;
-    }
-
-    public PokemonConditions conditions() {
-        return this.conditions;
-    }
-
-    public int damageDealt() {
-        return this.damageDealt;
-    }
-
-    public int damageReceived() {
-        return this.damageReceived;
-    }
-
-    public Move moveSelected() {
-        return this.moveSelected;
-    }
-
-    public Move lastMove() {
-        return this.lastMove;
-    }
+    public int level() {return this.level;}
+    public String pokemonName() {return this.pokemonName;}
+    public PokemonType pokemonType() {return this.pokemonType;}
+    public int pokedexID() {return this.pokedexID;}
+    public HealthPoints hp() {return this.hp;}
+    public Stat[] stats() {return this.stats;}
+    public Stat attack() {return this.stats[Stat.ATTACK];}
+	public Stat defense() {return this.stats[Stat.DEFENSE];}
+	public Stat specialAttack() {return this.stats[Stat.SPECIAL_ATTACK];}
+	public Stat specialDefense() {return this.stats[Stat.SPECIAL_DEFENSE];}
+	public Stat speed() {return this.stats[Stat.SPEED];}
+	public Stat accuracy() {return this.stats[Stat.ACCURACY];}
+	public Stat evasion() {return this.stats[Stat.EVASION];}
+	public double weight() {return this.weight;}
+    public Move[] moves() {return this.moves;}
+    public PokemonConditions conditions() {return this.conditions;}
+    public int damageDealt() {return this.damageDealt;}
+    public int damageReceived() {return this.damageReceived;}
+    public Move moveSelected() {return this.moveSelected;}
+    public Move lastMove() {return this.lastMove;}
 
 }

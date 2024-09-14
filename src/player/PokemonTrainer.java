@@ -1,6 +1,8 @@
 package player;
 
 import battle.BattleLog;
+import event.EventData;
+import event.GameEvent;
 import pokemon.Pokemon;
 import pokemon.PokemonStats;
 
@@ -63,7 +65,9 @@ public class PokemonTrainer {
     public void sendOut(Pokemon p) {
         this.pokemonInBattle = p;
         this.pokemonInBattle.conditions().setSwitchedIn(true);
+
         BattleLog.add("%n%s sends out %s!", this, p);
+        GameEvent.onSwitchIn.update(new EventData(p));
     }
 
     // Returns the Pokemon on the battle

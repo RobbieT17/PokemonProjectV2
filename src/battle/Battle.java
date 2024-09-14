@@ -1,5 +1,6 @@
 package battle;
 
+import event.EventData;
 import exceptions.BattleEndedException;
 import java.util.InputMismatchException;
 import java.util.Random;
@@ -187,7 +188,7 @@ public class Battle {
         if (a.conditions().fainted() || b.conditions().fainted() || a.moveSelected() == null) return;
 
         BattleLog.addLine();
-        a.useTurn(b);
+        a.useTurn(new EventData(a, b, a.moveSelected()));
     }
 
     /**

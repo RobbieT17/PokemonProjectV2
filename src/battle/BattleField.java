@@ -1,5 +1,6 @@
 package battle;
 
+
 import exceptions.BattleEndedException;
 import player.PokemonTrainer;
 import utility.Counter;
