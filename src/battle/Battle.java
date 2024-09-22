@@ -10,6 +10,9 @@ import move.MoveList;
 import player.*;
 import pokemon.Pokemon;
 import pokemon.PokemonList;
+import stats.Ability.*;
+import stats.Ability.BlazeAbility;
+import stats.Ability.WaterAbsorb;
 import stats.StatusCondition;
 import utility.Input;
 
@@ -221,9 +224,14 @@ public class Battle {
 
     public static void main(String[] args) {
 
+        Pokemon p1 = PokemonList.venusaur("Bobby");
+        p1.setAbility(new WaterAbsorb(p1));
+        Pokemon p2 = PokemonList.charizard("Chandler");
+        p2.setAbility(new BlazeAbility(p2));
+
         PokemonTrainer player1 = new PokemonTrainerBuilder()
         .setName("Robbie")
-        .addPokemon(PokemonList.venusaur("Bobby"))
+        .addPokemon(p1)
         .addPokemon(PokemonList.charizard("Charlie"))
         .addPokemon(PokemonList.blastoise("Squirt"))
         .buildTrainer();
@@ -231,7 +239,7 @@ public class Battle {
         PokemonTrainer player2 = new PokemonTrainerBuilder()
         .setName("Sammi")
         .addPokemon(PokemonList.venusaur("Bub"))
-        .addPokemon(PokemonList.charizard("Chandler"))
+        .addPokemon(p2)
         .addPokemon(PokemonList.blastoise("Tim"))
         .buildTrainer();
 

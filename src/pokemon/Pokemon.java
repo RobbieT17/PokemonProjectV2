@@ -7,6 +7,8 @@ import battle.Weather;
 import event.EventData;
 import exceptions.*;
 import move.Move;
+import player.PokemonTrainer;
+import stats.Ability;
 import stats.Stat;
 import stats.StatusCondition;
 import stats.Type;
@@ -39,6 +41,12 @@ public class Pokemon {
 
     //Conditions
     private final PokemonConditions conditions; 
+
+    // Ability
+    private Ability ability;
+
+    // Owner of the Pokemon
+    private PokemonTrainer owner;
 
     // Other Stats
     private int damageDealt; // Amount of damage dealt during the round
@@ -368,6 +376,9 @@ public class Pokemon {
         this.damageReceived = 0;
         this.lastMove = null;     
     }
+
+    public void setAbility(Ability a) {this.ability = a;}
+    public void setOwner(PokemonTrainer pt) {this.owner = pt;}
 
 // Getters
     public int level() {return this.level;}

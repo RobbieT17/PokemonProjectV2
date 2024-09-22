@@ -4,6 +4,7 @@ import battle.BattleField;
 import battle.BattleLog;
 import battle.Weather;
 import event.EventData;
+import event.GameEvent;
 import exceptions.MoveInterruptedException;
 import java.util.Random;
 import pokemon.Pokemon;
@@ -47,8 +48,8 @@ public interface MoveAction {
     }
 
     public static void moveHits(EventData data) {
-        Pokemon attacker = data.attackerPokemon();
-        Pokemon defender = data.targetPokemon();
+        Pokemon attacker = data.user();
+        Pokemon defender = data.target();
         Move move = data.moveUsed();
 
         checkInvulnerabilityExceptions(defender, move);
@@ -120,7 +121,9 @@ public interface MoveAction {
     * No damage is dealt if defending is immune to the attack
     */
     private static double moveEffectiveness(EventData data) {
-        Pokemon p = data.attackerPokemon();
+        GameEvent.onMoveEffectiveness.update(data);
+
+        Pokemon p = data.target();
         double effectiveness = typeEffectiveness(data.moveUsed().moveType(), p);
         if (effectiveness == 0) throw new MoveInterruptedException("But it doesn't affect %s...", p);     
         return effectiveness;
@@ -248,8 +251,10 @@ public interface MoveAction {
      * @return calculated damage
      */
     private static int calculateDamage(EventData data) { 
-        Pokemon attacker = data.attackerPokemon();
-        Pokemon defender = data.targetPokemon();
+        GameEvent.onDamageMultiplier.update(data);
+
+        Pokemon attacker = data.user();
+        Pokemon defender = data.target();
         Move move = data.moveUsed();
         boolean isCritical = data.criticalHit();
         double effectiveness = data.moveEffectiveness();  
@@ -276,7 +281,7 @@ public interface MoveAction {
 
     // Pokemon takes damage based on some percent of the damage dealt
     private static void recoilDamage(EventData data) {
-        Pokemon p = data.attackerPokemon();
+        Pokemon p = data.user();
         if (p.damageDealt() == 0) return;
 
         int damage = (int) (0.01 * data.percent() * p.damageDealt()); 
@@ -285,7 +290,7 @@ public interface MoveAction {
     }
 
     private static void drainHP(EventData data) {
-        Pokemon p = data.attackerPokemon();
+        Pokemon p = data.user();
         if (p.damageDealt() == 0) return;
 
         int heal = (int) (0.01 * data.percent() * p.damageDealt()); 
@@ -295,8 +300,8 @@ public interface MoveAction {
 
     // Pokemon takes damage from a multi-hit move
     private static void dealMultiDamage(EventData data) {
-        Pokemon attacker = data.attackerPokemon();
-        Pokemon defender = data.targetPokemon();
+        Pokemon attacker = data.user();
+        Pokemon defender = data.target();
 
         boolean isCritical = criticalHit(data.moveUsed().critRate());
         int damage = calculateDamage(data);
@@ -319,14 +324,15 @@ public interface MoveAction {
      * @param move Move used by the attacker
      */
     public static void dealDamage(EventData data) {  
-        Pokemon attacker = data.attackerPokemon();
-        Pokemon defender = data.targetPokemon();
+        Pokemon attacker = data.user();
+        Pokemon defender = data.target();
         
         data.setMoveEffectiveness(moveEffectiveness(data)); // Returns if effect is 0  
         data.setCriticalHit(criticalHit(data.moveUsed().critRate())); // Rolls for a critical hit
         
-        data.addDamage(calculateDamage(data));
-        int damage = data.damage();
+        int damage = calculateDamage(data);
+        data.addDamage(damage);
+        
  
         BattleLog.add("%s took %d damage!", defender, damage);
         BattleLog.add(isSuperEffective(data.moveEffectiveness()));
@@ -345,7 +351,7 @@ public interface MoveAction {
     // Deals multiple hits of damage
     public static void multiHit(EventData data) {
         data.setMoveEffectiveness(moveEffectiveness(data));
-        Pokemon defender = data.targetPokemon();
+        Pokemon defender = data.target();
 
         moveHits(data);
 
@@ -393,7 +399,7 @@ public interface MoveAction {
 
     // Restores a percentage of a Pokemon's maximum HP
     public static void restoreHp(EventData data, boolean self, double percent) {
-        Pokemon p = self ? data.attackerPokemon() : data.targetPokemon();
+        Pokemon p = self ? data.user() : data.target();
         if (p.hp().atFullHP()) throw new MoveInterruptedException("But %s is already at full health!", p);
 
         int heal = (int) (0.01 * percent * p.hp().max());
@@ -403,7 +409,7 @@ public interface MoveAction {
 
 // Bracing Functions
     public static void pokemonProtects(EventData data, Protection b, String success) {
-        Pokemon p = data.attackerPokemon();
+        Pokemon p = data.user();
         data.setProtect(b);
         data.setMessage(success);
 
@@ -422,7 +428,7 @@ public interface MoveAction {
      * Can be interrupted by status effects
      */
     public static void chargeMove(EventData data) {
-        Pokemon attacker = data.attackerPokemon();
+        Pokemon attacker = data.user();
         if (!attacker.conditions().forcedMove()) {
             attacker.conditions().setForcedMove(true);       
             BattleLog.add("%s begins charging!", attacker);
@@ -435,7 +441,7 @@ public interface MoveAction {
 
 
     public static void focusMove(EventData data) {
-        Pokemon attacker = data.attackerPokemon();
+        Pokemon attacker = data.user();
         if (!attacker.conditions().focused()){
             attacker.conditions().setFocused(true);
             attacker.conditions().setForcedMove(true);
@@ -452,7 +458,7 @@ public interface MoveAction {
     }
 
     public static void rechargeMove(EventData data) {
-        data.attackerPokemon().conditions().setRecharging(true);
+        data.user().conditions().setRecharging(true);
     }
 
     /**
@@ -461,7 +467,7 @@ public interface MoveAction {
      * cannot act due to a status condition
      */
     public static void rampageMove(EventData data) {
-        Pokemon attacker = data.attackerPokemon();
+        Pokemon attacker = data.user();
         // Starts rampage
         if (!attacker.conditions().onRampage()) 
             attacker.conditions().startRampage(RandomValues.generateInt(1, 2));
@@ -498,7 +504,7 @@ public interface MoveAction {
      * Pokemon leaves the state and attacks on the second turn
      */
     public static void enterImmuneState(EventData data, int state, String message) {
-        Pokemon attacker = data.attackerPokemon();
+        Pokemon attacker = data.user();
         data.setImmuneState(state);
         data.setMessage(message);
 
@@ -518,7 +524,7 @@ public interface MoveAction {
      * Pokemon is knocked out of their semi-invulnerable state, interrupted
      */
     public static void leaveImmuneState(EventData data, int state, String message) {
-        Pokemon p = data.targetPokemon();
+        Pokemon p = data.target();
         data.setImmuneState(state * -1); // Negative indicates removal
         data.setMessage(message);
 
@@ -541,7 +547,7 @@ public interface MoveAction {
      * @param chance The stat change success rate
      */
     private static void changeEachStat(EventData data, int[] stats) {
-        Pokemon p = stats[7] == 0 ? data.attackerPokemon() : data.targetPokemon();
+        Pokemon p = stats[7] == 0 ? data.user() : data.target();
         data.setStatChanges(stats);
         
         for (int i = 0; i < stats.length - 1; i++) {
@@ -559,12 +565,12 @@ public interface MoveAction {
     }
 
     public static void changeStats(EventData data, int[] stats) {
-        if (data.attackerPokemon().conditions().fainted()) return;
+        if (data.user().conditions().fainted()) return;
         changeEachStat(data, stats);
     }
 
     public static void changeStats(EventData data, int[] stats, double chance) {
-        if (data.attackerPokemon().conditions().fainted() || new Random().nextDouble() > chance * 0.01) return;
+        if (data.user().conditions().fainted() || new Random().nextDouble() > chance * 0.01) return;
         changeEachStat(data, stats);
     }
 

@@ -7,7 +7,7 @@ import utility.Protection;
 
 public class EventData {
     // Variables
-    private final Pokemon attacker;
+    private final Pokemon user;
     private final Pokemon target;
     private final Move move;
     
@@ -29,13 +29,13 @@ public class EventData {
 
     // Constructors
     public EventData(Pokemon a) {
-        this.attacker = a;
+        this.user = a;
         this.target = null;
         this.move = null;
     }
 
     public EventData(Pokemon a, Pokemon b, Move m) {
-        this.attacker = a;
+        this.user = a;
         this.target = b;
         this.move = m;
     }
@@ -54,8 +54,8 @@ public class EventData {
     public void setCriticalHit(boolean b) {this.criticalHit = b;}
 
     // Getters
-    public Pokemon attackerPokemon() {return this.attacker;}
-    public Pokemon targetPokemon() {return this.target;}
+    public Pokemon user() {return this.user;}
+    public Pokemon target() {return this.target;}
     public Move moveUsed() {return this.move;}
     public int damage() {return this.damage;}
     public int[] statChanges() {return this.statChanges;}

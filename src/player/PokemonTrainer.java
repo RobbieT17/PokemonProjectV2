@@ -23,6 +23,8 @@ public class PokemonTrainer {
     public PokemonTrainer(String name, Pokemon[] team) {
         this.playerName = name;
         this.team = team;
+
+        for (Pokemon p : team) p.setOwner(this);
     }
 
 // Methods

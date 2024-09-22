@@ -41,6 +41,7 @@ public class Stat {
 		this.base = base;
 		this.power = base;
 		this.stage = 0;
+		this.mod = 1.0;
 	}
 	
 // Class Methods
