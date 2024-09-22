@@ -3,8 +3,9 @@ package pokemon;
 import java.util.ArrayList;
 import java.util.Arrays;
 import stats.Type;
+import utility.Builder;
 
-public class PokemonTypeBuilder {
+public class PokemonTypeBuilder implements Builder {
 
 // Object Variables
     private Type primaryType = null;
@@ -14,14 +15,20 @@ public class PokemonTypeBuilder {
     private final ArrayList<String> weaknesses = new ArrayList<>();
     private final ArrayList<String> immunities = new ArrayList<>();
 
+
+    @Override
+    public void validBuild() {
+        if (this.primaryType == null) throw new IllegalStateException("Primary type has not be initialized");
+    }
+
     /**
      * Converts to PokemonType
      * @throws IllegalStateException If required variables are not set
      * @return new PokemonType object
      */
-    public PokemonType buildPokemonType() {
-        if (this.primaryType == null) throw new IllegalStateException("Primary type has not be initialized");
-
+    @Override
+    public PokemonType build() {
+        validBuild();
         this.setTypeMatchups();
 
         return new PokemonType(

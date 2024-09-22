@@ -32,7 +32,7 @@ public interface MoveList {
         .setPP(20)
         .setPower(40)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move acrobatics() {
@@ -44,7 +44,7 @@ public interface MoveList {
         .setPP(15)
         .setPower(55)
         .setAction(MoveAction.DEFAULT_ACTION)
-        .buildMove();
+        .build();
     }
 
     public static Move aerialAce() {
@@ -56,7 +56,7 @@ public interface MoveList {
         .setPP(60)
         .setAccuracy(Move.ALWAYS_HITS)
         .setAction(MoveAction.DEFAULT_ACTION)
-        .buildMove();
+        .build();
     }
 
     public static Move airCutter() {
@@ -70,7 +70,7 @@ public interface MoveList {
         .setAccuracy(95)
         .setCritRatio(Move.HIGH_CRIT)
         .setAction(MoveAction.DEFAULT_ACTION)
-        .buildMove();
+        .build();
     }
 
     public static Move airSlash() {
@@ -88,7 +88,7 @@ public interface MoveList {
         .setPower(75)
         .setAccuracy(95)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move amnesia() {
@@ -99,7 +99,7 @@ public interface MoveList {
         .setCategory(Move.STATUS)
         .setPP(20)
         .setAction(e -> MoveAction.changeStats(e, stats(0, 0, 0, 1, 0, 0, 0, 0)))
-        .buildMove();
+        .build();
     }
 
     public static Move aquaTail() {
@@ -112,7 +112,7 @@ public interface MoveList {
         .setPower(90)
         .setAccuracy(90)
         .setAction(MoveAction.DEFAULT_ACTION)
-        .buildMove();
+        .build();
     }
 
     public static Move auraSphere() {
@@ -125,7 +125,7 @@ public interface MoveList {
         .setPower(80)
         .setAccuracy(Move.ALWAYS_HITS)
         .setAction(MoveAction.DEFAULT_ACTION)
-        .buildMove();
+        .build();
     }
 
     public static Move avalanche() {
@@ -143,7 +143,7 @@ public interface MoveList {
         .setPower(60)
         .setPriority(-4)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     
@@ -163,7 +163,7 @@ public interface MoveList {
         .setPP(25)
         .setPower(60)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move blastBurn() {
@@ -181,7 +181,7 @@ public interface MoveList {
         .setPower(150)
         .setAccuracy(90)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move blizzard() {
@@ -199,7 +199,7 @@ public interface MoveList {
         .setPower(110)
         .setAccuracy(70)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move bodySlam() {
@@ -217,7 +217,7 @@ public interface MoveList {
         .setPP(15)
         .setPower(85)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move breakingSwipe() {
@@ -234,7 +234,7 @@ public interface MoveList {
         .setPP(15)
         .setPower(60)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move brickBreak() {
@@ -251,7 +251,7 @@ public interface MoveList {
         .setPP(15)
         .setPower(75)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move bulldoze() {
@@ -269,7 +269,7 @@ public interface MoveList {
         .setPower(60)
         .setContact(false)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move bulletSeed() {
@@ -282,7 +282,7 @@ public interface MoveList {
         .setPower(25)
         .setContact(false)
         .setAction(e -> MoveAction.multiHit(e))
-        .buildMove();
+        .build();
     }
 
 // CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
@@ -300,7 +300,7 @@ public interface MoveList {
         .setCategory(Move.STATUS)
         .setPP(20)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move chillingWater() {
@@ -317,7 +317,7 @@ public interface MoveList {
         .setPP(20)
         .setPower(50)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
 
@@ -335,7 +335,7 @@ public interface MoveList {
         .setPP(15)
         .setPower(80)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move curse() {
@@ -351,7 +351,7 @@ public interface MoveList {
         .setCategory(Move.STATUS)
         .setPP(10)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
 // DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
@@ -369,7 +369,7 @@ public interface MoveList {
         .setCategory(Move.SPECIAL)
         .setPP(80)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
 
@@ -382,7 +382,7 @@ public interface MoveList {
         .setPP(10)
         .setPower(80)
         .setAction(e -> MoveAction.enterImmuneState(e, StatusCondition.DIG, e.user() + " dug into the ground!"))
-        .buildMove();
+        .build();
     }
 
     public static Move dive() {
@@ -394,7 +394,7 @@ public interface MoveList {
         .setPP(10)
         .setPower(80)
         .setAction(e -> MoveAction.enterImmuneState(e, StatusCondition.DIVE, e.user() + " dove underwater!"))
-        .buildMove();
+        .build();
     }
 
     public static Move doubleEdge() {
@@ -406,7 +406,7 @@ public interface MoveList {
         .setPP(15)
         .setPower(120)
         .setAction(e -> MoveAction.dealDamageRecoil(e, 33))
-        .buildMove();
+        .build();
     }
 
     public static Move dragonBreath() {
@@ -423,7 +423,7 @@ public interface MoveList {
         .setPP(20)
         .setPower(60)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move dragonClaw() {
@@ -435,7 +435,7 @@ public interface MoveList {
         .setPP(15)
         .setPower(80)
         .setAction(MoveAction.DEFAULT_ACTION)
-        .buildMove();
+        .build();
     }
 
     public static Move dragonDance() {
@@ -446,7 +446,7 @@ public interface MoveList {
         .setCategory(Move.STATUS)
         .setPP(20)
         .setAction(e -> MoveAction.changeStats(e, stats(1, 0, 0, 0, 1, 0, 0, 0)))
-        .buildMove();
+        .build();
     }
 
     public static Move dragonPulse() {
@@ -458,7 +458,7 @@ public interface MoveList {
         .setPP(10)
         .setPower(85)
         .setAction(MoveAction.DEFAULT_ACTION)
-        .buildMove();
+        .build();
     }
 
     public static Move dragonTail() {
@@ -477,7 +477,7 @@ public interface MoveList {
         .setAccuracy(90)
         .setPriority(-6)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
 // EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
@@ -498,7 +498,7 @@ public interface MoveList {
         .setPower(100)
         .setContact(false)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move earthPower() {
@@ -515,7 +515,7 @@ public interface MoveList {
         .setPP(10)
         .setPower(90)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move ember() {
@@ -532,7 +532,7 @@ public interface MoveList {
         .setPP(25)
         .setPower(40)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move endure() {
@@ -544,7 +544,7 @@ public interface MoveList {
         .setPP(10)
         .setPriority(4)
         .setAction(e -> MoveAction.pokemonProtects(e, e.user().conditions().endured(), e.user() + " braced itself!"))
-        .buildMove();
+        .build();
     }
 
     public static Move energyBall() {
@@ -561,7 +561,7 @@ public interface MoveList {
         .setPP(10)
         .setPower(90)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
 // FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
@@ -586,7 +586,7 @@ public interface MoveList {
         .setPP(20)
         .setPower(70)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move falseSwipe() {
@@ -604,7 +604,7 @@ public interface MoveList {
         .setPP(40)
         .setPower(40)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move fireBlast() {
@@ -622,7 +622,7 @@ public interface MoveList {
         .setPower(110)
         .setAccuracy(85)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move fireFang() {
@@ -641,7 +641,7 @@ public interface MoveList {
         .setPower(65)
         .setAccuracy(95)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move firePledge() {
@@ -653,7 +653,7 @@ public interface MoveList {
         .setPP(10)
         .setPower(80)
         .setAction(MoveAction.DEFAULT_ACTION)
-        .buildMove();
+        .build();
     }
 
     public static Move firePunch() {
@@ -670,7 +670,7 @@ public interface MoveList {
         .setPP(15)
         .setPower(75)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move flameCharge() {
@@ -687,7 +687,7 @@ public interface MoveList {
         .setPP(20)
         .setPower(50)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move flamethrower() {
@@ -704,7 +704,7 @@ public interface MoveList {
         .setPP(15)
         .setPower(90)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move flareBlitz() {
@@ -721,7 +721,7 @@ public interface MoveList {
         .setPP(15)
         .setPower(120)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move flashCannon() {
@@ -738,7 +738,7 @@ public interface MoveList {
         .setPP(10)
         .setPower(80)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move flipTurn() {
@@ -755,7 +755,7 @@ public interface MoveList {
         .setPP(20)
         .setPower(60)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move fly() {
@@ -768,7 +768,7 @@ public interface MoveList {
         .setPower(90)
         .setAccuracy(95)
         .setAction(e -> MoveAction.enterImmuneState(e, StatusCondition.FLY, e.user() + " flew high into the sky!"))
-        .buildMove();
+        .build();
     }
 
     public static Move focusBlast() {
@@ -786,7 +786,7 @@ public interface MoveList {
         .setPower(120)
         .setAccuracy(70)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move focusPunch() {
@@ -799,7 +799,7 @@ public interface MoveList {
         .setPower(150)
         .setPriority(-3)
         .setAction(e -> MoveAction.focusMove(e))
-        .buildMove();
+        .build();
     }
 
     public static Move frenzyPlant() {
@@ -817,7 +817,7 @@ public interface MoveList {
         .setPower(150)
         .setAccuracy(90)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move furyAttack() {
@@ -830,7 +830,7 @@ public interface MoveList {
         .setPower(15)
         .setAccuracy(85)
         .setAction(e -> MoveAction.multiHit(e))
-        .buildMove();
+        .build();
     }
 
     
@@ -846,7 +846,7 @@ public interface MoveList {
         .setPP(10)
         .setPower(75)
         .setAction(e -> MoveAction.dealDamageDrain(e, 50))
-        .buildMove();
+        .build();
     }
 
     public static Move gigaImpact() {
@@ -864,7 +864,7 @@ public interface MoveList {
         .setPower(150)
         .setAccuracy(90)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move grassKnot() {
@@ -895,7 +895,7 @@ public interface MoveList {
         .setPower(120) // Varies
         .setContact(true)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move growl() {
@@ -911,7 +911,7 @@ public interface MoveList {
         .setCategory(Move.STATUS)
         .setPP(40)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move growth() {
@@ -931,7 +931,7 @@ public interface MoveList {
         .setCategory(Move.STATUS)
         .setPP(20)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move gyroBall() {
@@ -948,7 +948,7 @@ public interface MoveList {
         .setPP(5)
         .setPower(-1) // Varies
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
 // HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
@@ -961,7 +961,7 @@ public interface MoveList {
         .setCategory(Move.STATUS)
         .setPP(10)
         .setAction(e -> MoveAction.changeWeather(e, Weather.HAIL))
-        .buildMove();
+        .build();
     }
 
     public static Move haze() {
@@ -977,7 +977,7 @@ public interface MoveList {
         .setCategory(Move.STATUS)
         .setPP(30)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move heatCrash() {
@@ -1010,7 +1010,7 @@ public interface MoveList {
         .setPP(10)
         .setPower(120) // Varies
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move heatWave() {
@@ -1028,7 +1028,7 @@ public interface MoveList {
         .setPower(95)
         .setAccuracy(90)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move hurricane() {
@@ -1051,7 +1051,7 @@ public interface MoveList {
         .setPower(110)
         .setAccuracy(70)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move hydroCannon() {
@@ -1069,7 +1069,7 @@ public interface MoveList {
         .setPower(150)
         .setAccuracy(90)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move hydroPump() {
@@ -1082,7 +1082,7 @@ public interface MoveList {
         .setPower(110)
         .setAccuracy(80)
         .setAction(MoveAction.DEFAULT_ACTION)
-        .buildMove();
+        .build();
     }
 
     public static Move hyperBeam() {
@@ -1100,7 +1100,7 @@ public interface MoveList {
         .setPower(150)
         .setAccuracy(90)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
 // IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
@@ -1119,7 +1119,7 @@ public interface MoveList {
         .setPP(10)
         .setPower(90)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move icePunch() {
@@ -1136,7 +1136,7 @@ public interface MoveList {
         .setPP(15)
         .setPower(75)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move iceSpinner() {
@@ -1152,7 +1152,7 @@ public interface MoveList {
         .setCategory(Move.PHYSICAL)
         .setPP(15)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
 
@@ -1171,7 +1171,7 @@ public interface MoveList {
         .setPower(55)
         .setAccuracy(95)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
 
@@ -1190,7 +1190,7 @@ public interface MoveList {
         .setPower(100)
         .setAccuracy(50)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move ironDefense() {
@@ -1201,7 +1201,7 @@ public interface MoveList {
         .setCategory(Move.STATUS)
         .setPP(15)
         .setAction(e -> MoveAction.changeStats(e, stats(0, 2, 0, 0, 0, 0, 0, 0)))
-        .buildMove();
+        .build();
     }
 
 // JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ
@@ -1224,7 +1224,7 @@ public interface MoveList {
         .setPower(130)
         .setAccuracy(90)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move leechSeed() {
@@ -1241,7 +1241,7 @@ public interface MoveList {
         .setPP(10)
         .setAccuracy(90)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move liquidation() {
@@ -1258,7 +1258,7 @@ public interface MoveList {
         .setPP(10)
         .setPower(85)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
 
@@ -1274,7 +1274,7 @@ public interface MoveList {
         .setPower(60)
         .setAccuracy(Move.ALWAYS_HITS)
         .setAction(MoveAction.DEFAULT_ACTION)
-        .buildMove();
+        .build();
     }
 
     public static Move muddyWater() {
@@ -1292,7 +1292,7 @@ public interface MoveList {
         .setPower(90)
         .setAccuracy(85)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move mudShot() {
@@ -1310,7 +1310,7 @@ public interface MoveList {
         .setPower(55)
         .setAccuracy(95)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
 
@@ -1328,7 +1328,7 @@ public interface MoveList {
         .setPP(10)
         .setPower(120)
         .setAction(e -> MoveAction.rampageMove(e))
-        .buildMove();
+        .build();
     }
 
     public static Move overheat() {
@@ -1346,7 +1346,7 @@ public interface MoveList {
         .setPower(130)
         .setAccuracy(90)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
 // PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
@@ -1361,7 +1361,7 @@ public interface MoveList {
         .setPower(90)
         .setContact(false)
         .setAction(MoveAction.DEFAULT_ACTION)
-        .buildMove();
+        .build();
     }
 
     public static Move petalDance() {
@@ -1374,7 +1374,7 @@ public interface MoveList {
         .setPower(120)
         .setContact(true)
         .setAction(e -> MoveAction.rampageMove(e))
-        .buildMove();
+        .build();
     }
 
     public static Move poisonJab() {
@@ -1391,7 +1391,7 @@ public interface MoveList {
         .setPP(20)
         .setPower(80)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move poisonPowder() {
@@ -1408,7 +1408,7 @@ public interface MoveList {
         .setPP(35)
         .setAccuracy(100)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move powerWhip() {
@@ -1421,7 +1421,7 @@ public interface MoveList {
         .setPower(120)
         .setAccuracy(85)
         .setAction(MoveAction.DEFAULT_ACTION)
-        .buildMove();
+        .build();
     }
 
     public static Move protect() {
@@ -1433,7 +1433,7 @@ public interface MoveList {
         .setPP(10)
         .setPriority(4)
         .setAction(e -> MoveAction.pokemonProtects(e, e.user().conditions().protect(), e.user() + " protected itself!"))
-        .buildMove();
+        .build();
     }
 
 // QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ
@@ -1448,7 +1448,7 @@ public interface MoveList {
         .setCategory(Move.STATUS)
         .setPP(5)
         .setAction(e -> MoveAction.changeWeather(e, Weather.RAIN))
-        .buildMove();
+        .build();
     }
 
     public static Move rapidSpin() {
@@ -1466,7 +1466,7 @@ public interface MoveList {
         .setPP(40)
         .setPower(50)
         .setAction(action)
-        .buildMove();
+        .build();
     }
     
     public static Move razorLeaf() {
@@ -1481,7 +1481,7 @@ public interface MoveList {
         .setCritRatio(Move.HIGH_CRIT)
         .setContact(false)
         .setAction(MoveAction.DEFAULT_ACTION)
-        .buildMove();
+        .build();
     }
 
     public static Move rest() {
@@ -1497,7 +1497,7 @@ public interface MoveList {
         .setCategory(Move.STATUS)
         .setPP(5)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move roar() {
@@ -1513,7 +1513,7 @@ public interface MoveList {
         .setPP(20)
         .setPriority(-6)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move rockSlide() {
@@ -1532,7 +1532,7 @@ public interface MoveList {
         .setAccuracy(90)
         .setContact(false)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move rockTomb() {
@@ -1551,7 +1551,7 @@ public interface MoveList {
         .setAccuracy(95)
         .setContact(false)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
 // SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
@@ -1564,7 +1564,7 @@ public interface MoveList {
         .setCategory(Move.STATUS)
         .setPP(10)
         .setAction(e -> MoveAction.changeWeather(e, Weather.SANDSTORM))
-        .buildMove();
+        .build();
     }
 
     public static Move scaryFace() {
@@ -1580,7 +1580,7 @@ public interface MoveList {
         .setCategory(Move.STATUS)
         .setPP(10)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move scratch() {
@@ -1592,7 +1592,7 @@ public interface MoveList {
         .setPP(35)
         .setPower(40)
         .setAction(MoveAction.DEFAULT_ACTION)
-        .buildMove();
+        .build();
     }
 
     public static Move scorchingSands() {
@@ -1610,7 +1610,7 @@ public interface MoveList {
         .setPP(10)
         .setPower(70)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move seedBomb() {
@@ -1623,7 +1623,7 @@ public interface MoveList {
         .setPower(80)
         .setContact(false)
         .setAction(MoveAction.DEFAULT_ACTION)
-        .buildMove();
+        .build();
     }
 
     public static Move shadowClaw() {
@@ -1636,7 +1636,7 @@ public interface MoveList {
         .setPower(70)
         .setCritRatio(Move.HIGH_CRIT)
         .setAction(MoveAction.DEFAULT_ACTION)
-        .buildMove();
+        .build();
     }
 
     public static Move shellSmash() {
@@ -1647,7 +1647,7 @@ public interface MoveList {
         .setCategory(Move.STATUS)
         .setPP(15)
         .setAction(e -> MoveAction.changeStats(e, stats(1, -1, 1, -1, 1, 0, 0, 0)))
-        .buildMove();
+        .build();
     }
 
     public static Move slash() {
@@ -1660,7 +1660,7 @@ public interface MoveList {
         .setPower(70)
         .setCritRatio(Move.HIGH_CRIT)
         .setAction(MoveAction.DEFAULT_ACTION)
-        .buildMove();
+        .build();
     }
 
     public static Move sleepPowder() {
@@ -1677,7 +1677,7 @@ public interface MoveList {
         .setPP(15)
         .setAccuracy(75)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move sleepTalk() {
@@ -1708,7 +1708,7 @@ public interface MoveList {
         .setCategory(Move.STATUS)
         .setPP(10)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move smackDown() {
@@ -1727,7 +1727,7 @@ public interface MoveList {
         .setPower(50)
         .setContact(false)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move smokescreen() {
@@ -1743,7 +1743,7 @@ public interface MoveList {
         .setCategory(Move.STATUS)
         .setPP(20)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move solarBeam() {
@@ -1760,7 +1760,7 @@ public interface MoveList {
         .setPower(120)
         .setPP(10)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move stompingTantrum() {
@@ -1777,7 +1777,7 @@ public interface MoveList {
         .setPP(10)
         .setPower(75)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move stunSpore() {
@@ -1794,7 +1794,7 @@ public interface MoveList {
         .setPP(30)
         .setAccuracy(75)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move sunnyDay() {  
@@ -1805,7 +1805,7 @@ public interface MoveList {
         .setCategory(Move.STATUS)
         .setPP(5)
         .setAction(e -> MoveAction.changeWeather(e, Weather.SUNNY))
-        .buildMove();
+        .build();
     }
 
     public static Move surf() {
@@ -1817,7 +1817,7 @@ public interface MoveList {
         .setPP(15)
         .setPower(90)
         .setAction(MoveAction.DEFAULT_ACTION)
-        .buildMove();
+        .build();
     }
 
     public static Move sweetScent() {
@@ -1833,7 +1833,7 @@ public interface MoveList {
         .setCategory(Move.STATUS)
         .setPP(20)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move swift() {
@@ -1846,7 +1846,7 @@ public interface MoveList {
         .setPower(60)
         .setAccuracy(Move.ALWAYS_HITS)
         .setAction(MoveAction.DEFAULT_ACTION)
-        .buildMove();
+        .build();
     }
 
     public static Move swordsDance() {
@@ -1857,7 +1857,7 @@ public interface MoveList {
         .setCategory(Move.STATUS)
         .setPP(20)
         .setAction(e -> MoveAction.changeStats(e, stats(2, 0, 0, 0, 0, 0, 0, 0)))
-        .buildMove();
+        .build();
     }
 
     public static Move synthesis() {
@@ -1876,7 +1876,7 @@ public interface MoveList {
         .setCategory(Move.STATUS)
         .setPP(5)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
 // TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
@@ -1889,7 +1889,7 @@ public interface MoveList {
         .setPower(40)
         .setPP(35)
         .setAction(MoveAction.DEFAULT_ACTION)
-        .buildMove();
+        .build();
     }
 
     public static Move tailWhip() {
@@ -1905,7 +1905,7 @@ public interface MoveList {
         .setCategory(Move.STATUS)
         .setPP(30)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move takeDown() {    
@@ -1918,7 +1918,7 @@ public interface MoveList {
         .setPower(90)
         .setAccuracy(85)
         .setAction(e -> MoveAction.dealDamageRecoil(e, 25))
-        .buildMove();
+        .build();
     }
 
     public static Move temperFlare() {
@@ -1935,7 +1935,7 @@ public interface MoveList {
         .setPP(10)
         .setPower(75)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move thunderPunch() {
@@ -1952,7 +1952,7 @@ public interface MoveList {
         .setPP(15)
         .setPower(75)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move toxic() {
@@ -1969,7 +1969,7 @@ public interface MoveList {
         .setPP(10)
         .setAccuracy(90)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move trailblaze() {
@@ -1986,7 +1986,7 @@ public interface MoveList {
         .setPP(20)
         .setPower(50)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
 // UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU
@@ -2007,7 +2007,7 @@ public interface MoveList {
         .setPP(10)
         .setPower(65)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move vineWhip() {
@@ -2019,7 +2019,7 @@ public interface MoveList {
         .setPower(40)
         .setPP(25)
         .setAction(MoveAction.DEFAULT_ACTION)
-        .buildMove();
+        .build();
     }
 
 // WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
@@ -2033,7 +2033,7 @@ public interface MoveList {
         .setPower(40)
         .setPP(25)
         .setAction(MoveAction.DEFAULT_ACTION)
-        .buildMove();
+        .build();
     }
 
     public static Move waterPledge() {
@@ -2045,7 +2045,7 @@ public interface MoveList {
         .setPP(10)
         .setPower(80)
         .setAction(MoveAction.DEFAULT_ACTION)
-        .buildMove();
+        .build();
     }
 
     public static Move waterPulse() {
@@ -2062,7 +2062,7 @@ public interface MoveList {
         .setPP(20)
         .setPower(60)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move waveCrash() {
@@ -2074,7 +2074,7 @@ public interface MoveList {
         .setPP(10)
         .setPower(120)
         .setAction(e -> MoveAction.dealDamageRecoil(e, 33))
-        .buildMove();
+        .build();
     }
 
     public static Move whirlpool() {
@@ -2093,7 +2093,7 @@ public interface MoveList {
         .setPower(35)
         .setAccuracy(85)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move willOWisp() {
@@ -2110,7 +2110,7 @@ public interface MoveList {
         .setPP(15)
         .setAccuracy(85)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
     public static Move withdraw() {
@@ -2121,7 +2121,7 @@ public interface MoveList {
         .setCategory(Move.STATUS)
         .setPP(40)
         .setAction(e -> MoveAction.changeStats(e, stats(0, 1, 0, 0, 0, 0, 0, 0)))
-        .buildMove();
+        .build();
     }
 
 
@@ -2144,7 +2144,7 @@ public interface MoveList {
         .setPower(80)
         .setAccuracy(90)
         .setAction(action)
-        .buildMove();
+        .build();
     }
 
 
@@ -2159,7 +2159,7 @@ public interface MoveList {
         .setPP(-1)
         .setPower(40)
         .setAction(e -> MoveAction.dealDamageRecoil(e, 25))
-        .buildMove();
+        .build();
     }
 
 }

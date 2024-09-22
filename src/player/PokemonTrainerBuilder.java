@@ -2,24 +2,25 @@ package player;
 
 import java.util.ArrayList;
 import pokemon.Pokemon;
+import utility.Builder;
 
 // // Class designed to create PokemonTrainer objects efficiently
-public class PokemonTrainerBuilder {
+public class PokemonTrainerBuilder implements Builder {
     private static final int MAX_PARTY_CAPACITY = 6; // Trainers can have up to six Pokemon
 
     // Must Set
     private String name = null;
     private final ArrayList<Pokemon> party = new ArrayList<>();
 
-    /**
-     * Converts into a PokemonTrainer
-     * @throws IllegalStateException if required variables are not set
-     * @return a new PokemonTrainer object
-     */
-    public PokemonTrainer buildTrainer() {
+    @Override
+    public void validBuild() {
         if (this.name == null) throw new IllegalStateException("Trainer does not have a name");
         if (this.party.isEmpty()) throw new IllegalStateException(String.format("%s needs at least one pokemon in their party", this.name));
+    }
 
+    @Override
+    public PokemonTrainer build() {
+        validBuild();
         return new PokemonTrainer(this.name, this.party.toArray(Pokemon[]::new));
     }
 
@@ -36,4 +37,5 @@ public class PokemonTrainerBuilder {
         this.party.add(p);
         return this;
     }
+
 }

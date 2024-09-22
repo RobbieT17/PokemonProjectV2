@@ -22,7 +22,7 @@ public interface PokemonList {
         .addMove(MoveList.solarBeam())
         .addMove(MoveList.waveCrash())
         .addMove(MoveList.sleepPowder())
-        .buildPokemon();
+        .build();
     }
 
     public static Pokemon charizard(String name) {
@@ -37,7 +37,7 @@ public interface PokemonList {
         .addMove(MoveList.dragonClaw())
         .addMove(MoveList.focusPunch())
         .addMove(MoveList.sandstorm())
-        .buildPokemon();
+        .build();
     }    
 
 
@@ -53,7 +53,7 @@ public interface PokemonList {
         .addMove(MoveList.dive())
         .addMove(MoveList.swift())
         .addMove(MoveList.smackDown())
-        .buildPokemon();
+        .build();
     }
 
    

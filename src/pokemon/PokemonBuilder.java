@@ -3,9 +3,10 @@ package pokemon;
 import java.util.ArrayList;
 import move.Move;
 import stats.Stat;
+import utility.Builder;
 
 // Class designed to create Pokemon objects efficiently
-public class PokemonBuilder { 
+public class PokemonBuilder implements Builder{ 
 
     private final static int MIN_MOVE_ALLOWED = 2; // Pokemon must have at least two moves
     private final static int MAX_MOVES_ALLOWED = 4; // Pokemon can have up to four moves
@@ -37,6 +38,9 @@ public class PokemonBuilder {
     // Moves
     private final ArrayList<Move> moves = new ArrayList<>();
 
+    // Ability
+    private String ability = null;
+
     // Methods
     private int calculateHp(int baseHp) {
 		return (((2 * baseHp) * this.level) / 100) + this.level + 10;
@@ -53,12 +57,8 @@ public class PokemonBuilder {
         return false;
     }
 
-    /**
-     * Converts into a Pokemon
-     * @throws IllegalStateException If required variables are not set
-     * @return a new Pokemon object
-     */
-    public Pokemon buildPokemon() {
+    @Override
+    public void validBuild() {
         if (this.name == null) throw new IllegalStateException("Pokemon does not have name");
         if (this.types == null) throw new IllegalStateException("Types have not been initialized");
         if (this.pokedex == 0) throw new IllegalStateException("Pokedex ID number has not be initialized");
@@ -66,6 +66,17 @@ public class PokemonBuilder {
         if (this.atk == null) throw new IllegalStateException("Stats not initialized");
         if (this.weight == 0.0) throw new IllegalStateException("Weight not initialized");
         if (this.moves.size() < MIN_MOVE_ALLOWED) throw new IllegalStateException("Move not initialized or not enough moves implemented");
+        if (this.ability == null) throw new IllegalStateException("Ability not initialized");
+    }
+
+    /**
+     * Converts into a Pokemon
+     * @throws IllegalStateException If required variables are not set
+     * @return a new Pokemon object
+     */
+    @Override
+    public Pokemon build() {
+        validBuild();
 
         this.acc = new Stat(Stat.ACCURACY_NAME, Stat.ACCURACY, 100);
         this.eva = new Stat(Stat.EVASION_NAME, Stat.EVASION, 100);
@@ -79,7 +90,8 @@ public class PokemonBuilder {
             this.hp, 
             new Stat[] {this.atk, this.def, this.spAtk, this.spDef, this.spd, this.acc, this.eva},
             this.moves.toArray(Move[]::new),
-            new PokemonConditions()
+            new PokemonConditions(),
+            this.ability
             );
     }
 
@@ -98,7 +110,7 @@ public class PokemonBuilder {
     public PokemonBuilder setTypes(String t) {
         this.types = new PokemonTypeBuilder()
         .setPrimaryType(t)
-        .buildPokemonType();
+        .build();
         return this;
     }
 
@@ -106,7 +118,7 @@ public class PokemonBuilder {
         this.types = new PokemonTypeBuilder()
         .setPrimaryType(t1)
         .setSecondaryType(t2)
-        .buildPokemonType();
+        .build();
         return this;
     }
 
@@ -136,7 +148,7 @@ public class PokemonBuilder {
 
     // Adds move to moveset, cannot have more than four moves or duplicates moves
     public PokemonBuilder addMove(Move m) {
-        if (this.moves.size() == MAX_MOVES_ALLOWED) throw new IllegalStateException("Cannot have more than four moves");
+        if (this.moves.size() == PokemonBuilder.MAX_MOVES_ALLOWED) throw new IllegalStateException("Cannot have more than four moves");
         if (this.duplicateMove(m)) throw new IllegalArgumentException(String.format("Duplicate move: %s", m));
 
         this.moves.add(m);
