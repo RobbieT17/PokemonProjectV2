@@ -2,6 +2,7 @@ package pokemon;
 
 import java.util.ArrayList;
 import move.Move;
+import stats.Ability;
 import stats.Stat;
 import utility.Builder;
 
@@ -38,9 +39,6 @@ public class PokemonBuilder implements Builder{
     // Moves
     private final ArrayList<Move> moves = new ArrayList<>();
 
-    // Ability
-    private String ability = null;
-
     // Methods
     private int calculateHp(int baseHp) {
 		return (((2 * baseHp) * this.level) / 100) + this.level + 10;
@@ -66,7 +64,6 @@ public class PokemonBuilder implements Builder{
         if (this.atk == null) throw new IllegalStateException("Stats not initialized");
         if (this.weight == 0.0) throw new IllegalStateException("Weight not initialized");
         if (this.moves.size() < MIN_MOVE_ALLOWED) throw new IllegalStateException("Move not initialized or not enough moves implemented");
-        if (this.ability == null) throw new IllegalStateException("Ability not initialized");
     }
 
     /**
@@ -90,8 +87,7 @@ public class PokemonBuilder implements Builder{
             this.hp, 
             new Stat[] {this.atk, this.def, this.spAtk, this.spDef, this.spd, this.acc, this.eva},
             this.moves.toArray(Move[]::new),
-            new PokemonConditions(),
-            this.ability
+            new PokemonConditions()
             );
     }
 

@@ -64,8 +64,7 @@ public class Pokemon {
         HealthPoints hp,
         Stat[] stats, 
         Move[] moves,
-        PokemonConditions conditions,
-        String ability
+        PokemonConditions conditions
     ) {
         this.level = level;
         this.pokemonName = name;
@@ -78,7 +77,6 @@ public class Pokemon {
 
         this.moves = moves;
         this.conditions = conditions;
-        this.ability = ability;
     }
 
 // Methods
@@ -378,6 +376,7 @@ public class Pokemon {
         this.lastMove = null;     
     }
 
+    public void setAbility(String a) {this.ability = a;}
     public void setOwner(PokemonTrainer pt) {this.owner = pt;}
 
 // Getters

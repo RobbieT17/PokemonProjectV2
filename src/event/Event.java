@@ -24,6 +24,11 @@ public class Event implements Subscriber {
     }
 
     @Override
+    public void update() {
+        for (Observer listener : this.eventListeners) listener.act(null);
+    }
+
+    @Override
     public void update(EventData e) {
         for (Observer listener : this.eventListeners) listener.act(e);
     }

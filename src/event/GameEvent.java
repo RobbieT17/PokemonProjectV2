@@ -10,4 +10,5 @@ public class GameEvent {
     public static final Event onDamageMultiplier = new Event(6);
     public static final Event onMoveEffectiveness = new Event(7);
     public static final Event onMoveOrder = new Event(8);
+    public static final Event onWeatherEffect = new Event(9);
 }

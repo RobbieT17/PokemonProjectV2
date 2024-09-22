@@ -12,7 +12,9 @@ public interface Ability extends Observer {
 
     public static final String BLAZE_ID = "Blaze";
     public static final String CHLOROPHYLL_ID = "Chlorophyll";
-    public static final String OVERGROW_ID = "Overgrow"; 
+    public static final String OVERGROW_ID = "Overgrow";
+    public static final String RAIN_DISH_ID = "Rain Dish"; 
+    public static final String SOLAR_POWER_ID = "Solar Power";
     public static final String TORRENT_ID = "Torrent";
     public static final String WATER_ABSORB_ID = "Water Absorb";
 
@@ -61,8 +63,43 @@ public interface Ability extends Observer {
                 BattleLog.add("%s's Overgrow increased the power of its Grass-Type attack!", p);
             }         
         });
-
         return Ability.OVERGROW_ID;
+    }
+
+    // Recovers 1/16 of its maximum HP during rain, after each turn.
+    public static String rainDish(Pokemon p) {
+        GameEvent.onWeatherEffect.addListener(e -> {
+            if (BattleField.currentWeather == Weather.RAIN) {
+                int heal = (int) (p.hp().max() / 16.0);
+                p.healDamage(heal);
+                BattleLog.add("%s restore %d HP from its Rain Dish!", p, heal);
+            }
+        });
+        return Ability.SOLAR_POWER_ID;
+    }
+
+    /*
+     * During harsh sunlight, raises Special Attack by 50%, 
+     * but it also loses 1/8 of its maximum HP after each turn.
+     */
+    public static String solarPower(Pokemon p) {
+        GameEvent.onDamageMultiplier.addListener(e -> {
+            if (!isUser(p, e)) return;
+
+            Move m = e.moveUsed();
+            if (m.category().equals(Move.SPECIAL)) {
+                m.changePowerByPercent(50);
+            }
+        });
+
+        GameEvent.onWeatherEffect.addListener(e -> {
+            if (BattleField.currentWeather == Weather.SUNNY) {
+                int damage = (int) (p.hp().max() / 8.0);
+                p.takeDamage(damage);
+                BattleLog.add("%s's Solar Power caused the sun to drain %d HP from it!", p, damage);
+            }
+        });
+        return Ability.SOLAR_POWER_ID;
     }
 
     // Increases Water-Type attacks by 50% while under 1/3 Max HP

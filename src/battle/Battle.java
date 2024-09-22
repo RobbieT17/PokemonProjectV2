@@ -1,6 +1,7 @@
 package battle;
 
 import event.EventData;
+import event.GameEvent;
 import exceptions.BattleEndedException;
 import java.util.InputMismatchException;
 import java.util.Random;
@@ -10,9 +11,7 @@ import move.MoveList;
 import player.*;
 import pokemon.Pokemon;
 import pokemon.PokemonList;
-import stats.Ability.*;
-import stats.Ability.BlazeAbility;
-import stats.Ability.WaterAbsorb;
+import stats.Ability;
 import stats.StatusCondition;
 import utility.Input;
 
@@ -127,6 +126,7 @@ public class Battle {
 
     // Finds the order which the Pokemon in battle will move
     public static Pokemon[] turnOrder(Pokemon p1, Pokemon p2) {
+        GameEvent.onMoveOrder.update();
         Pokemon[] order = new Pokemon[2];
 
         Move m1 = p1.moveSelected();
@@ -224,18 +224,36 @@ public class Battle {
 
     public static void main(String[] args) {
 
+        Pokemon p1 = PokemonList.venusaur("Bobby");
+        p1.setAbility(Ability.chlorophyll(p1));
+
+        Pokemon p2 = PokemonList.charizard("Charlie");
+        p2.setAbility(Ability.blaze(p2));
+
+        Pokemon p3 = PokemonList.blastoise("Squirt");
+        p3.setAbility(Ability.torrent(p3));
+
+        Pokemon p4 = PokemonList.venusaur("Bub");
+        p4.setAbility(Ability.waterAbsorb(p4));
+
+        Pokemon p5 = PokemonList.charizard("Chandler");
+        p5.setAbility(Ability.solarPower(p5));
+
+        Pokemon p6 = PokemonList.blastoise("Tim");
+        p6.setAbility(Ability.rainDish(p6));
+
         PokemonTrainer player1 = new PokemonTrainerBuilder()
         .setName("Robbie")
-        .addPokemon(PokemonList.venusaur("Bobby"))
-        .addPokemon(PokemonList.charizard("Charlie"))
-        .addPokemon(PokemonList.blastoise("Squirt"))
+        .addPokemon(p1)
+        .addPokemon(p2)
+        .addPokemon(p3)
         .build();
 
         PokemonTrainer player2 = new PokemonTrainerBuilder()
         .setName("Sammi")
-        .addPokemon(PokemonList.venusaur("Bub"))
-        .addPokemon(PokemonList.charizard("Chandler"))
-        .addPokemon(PokemonList.blastoise("Tim"))
+        .addPokemon(p4)
+        .addPokemon(p5)
+        .addPokemon(p6)
         .build();
 
         choosePokemon(player1);
