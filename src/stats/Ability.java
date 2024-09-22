@@ -1,8 +1,6 @@
 package stats;
 
-import battle.BattleField;
-import battle.BattleLog;
-import battle.Weather;
+import battle.*;
 import event.EventData;
 import event.GameEvent;
 import event.Observer;
@@ -10,168 +8,87 @@ import exceptions.MoveInterruptedException;
 import move.Move;
 import pokemon.Pokemon;
 
-public abstract class Ability implements Observer {
-    // Abilities List
-    public static final int BLAZE_ID = 0;
-    public static final int CHLOROPHYLL_ID = 1;
-    public static final int OVERGROW_ID = 2; 
-    public static final int TORRENT_ID = 3;
-    public static final int WATER_ABSORB_ID = 4;
+public interface Ability extends Observer {
 
-    
-    // Variables
-    protected  final Pokemon owner;
+    public static final String BLAZE_ID = "Blaze";
+    public static final String CHLOROPHYLL_ID = "Chlorophyll";
+    public static final String OVERGROW_ID = "Overgrow"; 
+    public static final String TORRENT_ID = "Torrent";
+    public static final String WATER_ABSORB_ID = "Water Absorb";
 
-    // Constructor
-    public Ability(Pokemon p) {
-        this.owner = p;
+    private static boolean isUser(Pokemon p, EventData e) {
+        return p == e.user();
     }
 
-    // Abstract Methods
-    public abstract String abilityName();
-    public abstract int abilityId();
+    private static boolean isTarget(Pokemon p, EventData e) {
+        return p == e.target();
+    }
 
-    // Getters
-    public Pokemon owner() {return this.owner;}
-  
-    public static class BlazeAbility extends Ability {
-        public BlazeAbility(Pokemon p) {
-            super(p);
-            GameEvent.onDamageMultiplier.addListener(this);
-        }
-
-        @Override
-        public void act(EventData e) {
-            if (this.owner != e.user()) return;
+    // Increases Fire-Type attacks by 50% while under 1/3 Max HP
+    public static String blaze(Pokemon p) {
+        GameEvent.onDamageMultiplier.addListener(e -> {
+            if (!isUser(p, e)) return;
 
             Move move = e.moveUsed();
-            if (move.isType(Type.FIRE) && this.owner.hpLessThanPercent(33)) 
+            if (move.isType(Type.FIRE) && p.hpLessThanPercent(33)) {
                 move.changePowerByPercent(50);
-        }
+                BattleLog.add("%s's Blaze increased the power of its Fire-Type attack!", p);
+            } 
+        });
 
-        @Override
-        public String abilityName() {
-            return "Blaze";
-        }
-
-        @Override
-        public int abilityId() {
-            return Ability.BLAZE_ID;
-        }
+        return Ability.BLAZE_ID;
     }
 
-
-    public static class ChlorophyllAbility extends Ability {
-
-        public ChlorophyllAbility(Pokemon p) {
-            super(p);
-        }
-
-        @Override
-        public void act(EventData e) {
-
-            if (BattleField.currentWeather == Weather.SUNNY)
-                owner.modifySpeedByPercent(200);
-        }
-
-        @Override
-        public String abilityName() {
-            return "Chlorophyll";
-        }
-
-        @Override
-        public int abilityId() {
-            return Ability.CHLOROPHYLL_ID;
-        }
-        
-    }
-
-    public static class OvergrowAbility extends Ability {
-        public OvergrowAbility(Pokemon p) {
-            super(p);
-            GameEvent.onDamageMultiplier.addListener(this);
-        }
-
-        @Override
-        public void act(EventData e) {
-            if (this.owner != e.user()) return;
-            Move move = e.moveUsed();
-
-            if (move.isType(Type.GRASS) && this.owner.hpLessThanPercent(95)) {
-                move.changePowerByPercent(50);
-                BattleLog.add("%s's Overgrow increased their attack power!", this.owner);
+    // Doubles speed in the sun
+    public static String chlorophyll(Pokemon p) {
+        GameEvent.onMoveOrder.addListener(e -> {
+            if (BattleField.currentWeather == Weather.SUNNY) {
+                p.modifySpeedByPercent(200);
             }
-                
-        }
+        });
 
-        @Override
-        public String abilityName() {
-            return "Overgrow";
-        }
-
-        @Override
-        public int abilityId() {
-            return Ability.OVERGROW_ID;
-        }
-        
+        return Ability.CHLOROPHYLL_ID;
     }
 
-    public static class TorrentAbility extends Ability {
-        public TorrentAbility(Pokemon p) {
-            super(p);
-            GameEvent.onDamageMultiplier.addListener(this);
-        }
-
-        @Override
-        public void act(EventData e) {
-            if (this.owner != e.user()) return;
+    // Increases Grass-Type attacks by 50% while under 1/3 Max HP
+    public static String overgrow(Pokemon p) {
+        GameEvent.onDamageMultiplier.addListener(e -> {
+            if (!isUser(p, e)) return;
 
             Move move = e.moveUsed();
-
-            if (move.isType(Type.WATER) && this.owner.hpLessThanPercent(33)) 
+            if (move.isType(Type.GRASS) && p.hpLessThanPercent(33)) {
                 move.changePowerByPercent(50);
-        }
+                BattleLog.add("%s's Overgrow increased the power of its Grass-Type attack!", p);
+            }         
+        });
 
-        @Override
-        public String abilityName() {
-            return "Torrent";
-        }
-
-        @Override
-        public int abilityId() {
-            return Ability.TORRENT_ID;
-        }
-        
+        return Ability.OVERGROW_ID;
     }
 
-    public static class WaterAbsorb extends Ability {
-        public WaterAbsorb(Pokemon p) {
-            super(p);
-            GameEvent.onMoveEffectiveness.addListener(this);
-        }
-
-        @Override
-        public void act(EventData e) {
-            if (this.owner != e.target()) return;
+    // Increases Water-Type attacks by 50% while under 1/3 Max HP
+    public static String torrent(Pokemon p) {
+        GameEvent.onDamageMultiplier.addListener(e -> {
+            if (!isUser(p, e)) return;
 
             Move move = e.moveUsed();
-            if (move.isType(Type.WATER)) 
-                throw new MoveInterruptedException("But %s's Water Absorb soaked up the water!", this.owner);
-            
-        }
+            if (move.isType(Type.WATER) && p.hpLessThanPercent(33)) {
+                move.changePowerByPercent(50);
+                BattleLog.add("%s's Overgrow increased the power of its Water-Type attack!", p);
+            }        
+        });
 
-        @Override
-        public String abilityName() {
-            return "Water Absorb";
-        }
-
-        @Override
-        public int abilityId() {
-            return Ability.WATER_ABSORB_ID;
-        }
+        return Ability.TORRENT_ID;
     }
 
-    
+    public static String waterAbsorb(Pokemon p) {
+        GameEvent.onMoveEffectiveness.addListener(e -> {
+            if (!isTarget(p, e)) return;
 
-    
+            if (e.moveUsed().isType(Type.WATER)) {
+                throw new MoveInterruptedException("%s's Water Absorb soaked up the water!", p);
+            }
+        });
+
+        return Ability.WATER_ABSORB_ID;
+    }
 }

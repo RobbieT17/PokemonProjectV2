@@ -224,24 +224,19 @@ public class Battle {
 
     public static void main(String[] args) {
 
-        Pokemon p1 = PokemonList.venusaur("Bobby");
-        p1.setAbility(new WaterAbsorb(p1));
-        Pokemon p2 = PokemonList.charizard("Chandler");
-        p2.setAbility(new BlazeAbility(p2));
-
         PokemonTrainer player1 = new PokemonTrainerBuilder()
         .setName("Robbie")
-        .addPokemon(p1)
+        .addPokemon(PokemonList.venusaur("Bobby"))
         .addPokemon(PokemonList.charizard("Charlie"))
         .addPokemon(PokemonList.blastoise("Squirt"))
-        .buildTrainer();
+        .build();
 
         PokemonTrainer player2 = new PokemonTrainerBuilder()
         .setName("Sammi")
         .addPokemon(PokemonList.venusaur("Bub"))
-        .addPokemon(p2)
+        .addPokemon(PokemonList.charizard("Chandler"))
         .addPokemon(PokemonList.blastoise("Tim"))
-        .buildTrainer();
+        .build();
 
         choosePokemon(player1);
         choosePokemon(player2);

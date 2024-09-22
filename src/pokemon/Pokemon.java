@@ -8,7 +8,6 @@ import event.EventData;
 import exceptions.*;
 import move.Move;
 import player.PokemonTrainer;
-import stats.Ability;
 import stats.Stat;
 import stats.StatusCondition;
 import stats.Type;
@@ -43,7 +42,7 @@ public class Pokemon {
     private final PokemonConditions conditions; 
 
     // Ability
-    private Ability ability;
+    private String ability;
 
     // Owner of the Pokemon
     private PokemonTrainer owner;
@@ -65,7 +64,8 @@ public class Pokemon {
         HealthPoints hp,
         Stat[] stats, 
         Move[] moves,
-        PokemonConditions conditions
+        PokemonConditions conditions,
+        String ability
     ) {
         this.level = level;
         this.pokemonName = name;
@@ -78,6 +78,7 @@ public class Pokemon {
 
         this.moves = moves;
         this.conditions = conditions;
+        this.ability = ability;
     }
 
 // Methods
@@ -377,7 +378,6 @@ public class Pokemon {
         this.lastMove = null;     
     }
 
-    public void setAbility(Ability a) {this.ability = a;}
     public void setOwner(PokemonTrainer pt) {this.owner = pt;}
 
 // Getters
@@ -401,5 +401,7 @@ public class Pokemon {
     public int damageReceived() {return this.damageReceived;}
     public Move moveSelected() {return this.moveSelected;}
     public Move lastMove() {return this.lastMove;}
+    public String ability() {return this.ability;}
+    public PokemonTrainer owner() {return this.owner;}
 
 }
