@@ -40,6 +40,12 @@ public class EventData {
         this.move = m;
     }
 
+    // Methods
+    public void notifyEvent(String eventName) {
+        if (this.user != null) this.user.events().onEvent(eventName, this);
+        if (this.target != null) this.target.events().onEvent(eventName, this);  
+    }
+
     // Setters
     public void addDamage(int i) {this.damage += i;}
     public void setStatChanges(int[] arr) {this.statChanges = arr;}

@@ -1,7 +1,6 @@
 package battle;
 
 
-import event.GameEvent;
 import exceptions.BattleEndedException;
 import player.PokemonTrainer;
 import utility.Counter;
@@ -25,7 +24,6 @@ public class BattleField {
 
     // Increments weather counter
     private static void weatherUpdate(){
-        GameEvent.onWeatherEffect.update();
         if (BattleField.weatherCount != null){
             weatherCount.inc();
             // Clears weather when counter finishes

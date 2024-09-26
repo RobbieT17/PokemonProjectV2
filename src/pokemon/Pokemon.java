@@ -5,9 +5,11 @@ import battle.BattleField;
 import battle.BattleLog;
 import battle.Weather;
 import event.EventData;
+import event.GameEvent;
 import exceptions.*;
 import move.Move;
 import player.PokemonTrainer;
+import stats.Ability;
 import stats.Stat;
 import stats.StatusCondition;
 import stats.Type;
@@ -42,10 +44,13 @@ public class Pokemon {
     private final PokemonConditions conditions; 
 
     // Ability
-    private String ability;
+    private Ability ability;
 
     // Owner of the Pokemon
     private PokemonTrainer owner;
+
+    // Event Listeners
+    private final GameEvent events;
 
     // Other Stats
     private int damageDealt; // Amount of damage dealt during the round
@@ -77,6 +82,8 @@ public class Pokemon {
 
         this.moves = moves;
         this.conditions = conditions;
+
+        this.events = new GameEvent();
     }
 
 // Methods
@@ -353,6 +360,9 @@ public class Pokemon {
 
     public void afterEffects() {
         this.conditions.setSwitchedIn(false);
+        this.events.onEvent(GameEvent.END_OF_ROUND, null);
+        this.events.onEvent(GameEvent.WEATHER_EFFECT, null);
+
         if (Battle.skipRound || this.conditions.fainted()) return;
             
         this.resetMove();
@@ -376,7 +386,7 @@ public class Pokemon {
         this.lastMove = null;     
     }
 
-    public void setAbility(String a) {this.ability = a;}
+    public void setAbility(Ability a) {this.ability = a;}
     public void setOwner(PokemonTrainer pt) {this.owner = pt;}
 
 // Getters
@@ -400,7 +410,8 @@ public class Pokemon {
     public int damageReceived() {return this.damageReceived;}
     public Move moveSelected() {return this.moveSelected;}
     public Move lastMove() {return this.lastMove;}
-    public String ability() {return this.ability;}
+    public Ability ability() {return this.ability;}
     public PokemonTrainer owner() {return this.owner;}
+    public GameEvent events() {return this.events;}
 
 }

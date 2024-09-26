@@ -126,7 +126,9 @@ public class Battle {
 
     // Finds the order which the Pokemon in battle will move
     public static Pokemon[] turnOrder(Pokemon p1, Pokemon p2) {
-        GameEvent.onMoveOrder.update();
+        p1.events().onEvent(GameEvent.FIND_MOVE_ORDER, null);
+        p2.events().onEvent(GameEvent.FIND_MOVE_ORDER, null);
+
         Pokemon[] order = new Pokemon[2];
 
         Move m1 = p1.moveSelected();
@@ -223,6 +225,13 @@ public class Battle {
     }
 
     public static void main(String[] args) {
+
+        /**
+         * TODO: Implement an algorithm to remove
+         * all listeners when a Pokemon switches out.
+         * Must re-add listener when Pokemon switches back
+         * in
+         */
 
         Pokemon p1 = PokemonList.venusaur("Bobby");
         p1.setAbility(Ability.chlorophyll(p1));

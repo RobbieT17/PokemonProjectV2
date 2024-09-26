@@ -4,10 +4,10 @@ import java.util.ArrayList;
 
 public class Event implements Subscriber {
     
-    private final int eventId;
+    private final String eventId;
     private final ArrayList<Observer> eventListeners;
 
-    public Event(int id) {
+    public Event(String id) {
         this.eventId = id;
         this.eventListeners = new ArrayList<>();
     }
@@ -34,11 +34,6 @@ public class Event implements Subscriber {
     }
 
     // Getters
-    public int eventId() {
-        return this.eventId;
-    }
-
-    public ArrayList<Observer> eventListeners() {
-        return this.eventListeners;
-    }
+    public String eventId() {return this.eventId;}
+    public ArrayList<Observer> eventListeners() {return this.eventListeners;}
 }

@@ -121,10 +121,13 @@ public interface MoveAction {
     * No damage is dealt if defending is immune to the attack
     */
     private static double moveEffectiveness(EventData data) {
-        GameEvent.onMoveEffectiveness.update(data);
-
         Pokemon p = data.target();
         double effectiveness = typeEffectiveness(data.moveUsed().moveType(), p);
+
+        data.setMoveEffectiveness(effectiveness);
+
+        data.notifyEvent(GameEvent.MOVE_EFFECTIVENESS);
+
         if (effectiveness == 0) throw new MoveInterruptedException("But it doesn't affect %s...", p);     
         return effectiveness;
     }
@@ -251,8 +254,8 @@ public interface MoveAction {
      * @return calculated damage
      */
     private static int calculateDamage(EventData data) { 
-        GameEvent.onDamageMultiplier.update(data);
-
+        data.notifyEvent(GameEvent.DAMAGE_MULTIPLIER);
+   
         Pokemon attacker = data.user();
         Pokemon defender = data.target();
         Move move = data.moveUsed();
