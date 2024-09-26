@@ -287,7 +287,7 @@ public interface MoveAction {
         Pokemon p = data.user();
         if (p.damageDealt() == 0) return;
 
-        int damage = (int) (0.01 * data.percent() * p.damageDealt()); 
+        int damage = (int) (0.01 * data.recoilPercent() * p.damageDealt()); 
         BattleLog.add("%s took %d damage from the recoil!", p, damage);
         p.takeDamage(damage);
     }
@@ -296,7 +296,7 @@ public interface MoveAction {
         Pokemon p = data.user();
         if (p.damageDealt() == 0) return;
 
-        int heal = (int) (0.01 * data.percent() * p.damageDealt()); 
+        int heal = (int) (0.01 * data.drainPercent() * p.damageDealt()); 
         BattleLog.add("%s restored %d HP!", p, heal);
         p.healDamage(heal);
     }
@@ -334,7 +334,7 @@ public interface MoveAction {
         data.setCriticalHit(criticalHit(data.moveUsed().critRate())); // Rolls for a critical hit
         
         int damage = calculateDamage(data);
-        data.addDamage(damage);
+        data.addDamageDealt(damage);
         
  
         BattleLog.add("%s took %d damage!", defender, damage);
@@ -374,14 +374,14 @@ public interface MoveAction {
 
     // Deals damage, attacking Pokemon receives a percentage of the damage dealt
     public static void dealDamageRecoil(EventData data, double percent) {
-        data.setPercent(percent);
+        data.setRecoilPercent(percent);
         dealDamage(data);
         recoilDamage(data);
     }
 
     // Deals damage, attacking Pokemon heals from percentage of the damage dealt
     public static void dealDamageDrain(EventData data, double percent) {
-        data.setPercent(percent);
+        data.setDrainPercent(percent);
         dealDamage(data);
         drainHP(data);
     }
@@ -413,7 +413,7 @@ public interface MoveAction {
 // Bracing Functions
     public static void pokemonProtects(EventData data, Protection b, String success) {
         Pokemon p = data.user();
-        data.setProtect(b);
+        data.setProtectionType(b);
         data.setMessage(success);
 
         if (p.moveSelected().equals(p.lastMove())) b.set();
@@ -495,7 +495,7 @@ public interface MoveAction {
 
     // Changes current weather
     public static void changeWeather(EventData data, int c) {
-        data.setWeather(c);
+        data.setWeatherChange(c);
         if (BattleField.currentWeather == c) throw new MoveInterruptedException(Move.FAILED);
         Weather.change(c);
     }
@@ -508,7 +508,7 @@ public interface MoveAction {
      */
     public static void enterImmuneState(EventData data, int state, String message) {
         Pokemon attacker = data.user();
-        data.setImmuneState(state);
+        data.setImmuneStateChange(state);
         data.setMessage(message);
 
         if (!attacker.conditions().inImmuneState()) {
@@ -528,7 +528,7 @@ public interface MoveAction {
      */
     public static void leaveImmuneState(EventData data, int state, String message) {
         Pokemon p = data.target();
-        data.setImmuneState(state * -1); // Negative indicates removal
+        data.setImmuneStateChange(state * -1); // Negative indicates removal
         data.setMessage(message);
 
         if (p.conditions().fainted() || !p.conditions().hasImmuneState(state)) return;

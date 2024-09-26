@@ -6,72 +6,78 @@ import utility.Protection;
 
 
 public class EventData {
-    // Variables
-    private final Pokemon user;
-    private final Pokemon target;
-    private final Move move;
-    
-    /* Ex. [0, -2, 0, -2, 0, 0, 0, 1] 
-     * Lowers target's Def and Sp.Def by two stages
-     * Final Index: 0 = User, 1 = Opponent*/
-    private int[] statChanges; 
-    private int damage;
-    private double moveEffectiveness;
-    private boolean moveHits;
-    private boolean criticalHit;
-    private int hitCount; // Number of times move connects (multi-hit moves)
-    private double percent; // Recoil % or Drain % or Heal % etc.
-    private int immuneState;
-    private String message;
-    private int weather;
-    private Protection protect;
-   
+    // Turn Info: Relevant to a singular Pokemon turn, this data is reset after each turn
+    private final Pokemon user; // User of the move
+    private final Pokemon target; // Target of the move
+    private final Move moveUsed; // Move Used
 
-    // Constructors
-    public EventData(Pokemon a) {
-        this.user = a;
-        this.target = null;
-        this.move = null;
-    }
+    private int[] statChanges; // Stat Changes a Pokemon received
+    private int[] statusChanges; // Status Condition a Pokemon received
+    private int weatherChange; // Change in weather
+    private int immuneStateChange; // The immunity state a Pokemon changed to
+    private Protection protectionType; // The kind of damage nullifier
+
+    private int damageDealt; // Damage dealt by attacker
+ 
+    private double moveEffectiveness; // Effectiveness of the move on the target
+    private boolean moveHits; // True if the move connects
+    private boolean criticalHit; // True if the move was a critical hit
+    private boolean moveFailed; // Move failed to execute
+    private boolean moveInterrupted; // Move was interrupted
+    private int hitCount; // Number of times move connects (multi-hit moves)
+
+    private double recoilPercent; // Percentage of damage dealt applied to recoil
+    private double drainPercent; // Percentage of damage dealt applied to heal
+
+    private String message; // A message produced 
+   
 
     public EventData(Pokemon a, Pokemon b, Move m) {
         this.user = a;
         this.target = b;
-        this.move = m;
+        this.moveUsed = m;
     }
 
     // Methods
     public void notifyEvent(String eventName) {
-        if (this.user != null) this.user.events().onEvent(eventName, this);
-        if (this.target != null) this.target.events().onEvent(eventName, this);  
+        this.user.events().onEvent(eventName, this);
+        this.target.events().onEvent(eventName, this);  
     }
 
-    // Setters
-    public void addDamage(int i) {this.damage += i;}
-    public void setStatChanges(int[] arr) {this.statChanges = arr;}
-    public void setMoveEffectiveness(double d) {this.moveEffectiveness = d;}
-    public void setPercent(double d) {this.percent = d;}
-    public void setImmuneState(int i) {this.immuneState = i;}
-    public void setMessage(String s) {this.message = s;}
-    public void setWeather(int i) {this.weather = i;}
-    public void setProtect(Protection p) {this.protect = p;}
-    public void setMoveHits(boolean b) {this.moveHits = b;}
-    public void incHitCount() {this.hitCount++;}
-    public void setCriticalHit(boolean b) {this.criticalHit = b;}
+// Setters
+    public void addDamageDealt(int damageDealt) {this.damageDealt += damageDealt;}
+    public void setStatChanges(int[] statChanges) {this.statChanges = statChanges;}
+    public void setStatusChanges(int[] statusChanges) {this.statusChanges = statusChanges;}
+    public void setWeatherChange(int weatherChange) {this.weatherChange = weatherChange;}
+    public void setImmuneStateChange(int immuneStateChange) {this.immuneStateChange = immuneStateChange;}
+    public void setProtectionType(Protection protectionType) {this.protectionType = protectionType;}
+    public void setMoveEffectiveness(double moveEffectiveness) {this.moveEffectiveness = moveEffectiveness;}
+    public void setMoveHits(boolean moveHits) {this.moveHits = moveHits;}
+    public void setCriticalHit(boolean criticalHit) {this.criticalHit = criticalHit;}
+    public void setMoveFailed(boolean moveFailed) {this.moveFailed = moveFailed;}
+    public void setMoveInterrupted(boolean moveInterrupted) {this.moveInterrupted = moveInterrupted;}
+    public void setHitCount(int hitCount) {this.hitCount = hitCount;}
+    public void setRecoilPercent(double recoilPercent) {this.recoilPercent = recoilPercent;}
+    public void setDrainPercent(double drainPercent) {this.drainPercent = drainPercent;}
+    public void setMessage(String message) {this.message = message;}
 
-    // Getters
+// Getters
     public Pokemon user() {return this.user;}
     public Pokemon target() {return this.target;}
-    public Move moveUsed() {return this.move;}
-    public int damage() {return this.damage;}
+    public Move moveUsed() {return this.moveUsed;}
     public int[] statChanges() {return this.statChanges;}
+    public int[] statusChanges() {return this.statusChanges;}
+    public int weatherChange() {return this.weatherChange;}
+    public int immuneStateChange() {return this.immuneStateChange;}
+    public Protection protectionType() {return this.protectionType;}
+    public int damageDealt() {return this.damageDealt;}
     public double moveEffectiveness() {return this.moveEffectiveness;}
-    public double percent() {return this.percent;}
-    public int immuneState() {return this.immuneState;}
-    public String message() {return this.message;}
-    public int weather() {return this.weather;}
-    public Protection protect() {return this.protect;}
     public boolean moveHits() {return this.moveHits;}
-    public int hitCount() {return this.hitCount;}
     public boolean criticalHit() {return this.criticalHit;}
+    public boolean moveFailed() {return this.moveFailed;}
+    public boolean moveInterrupted() {return this.moveInterrupted;}
+    public int hitCount() {return this.hitCount;}
+    public double recoilPercent() {return this.recoilPercent;}
+    public double drainPercent() {return this.drainPercent;}
+    public String message() {return this.message;} 
 }

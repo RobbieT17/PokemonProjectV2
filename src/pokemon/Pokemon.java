@@ -360,8 +360,6 @@ public class Pokemon {
 
     public void afterEffects() {
         this.conditions.setSwitchedIn(false);
-        this.events.onEvent(GameEvent.END_OF_ROUND, null);
-        this.events.onEvent(GameEvent.WEATHER_EFFECT, null);
 
         if (Battle.skipRound || this.conditions.fainted()) return;
             

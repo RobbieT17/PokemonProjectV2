@@ -108,7 +108,7 @@ public class Ability {
         });
 
         p.events().addEventSubscriber(GameEvent.WEATHER_EFFECT, e -> {
-            if (BattleField.currentWeather == Weather.SUNNY) {
+            if (BattleField.currentWeather == Weather.SUNNY && !p.conditions().fainted()) {
                 int damage = (int) (p.hp().max() / 8.0);
                 p.takeDamage(damage);
                 BattleLog.add("%s's Solar Power caused the sun to drain %d HP from it!", p, damage);

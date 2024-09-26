@@ -25,8 +25,8 @@ public class Battle {
     }
 
     // Trainer chooses a Pokemon to send out to battle
-    public static void choosePokemon(PokemonTrainer trainer) {
-        if (trainer.outOfPokemon()) return;
+    public static Pokemon choosePokemon(PokemonTrainer trainer) {
+        if (trainer.outOfPokemon()) return null;
 
         Scanner scanner = new Scanner(System.in);
         boolean done = false;
@@ -56,11 +56,12 @@ public class Battle {
         // Sets trainer's in-battle Pokemon to the one selected
         trainer.returns();
         trainer.sendOut(pokemon);
+        return pokemon;
     }
 
 
     // Pokemon chooses a move
-    public static void chooseMove(PokemonTrainer pt) {
+    public static Pokemon chooseMove(PokemonTrainer pt) {
         Pokemon p = pt.pokemonInBattle();
 
         /*
@@ -69,7 +70,7 @@ public class Battle {
          */
         if (p.conditions().switchedIn() | p.conditions().recharging()) {
             p.conditions().setRecharging(false);
-            return; 
+            return p; 
         }
         // Default to struggle if all the Pokemon's move has no more PP
         if (p.hasNoMoves()) {
@@ -82,7 +83,7 @@ public class Battle {
 
         if (move != null) {
             p.setMove(move);
-            return;
+            return p;
         }
 
         BattleLog.addPrintln("=====================================");
@@ -102,8 +103,8 @@ public class Battle {
                  * or Pokemon is unable to switch
                  */
                 if (Input.isChar(input, 's') && pt.pokemonAvailable() > 1){ 
-                    choosePokemon(pt);
-                    return;
+                    p = choosePokemon(pt);
+                    return p;
                 }
 
                 // Selects one of the Pokemon's move pool to use
@@ -122,6 +123,7 @@ public class Battle {
         }
         // Locks in Pokemon's chosen move
         p.setMove(move);
+        return p;
     }
 
     // Finds the order which the Pokemon in battle will move
@@ -208,9 +210,9 @@ public class Battle {
     public static void moveSelection(PokemonTrainer pt1, PokemonTrainer pt2) {
         if (Battle.skipRound) return;
         
-        // Player choose their moves
-        chooseMove(pt1);
-        chooseMove(pt2);
+        // Player choose their moves, returns the Pokemon (in case of a switch out)
+        BattleField.pokemon1 = chooseMove(pt1);
+        BattleField.pokemon2 = chooseMove(pt2);
 
         // Order of Pokemon
         Pokemon[] order = turnOrder(pt1.pokemonInBattle(), pt2.pokemonInBattle());
@@ -265,8 +267,8 @@ public class Battle {
         .addPokemon(p6)
         .build();
 
-        choosePokemon(player1);
-        choosePokemon(player2);
+        BattleField.pokemon1 = choosePokemon(player1);
+        BattleField.pokemon2 = choosePokemon(player2);
 
         BattleLog.out();
         Battle.skipRound = true;
