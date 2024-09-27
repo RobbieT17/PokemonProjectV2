@@ -12,8 +12,8 @@ import utility.RandomValues;
 // Interface storing all available Pokemon moves (Moves listed alphabetically)
 public interface MoveList {
 
-    private static int[] stats(int atk, int def, int spAtk, int spDef, int spd, int acc, int eva, int target) {
-        return new int[] {atk, def, spAtk, spDef, spd, acc, eva, target};
+    private static int[] stats(int atk, int def, int spAtk, int spDef, int spd, int acc, int eva) {
+        return new int[] {atk, def, spAtk, spDef, spd, acc, eva};
     }
 
 // AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
@@ -21,7 +21,7 @@ public interface MoveList {
     public static Move acidSpray() {
         MoveAction action = e -> {
             MoveAction.dealDamage(e);
-            MoveAction.changeStats(e, stats(0, 0, 0, -2, 0, 0, 0, 1));
+            MoveAction.changeStats(e, stats(0, 0, 0, -2, 0, 0, 0));
         };
 
         return new MoveBuilder()
@@ -98,7 +98,7 @@ public interface MoveList {
         .setType(Type.PSYCHIC)
         .setCategory(Move.STATUS)
         .setPP(20)
-        .setAction(e -> MoveAction.changeStats(e, stats(0, 0, 0, 1, 0, 0, 0, 0)))
+        .setAction(e -> MoveAction.changeStats(e, stats(0, 0, 0, 1, 0, 0, 0)))
         .build();
     }
 
@@ -223,7 +223,7 @@ public interface MoveList {
     public static Move breakingSwipe() {
         MoveAction action = e -> {
             MoveAction.dealDamage(e);
-            MoveAction.changeStats(e, stats(-1, 0, 0, 0, 0, 0, 0, 1));
+            MoveAction.changeStats(e, stats(-1, 0, 0, 0, 0, 0, 0));
         };
 
         return new MoveBuilder()
@@ -257,7 +257,7 @@ public interface MoveList {
     public static Move bulldoze() {
         MoveAction action = e -> {
             MoveAction.dealDamage(e);
-            MoveAction.changeStats(e, stats(0, 0, 0, 0, -1, 0, 0, 1));
+            MoveAction.changeStats(e, stats(0, 0, 0, 0, -1, 0, 0));
         };
 
         return new MoveBuilder()
@@ -290,7 +290,7 @@ public interface MoveList {
     public static Move charm() {
         MoveAction action = e -> {
             MoveAction.moveHits(e);
-            MoveAction.changeStats(e, stats(-2, 0, 0, 0, 0, 0, 0, 1));
+            MoveAction.changeStats(e, stats(-2, 0, 0, 0, 0, 0, 0));
         };
 
         return new MoveBuilder()
@@ -306,7 +306,7 @@ public interface MoveList {
     public static Move chillingWater() {
         MoveAction action = e -> {
             MoveAction.dealDamage(e);
-            MoveAction.changeStats(e, stats(-1, 0, 0, 0, 0, 0, 0, 1));
+            MoveAction.changeStats(e, stats(-1, 0, 0, 0, 0, 0, 0));
         };
 
         return new MoveBuilder()
@@ -324,7 +324,7 @@ public interface MoveList {
     public static Move crunch() {
         MoveAction action = e -> {
             MoveAction.dealDamage(e);
-            MoveAction.changeStats(e, stats(0, -1, 0, 0, 0, 0, 0, 1), 20);
+            MoveAction.changeStats(e, stats(0, -1, 0, 0, 0, 0, 0), 20);
         };
 
         return new MoveBuilder()
@@ -341,7 +341,7 @@ public interface MoveList {
     public static Move curse() {
         // TODO: Two Verison of move, Ghost-Type, and Non-Ghost-Type
         MoveAction action = e -> {
-            MoveAction.changeStats(e, stats(1, 1, 0, 0, -1, 0, 0, 0));
+            MoveAction.changeStats(e, stats(1, 1, 0, 0, -1, 0, 0));
         };
 
         return new MoveBuilder()
@@ -381,7 +381,7 @@ public interface MoveList {
         .setCategory(Move.PHYSICAL)
         .setPP(10)
         .setPower(80)
-        .setAction(e -> MoveAction.enterImmuneState(e, StatusCondition.DIG, e.user() + " dug into the ground!"))
+        .setAction(e -> MoveAction.enterImmuneState(e, StatusCondition.DIG_ID, e.user() + " dug into the ground!"))
         .build();
     }
 
@@ -393,7 +393,7 @@ public interface MoveList {
         .setCategory(Move.PHYSICAL)
         .setPP(10)
         .setPower(80)
-        .setAction(e -> MoveAction.enterImmuneState(e, StatusCondition.DIVE, e.user() + " dove underwater!"))
+        .setAction(e -> MoveAction.enterImmuneState(e, StatusCondition.DIVE_ID, e.user() + " dove underwater!"))
         .build();
     }
 
@@ -445,7 +445,7 @@ public interface MoveList {
         .setType(Type.DRAGON)
         .setCategory(Move.STATUS)
         .setPP(20)
-        .setAction(e -> MoveAction.changeStats(e, stats(1, 0, 0, 0, 1, 0, 0, 0)))
+        .setAction(e -> MoveAction.changeStats(e, stats(1, 0, 0, 0, 1, 0, 0)))
         .build();
     }
 
@@ -504,7 +504,7 @@ public interface MoveList {
     public static Move earthPower() {
         MoveAction action = e -> {
             MoveAction.dealDamage(e);
-            MoveAction.changeStats(e, stats(0, 0, 0, -1, 0, 0, 0, 1), 10);
+            MoveAction.changeStats(e, stats(0, 0, 0, -1, 0, 0, 0), 10);
         };
 
         return new MoveBuilder()
@@ -550,7 +550,7 @@ public interface MoveList {
     public static Move energyBall() {
         MoveAction action = e -> {
             MoveAction.dealDamage(e);
-            MoveAction.changeStats(e, stats(0, 0, 0, -1, 0, 0, 0, 1), 10);
+            MoveAction.changeStats(e, stats(0, 0, 0, -1, 0, 0, 0), 10);
         };
 
         return new MoveBuilder()
@@ -676,7 +676,7 @@ public interface MoveList {
     public static Move flameCharge() {
         MoveAction action = e -> {
             MoveAction.dealDamage(e);
-            MoveAction.changeStats(e, stats(0, 0, 0, 0, 1, 0, 0, 0));
+            MoveAction.changeStats(e, stats(0, 0, 0, 0, 1, 0, 0));
         };
 
         return new MoveBuilder()
@@ -727,7 +727,7 @@ public interface MoveList {
     public static Move flashCannon() {
         MoveAction action = e -> {
             MoveAction.dealDamage(e);
-            MoveAction.changeStats(e, stats(0, 0, 0, -1, 0, 0, 0, 1), 10);
+            MoveAction.changeStats(e, stats(0, 0, 0, -1, 0, 0, 0), 10);
         };
 
         return new MoveBuilder()
@@ -774,7 +774,7 @@ public interface MoveList {
     public static Move focusBlast() {
         MoveAction action = e -> {
             MoveAction.dealDamage(e);
-            MoveAction.changeStats(e, stats(0, 0, 0, -1, 0, 0, 0, 1), 10);
+            MoveAction.changeStats(e, stats(0, 0, 0, -1, 0, 0, 0), 10);
         };
 
         return new MoveBuilder()
@@ -901,7 +901,7 @@ public interface MoveList {
     public static Move growl() {
         MoveAction action = e -> {
             MoveAction.moveHits(e);
-            MoveAction.changeStats(e, stats(0, -1, 0, 0, 0, 0, 0, 1));
+            MoveAction.changeStats(e, stats(0, -1, 0, 0, 0, 0, 0));
         };
 
         return new MoveBuilder()
@@ -917,11 +917,11 @@ public interface MoveList {
     public static Move growth() {
         MoveAction action = e -> {   
             if (BattleField.currentWeather == Weather.SUNNY) {
-                MoveAction.changeStats(e, stats(2, 0, 2, 0, 0, 0, 0, 0));
+                MoveAction.changeStats(e, stats(2, 0, 2, 0, 0, 0, 0));
                 return;
             }
           
-            MoveAction.changeStats(e, stats(1, 0, 1, 0, 0, 0, 0, 0));
+            MoveAction.changeStats(e, stats(1, 0, 1, 0, 0, 0, 0));
         };
 
         return new MoveBuilder()
@@ -1159,7 +1159,7 @@ public interface MoveList {
     public static Move icyWind() {
         MoveAction action = e -> {
             MoveAction.dealDamage(e);
-            MoveAction.changeStats(e, stats(0, 0, 0, 0, -1, 0, 0, 1));
+            MoveAction.changeStats(e, stats(0, 0, 0, 0, -1, 0, 0));
         };
 
         return new MoveBuilder()
@@ -1200,7 +1200,7 @@ public interface MoveList {
         .setType(Type.STEEL)
         .setCategory(Move.STATUS)
         .setPP(15)
-        .setAction(e -> MoveAction.changeStats(e, stats(0, 2, 0, 0, 0, 0, 0, 0)))
+        .setAction(e -> MoveAction.changeStats(e, stats(0, 2, 0, 0, 0, 0, 0)))
         .build();
     }
 
@@ -1212,7 +1212,7 @@ public interface MoveList {
     public static Move leafStorm() {
         MoveAction action = e -> {
             MoveAction.dealDamage(e);
-            MoveAction.changeStats(e, stats(0, 0, -2, 0, 0, 0, 0, 0));
+            MoveAction.changeStats(e, stats(0, 0, -2, 0, 0, 0, 0));
         };
 
         return new MoveBuilder()
@@ -1247,7 +1247,7 @@ public interface MoveList {
     public static Move liquidation() {
         MoveAction action = e -> {
             MoveAction.dealDamage(e);
-            MoveAction.changeStats(e, stats(0, -1, 0, 0, 0, 0, 0, 1), 20);
+            MoveAction.changeStats(e, stats(0, -1, 0, 0, 0, 0, 0), 20);
         };
 
         return new MoveBuilder()
@@ -1280,7 +1280,7 @@ public interface MoveList {
     public static Move muddyWater() {
         MoveAction action = e -> {
             MoveAction.dealDamage(e);
-            MoveAction.changeStats(e, stats(0, 0, 0, 0, 0, -1, 0, 1), 30);
+            MoveAction.changeStats(e, stats(0, 0, 0, 0, 0, -1, 0), 30);
         };
 
         return new MoveBuilder()
@@ -1298,7 +1298,7 @@ public interface MoveList {
     public static Move mudShot() {
         MoveAction action = e -> {
             MoveAction.dealDamage(e);
-            MoveAction.changeStats(e, stats(0, 0, 0, 0, -1, 0, 0, 1));
+            MoveAction.changeStats(e, stats(0, 0, 0, 0, -1, 0, 0));
         };
 
         return new MoveBuilder()
@@ -1334,7 +1334,7 @@ public interface MoveList {
     public static Move overheat() {
         MoveAction action = e -> {
             MoveAction.dealDamage(e);
-            MoveAction.changeStats(e, stats(-2, 0, 0, 0, 0, 0, 0, 0));
+            MoveAction.changeStats(e, stats(-2, 0, 0, 0, 0, 0, 0));
         };
 
         return new MoveBuilder()
@@ -1454,7 +1454,7 @@ public interface MoveList {
     public static Move rapidSpin() {
         MoveAction action = e -> {
             MoveAction.dealDamage(e);
-            MoveAction.changeStats(e, stats(0, 0, 0, 0, 1, 0, 0, 0));
+            MoveAction.changeStats(e, stats(0, 0, 0, 0, 1, 0, 0));
             // TODO: Removes Trap Effects
         };
 
@@ -1538,7 +1538,7 @@ public interface MoveList {
     public static Move rockTomb() {
         MoveAction action = e -> {
             MoveAction.dealDamage(e);
-            MoveAction.changeStats(e, stats(0, -1, 0, 0, 0, 0, 0, 0));
+            MoveAction.changeStats(e, stats(0, -1, 0, 0, 0, 0, 0));
         };
 
         return new MoveBuilder()
@@ -1570,7 +1570,7 @@ public interface MoveList {
     public static Move scaryFace() {
         MoveAction action = e -> {
             MoveAction.moveHits(e);
-            MoveAction.changeStats(e, stats(0, 0, 0, 0, -2, 0, 0, 1));
+            MoveAction.changeStats(e, stats(0, 0, 0, 0, -2, 0, 0));
         };
 
         return new MoveBuilder()
@@ -1646,7 +1646,7 @@ public interface MoveList {
         .setType(Type.NORMAL)
         .setCategory(Move.STATUS)
         .setPP(15)
-        .setAction(e -> MoveAction.changeStats(e, stats(1, -1, 1, -1, 1, 0, 0, 0)))
+        .setAction(e -> MoveAction.changeStats(e, stats(1, -1, 1, -1, 1, 0, 0)))
         .build();
     }
 
@@ -1733,7 +1733,7 @@ public interface MoveList {
     public static Move smokescreen() {
         MoveAction action = e -> {
             MoveAction.moveHits(e);
-            MoveAction.changeStats(e, stats(0, 0, 0, 0, 0, -1, 0, 1));
+            MoveAction.changeStats(e, stats(0, 0, 0, 0, 0, -1, 0));
         };
 
         return new MoveBuilder()
@@ -1823,7 +1823,7 @@ public interface MoveList {
     public static Move sweetScent() {
         MoveAction action = e -> {
             MoveAction.moveHits(e);
-            MoveAction.changeStats(e, stats(0, 0, 0, 0, 0, 0, -1, 1));
+            MoveAction.changeStats(e, stats(0, 0, 0, 0, 0, 0, -1));
         };
 
         return new MoveBuilder()
@@ -1856,7 +1856,7 @@ public interface MoveList {
         .setType(Type.NORMAL)
         .setCategory(Move.STATUS)
         .setPP(20)
-        .setAction(e -> MoveAction.changeStats(e, stats(2, 0, 0, 0, 0, 0, 0, 0)))
+        .setAction(e -> MoveAction.changeStats(e, stats(2, 0, 0, 0, 0, 0, 0)))
         .build();
     }
 
@@ -1895,7 +1895,7 @@ public interface MoveList {
     public static Move tailWhip() {
         MoveAction action = e -> {
             MoveAction.moveHits(e);
-            MoveAction.changeStats(e, stats(0, -1, 0, 0, 0, 0, 0, 1));
+            MoveAction.changeStats(e, stats(0, -1, 0, 0, 0, 0, 0));
         };
 
         return new MoveBuilder()
@@ -1975,7 +1975,7 @@ public interface MoveList {
     public static Move trailblaze() {
         MoveAction action = e -> {
             MoveAction.dealDamage(e);
-            MoveAction.changeStats(e, stats(0, 0, 0, 0, 1, 0, 0, 0));
+            MoveAction.changeStats(e, stats(0, 0, 0, 0, 1, 0, 0));
         };
 
         return new MoveBuilder()
@@ -2120,7 +2120,7 @@ public interface MoveList {
         .setType(Type.WATER)
         .setCategory(Move.STATUS)
         .setPP(40)
-        .setAction(e -> MoveAction.changeStats(e, stats(0, 1, 0, 0, 0, 0, 0, 0)))
+        .setAction(e -> MoveAction.changeStats(e, stats(0, 1, 0, 0, 0, 0, 0)))
         .build();
     }
 

@@ -87,44 +87,6 @@ public class Pokemon {
     }
 
 // Methods
-    /**
-     * Checks a Pokemon's primary condition if it has one
-     * @param before If the effect goes before the move
-     */
-    private void checkPrimaryCondition(boolean before) {
-        if (this.conditions.filterPrimaryCondition(before) == null) return;
-        this.conditions.filterPrimaryCondition(before).action().apply(this);
-    }
-
-    /**
-     * A Pokemon that flinches cannot act
-     * @throws PokemonCannotActException If the Pokemon flinched
-     */
-    private void checkFlinched() {
-        if (!this.conditions.flinched()) return;
-
-        this.conditions.setForcedMove(false);
-        throw new PokemonCannotActException("%s flinched and couldn't move!", this);    
-    }
-
-    /**
-     * Applies all other before/after move conditions
-     * @param before
-     */
-    private void checkVolatileConditions(boolean before) {
-        this.conditions.filterVolatileConditions(before).forEach(c -> c.action().apply(this)); 
-    }
-
-
-    /**
-     * Checks all the Pokemon's status effects
-     * @param before If looking at condition that are applied before the Pokemon moves
-     */
-    public void checkConditions(boolean before) {
-        this.checkPrimaryCondition(before);
-        this.checkFlinched();
-        this.checkVolatileConditions(before);
-    }
 
     /**
      * Uses a move on a target
@@ -148,7 +110,6 @@ public class Pokemon {
      */
     public void useTurn(EventData data){
         try {
-            this.checkConditions(true);
             this.useMove(data);
             this.conditions.setInterrupted(false); // Successful Move
         } catch (MoveInterruptedException | PokemonCannotActException e) {
@@ -291,14 +252,14 @@ public class Pokemon {
         return this.conditions.primaryCondition() != null;
     }
 
-    public boolean hasPrimaryCondition(int i) {
+    public boolean hasPrimaryCondition(String s) {
         return this.conditions.primaryCondition() != null
-        ? this.conditions.primaryCondition().id() == i
+        ? this.conditions.primaryCondition().effectName().equals(s)
         : false;
     }
 
-    public boolean hasCondition(int i) {
-        return this.conditions.hasKey(i);
+    public boolean hasCondition(String s) {
+        return this.conditions.hasKey(s);
     }
 
     public boolean hasNoMoves() {
@@ -339,14 +300,14 @@ public class Pokemon {
         this.damageDealt = 0;
     }
 
-    public void clearPrimaryCondition(int c) {
+    public void clearPrimaryCondition(String s) {
         this.conditions.clearPrimaryCondition();
-        BattleLog.add(this + StatusCondition.expireMessage(c));
+        BattleLog.add(this + StatusCondition.expireMessage(s));
     }
 
-    public void clearCondition(int c) {
-        this.conditions.remove(c);
-        BattleLog.add(this + StatusCondition.expireMessage(c));
+    public void clearCondition(String s) {
+        this.conditions.removeCondition(s);
+        BattleLog.add(this + StatusCondition.expireMessage(s));
     }
 
     public void setMove(Move m) {
@@ -370,7 +331,6 @@ public class Pokemon {
 
         try {
             this.weatherEffect();
-            this.checkConditions(false);
         } catch (PokemonFaintedException e) {
         }   
     }

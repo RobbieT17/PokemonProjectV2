@@ -2,7 +2,6 @@ package pokemon;
 
 import java.util.ArrayList;
 import move.Move;
-import stats.Ability;
 import stats.Stat;
 import utility.Builder;
 

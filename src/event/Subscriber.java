@@ -1,8 +1,8 @@
 package event;
 
 public interface Subscriber {
-    void addListener(Observer o);
-    void removeListener(Observer o);
+    void addListener(String id, Observer o);
+    void removeListener(String id);
     void update(EventData e);
     void update(); 
 }

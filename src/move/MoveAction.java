@@ -6,14 +6,13 @@ import battle.Weather;
 import event.EventData;
 import event.GameEvent;
 import exceptions.MoveInterruptedException;
+import exceptions.StatusFailedException;
 import java.util.Random;
 import pokemon.Pokemon;
 import stats.Stat;
-import stats.StatusAction;
 import stats.StatusCondition;
 import stats.Type;
 import utility.Protection;
-import utility.RandomValues;
 
 @FunctionalInterface
 public interface MoveAction {
@@ -34,31 +33,31 @@ public interface MoveAction {
      * DIG: Earthquake
      * DIVE: Surf, Whirlpool
      */
-    public static void checkInvulnerabilityExceptions(Pokemon p, Move m) {
-        if (!p.conditions().inImmuneState()) return;
+    // public static void checkInvulnerabilityExceptions(Pokemon p, Move m) {
+    //     if (!p.conditions().inImmuneState()) return;
 
-        boolean exceptionFound = false;
-        switch (p.conditions().immuneState()) {
-            case StatusCondition.FLY -> exceptionFound = m.moveID() == 479 ||  m.moveID() == 542; // Smack Down, Hurricane   
-            case StatusCondition.DIG -> exceptionFound = m.moveID() == 89; // Earthquake
-            case StatusCondition.DIVE -> exceptionFound = m.moveID() == 57 || m.moveID() == 250; // Surf, Whirlpool    
-        }
+    //     boolean exceptionFound = false;
+    //     switch (p.conditions().immuneState()) {
+    //         case StatusCondition2.FLY_ID -> exceptionFound = m.moveID() == 479 ||  m.moveID() == 542; // Smack Down, Hurricane   
+    //         case StatusCondition2.DIG_ID -> exceptionFound = m.moveID() == 89; // Earthquake
+    //         case StatusCondition2.DIVE_ID -> exceptionFound = m.moveID() == 57 || m.moveID() == 250; // Surf, Whirlpool    
+    //     }
 
-        if (!exceptionFound) throw new MoveInterruptedException("But %s is out of sight!", p);
-    }
+    //     if (!exceptionFound) throw new MoveInterruptedException("But %s is out of sight!", p);
+    // }
 
     public static void moveHits(EventData data) {
-        Pokemon attacker = data.user();
-        Pokemon defender = data.target();
-        Move move = data.moveUsed();
+        Pokemon attacker = data.user;
+        Pokemon defender = data.target;
+        Move move = data.moveUsed;
 
-        checkInvulnerabilityExceptions(defender, move);
-        defenderProtects(defender);
+        // checkInvulnerabilityExceptions(defender, move);
+        // defenderProtects(defender);
 
         int accuracy = move.accuracy();
 
         if (accuracy == Move.ALWAYS_HITS || defender.conditions().immobilized()) {
-            data.setMoveHits(true);
+            data.moveHits = true;
             return;
         }
 		
@@ -68,31 +67,31 @@ public interface MoveAction {
         if (new Random().nextDouble() > modifiedAccuracy) 
             throw new MoveInterruptedException("But %s avoided the attack!", defender); 
         
-        data.setMoveHits(true);
+        data.moveHits = true;
     } 
 
 // Protection Functions
-    public static void defenderProtects(Pokemon p) {
-        if (!p.conditions().protect().active()) return;
+    // public static void defenderProtects(Pokemon p) {
+    //     if (!p.conditions().protect().active()) return;
             
-        p.conditions().protect().setActive(false);
-        throw new MoveInterruptedException("But %s protected itself!", p);
-    }
+    //     p.conditions().protect().setActive(false);
+    //     throw new MoveInterruptedException("But %s protected itself!", p);
+    // }
 
-    public static void defenderTakesHit(Pokemon p, int damage) {
-        if (p.conditions().endured().active()) {
-            p.takeDamageEndure(damage);
-            p.conditions().endured().setActive(false);
-        }
-        else p.takeDamage(damage);     
-    }
+    // public static void defenderTakesHit(Pokemon p, int damage) {
+    //     if (p.conditions().endured().active()) {
+    //         p.takeDamageEndure(damage);
+    //         p.conditions().endured().setActive(false);
+    //     }
+    //     else p.takeDamage(damage);     
+    // }
 
 // Damaging Functions
 
     // Grounded Pokemon are vulnerable to Ground-Type moves
-    private static boolean immunityExceptionFound(String type, Pokemon p) {
-        return p.conditions().grounded() && type.equals(Type.GROUND);
-    }
+    // private static boolean immunityExceptionFound(String type, Pokemon p) {
+    //     return p.conditions().grounded() && type.equals(Type.GROUND);
+    // }
 
     /**
      * Calculates the effectiveness of a move on a Pokemon
@@ -109,7 +108,7 @@ public interface MoveAction {
             if (t.equals(type)) effect *= 2;
 
         for (String t : p.pokemonType().typeImmunities()) { // Pokemon immune to type, nullifies damage
-            if (immunityExceptionFound(type, p)) break;
+            // if (immunityExceptionFound(type, p)) break;
             if (t.equals(type)) effect = 0;
         } 
         
@@ -121,14 +120,14 @@ public interface MoveAction {
     * No damage is dealt if defending is immune to the attack
     */
     private static double moveEffectiveness(EventData data) {
-        Pokemon p = data.target();
-        double effectiveness = typeEffectiveness(data.moveUsed().moveType(), p);
+        Pokemon p = data.target;
+        double effectiveness = typeEffectiveness(data.moveUsed.moveType(), p);
 
-        data.setMoveEffectiveness(effectiveness);
+        data.moveEffectiveness = effectiveness;
 
         data.notifyEvent(GameEvent.MOVE_EFFECTIVENESS);
 
-        if (effectiveness == 0) throw new MoveInterruptedException("But it doesn't affect %s...", p);     
+        if (effectiveness == 0) throw new MoveInterruptedException(Move.noEffectOn(p));     
         return effectiveness;
     }
  
@@ -194,23 +193,6 @@ public interface MoveAction {
     }
 
     /**
-     * Additional Multipliers for physical moves.
-     * 
-     * 1) Burned Pokemon deal 50% less damage
-     */
-    private static double physicalMoveBonus(Pokemon p) {
-        return p.hasPrimaryCondition(StatusCondition.BURN) ? 0.5 : 1.0;
-    }
-
-    /**
-     * Additional Multipliers for special moves
-     * NONE for right now
-     */
-    private static double specialMoveBonus(Pokemon p) {
-        return 1.0;
-    }
-
-    /**
      * Number of times a multi-hit damages the opponent
      * 
      * 2 turns: 35% chance
@@ -256,11 +238,11 @@ public interface MoveAction {
     private static int calculateDamage(EventData data) { 
         data.notifyEvent(GameEvent.DAMAGE_MULTIPLIER);
    
-        Pokemon attacker = data.user();
-        Pokemon defender = data.target();
-        Move move = data.moveUsed();
-        boolean isCritical = data.criticalHit();
-        double effectiveness = data.moveEffectiveness();  
+        Pokemon attacker = data.user;
+        Pokemon defender = data.target;
+        Move move = data.moveUsed;
+        boolean isCritical = data.criticalHit;
+        double effectiveness = data.moveEffectiveness;  
 
         double stab = sameTypeAttackBonus(attacker, move);
         double crit = isCritical ? 1.5 : 1.0;
@@ -274,39 +256,37 @@ public interface MoveAction {
         double defense = move.category().equals(Move.SPECIAL) 
         ? calculateDefense(defender.specialDefense(), isCritical) 
         : calculateDefense(defender.defense(), isCritical);
-
-        double additional = move.category().equals(Move.SPECIAL) ? specialMoveBonus(attacker) : physicalMoveBonus(attacker);
         
         return (int) (((((2 * attacker.level()) / 5.0 + 2) * move.power() * (attack / defense)) / 50.0 + 2) 
-        * stab * crit * effectiveness * random * weather * additional);      
+        * stab * crit * effectiveness * random * weather);      
     }
 
 
     // Pokemon takes damage based on some percent of the damage dealt
     private static void recoilDamage(EventData data) {
-        Pokemon p = data.user();
+        Pokemon p = data.user;
         if (p.damageDealt() == 0) return;
 
-        int damage = (int) (0.01 * data.recoilPercent() * p.damageDealt()); 
+        int damage = (int) (0.01 * data.recoilPercent * p.damageDealt()); 
         BattleLog.add("%s took %d damage from the recoil!", p, damage);
         p.takeDamage(damage);
     }
 
     private static void drainHP(EventData data) {
-        Pokemon p = data.user();
+        Pokemon p = data.user;
         if (p.damageDealt() == 0) return;
 
-        int heal = (int) (0.01 * data.drainPercent() * p.damageDealt()); 
+        int heal = (int) (0.01 * data.drainPercent * p.damageDealt()); 
         BattleLog.add("%s restored %d HP!", p, heal);
         p.healDamage(heal);
     }
 
     // Pokemon takes damage from a multi-hit move
     private static void dealMultiDamage(EventData data) {
-        Pokemon attacker = data.user();
-        Pokemon defender = data.target();
+        Pokemon attacker = data.user;
+        Pokemon defender = data.target;
 
-        boolean isCritical = criticalHit(data.moveUsed().critRate());
+        boolean isCritical = criticalHit(data.moveUsed.critRate());
         int damage = calculateDamage(data);
 
         BattleLog.add("%s took %d damage!", defender, damage);
@@ -315,8 +295,9 @@ public interface MoveAction {
         attacker.addDealtDamage(damage);
         defender.addDamageReceived(damage);
 
-        if (defender.conditions().endured().active()) defenderTakesHit(defender, damage);
-        else defender.takeDamage(damage);
+        // if (defender.conditions().endured().active()) defenderTakesHit(defender, damage);
+        // else 
+        defender.takeDamage(damage);
     }
     
 
@@ -327,34 +308,35 @@ public interface MoveAction {
      * @param move Move used by the attacker
      */
     public static void dealDamage(EventData data) {  
-        Pokemon attacker = data.user();
-        Pokemon defender = data.target();
+        Pokemon attacker = data.user;
+        Pokemon defender = data.target;
         
-        data.setMoveEffectiveness(moveEffectiveness(data)); // Returns if effect is 0  
-        data.setCriticalHit(criticalHit(data.moveUsed().critRate())); // Rolls for a critical hit
+        data.moveEffectiveness = moveEffectiveness(data); // Returns if effect is 0  
+        data.criticalHit = criticalHit(data.moveUsed.critRate()); // Rolls for a critical hit
         
         int damage = calculateDamage(data);
-        data.addDamageDealt(damage);
+        data.damageDealt += damage;
         
  
         BattleLog.add("%s took %d damage!", defender, damage);
-        BattleLog.add(isSuperEffective(data.moveEffectiveness()));
-        BattleLog.add(data.criticalHit() ? "Critical hit!" : "");
+        BattleLog.add(isSuperEffective(data.moveEffectiveness));
+        BattleLog.add(data.criticalHit ? "Critical hit!" : "");
 
         attacker.addDealtDamage(damage); 
         defender.addDamageReceived(damage);
 
-        if (defender.conditions().endured().active()) defenderTakesHit(defender, damage);
-        else defender.takeDamage(damage);
+        // if (defender.conditions().endured().active()) defenderTakesHit(defender, damage);
+        // else 
+        defender.takeDamage(damage);
 
         // Defender loses focus
-        if (defender.conditions().focused()) defender.conditions().setInterrupted(true);
+        // if (defender.conditions().focused()) defender.conditions().setInterrupted(true);
     }
 
     // Deals multiple hits of damage
     public static void multiHit(EventData data) {
-        data.setMoveEffectiveness(moveEffectiveness(data));
-        Pokemon defender = data.target();
+        data.moveEffectiveness = moveEffectiveness(data);
+        Pokemon defender = data.target;
 
         moveHits(data);
 
@@ -367,21 +349,21 @@ public interface MoveAction {
             }
         }
         BattleLog.add("It hit %d times!", hits);
-        BattleLog.add(isSuperEffective(data.moveEffectiveness()));
+        BattleLog.add(isSuperEffective(data.moveEffectiveness));
 
-        if (defender.conditions().focused()) defender.conditions().setInterrupted(true);
+        // if (defender.conditions().focused()) defender.conditions().setInterrupted(true);
     }
 
     // Deals damage, attacking Pokemon receives a percentage of the damage dealt
     public static void dealDamageRecoil(EventData data, double percent) {
-        data.setRecoilPercent(percent);
+        data.recoilPercent = percent;
         dealDamage(data);
         recoilDamage(data);
     }
 
     // Deals damage, attacking Pokemon heals from percentage of the damage dealt
     public static void dealDamageDrain(EventData data, double percent) {
-        data.setDrainPercent(percent);
+        data.drainPercent = percent;
         dealDamage(data);
         drainHP(data);
     }
@@ -401,8 +383,8 @@ public interface MoveAction {
 // Restore HP Functions
 
     // Restores a percentage of a Pokemon's maximum HP
-    public static void restoreHp(EventData data, boolean self, double percent) {
-        Pokemon p = self ? data.user() : data.target();
+    public static void restoreHp(EventData data, double percent) {
+        Pokemon p = data.target;
         if (p.hp().atFullHP()) throw new MoveInterruptedException("But %s is already at full health!", p);
 
         int heal = (int) (0.01 * percent * p.hp().max());
@@ -412,9 +394,9 @@ public interface MoveAction {
 
 // Bracing Functions
     public static void pokemonProtects(EventData data, Protection b, String success) {
-        Pokemon p = data.user();
-        data.setProtectionType(b);
-        data.setMessage(success);
+        Pokemon p = data.user;
+        data.protectionType = b;
+        data.message = success;
 
         if (p.moveSelected().equals(p.lastMove())) b.set();
         else {
@@ -430,72 +412,72 @@ public interface MoveAction {
      * Charges move first round, then unleashes it on the second
      * Can be interrupted by status effects
      */
-    public static void chargeMove(EventData data) {
-        Pokemon attacker = data.user();
-        if (!attacker.conditions().forcedMove()) {
-            attacker.conditions().setForcedMove(true);       
-            BattleLog.add("%s begins charging!", attacker);
-        }
-        else {
-            attacker.conditions().setForcedMove(false);
-            dealDamage(data);
-        }
-    }
+    // public static void chargeMove(EventData data) {
+    //     Pokemon attacker = data.user();
+    //     if (!attacker.conditions().forcedMove()) {
+    //         attacker.conditions().setForcedMove(true);       
+    //         BattleLog.add("%s begins charging!", attacker);
+    //     }
+    //     else {
+    //         attacker.conditions().setForcedMove(false);
+    //         dealDamage(data);
+    //     }
+    // }
 
 
-    public static void focusMove(EventData data) {
-        Pokemon attacker = data.user();
-        if (!attacker.conditions().focused()){
-            attacker.conditions().setFocused(true);
-            attacker.conditions().setForcedMove(true);
-            BattleLog.add("%s concentrates its energy!", attacker);
-            return;
-        }
-        attacker.conditions().setFocused(false);
-        attacker.conditions().setForcedMove(false);
+    // public static void focusMove(EventData data) {
+    //     Pokemon attacker = data.user();
+    //     if (!attacker.conditions().focused()){
+    //         attacker.conditions().setFocused(true);
+    //         attacker.conditions().setForcedMove(true);
+    //         BattleLog.add("%s concentrates its energy!", attacker);
+    //         return;
+    //     }
+    //     attacker.conditions().setFocused(false);
+    //     attacker.conditions().setForcedMove(false);
 
-        if (attacker.conditions().interrupted()) 
-            throw new MoveInterruptedException("%s lost its focus and couldn't move!", attacker);
+    //     if (attacker.conditions().interrupted()) 
+    //         throw new MoveInterruptedException("%s lost its focus and couldn't move!", attacker);
 
-        dealDamage(data);
-    }
+    //     dealDamage(data);
+    // }
 
-    public static void rechargeMove(EventData data) {
-        data.user().conditions().setRecharging(true);
-    }
+    // public static void rechargeMove(EventData data) {
+    //     data.user().conditions().setRecharging(true);
+    // }
 
     /**
      * Forces Pokemon to use the same move for 2-3 turns
      * Rampage is disrupt if the move misses or the Pokemon
      * cannot act due to a status condition
      */
-    public static void rampageMove(EventData data) {
-        Pokemon attacker = data.user();
-        // Starts rampage
-        if (!attacker.conditions().onRampage()) 
-            attacker.conditions().startRampage(RandomValues.generateInt(1, 2));
+    // public static void rampageMove(EventData data) {
+    //     Pokemon attacker = data.user();
+    //     // Starts rampage
+    //     if (!attacker.conditions().onRampage()) 
+    //         attacker.conditions().startRampage(RandomValues.generateInt(1, 2));
         
-        // On rampage
-        attacker.conditions().rampage().inc();
-        if (attacker.conditions().rampage().terminated()) { // After rampage ends, user becomes confused
-            dealDamage(data);
-            attacker.conditions().stopRampage();
-            attacker.conditions().setForcedMove(false);
+    //     // On rampage
+    //     attacker.conditions().rampage().inc();
+    //     if (attacker.conditions().rampage().terminated()) { // After rampage ends, user becomes confused
+    //         dealDamage(data);
+    //         attacker.conditions().stopRampage();
+    //         attacker.conditions().setForcedMove(false);
 
-            BattleLog.add("%s's rampage ended!", attacker);
-            volatileStatusEffect(attacker, StatusCondition.CONFUSION, 100);
-            return;
-        }
+    //         BattleLog.add("%s's rampage ended!", attacker);
+    //         volatileStatusEffect(attacker, StatusCondition.CONFUSION, 100);
+    //         return;
+    //     }
 
-        attacker.conditions().setForcedMove(true);
-        dealDamage(data);
-    }
+    //     attacker.conditions().setForcedMove(true);
+    //     dealDamage(data);
+    // }
 
 // Weather Change Functions
 
     // Changes current weather
     public static void changeWeather(EventData data, int c) {
-        data.setWeatherChange(c);
+        data.weatherChange = c;
         if (BattleField.currentWeather == c) throw new MoveInterruptedException(Move.FAILED);
         Weather.change(c);
     }
@@ -506,38 +488,38 @@ public interface MoveAction {
      * Pokemon enters a semi-invulnerable state the first turn
      * Pokemon leaves the state and attacks on the second turn
      */
-    public static void enterImmuneState(EventData data, int state, String message) {
-        Pokemon attacker = data.user();
-        data.setImmuneStateChange(state);
-        data.setMessage(message);
+    // public static void enterImmuneState(EventData data, int state, String message) {
+    //     Pokemon attacker = data.user();
+    //     data.setImmuneStateChange(state);
+    //     data.setMessage(message);
 
-        if (!attacker.conditions().inImmuneState()) {
-            attacker.conditions().setImmuneState(state);
-            attacker.conditions().setForcedMove(true);
-            BattleLog.add(message);
-            return;
-        }
+    //     if (!attacker.conditions().inImmuneState()) {
+    //         attacker.conditions().setImmuneState(state);
+    //         attacker.conditions().setForcedMove(true);
+    //         BattleLog.add(message);
+    //         return;
+    //     }
 
-        attacker.conditions().setImmuneState(StatusCondition.NO_INVUL);
-        attacker.conditions().setForcedMove(false);
-        dealDamage(data);
-    }
+    //     attacker.conditions().setImmuneState(StatusCondition.NO_INVUL);
+    //     attacker.conditions().setForcedMove(false);
+    //     dealDamage(data);
+    // }
 
     /*
      * Pokemon is knocked out of their semi-invulnerable state, interrupted
      */
-    public static void leaveImmuneState(EventData data, int state, String message) {
-        Pokemon p = data.target();
-        data.setImmuneStateChange(state * -1); // Negative indicates removal
-        data.setMessage(message);
+    // public static void leaveImmuneState(EventData data, int state, String message) {
+    //     Pokemon p = data.target();
+    //     data.setImmuneStateChange(state * -1); // Negative indicates removal
+    //     data.setMessage(message);
 
-        if (p.conditions().fainted() || !p.conditions().hasImmuneState(state)) return;
-        p.conditions().setImmuneState(StatusCondition.NO_INVUL);
-        p.conditions().setForcedMove(false);
-        p.conditions().setInterrupted(true);
-        p.resetMove();
-        BattleLog.add(message);
-    }
+    //     if (p.conditions().fainted() || !p.conditions().hasImmuneState(state)) return;
+    //     p.conditions().setImmuneState(StatusCondition.NO_INVUL);
+    //     p.conditions().setForcedMove(false);
+    //     p.conditions().setInterrupted(true);
+    //     p.resetMove();
+    //     BattleLog.add(message);
+    // }
 
 
 // Stat Change Functions
@@ -550,10 +532,10 @@ public interface MoveAction {
      * @param chance The stat change success rate
      */
     private static void changeEachStat(EventData data, int[] stats) {
-        Pokemon p = stats[7] == 0 ? data.user() : data.target();
-        data.setStatChanges(stats);
+        Pokemon p = data.target;
+        data.statChanges = stats;
         
-        for (int i = 0; i < stats.length - 1; i++) {
+        for (int i = 0; i < stats.length; i++) {
             int change = stats[i];
             if (change == 0) continue;
         
@@ -567,15 +549,15 @@ public interface MoveAction {
         }  
     }
 
-    public static void changeStats(EventData data, int[] stats) {
-        if (data.user().conditions().fainted()) return;
-        changeEachStat(data, stats);
-    }
+    // public static void changeStats(EventData data, int[] stats) {
+    //     if (data.user.conditions().fainted()) return;
+    //     changeEachStat(data, stats);
+    // }
 
-    public static void changeStats(EventData data, int[] stats, double chance) {
-        if (data.user().conditions().fainted() || new Random().nextDouble() > chance * 0.01) return;
-        changeEachStat(data, stats);
-    }
+    // public static void changeStats(EventData data, int[] stats, double chance) {
+    //     if (data.user.conditions().fainted() || new Random().nextDouble() > chance * 0.01) return;
+    //     changeEachStat(data, stats);
+    // }
 
     // Resets all stat changes back to neutral
     public static void resetStats(EventData data, Pokemon p) {
@@ -592,30 +574,30 @@ public interface MoveAction {
      * @param condition which condition is applied
      * @param message application message
      */
-    private static void applyCondition(Pokemon p, double chance, StatusCondition condition, String message) {
-        if (!RandomValues.chance(chance)) return;
+    // private static void applyCondition(Pokemon p, double chance, StatusCondition condition, String message) {
+    //     if (!RandomValues.chance(chance)) return;
 
-        p.conditions().setPrimaryCondition(condition);
-        BattleLog.add(message);
-    }
+    //     p.conditions().setPrimaryCondition(condition);
+    //     BattleLog.add(message);
+    // }
 
-    private static void applyVolatileCondition(Pokemon p, double chance, StatusCondition condition, String message) {
-        if (!RandomValues.chance(chance)) return;
+    // private static void applyVolatileCondition(Pokemon p, double chance, StatusCondition condition, String message) {
+    //     if (!RandomValues.chance(chance)) return;
 
-        p.conditions().add(condition);
-        BattleLog.add(message);
-    }
+    //     p.conditions().add(condition);
+    //     BattleLog.add(message);
+    // }
 
-    private static boolean typeImmunity(Pokemon p, int id) {
-        return switch (id) {
-            case StatusCondition.BURN -> p.isType(Type.FIRE);
-            case StatusCondition.FREEZE -> p.isType(Type.ICE);
-            case StatusCondition.PARALYSIS -> p.isType(Type.ELECTRIC);
-            case StatusCondition.POISON -> p.isType(Type.POISON) || p.isType(Type.STEEL);
-            case StatusCondition.SEEDED -> p.isType(Type.GRASS);
-            default -> false;
-        };
-    }
+    // private static boolean typeImmunity(Pokemon p, String id) {
+    //     return switch (id) {
+    //         case StatusCondition2.BURN_ID -> p.isType(Type.FIRE);
+    //         case StatusCondition2.FREEZE_ID -> p.isType(Type.ICE);
+    //         case StatusCondition2.PARALYSIS -> p.isType(Type.ELECTRIC);
+    //         case StatusCondition2.POISON -> p.isType(Type.POISON) || p.isType(Type.STEEL);
+    //         case StatusCondition2.SEEDED -> p.isType(Type.GRASS);
+    //         default -> false;
+    //     };
+    // }
 
     /**
      * Checks if a status condition can be applied to a Pokemon
@@ -625,117 +607,168 @@ public interface MoveAction {
      * 2) The Pokemon already has the condition
      * @param id
      */
-    private static void canBeApplied(Pokemon p, int id) {
-        defenderProtects(p);
-        if (typeImmunity(p, id)) throw new MoveInterruptedException("But it doesn't affect %s...", p);
+    // private static void canBeApplied(Pokemon p, int id) {
+    //     defenderProtects(p);
+    //     if (typeImmunity(p, id)) throw new MoveInterruptedException("But it doesn't affect %s...", p);
         
-        if (p.hasPrimaryCondition()) throw new MoveInterruptedException(p.hasPrimaryCondition(id)  
-        ? String.format("But %s is already %s!", p, StatusCondition.failMessage(id)) 
-        : Move.FAILED);
-    }
+    //     if (p.hasPrimaryCondition()) throw new MoveInterruptedException(p.hasPrimaryCondition(id)  
+    //     ? String.format("But %s is already %s!", p, StatusCondition.failMessage(id)) 
+    //     : Move.FAILED);
+    // }
 
-    private static void canBeAppliedV(Pokemon p, int id) {
-        defenderProtects(p);
-        if (typeImmunity(p, id)) throw new MoveInterruptedException("But it doesn't affect %s...", p);
-        if (p.hasCondition(id)) throw new MoveInterruptedException(Move.FAILED);
-    }
+    // private static void canBeAppliedV(Pokemon p, int id) {
+    //     defenderProtects(p);
+    //     if (typeImmunity(p, id)) throw new MoveInterruptedException("But it doesn't affect %s...", p);
+    //     if (p.hasCondition(id)) throw new MoveInterruptedException(Move.FAILED);
+    // }
 
     // Applies Burn Condition
-    private static void applyBurn(Pokemon p, double chance) { 
-        applyCondition(p, chance, StatusAction.burn(), p + " was burned!");
+    private static void applyBurn(Pokemon p) { 
+        p.conditions().setPrimaryCondition(StatusCondition.burn(p));
     }
 
     // Applies Freeze Condition
-    private static void applyFreeze(Pokemon p, double chance) {
-        applyCondition(p, chance, StatusAction.freeze(), p + " froze!");
-        p.conditions().setForcedMove(false);
+    private static void applyFreeze(Pokemon p) {
+        p.conditions().setPrimaryCondition(StatusCondition.freeze(p));
     }
 
     // Applies Paralysis Condition
-    private static void applyParalysis(Pokemon p, double chance) {
-        applyCondition(p, chance, StatusAction.paralysis(), p + " was paralyzed!");
+    private static void applyParalysis(Pokemon p) {
+        p.conditions().setPrimaryCondition(StatusCondition.paralysis(p));
     }
 
     // Applies Poison Condition
-    private static void applyPoison(Pokemon p, double chance) {
-        applyCondition(p, chance, StatusAction.poison(), p + " was poisoned!");
+    private static void applyPoison(Pokemon p) {
+        p.conditions().setPrimaryCondition(StatusCondition.poisoned(p));
+    }
+
+    // Applies Badly Poison Condition
+    private static void applyBadlyPoison(Pokemon p) {
+        p.conditions().setPrimaryCondition(StatusCondition.badlyPoisoned(p));
     }
 
     // Applies Sleep Condition
     private static void applySleep(Pokemon p) {
-        applyCondition(p, 100, StatusAction.sleep(), p + " fell asleep!");
+        p.conditions().setPrimaryCondition(StatusCondition.sleep(p));
     }
 
     // Applies Confusion Condition
-    private static void applyBound(Pokemon p, double chance) {
-        applyVolatileCondition(p, chance, StatusAction.bound(), p + " was trapped in a bound!");
+    private static void applyBound(Pokemon p) {
+        p.conditions().addCondition(StatusCondition.bound(p));
     }
 
-    private static void applyConfusion(Pokemon p, double chance) {
-        applyVolatileCondition(p, chance, StatusAction.confusion(), p + " became confused!");
+    private static void applyConfusion(Pokemon p) {
+        p.conditions().addCondition(StatusCondition.confusion(p));
     }
+
+    private static void applySeeded(Pokemon p, Pokemon r) {
+        p.conditions().addCondition(StatusCondition.seeded(p, r));
+    }
+
+    private static void applyFlinch(Pokemon p) {
+        p.conditions().addCondition(StatusCondition.flinch(p));
+    }
+
+    public static void applyCondition(EventData data, String id) {
+        Pokemon p = data.target;
+        data.statusChange = id;
+
+        try {
+            p.events().onEvent(GameEvent.STATUS_CONDITION_CHANGE, data);
+        } catch (StatusFailedException e) {
+            BattleLog.add(e.getMessage());
+            data.statusFailed = true;
+            return;
+        }
+    
+        switch (id) {
+            case StatusCondition.BURN_ID -> applyBurn(p);
+            case StatusCondition.FREEZE_ID -> applyFreeze(p);
+            case StatusCondition.PARALYSIS_ID -> applyParalysis(p);
+            case StatusCondition.POISON_ID -> applyPoison(p);
+            case StatusCondition.BAD_POISON_ID -> applyBadlyPoison(p);
+            case StatusCondition.SLEEP_ID -> applySleep(p);
+            case StatusCondition.FLINCH_ID -> applyFlinch(p);
+            case StatusCondition.BOUND_ID -> applyBound(p);
+            case StatusCondition.CONFUSION_ID -> applyConfusion(p);
+            case StatusCondition.SEEDED_ID -> applySeeded(data.target, data.user);
+            default -> throw new IllegalArgumentException(StatusCondition.ID_ERR);
+        }
+
+        
+    }
+
+    public static void applyCondition(EventData data, String id, double chance) {
+        data.statusProb = chance;
+        if (new Random().nextDouble() > chance * 0.01) {
+            data.statusFailed = true;
+            return;
+        }
+        applyCondition(data, id);
+    }
+    
 
 
     // Check if a condition can be applied. Displays a message if it cannot
-    public static void canApplyEffect(Pokemon p, int statusId) {
-        canBeApplied(p, statusId);
-        statusEffect(p, statusId, 100);
-    }
+    // public static void canApplyEffect(Pokemon p, int statusId) {
+    //     canBeApplied(p, statusId);
+    //     statusEffect(p, statusId, 100);
+    // }
 
-    public static void canApplyVolatileEffect(Pokemon p, int statusId) {
-        canBeAppliedV(p, statusId);
-        volatileStatusEffect(p, statusId, 100);
-    }
+    // public static void canApplyVolatileEffect(Pokemon p, int statusId) {
+    //     canBeAppliedV(p, statusId);
+    //     volatileStatusEffect(p, statusId, 100);
+    // }
 
     // Checks if a non-volatile condition can be applied. 
-    public static void statusEffect(Pokemon p, int statusId, double chance) {
-        if (p.conditions().fainted() | p.hasPrimaryCondition() | typeImmunity(p, statusId)) return;
+    // public static void statusEffect(Pokemon p, int statusId, double chance) {
+    //     if (p.conditions().fainted() | p.hasPrimaryCondition() | typeImmunity(p, statusId)) return;
 
-        switch (statusId) {
-            case StatusCondition.BURN -> applyBurn(p, chance);  
-            case StatusCondition.FREEZE -> applyFreeze(p, chance);  
-            case StatusCondition.PARALYSIS -> applyParalysis(p, chance);   
-            case StatusCondition.POISON -> applyPoison(p, chance); 
-            case StatusCondition.SLEEP -> applySleep(p);
-            default -> throw new IllegalArgumentException("Invalid condition id");
-        }
-    }
+    //     switch (statusId) {
+    //         case StatusCondition.BURN -> applyBurn(p, chance);  
+    //         case StatusCondition.FREEZE -> applyFreeze(p, chance);  
+    //         case StatusCondition.PARALYSIS -> applyParalysis(p, chance);   
+    //         case StatusCondition.POISON -> applyPoison(p, chance); 
+    //         case StatusCondition.SLEEP -> applySleep(p);
+    //         default -> throw new IllegalArgumentException("Invalid condition id");
+    //     }
+    // }
 
-    public static void volatileStatusEffect(Pokemon p, int statusId, double chance) {
-        // TODO: Code Duplication, unneeded condition check 
-        if (p.conditions().fainted() | p.hasCondition(statusId) | typeImmunity(p, statusId)) return;
+    // public static void volatileStatusEffect(Pokemon p, int statusId, double chance) {
+    //     // TODO: Code Duplication, unneeded condition check 
+    //     if (p.conditions().fainted() | p.hasCondition(statusId) | typeImmunity(p, statusId)) return;
     
-        switch (statusId) {
-            case StatusCondition.BOUND -> applyBound(p, chance);
-            case StatusCondition.CONFUSION -> applyConfusion(p, chance);
-            default -> throw new IllegalArgumentException("Invalid condition id");
-        }
-    }
+    //     switch (statusId) {
+    //         case StatusCondition.BOUND -> applyBound(p, chance);
+    //         case StatusCondition.CONFUSION -> applyConfusion(p, chance);
+    //         default -> throw new IllegalArgumentException("Invalid condition id");
+    //     }
+    // }
 
     // Pokemon flinches if it hasn't moved yet
-    public static void applyFlinch(Pokemon p, double chance) {
-        if (p.conditions().fainted() || p.conditions().hasMoved() || new Random().nextDouble() > chance * 0.01) return;
-        p.conditions().setFlinched(true);
-    }
+    // public static void applyFlinch(Pokemon p, double chance) {
+    //     if (p.conditions().fainted() || p.conditions().hasMoved() || new Random().nextDouble() > chance * 0.01) return;
+    //     p.conditions().setFlinched(true);
+    // }
 
-    public static void applySeeded(Pokemon receiver, Pokemon seeded) {
-        if (typeImmunity(seeded, StatusCondition.SEEDED)) throw new MoveInterruptedException(Move.FAILED);
-        seeded.conditions().add(StatusAction.seeded(receiver));
-        BattleLog.add("%s was grew sprouts!", seeded);
-    }
+    // public static void applySeeded(Pokemon receiver, Pokemon seeded) {
+    //     if (typeImmunity(seeded, StatusCondition.SEEDED)) throw new MoveInterruptedException(Move.FAILED);
+    //     seeded.conditions().add(StatusAction.seeded(receiver));
+    //     BattleLog.add("%s was grew sprouts!", seeded);
+    // }
 
     /*
      * Grounds a Pokemon, any Flying-Type Pokemon are vulnerable to Ground-Type moves
      */
-    public static void groundedPokemon(Pokemon p) {
-        if (p.conditions().fainted()) return;
-        p.conditions().setGrounded(true);
-        BattleLog.add("%s was grounded!", p);
-    }
+    // public static void groundedPokemon(Pokemon p) {
+    //     if (p.conditions().fainted()) return;
+    //     p.conditions().setGrounded(true);
+    //     BattleLog.add("%s was grounded!", p);
+    // }
 
     // Pokemon removes status condition
-    public static void removeStatusEffect(Pokemon p, int statusId) {
-        if (!p.hasPrimaryCondition(statusId)) return;
-        p.clearPrimaryCondition(statusId);
-    }
+    // public static void removeStatusEffect(Pokemon p, int statusId) {
+    //     if (!p.hasPrimaryCondition(statusId)) return;
+    //     p.clearPrimaryCondition(statusId);
+    // }
 }

@@ -7,7 +7,7 @@ import exceptions.MoveInterruptedException;
 import move.Move;
 import pokemon.Pokemon;
 
-public class Ability {
+public class Ability extends Effect{
 
 // Public Class Variables
     public static final String BLAZE_ID = "Blaze";
@@ -18,71 +18,68 @@ public class Ability {
     public static final String TORRENT_ID = "Torrent";
     public static final String WATER_ABSORB_ID = "Water Absorb";
 
-// Object
-    private final String abilityName;
-    private final Pokemon abilityBearer; // Pokemon with this ability
-
-    public Ability(Pokemon p, String name) {
-        this.abilityName = name;
-        this.abilityBearer = p;
+// Object   
+    public Ability(Pokemon p, String name, String[] flags) {
+        super(p, name, flags);
     }
-
-    public String abilityName() {return this.abilityName;}
-    public Pokemon abilityBearer() {return this.abilityBearer;}
 
 // Public Class Methods
-    private static boolean isUser(Pokemon p, EventData e) {
-        return p == e.user();
-    }
-
-    private static boolean isTarget(Pokemon p, EventData e) {
-        return p == e.target();
-    }
-
     // Increases Fire-Type attacks by 50% while under 1/3 Max HP
     public static Ability blaze(Pokemon p) {
-        p.events().addEventSubscriber(GameEvent.DAMAGE_MULTIPLIER, e -> {
-            if (!isUser(p, e)) return;
+        String name = Ability.BLAZE_ID;
+        String[] flags = new String[] {GameEvent.DAMAGE_MULTIPLIER};
 
-            Move move = e.moveUsed();
+        p.events().addEventSubscriber(flags[0], name , e -> {
+            if (!EventData.isUser(p, e)) return;
+
+            Move move = e.moveUsed;
             if (move.isType(Type.FIRE) && p.hpLessThanPercent(33)) {
                 move.changePowerByPercent(50);
                 BattleLog.add("%s's Blaze increased the power of its Fire-Type attack!", p);
             } 
         });
 
-        return new Ability(p, Ability.BLAZE_ID);
+        return new Ability(p, name, flags);
     }
 
     // Doubles speed in the sun
     public static Ability chlorophyll(Pokemon p) {
-        p.events().addEventSubscriber(GameEvent.FIND_MOVE_ORDER, e -> {
+        String name = Ability.CHLOROPHYLL_ID;
+        String[] flags = new String[] {GameEvent.FIND_MOVE_ORDER};
+
+        p.events().addEventSubscriber(flags[0], name, e -> {
             if (BattleField.currentWeather == Weather.SUNNY) {
                 p.modifySpeedByPercent(200);
             }
         });
 
-        return new Ability(p, Ability.CHLOROPHYLL_ID);
+        return new Ability(p, name, flags);
     }
 
     // Increases Grass-Type attacks by 50% while under 1/3 Max HP
     public static Ability overgrow(Pokemon p) {
-        p.events().addEventSubscriber(GameEvent.DAMAGE_MULTIPLIER, e -> {
-            if (!isUser(p, e)) return;
+        String name = Ability.OVERGROW_ID;
+        String[] flags = new String[] {GameEvent.DAMAGE_MULTIPLIER};
 
-            Move move = e.moveUsed();
+        p.events().addEventSubscriber(flags[0], name, e -> {
+            if (!EventData.isUser(p, e)) return;
+
+            Move move = e.moveUsed;
             if (move.isType(Type.GRASS) && p.hpLessThanPercent(33)) {
                 move.changePowerByPercent(50);
                 BattleLog.add("%s's Overgrow increased the power of its Grass-Type attack!", p);
             }         
         });
 
-        return new Ability(p, Ability.OVERGROW_ID);
+        return new Ability(p, name, flags);
     }
 
     // Recovers 1/16 of its maximum HP during rain, after each turn.
     public static Ability rainDish(Pokemon p) {
-        p.events().addEventSubscriber(GameEvent.WEATHER_EFFECT, e -> {
+        String name = Ability.RAIN_DISH_ID;
+        String[] flags = new String[] {GameEvent.WEATHER_EFFECT};
+
+        p.events().addEventSubscriber(flags[0], name, e -> {
             if (BattleField.currentWeather == Weather.RAIN) {
                 int heal = (int) (p.hp().max() / 16.0);
                 p.healDamage(heal);
@@ -90,7 +87,7 @@ public class Ability {
             }
         });
 
-        return new Ability(p, Ability.RAIN_DISH_ID);
+        return new Ability(p, name, flags);
     }
 
     /*
@@ -98,16 +95,19 @@ public class Ability {
      * but it also loses 1/8 of its maximum HP after each turn.
      */
     public static Ability solarPower(Pokemon p) {
-        p.events().addEventSubscriber(GameEvent.DAMAGE_MULTIPLIER, e -> {
-            if (!isUser(p, e)) return;
+        String name = Ability.SOLAR_POWER_ID;
+        String[] flags = new String[] {GameEvent.DAMAGE_MULTIPLIER, GameEvent.WEATHER_EFFECT};
 
-            Move m = e.moveUsed();
+        p.events().addEventSubscriber(flags[0], name, e -> {
+            if (!EventData.isUser(p, e)) return;
+
+            Move m = e.moveUsed;
             if (m.category().equals(Move.SPECIAL)) {
                 m.changePowerByPercent(50);
             }
         });
 
-        p.events().addEventSubscriber(GameEvent.WEATHER_EFFECT, e -> {
+        p.events().addEventSubscriber(flags[1], name, e -> {
             if (BattleField.currentWeather == Weather.SUNNY && !p.conditions().fainted()) {
                 int damage = (int) (p.hp().max() / 8.0);
                 p.takeDamage(damage);
@@ -115,33 +115,40 @@ public class Ability {
             }
         });
 
-        return new Ability(p, Ability.SOLAR_POWER_ID);
+        return new Ability(p, name, flags);
     }
 
     // Increases Water-Type attacks by 50% while under 1/3 Max HP
     public static Ability torrent(Pokemon p) {
-        p.events().addEventSubscriber(GameEvent.DAMAGE_MULTIPLIER, e -> {
-            if (!isUser(p, e)) return;
+        String name = Ability.TORRENT_ID;
+        String[] flags = new String[] {GameEvent.DAMAGE_MULTIPLIER};
 
-            Move move = e.moveUsed();
+        p.events().addEventSubscriber(flags[0], name, e -> {
+            if (!EventData.isUser(p, e)) return;
+
+            Move move = e.moveUsed;
             if (move.isType(Type.WATER) && p.hpLessThanPercent(33)) {
                 move.changePowerByPercent(50);
                 BattleLog.add("%s's Overgrow increased the power of its Water-Type attack!", p);
             }        
         });
 
-        return new Ability(p, Ability.TORRENT_ID);
+        return new Ability(p, name, flags);
     }
 
+    // Water moves deal no effect and instead heal the Pokemon
     public static Ability waterAbsorb(Pokemon p) {
-        p.events().addEventSubscriber(GameEvent.MOVE_EFFECTIVENESS, e -> {
-            if (!isTarget(p, e)) return;
+        String name = Ability.WATER_ABSORB_ID;
+        String[] flags = new String[] {GameEvent.DAMAGE_MULTIPLIER};
 
-            if (e.moveUsed().isType(Type.WATER)) {
+        p.events().addEventSubscriber(flags[0], name, e -> {
+            if (!EventData.isTarget(p, e)) return;
+
+            if (e.moveUsed.isType(Type.WATER)) {
                 throw new MoveInterruptedException("%s's Water Absorb soaked up the water!", p);
             }
         });
 
-        return new Ability(p, Ability.WATER_ABSORB_ID);
+        return new Ability(p, name, flags);
     }
 }

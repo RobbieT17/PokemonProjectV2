@@ -35,7 +35,7 @@ public interface PokemonStats {
 
 
         for (StatusCondition c : p.conditions().volatileConditions().values()) 
-            sb.append(c.toString())
+            sb.append(c.effectName())
             .append(", ");
         
         String s = sb.toString();

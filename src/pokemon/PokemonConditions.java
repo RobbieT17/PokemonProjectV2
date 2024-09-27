@@ -1,8 +1,6 @@
 package pokemon;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.stream.Stream;
 import stats.StatusCondition;
 import utility.Counter;
 import utility.Protection;
@@ -23,7 +21,7 @@ public class PokemonConditions {
     private boolean grounded; // Pokemon is grounded, vulnerable to Ground-Type moves 
     private boolean flinched; // Pokemon cannot act for the turn
 
-    private int immuneState; // Pokemon is immune from most attacks for a turn
+    private String immuneState; // Pokemon is immune from most attacks for a turn
   
     // Likely fails when used consecutively
     private final Protection protect; // Protects Pokemon from incoming attacks
@@ -32,7 +30,7 @@ public class PokemonConditions {
     private Counter rampage; // Count for rampage
 
     private StatusCondition primaryCondition; // Non-Volatile Condition (Burn, Freeze, Paralysis, Poison, Sleep)
-    private final HashMap<Integer, StatusCondition> volatileConditions;
+    private final HashMap<String, StatusCondition> volatileConditions;
 
 
 // Constructor
@@ -44,26 +42,15 @@ public class PokemonConditions {
 
 // Methods
     public boolean inImmuneState() {
-        return this.immuneState != StatusCondition.NO_INVUL;
+        return !this.immuneState.equals(StatusCondition.NO_INVUL_ID) ;
     }
 
-    public boolean hasImmuneState(int s) {
-        return this.immuneState == s;
+    public boolean hasImmuneState(String s) {
+        return this.immuneState.equals(s);
     }
 
-    public boolean hasKey(int key) {
+    public boolean hasKey(String key) {
         return this.volatileConditions.containsKey(key);
-    }
-
-    public StatusCondition filterPrimaryCondition(boolean b) {
-        return this.primaryCondition != null && this.primaryCondition.beforeMove() == b
-        ? this.primaryCondition
-        : null;
-    }
-
-    public Stream<StatusCondition> filterVolatileConditions(boolean b) {
-        return Arrays.stream(this.volatileConditions.values().toArray(StatusCondition[]::new))
-        .filter(c -> c.beforeMove() == b);
     }
 
     public boolean onRampage() {
@@ -110,7 +97,7 @@ public class PokemonConditions {
         this.flinched = f;
     } 
 
-    public void setImmuneState(int s) {
+    public void setImmuneState(String s) {
         this.immuneState = s;
     }
 
@@ -127,18 +114,21 @@ public class PokemonConditions {
     }
 
     public void clearPrimaryCondition() {
+        this.primaryCondition.removeEffect();
         this.primaryCondition = null;
     }
 
-    public void add(StatusCondition condition) {
-        this.volatileConditions.put(condition.id(), condition);
+    public void addCondition(StatusCondition condition) {
+        this.volatileConditions.put(condition.effectName(), condition);
     }
 
-    public void remove(int key) {
+    public void removeCondition(String key) {
+        this.volatileConditions.get(key).removeEffect();
         this.volatileConditions.remove(key);
     }
 
     public void clearVolatileConditions() {
+        for (StatusCondition c : this.volatileConditions.values()) c.removeEffect();
         this.volatileConditions.clear();
     }
 
@@ -196,7 +186,7 @@ public class PokemonConditions {
         return this.flinched;
     }
 
-    public int immuneState() {
+    public String immuneState() {
         return this.immuneState;
     }
 
@@ -216,7 +206,7 @@ public class PokemonConditions {
         return this.primaryCondition;
     }
 
-    public HashMap<Integer, StatusCondition> volatileConditions() {
+    public HashMap<String, StatusCondition> volatileConditions() {
         return this.volatileConditions;
     }
 

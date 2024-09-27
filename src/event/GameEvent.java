@@ -12,6 +12,10 @@ public class GameEvent {
     public static final String MOVE_EFFECTIVENESS = "Move-Effectiveness";
     public static final String FIND_MOVE_ORDER = "Find-Move-Order";
     public static final String WEATHER_EFFECT = "Weather-Effect";
+    public static final String MOVE_ACCURACY = "Move-Accuracy";
+    public static final String STATUS_BEFORE = "Status-Effect-Before";
+    public static final String BEFORE_MOVE = "Before-Move";
+    public static final String SWITCH_OUT = "Switch-Out";
     
     private final Event onMoveHit;// Move hits
     private final Event onStatChange; // Pokemon stats are changed
@@ -19,10 +23,14 @@ public class GameEvent {
     private final Event onSwitchIn;// Pokemon switches in
     private final Event onMoveContact;// Hit with a contact move
     private final Event onEndRound;// End of Round
-    private final Event onDamageMultiplier;
-    private final Event onMoveEffectiveness;
+    private final Event onDamageMultiplier; // Additional move power booster
+    private final Event onMoveEffectiveness; 
     private final Event onMoveOrder;
     private final Event onWeatherEffect;
+    private final Event onMoveAccuracy;
+    private final Event onStatusBefore; // Status Effects triggered before moving
+    private final Event onBeforeMove; // Before move (ex. Pokemon might flinch)
+    private final Event onSwitchOut; // Attempt to switch Pokemon out
 
     public GameEvent() {
         this.onMoveHit = new Event(GameEvent.MOVE_HITS);
@@ -35,6 +43,10 @@ public class GameEvent {
         this.onMoveEffectiveness = new Event(GameEvent.MOVE_EFFECTIVENESS);
         this.onMoveOrder = new Event(GameEvent.FIND_MOVE_ORDER);
         this.onWeatherEffect = new Event(GameEvent.WEATHER_EFFECT);
+        this.onMoveAccuracy = new Event(GameEvent.MOVE_ACCURACY);
+        this.onStatusBefore = new Event(GameEvent.STATUS_BEFORE);
+        this.onBeforeMove = new Event(GameEvent.BEFORE_MOVE);
+        this.onSwitchOut = new Event(GameEvent.SWITCH_OUT);
     }
 
 
@@ -51,6 +63,10 @@ public class GameEvent {
             case GameEvent.MOVE_EFFECTIVENESS -> this.onMoveEffectiveness;
             case GameEvent.FIND_MOVE_ORDER -> this.onMoveOrder;
             case GameEvent.WEATHER_EFFECT -> this.onWeatherEffect;
+            case GameEvent.MOVE_ACCURACY -> this.onMoveAccuracy;
+            case GameEvent.STATUS_BEFORE -> this.onStatusBefore;
+            case GameEvent.BEFORE_MOVE -> this.onBeforeMove;
+            case GameEvent.SWITCH_OUT -> this.onSwitchOut;
             default -> throw new IllegalArgumentException("Invalid event id");
         };
     }
@@ -59,11 +75,15 @@ public class GameEvent {
         getEvent(eventName).update(data);
     }
 
-    public void addEventSubscriber(String eventName, Observer o) {
-        getEvent(eventName).addListener(o);
+    public void addEventSubscriber(String eventName, String id, Observer o) {
+        getEvent(eventName).addListener(id, o);
     }
 
-    public void removeEventSubscriber(String eventName, Observer o) {
-        getEvent(eventName).removeListener(o);
+    public void removeEventSubscriber(String eventName, String id) {
+        getEvent(eventName).removeListener(id);
+    }
+
+    public void removeEventSubscribers(String[] eventNames, String id) {
+        for (String name : eventNames) removeEventSubscriber(name, id);
     }
 }

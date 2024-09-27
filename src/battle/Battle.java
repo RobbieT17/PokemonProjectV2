@@ -12,7 +12,6 @@ import player.*;
 import pokemon.Pokemon;
 import pokemon.PokemonList;
 import stats.Ability;
-import stats.StatusCondition;
 import utility.Input;
 
 public class Battle {
@@ -136,14 +135,8 @@ public class Battle {
         Move m1 = p1.moveSelected();
         Move m2 = p2.moveSelected();
 
-        // Paralyzed Pokemons' speed is reduced by half
-        int speed1 = (int) (p1.hasPrimaryCondition(StatusCondition.PARALYSIS) 
-        ? p1.speed().power() * 0.5 
-        : p1.speed().power());
-
-        int speed2 = (int) (p2.hasPrimaryCondition(StatusCondition.PARALYSIS) 
-        ? p2.speed().power() * 0.5 
-        : p2.speed().power());
+        int speed1 = p1.speed().power();
+        int speed2 = p2.speed().power();
 
         // Handles null moves (pokemon may not always have selected a move)
         if (m2 == null) {

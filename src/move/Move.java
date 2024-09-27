@@ -1,5 +1,6 @@
 package move;
 
+import pokemon.Pokemon;
 import pokemon.PokemonType;
 
 public class Move {
@@ -64,6 +65,10 @@ public class Move {
     }
 
 // Methods
+    public static String noEffectOn(Pokemon p) {
+        return String.format("But it doesn't affect %s...", p);
+    }
+
     /**
      * @param t A Pokemon's typing
      * @return true if the move type is one of the Pokemon's types
