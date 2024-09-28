@@ -319,6 +319,8 @@ public class Pokemon {
         this.damageReceived = 0;
 
         try {
+            this.events().onEvent(GameEvent.END_OF_ROUND, null);
+            this.events().onEvent(GameEvent.WEATHER_EFFECT, null);
             this.weatherEffect();
         } catch (PokemonFaintedException e) {
         }   

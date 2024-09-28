@@ -4,6 +4,7 @@ import battle.*;
 import event.EventData;
 import event.GameEvent;
 import exceptions.MoveInterruptedException;
+import exceptions.PokemonFaintedException;
 import move.Move;
 import pokemon.Pokemon;
 
@@ -112,6 +113,8 @@ public class Ability extends Effect{
                 int damage = (int) (p.hp().max() / 8.0);
                 p.takeDamage(damage);
                 BattleLog.add("%s's Solar Power caused the sun to drain %d HP from it!", p, damage);
+
+                if (p.conditions().fainted()) throw new PokemonFaintedException();
             }
         });
 

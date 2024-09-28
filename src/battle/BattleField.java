@@ -1,35 +1,32 @@
 package battle;
 
 
-import event.GameEvent;
 import exceptions.BattleEndedException;
 import player.PokemonTrainer;
-import pokemon.Pokemon;
 import utility.Counter;
 
 public class BattleField {
 
 // Variables
-    public static Pokemon pokemon1; // Refers to Player 1's current Pokemon in battle
-    public static Pokemon pokemon2; // Refers to Player 2's current Pokemon in battle
+    public static PokemonTrainer player1;
+    public static PokemonTrainer player2;
 
     public static int currentWeather = Weather.CLEAR; 
     public static Counter weatherCount = null;
 
 // Methods
     // Battle ends when a trainer has no more Pokemon
-    private static void isBattleOver(PokemonTrainer pt1, PokemonTrainer pt2) {
-        if (pt1.outOfPokemon() && pt2.outOfPokemon()) 
+    private static void isBattleOver() {
+        if (player1.outOfPokemon() && player2.outOfPokemon()) 
             throw new BattleEndedException("Both trainers are out of Pokemon! It's a tie!");
 
-        if (pt1.outOfPokemon()) throw new BattleEndedException(pt2, pt1);
-        if (pt2.outOfPokemon()) throw new BattleEndedException(pt1, pt2);
+        if (player1.outOfPokemon()) throw new BattleEndedException(player2, player1);
+        if (player2.outOfPokemon()) throw new BattleEndedException(player1, player2);
     }
 
 
     // Increments weather counter
     private static void weatherUpdate(){
-        onEvent(GameEvent.WEATHER_EFFECT);
         if (BattleField.weatherCount != null){
             // Clears weather when counter finishes
             if (weatherCount.inc()) Weather.change(Weather.CLEAR);
@@ -37,20 +34,16 @@ public class BattleField {
     }
 
     // Called at the end of each round
-    public static void endOfRound(PokemonTrainer pt1, PokemonTrainer pt2) {
+    public static void endOfRound() {
         BattleLog.addLine();
-        onEvent(GameEvent.END_OF_ROUND);
-        isBattleOver(pt1, pt2);
+        isBattleOver();
         weatherUpdate();
-        pt1.pokemonInBattle().afterEffects();
-        pt2.pokemonInBattle().afterEffects();
-        isBattleOver(pt1, pt2);
+        player1.pokemonInBattle().afterEffects();
+        player2.pokemonInBattle().afterEffects();
+        isBattleOver();
         Battle.skipRound = false;
     }
 
-    public static void onEvent(String eventName){
-        pokemon1.events().onEvent(eventName, null);
-        pokemon2.events().onEvent(eventName, null);
-    }
+  
 
 }

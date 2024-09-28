@@ -12,13 +12,13 @@ import player.*;
 import pokemon.Pokemon;
 import pokemon.PokemonList;
 import stats.Ability;
-import utility.Input;
+
 
 public class Battle {
 
     public static boolean skipRound; // Switched in Pokemon after a faint don't get attacked for the round
 
-    // Can switch pokemon if and only if the Pokemon hasn't fainted and isn't the current one out
+    // Can't switch pokemon if and only if the Pokemon has fainted or is the current one out
     public static boolean validPokemonChoice(PokemonTrainer pt, Pokemon p) {
         return !p.conditions().fainted() && (pt.pokemonInBattle() != null) ? !pt.pokemonInBattle().equals(p) : true;
     }
@@ -42,6 +42,7 @@ public class Battle {
 
                 // Pokemon selected cannot be fainted or the same one that is already out
                 done = validPokemonChoice(trainer, pokemon);
+                if (!done) BattleLog.addPrint("%s is already on the field!%n", pokemon);
                 
             } catch (IndexOutOfBoundsException e) {
                 BattleLog.addPrintln("Invalid input try again");
@@ -87,7 +88,7 @@ public class Battle {
 
         BattleLog.addPrintln("=====================================");
         BattleLog.addPrintln(p.showSomeStats());
-        BattleLog.addPrintln("[S] Switch Pokemon");
+        BattleLog.addPrintln("[9] Switch Pokemon");
 
         Scanner scanner = new Scanner(System.in);
         boolean done = false;
@@ -95,22 +96,21 @@ public class Battle {
         while (!done) {
             try {
                 BattleLog.addPrint("What should %s do? ", p); 
-                String input = scanner.nextLine();
+                int input = scanner.nextInt();
 
                 /*
                  * Switches Pokemon out, not possible if trainer has one pokemon
                  * or Pokemon is unable to switch
                  */
-                if (Input.isChar(input, 's') && pt.pokemonAvailable() > 1){ 
+                if (input == 9 && pt.pokemonAvailable() > 1){ 
                     p = choosePokemon(pt);
                     return p;
                 }
 
                 // Selects one of the Pokemon's move pool to use
-                if (Input.isNumeric(input)) {
-                    move = p.moves()[Integer.parseInt(input)];
-                    done = !move.pp().depleted();
-                }
+                move = p.moves()[input];
+                done = !move.pp().depleted();
+                
             
             } catch (IndexOutOfBoundsException e) {
                 BattleLog.addPrintln("Invalid input try again");
@@ -200,12 +200,15 @@ public class Battle {
      * @param pt1 Player 1
      * @param pt2 Player 2
      */
-    public static void moveSelection(PokemonTrainer pt1, PokemonTrainer pt2) {
+    public static void moveSelection() {
+        PokemonTrainer pt1 = BattleField.player1;
+        PokemonTrainer pt2 = BattleField.player2;
+
         if (Battle.skipRound) return;
         
-        // Player choose their moves, returns the Pokemon (in case of a switch out)
-        BattleField.pokemon1 = chooseMove(pt1);
-        BattleField.pokemon2 = chooseMove(pt2);
+        // Player choose their moves
+        chooseMove(pt1);
+        chooseMove(pt2);
 
         // Order of Pokemon
         Pokemon[] order = turnOrder(pt1.pokemonInBattle(), pt2.pokemonInBattle());
@@ -246,38 +249,41 @@ public class Battle {
         Pokemon p6 = PokemonList.blastoise("Tim");
         p6.setAbility(Ability.rainDish(p6));
 
-        PokemonTrainer player1 = new PokemonTrainerBuilder()
+        BattleField.player1 = new PokemonTrainerBuilder()
         .setName("Robbie")
         .addPokemon(p1)
         .addPokemon(p2)
         .addPokemon(p3)
         .build();
 
-        PokemonTrainer player2 = new PokemonTrainerBuilder()
+        BattleField.player2 = new PokemonTrainerBuilder()
         .setName("Sammi")
         .addPokemon(p4)
         .addPokemon(p5)
         .addPokemon(p6)
         .build();
 
-        BattleField.pokemon1 = choosePokemon(player1);
-        BattleField.pokemon2 = choosePokemon(player2);
+        PokemonTrainer pt1 = BattleField.player1;
+        PokemonTrainer pt2 = BattleField.player2;
 
+        choosePokemon(pt1);
+        choosePokemon(pt2);
+        
         BattleLog.out();
         Battle.skipRound = true;
 
         // Game ends when one trainer is out of Pokemon
         try {
             while (true) { // Continues forever
-                while (!player1.pokemonInBattle().conditions().fainted() && !player2.pokemonInBattle().conditions().fainted()) {     
-                    moveSelection(player1, player2);    
-                    BattleField.endOfRound(player1, player2);      
+                while (!pt1.pokemonInBattle().conditions().fainted() && !pt2.pokemonInBattle().conditions().fainted()) {     
+                    moveSelection();    
+                    BattleField.endOfRound();      
                     BattleLog.out();  // Plays out the round messages
                 }
                 
                 Battle.skipRound = true;
-                if (player1.pokemonInBattle().conditions().fainted()) choosePokemon(player1);
-                else if (player2.pokemonInBattle().conditions().fainted()) choosePokemon(player2);
+                if (pt1.pokemonInBattle().conditions().fainted()) choosePokemon(pt1);
+                else if (pt2.pokemonInBattle().conditions().fainted()) choosePokemon(pt2);
                 else throw new IllegalStateException("Pokemon must've fainted, what happened???");
             }
         } catch (BattleEndedException e) {

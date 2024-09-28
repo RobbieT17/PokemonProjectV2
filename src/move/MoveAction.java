@@ -60,11 +60,6 @@ private static void defenderProtects(Pokemon p) {
 
 // Damaging Functions
 
-    // Grounded Pokemon are vulnerable to Ground-Type moves
-    // private static boolean immunityExceptionFound(String type, Pokemon p) {
-    //     return p.conditions().grounded() && type.equals(Type.GROUND);
-    // }
-
     /**
      * Calculates the effectiveness of a move on a Pokemon
      * @param type the move's type
@@ -241,6 +236,7 @@ private static void defenderProtects(Pokemon p) {
         data.damageDealt += damage;
     
         BattleLog.add("%s took %d damage!", defender, damage);
+        BattleLog.add(data.hitCount < 2 ? isSuperEffective(data.moveEffectiveness) : "");
         BattleLog.add(data.criticalHit ? "Critical hit!" : "");
 
         attacker.addDealtDamage(damage);
@@ -273,7 +269,6 @@ private static void defenderProtects(Pokemon p) {
         moveEffectiveness(data); 
         moveHits(data); 
         damageTaken(data);
-        BattleLog.add(isSuperEffective(data.moveEffectiveness));
     }
 
     // Deals multiple hits of damage
