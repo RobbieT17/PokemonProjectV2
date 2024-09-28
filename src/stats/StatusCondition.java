@@ -60,6 +60,7 @@ public class StatusCondition extends Effect {
         this.bearer().events().removeEventListener(this.flags(), this.effectName());
         this.bearer().events().removeEventListener(GameEvent.STATUS_CONDITION_CHANGE, this.effectName());
     }
+    
 
 // Static Methods
     private static void checkIfFaints(Pokemon p) {
@@ -105,6 +106,7 @@ public class StatusCondition extends Effect {
             if (RandomValues.chance(20)) {
                 p.conditions().setImmobilized(false);
                 p.conditions().clearPrimary();
+                BattleLog.add("%s thawed!", p);
                 return;
             }
             p.conditions().setImmobilized(true);
@@ -182,6 +184,7 @@ public class StatusCondition extends Effect {
             if (counter.inc()) {
                 p.conditions().setImmobilized(false);
                 p.conditions().clearPrimary();
+                BattleLog.add("%s woke up!", p);
                 return;
             } 
             p.conditions().setImmobilized(true);
@@ -234,7 +237,7 @@ public class StatusCondition extends Effect {
             if (!EventData.isTarget(p, e)) return; 
             if (a.moveID() == 57 || a.moveID() == 250) return;
 
-            throw new MoveInterruptedException("But %s is high in the sky!", p);
+            throw new MoveInterruptedException("But %s is underwater!", p);
         });
 
         return new StatusCondition(p, name, flags);

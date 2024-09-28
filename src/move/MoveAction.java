@@ -255,6 +255,7 @@ private static void defenderProtects(Pokemon p) {
 
         int damage = (int) (0.01 * data.recoilPercent * p.damageDealt()); 
         BattleLog.add("%s took %d damage from the recoil!", p, damage);
+        p.addDamageReceived(damage);
         p.takeDamage(damage);
     }
 
@@ -317,6 +318,7 @@ private static void defenderProtects(Pokemon p) {
     public static void takeConfusionDamage(Pokemon p) {
         int damage = (int) (((((2 * p.level()) / 5.0 + 2) * 40 * (p.attack().power() / (double) p.defense().power())) / 50.0 + 2)); 
         BattleLog.add("%s took %d damage from their own confusion!", p, damage);
+        p.addDamageReceived(damage);
         p.takeDamage(damage); 
     }
 

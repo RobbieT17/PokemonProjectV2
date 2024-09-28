@@ -14,9 +14,15 @@ public abstract class Effect {
         this.bearer = p;
     }
 
+    @Override
+    public String toString() {
+        return this.effectName;
+    }
+
     public void removeEffect() {
         this.bearer.events().removeEventListener(this.flags, this.effectName);
     }
+
 
     public String effectName() {return this.effectName;}
     public String[] flags() {return this.flags;}

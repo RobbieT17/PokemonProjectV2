@@ -45,6 +45,7 @@ public class EventData {
     public EventData(Pokemon a, Pokemon b, Move m) {
         this.user = a;
         this.target = b;
+        this.effectTarget = b;
         this.moveUsed = m;
     }
 
