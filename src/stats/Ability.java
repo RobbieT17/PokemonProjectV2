@@ -29,7 +29,7 @@ public class Ability extends Effect{
         String name = Ability.BLAZE_ID;
         String[] flags = new String[] {GameEvent.DAMAGE_MULTIPLIER};
 
-        p.events().addEventSubscriber(flags[0], name , e -> {
+        p.events().addEventListener(flags[0], name , e -> {
             if (!EventData.isUser(p, e)) return;
 
             Move move = e.moveUsed;
@@ -47,7 +47,7 @@ public class Ability extends Effect{
         String name = Ability.CHLOROPHYLL_ID;
         String[] flags = new String[] {GameEvent.FIND_MOVE_ORDER};
 
-        p.events().addEventSubscriber(flags[0], name, e -> {
+        p.events().addEventListener(flags[0], name, e -> {
             if (BattleField.currentWeather == Weather.SUNNY) {
                 p.modifySpeedByPercent(200);
             }
@@ -61,7 +61,7 @@ public class Ability extends Effect{
         String name = Ability.OVERGROW_ID;
         String[] flags = new String[] {GameEvent.DAMAGE_MULTIPLIER};
 
-        p.events().addEventSubscriber(flags[0], name, e -> {
+        p.events().addEventListener(flags[0], name, e -> {
             if (!EventData.isUser(p, e)) return;
 
             Move move = e.moveUsed;
@@ -79,7 +79,7 @@ public class Ability extends Effect{
         String name = Ability.RAIN_DISH_ID;
         String[] flags = new String[] {GameEvent.WEATHER_EFFECT};
 
-        p.events().addEventSubscriber(flags[0], name, e -> {
+        p.events().addEventListener(flags[0], name, e -> {
             if (BattleField.currentWeather == Weather.RAIN) {
                 int heal = (int) (p.hp().max() / 16.0);
                 p.healDamage(heal);
@@ -98,7 +98,7 @@ public class Ability extends Effect{
         String name = Ability.SOLAR_POWER_ID;
         String[] flags = new String[] {GameEvent.DAMAGE_MULTIPLIER, GameEvent.WEATHER_EFFECT};
 
-        p.events().addEventSubscriber(flags[0], name, e -> {
+        p.events().addEventListener(flags[0], name, e -> {
             if (!EventData.isUser(p, e)) return;
 
             Move m = e.moveUsed;
@@ -107,7 +107,7 @@ public class Ability extends Effect{
             }
         });
 
-        p.events().addEventSubscriber(flags[1], name, e -> {
+        p.events().addEventListener(flags[1], name, e -> {
             if (BattleField.currentWeather == Weather.SUNNY && !p.conditions().fainted()) {
                 int damage = (int) (p.hp().max() / 8.0);
                 p.takeDamage(damage);
@@ -123,7 +123,7 @@ public class Ability extends Effect{
         String name = Ability.TORRENT_ID;
         String[] flags = new String[] {GameEvent.DAMAGE_MULTIPLIER};
 
-        p.events().addEventSubscriber(flags[0], name, e -> {
+        p.events().addEventListener(flags[0], name, e -> {
             if (!EventData.isUser(p, e)) return;
 
             Move move = e.moveUsed;
@@ -141,7 +141,7 @@ public class Ability extends Effect{
         String name = Ability.WATER_ABSORB_ID;
         String[] flags = new String[] {GameEvent.DAMAGE_MULTIPLIER};
 
-        p.events().addEventSubscriber(flags[0], name, e -> {
+        p.events().addEventListener(flags[0], name, e -> {
             if (!EventData.isTarget(p, e)) return;
 
             if (e.moveUsed.isType(Type.WATER)) {

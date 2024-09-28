@@ -6,7 +6,6 @@ import battle.Weather;
 import event.EventData;
 import event.GameEvent;
 import exceptions.MoveInterruptedException;
-import exceptions.StatusFailedException;
 import java.util.Random;
 import pokemon.Pokemon;
 import stats.Stat;
@@ -23,36 +22,13 @@ public interface MoveAction {
     void act(EventData e);
 
 // Accuracy Function
-
-    /* 
-     * Some moves can hit opponents through their 
-     * semi-invulnerable state.
-     * 
-     * Exceptions
-     * FLY: Smack Down, Hurricane
-     * DIG: Earthquake
-     * DIVE: Surf, Whirlpool
-     */
-    // public static void checkInvulnerabilityExceptions(Pokemon p, Move m) {
-    //     if (!p.conditions().inImmuneState()) return;
-
-    //     boolean exceptionFound = false;
-    //     switch (p.conditions().immuneState()) {
-    //         case StatusCondition2.FLY_ID -> exceptionFound = m.moveID() == 479 ||  m.moveID() == 542; // Smack Down, Hurricane   
-    //         case StatusCondition2.DIG_ID -> exceptionFound = m.moveID() == 89; // Earthquake
-    //         case StatusCondition2.DIVE_ID -> exceptionFound = m.moveID() == 57 || m.moveID() == 250; // Surf, Whirlpool    
-    //     }
-
-    //     if (!exceptionFound) throw new MoveInterruptedException("But %s is out of sight!", p);
-    // }
-
     public static void moveHits(EventData data) {
         Pokemon attacker = data.user;
         Pokemon defender = data.target;
         Move move = data.moveUsed;
 
-        // checkInvulnerabilityExceptions(defender, move);
-        // defenderProtects(defender);
+        data.notifyEvent(GameEvent.MOVE_ACCURACY);
+        defenderProtects(defender);
 
         int accuracy = move.accuracy();
 
@@ -71,12 +47,12 @@ public interface MoveAction {
     } 
 
 // Protection Functions
-    // public static void defenderProtects(Pokemon p) {
-    //     if (!p.conditions().protect().active()) return;
+    public static void defenderProtects(Pokemon p) {
+        if (!p.conditions().protect().active()) return;
             
-    //     p.conditions().protect().setActive(false);
-    //     throw new MoveInterruptedException("But %s protected itself!", p);
-    // }
+        p.conditions().protect().setActive(false);
+        throw new MoveInterruptedException("But %s protected itself!", p);
+    }
 
     // public static void defenderTakesHit(Pokemon p, int damage) {
     //     if (p.conditions().endured().active()) {
@@ -295,8 +271,6 @@ public interface MoveAction {
         attacker.addDealtDamage(damage);
         defender.addDamageReceived(damage);
 
-        // if (defender.conditions().endured().active()) defenderTakesHit(defender, damage);
-        // else 
         defender.takeDamage(damage);
     }
     
@@ -669,18 +643,40 @@ public interface MoveAction {
         p.conditions().addCondition(StatusCondition.flinch(p));
     }
 
-    public static void applyCondition(EventData data, String id) {
+    private static boolean cannotApplyCondition(Pokemon p, String id) {
+        return switch (id) {
+            case StatusCondition.BURN_ID -> p.isType(Type.FIRE) || p.conditions().hasPrimary();
+            case StatusCondition.FREEZE_ID -> p.isType(Type.ICE) || p.conditions().hasPrimary();
+            case StatusCondition.PARALYSIS_ID -> p.isType(Type.ELECTRIC) || p.conditions().hasPrimary();
+            case 
+                StatusCondition.POISON_ID, 
+                StatusCondition.BAD_POISON_ID -> p.isType(Type.POISON) || p.isType(Type.STEEL) ||p.conditions().hasPrimary();
+            case StatusCondition.SLEEP_ID -> p.isType(Type.DIGITAL) || p.conditions().hasPrimary();
+            case StatusCondition.FLINCH_ID -> p.conditions().hasMoved();
+            case 
+                StatusCondition.BOUND_ID,
+                StatusCondition.CONFUSION_ID -> p.conditions().hasKey(id);
+            case StatusCondition.SEEDED_ID -> p.isType(Type.GRASS) || p.conditions().hasKey(id);
+            default -> throw new IllegalArgumentException(StatusCondition.ID_ERR);
+        };
+    }
+
+    public static void applyCondition(EventData data, String id, double chance) {
         Pokemon p = data.target;
         data.statusChange = id;
+        data.statusProb = chance;
+        
+        if (cannotApplyCondition(p, id)) {
+            data.statusFailed = true;
+            data.message = Move.FAILED;
+            return;
+        }
 
-        try {
-            p.events().onEvent(GameEvent.STATUS_CONDITION_CHANGE, data);
-        } catch (StatusFailedException e) {
-            BattleLog.add(e.getMessage());
+        if (new Random().nextDouble() > chance * 0.01) {
             data.statusFailed = true;
             return;
         }
-    
+            
         switch (id) {
             case StatusCondition.BURN_ID -> applyBurn(p);
             case StatusCondition.FREEZE_ID -> applyFreeze(p);
@@ -693,19 +689,9 @@ public interface MoveAction {
             case StatusCondition.CONFUSION_ID -> applyConfusion(p);
             case StatusCondition.SEEDED_ID -> applySeeded(data.target, data.user);
             default -> throw new IllegalArgumentException(StatusCondition.ID_ERR);
-        }
-
-        
+        }  
     }
 
-    public static void applyCondition(EventData data, String id, double chance) {
-        data.statusProb = chance;
-        if (new Random().nextDouble() > chance * 0.01) {
-            data.statusFailed = true;
-            return;
-        }
-        applyCondition(data, id);
-    }
     
 
 

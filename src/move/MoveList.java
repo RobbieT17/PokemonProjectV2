@@ -21,7 +21,7 @@ public interface MoveList {
     public static Move acidSpray() {
         MoveAction action = e -> {
             MoveAction.dealDamage(e);
-            MoveAction.changeStats(e, stats(0, 0, 0, -2, 0, 0, 0));
+            MoveAction.changeStats(stats(0, 0, 0, -2, 0, 0, 0));
         };
 
         return new MoveBuilder()

@@ -1,6 +1,7 @@
 package move;
 
 import pokemon.Pokemon;
+import stats.StatusCondition;
 
 public class PowerPoints {
 
@@ -24,7 +25,7 @@ public class PowerPoints {
      *  Doesn't decrement if Pokemon is in the charging phase or move is multi-turn
      */
     public void decrement(Pokemon p) {
-        if (p.conditions().forcedMove()) return;
+        if (p.conditions().hasKey(StatusCondition.FORCED_MOVE_ID)) return;
         this.powerPoints--;
         if (this.powerPoints < 0) this.powerPoints = 0;
     }

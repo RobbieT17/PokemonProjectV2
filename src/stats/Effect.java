@@ -15,7 +15,7 @@ public abstract class Effect {
     }
 
     public void removeEffect() {
-        this.bearer.events().removeEventSubscribers(this.flags, this.effectName);
+        this.bearer.events().removeEventListener(this.flags, this.effectName);
     }
 
     public String effectName() {return this.effectName;}

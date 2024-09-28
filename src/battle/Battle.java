@@ -62,13 +62,14 @@ public class Battle {
     // Pokemon chooses a move
     public static Pokemon chooseMove(PokemonTrainer pt) {
         Pokemon p = pt.pokemonInBattle();
+        p.events().onEvent(GameEvent.MOVE_SELECTION, null);
 
         /*
          * Unable to choose a move if just switched in
          * or needs to recharge 
          */
-        if (p.conditions().switchedIn() | p.conditions().recharging()) {
-            p.conditions().setRecharging(false);
+        if (p.conditions().switchedIn() | p.conditions().recharge()) {
+            p.conditions().setRecharge(false);
             return p; 
         }
         // Default to struggle if all the Pokemon's move has no more PP
@@ -77,8 +78,7 @@ public class Battle {
             p.setMove(MoveList.struggle());
         }
 
-        // Uses last move used if forced to
-        Move move = p.conditions().forcedMove() ? p.lastMove() : null;
+        Move move = p.moveSelected();
 
         if (move != null) {
             p.setMove(move);

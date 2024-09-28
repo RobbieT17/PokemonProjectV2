@@ -96,8 +96,13 @@ public class Pokemon {
      */
     public void useMove(EventData data) {
         BattleLog.add("%s used %s!", this, this.moveSelected);
-        this.moveSelected.pp().decrement(this);
-        this.moveSelected.action().act(data);
+        try {
+            this.events.onEvent(GameEvent.USE_MOVE, data);
+            this.moveSelected.pp().decrement(this);
+            this.moveSelected.action().act(data);
+        } catch (MoveEndedEarlyException e) {
+            BattleLog.add(e.getMessage());
+        }
     }
 
     /**
@@ -110,22 +115,27 @@ public class Pokemon {
      */
     public void useTurn(EventData data){
         try {
+            this.events().onEvent(GameEvent.BEFORE_MOVE, data);
+            this.events().onEvent(GameEvent.STATUS_BEFORE, data);
+
             this.useMove(data);
             this.conditions.setInterrupted(false); // Successful Move
         } catch (MoveInterruptedException | PokemonCannotActException e) {
             BattleLog.add(e.getMessage());
+            this.events.onEvent(GameEvent.MOVE_INTERRUPTED, data);
     
             // Resets any move modifications
             this.moveSelected().power(); 
             this.moveSelected().accuracy();
 
             // Stops any ongoing moves
-            this.conditions.setForcedMove(false);
-            this.conditions.setFocused(false);
+            this.conditions.removeCondition(StatusCondition.FOCUSED_ID);
+            this.conditions.removeCondition(StatusCondition.FORCED_MOVE_ID);
+            this.conditions.removeCondition(StatusCondition.RAMPAGE_ID);
             this.conditions.setInterrupted(true);
-            this.conditions.stopRampage();
-        }
+        } 
         this.conditions.setHasMoved(true); 
+        this.events.onEvent(GameEvent.END_OF_TURN, data);
     }
 
     /**
@@ -138,7 +148,11 @@ public class Pokemon {
     public void takeDamage(int value) {
         if (value <= 0) throw new IllegalArgumentException(Pokemon.INVALID_DAMAGE_ERR);
 
-        this.hp.change(-value); 
+        if (this.conditions().endure().active()) {
+            this.conditions.endure().setActive(false);
+            takeDamageEndure(value);
+        }
+        else this.hp.change(-value); 
         if (this.hp.depleted()) this.faints();   
     }
 
@@ -147,7 +161,7 @@ public class Pokemon {
      * @throws IllegalArgumentException if value isn't positive
      * @param value damage received
      */
-    public void takeDamageEndure(int value) {
+    private void takeDamageEndure(int value) {
         if (value <= 0) throw new IllegalArgumentException(Pokemon.INVALID_DAMAGE_ERR);
 
         this.hp.change(-value);
@@ -248,20 +262,6 @@ public class Pokemon {
 
 
 // Boolean Methods
-    public boolean hasPrimaryCondition() {
-        return this.conditions.primaryCondition() != null;
-    }
-
-    public boolean hasPrimaryCondition(String s) {
-        return this.conditions.primaryCondition() != null
-        ? this.conditions.primaryCondition().effectName().equals(s)
-        : false;
-    }
-
-    public boolean hasCondition(String s) {
-        return this.conditions.hasKey(s);
-    }
-
     public boolean hasNoMoves() {
         for (Move m : this.moves) 
             if (!m.pp().depleted()) return false;
@@ -281,7 +281,7 @@ public class Pokemon {
 // Setters
     private void faints() {
         this.conditions.setFainted(true);
-        this.conditions.clearPrimaryCondition();
+        this.conditions.clearPrimary();
         this.conditions.clearVolatileConditions();
         BattleLog.add("%s fainted!", this);
     } 
@@ -298,16 +298,6 @@ public class Pokemon {
 
     public void resetDamageDealt() {
         this.damageDealt = 0;
-    }
-
-    public void clearPrimaryCondition(String s) {
-        this.conditions.clearPrimaryCondition();
-        BattleLog.add(this + StatusCondition.expireMessage(s));
-    }
-
-    public void clearCondition(String s) {
-        this.conditions.removeCondition(s);
-        BattleLog.add(this + StatusCondition.expireMessage(s));
     }
 
     public void setMove(Move m) {
@@ -327,7 +317,6 @@ public class Pokemon {
         this.resetMove();
         this.damageDealt = 0;
         this.damageReceived = 0;
-        this.conditions.clearAtEndRound();
 
         try {
             this.weatherEffect();

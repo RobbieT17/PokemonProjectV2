@@ -31,9 +31,8 @@ public class BattleField {
     private static void weatherUpdate(){
         onEvent(GameEvent.WEATHER_EFFECT);
         if (BattleField.weatherCount != null){
-            weatherCount.inc();
             // Clears weather when counter finishes
-            if (weatherCount.terminated()) Weather.change(Weather.CLEAR);
+            if (weatherCount.inc()) Weather.change(Weather.CLEAR);
         }
     }
 

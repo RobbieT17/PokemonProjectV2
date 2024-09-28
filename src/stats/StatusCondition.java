@@ -3,15 +3,16 @@ package stats;
 import battle.BattleLog;
 import event.EventData;
 import event.GameEvent;
-import event.Observer;
+import exceptions.MoveEndedEarlyException;
+import exceptions.MoveInterruptedException;
 import exceptions.PokemonCannotActException;
 import exceptions.PokemonFaintedException;
-import exceptions.StatusFailedException;
 import move.Move;
 import move.MoveAction;
 import pokemon.Pokemon;
 import utility.Counter;
 import utility.RandomValues;
+import utility.State;
 
 public class StatusCondition extends Effect {
 // Error Messages
@@ -32,12 +33,20 @@ public class StatusCondition extends Effect {
     public static final String BOUND_ID = "Trapped";
     public static final String CONFUSION_ID = "Confused";
     public static final String SEEDED_ID = "Seeded";
+    public static final String FORCED_MOVE_ID = "Forced Move";
+    public static final String FOCUSED_ID = "Focused";
+    public static final String RAMPAGE_ID = "Rampage";
+    public static final String RECHARGE_ID = "Recharge";
+    public static final String GROUNDED_ID = "Grounded";
 
     // Semi-Invulnerable State
     public static final String NO_INVUL_ID = "Normal State";
     public static final String FLY_ID = "Flying State";
     public static final String DIG_ID = "Underground State";
     public static final String DIVE_ID = "Underwater State";
+
+    // Protection
+    public static final String PROTECT_ID = "Protect";
     
 // Object
     public StatusCondition(Pokemon p, String name, String[] flags) {
@@ -47,21 +56,13 @@ public class StatusCondition extends Effect {
 
     @Override
     public void removeEffect() {
-        this.bearer().events().removeEventSubscribers(this.flags(), this.effectName());
-        this.bearer().events().removeEventSubscriber(GameEvent.STATUS_CONDITION_CHANGE, this.effectName());
+        this.bearer().events().removeEventListener(this.flags(), this.effectName());
+        this.bearer().events().removeEventListener(GameEvent.STATUS_CONDITION_CHANGE, this.effectName());
     }
 
 // Static Methods
     private static void checkIfFaints(Pokemon p) {
         if (p.conditions().fainted()) throw new PokemonFaintedException();
-    }
-
-    /*
-     * All conditions update on the events where conditions are applied
-     * 
-     */
-    private static void canApplyStatus(Pokemon p, String id, Observer o) {
-        p.events().addEventSubscriber(GameEvent.STATUS_CONDITION_CHANGE, id, o);
     }
 
     /*
@@ -72,28 +73,18 @@ public class StatusCondition extends Effect {
         String name = StatusCondition.BURN_ID;
         String[] flags = new String[] {GameEvent.END_OF_ROUND, GameEvent.DAMAGE_MULTIPLIER};
 
-        p.events().addEventSubscriber(flags[0], name, e -> {
+        p.events().addEventListener(flags[0], name, e -> {
             int damage = (int) (p.hp().max() / 16.0);
             BattleLog.add("%s took %d damage from the burn!", p, damage);
             p.takeDamage(damage);
             checkIfFaints(p);
         });
 
-        p.events().addEventSubscriber(flags[1], name, e -> {
+        p.events().addEventListener(flags[1], name, e -> {
             if (!EventData.isUser(p, e))
             e.moveUsed.changePowerByPercent(50);
         });
 
-        /*
-         * Cannot be burned if
-         * 1) Pokemon is a Fire-Type
-         * 2) Pokemon already has a primary condition
-         */
-        canApplyStatus(p, name, e -> {
-            if (!e.statusChange.equals(name)) return;
-            if (p.isType(Type.FIRE)) throw new StatusFailedException(Move.noEffectOn(p));
-            if (p.hasPrimaryCondition()) throw new StatusFailedException(Move.FAILED);      
-        });
 
         return new StatusCondition(p, name, flags);
     }
@@ -107,28 +98,18 @@ public class StatusCondition extends Effect {
         String name = StatusCondition.FREEZE_ID;
         String[] flags = new String[] {GameEvent.STATUS_BEFORE, GameEvent.MOVE_ACCURACY};
 
-        p.events().addEventSubscriber(flags[0], name, e -> {
+        p.events().addEventListener(flags[0], name, e -> {
             if (p.moveSelected().moveID() == 815) return;
 
             if (RandomValues.chance(20)) {
                 p.conditions().setImmobilized(false);
-                p.clearPrimaryCondition(StatusCondition.FREEZE_ID);
+                p.conditions().clearPrimary();
                 return;
             }
             p.conditions().setImmobilized(true);
             throw new PokemonCannotActException("%s is frozen solid!", p);
         });
 
-        /*
-         * Cannot be frozen if
-         * 1) Pokemon is an Ice-Type
-         * 2) Pokemon already has a primary condition
-         */
-        canApplyStatus(p, name, e -> {
-            if (!e.statusChange.equals(name)) return;
-            if (p.isType(Type.ICE)) throw new StatusFailedException(Move.noEffectOn(p));
-            if (p.hasPrimaryCondition()) throw new StatusFailedException(Move.FAILED);      
-        });
 
         return new StatusCondition(p, name, flags);
     }
@@ -142,23 +123,12 @@ public class StatusCondition extends Effect {
         String name = StatusCondition.PARALYSIS_ID;
         String[] flags = new String[] {GameEvent.STATUS_BEFORE, GameEvent.FIND_MOVE_ORDER};
 
-        p.events().addEventSubscriber(flags[0], name, e -> {
+        p.events().addEventListener(flags[0], name, e -> {
             if (!RandomValues.chance(50)) return;
             throw new PokemonCannotActException("%s is paralyzed and cannot move!", p);                 
         });
 
-        p.events().addEventSubscriber(flags[1], name, e -> p.modifySpeedByPercent(50));
-
-        /*
-         * Cannot be paralyzed if
-         * 1) Pokemon is an Electric-Type
-         * 2) Pokemon already has a primary condition
-         */
-        canApplyStatus(p, name, e -> {
-            if (!e.statusChange.equals(name)) return;
-            if (p.isType(Type.ELECTRIC)) throw new StatusFailedException(Move.noEffectOn(p));
-            if (p.hasPrimaryCondition()) throw new StatusFailedException(Move.FAILED);      
-        });
+        p.events().addEventListener(flags[1], name, e -> p.modifySpeedByPercent(50));
 
         return new StatusCondition(p, name, flags);
     }
@@ -169,22 +139,11 @@ public class StatusCondition extends Effect {
         String name = StatusCondition.POISON_ID;
         String[] flags = new String[] {GameEvent.END_OF_ROUND};
 
-        p.events().addEventSubscriber(flags[0], name, e -> {
+        p.events().addEventListener(flags[0], name, e -> {
             int damage = (int) (p.hp().max() / 8.0);
             BattleLog.add("%s took %d damage from the poison!", p, damage);
             p.takeDamage(damage);
             checkIfFaints(p);
-        });
-
-         /*
-         * Cannot be poisoned if
-         * 1) Pokemon is a Poison-Type
-         * 2) Pokemon already has a primary condition
-         */
-        canApplyStatus(p, name, e -> {
-            if (!e.statusChange.equals(name)) return;
-            if (p.isType(Type.POISON) || p.isType(Type.STEEL)) throw new StatusFailedException(Move.noEffectOn(p));
-            if (p.hasPrimaryCondition()) throw new StatusFailedException(Move.FAILED);      
         });
 
         return new StatusCondition(p, name, flags);
@@ -200,23 +159,12 @@ public class StatusCondition extends Effect {
 
         Counter counter = new Counter();
 
-        p.events().addEventSubscriber(flags[0], name, e -> {
+        p.events().addEventListener(flags[0], name, e -> {
             counter.inc();
             int damage = (int) (p.hp().max() * (counter.count() / 16.0));
             BattleLog.add("%s took %d damage from the poison!", p, damage);
             p.takeDamage(damage);
             checkIfFaints(p);
-        });
-
-        /*
-         * Cannot be badly poisoned if
-         * 1) Pokemon is a Poison-Type
-         * 2) Pokemon already has a primary condition
-         */
-        canApplyStatus(p, name, e -> {
-            if (!e.statusChange.equals(name)) return;
-            if (p.isType(Type.POISON) || p.isType(Type.STEEL)) throw new StatusFailedException(Move.noEffectOn(p));
-            if (p.hasPrimaryCondition()) throw new StatusFailedException(Move.FAILED);      
         });
 
         return new StatusCondition(p, name, flags);
@@ -229,11 +177,10 @@ public class StatusCondition extends Effect {
 
         Counter counter = new Counter(RandomValues.generateInt(1, 3));
 
-        p.events().addEventSubscriber(flags[0], name, e -> {
-            counter.inc();
-            if (counter.terminated()) {
+        p.events().addEventListener(flags[0], name, e -> {
+            if (counter.inc()) {
                 p.conditions().setImmobilized(false);
-                p.clearPrimaryCondition(StatusCondition.SLEEP_ID);
+                p.conditions().clearPrimary();
                 return;
             } 
             p.conditions().setImmobilized(true);
@@ -241,34 +188,69 @@ public class StatusCondition extends Effect {
             throw new PokemonCannotActException("%s is fast asleep...", p);    
         });
 
-        /*
-         * Cannot fall asleep if
-         * 1) Pokemon is a Digital-Type
-         * 2) Pokemon already has a primary condition
-         */
-        canApplyStatus(p, name, e -> {
-            if (!e.statusChange.equals(name)) return;
-            if (p.isType(Type.DIGITAL)) throw new StatusFailedException(Move.noEffectOn(p));
-            if (p.hasPrimaryCondition()) throw new StatusFailedException(Move.FAILED);      
+        return new StatusCondition(p, name, flags);
+    }
+
+
+    public static StatusCondition fly(Pokemon p, Move m) {
+        String name = StatusCondition.FLY_ID;
+        String[] flags = new String[] {GameEvent.MOVE_SELECTION, GameEvent.MOVE_ACCURACY};
+
+        p.events().addEventListener(flags[0], name, e -> p.setMove(m));
+        p.events().addEventListener(flags[1], name, e -> {
+            Move a = e.moveUsed;
+            if (!EventData.isTarget(p, e)) return;
+            if (a.moveID() == 479 ||  a.moveID() == 542) return;
+            
+            throw new MoveInterruptedException("But %s is high in the sky!", p);
         });
 
         return new StatusCondition(p, name, flags);
-    }
+	}
+
+    public static StatusCondition dig(Pokemon p, Move m) {
+        String name = StatusCondition.FLY_ID;
+        String[] flags = new String[] {GameEvent.MOVE_SELECTION, GameEvent.MOVE_ACCURACY};
+
+        p.events().addEventListener(flags[0], name, e -> p.setMove(m));
+        p.events().addEventListener(flags[1], name, e -> {
+            if (!EventData.isTarget(p, e)) return;
+            if (e.moveUsed.moveID() == 89) return;
+
+            throw new MoveInterruptedException("But %s is high in the sky!", p);
+        });
+
+        return new StatusCondition(p, name, flags);
+	}
+
+    public static StatusCondition dive(Pokemon p, Move m) {
+        String name = StatusCondition.FLY_ID;
+        String[] flags = new String[] {GameEvent.MOVE_SELECTION, GameEvent.MOVE_ACCURACY};
+
+        p.events().addEventListener(flags[0], name, e -> p.setMove(m));
+        p.events().addEventListener(flags[1], name, e -> {
+            Move a = e.moveUsed;
+            if (!EventData.isTarget(p, e)) return; 
+            if (a.moveID() == 57 || a.moveID() == 250) return;
+
+            throw new MoveInterruptedException("But %s is high in the sky!", p);
+        });
+
+        return new StatusCondition(p, name, flags);
+	}
+
+ 
+
+
 
     // Pokemon flinches and can't act for the round
     public static StatusCondition flinch(Pokemon p) {
         String name = StatusCondition.FLINCH_ID;
         String[] flags = new String[] {GameEvent.BEFORE_MOVE};
 
-        p.events().addEventSubscriber(flags[0], name, e -> {
-            p.clearCondition(StatusCondition.FLINCH_ID);
+        p.events().addEventListener(flags[0], name, e -> {
+            p.conditions().removeCondition(name);
             throw new PokemonCannotActException("%s flinched and couldn't move!", p);
-        });
-
-        // Cannot Flinch if Pokemon already moved that round
-        canApplyStatus(p, name, e -> {
-            if (!e.statusChange.equals(name)) return;
-            if (p.conditions().hasMoved()) throw new StatusFailedException();      
         });
 
         return new StatusCondition(p, name, flags);
@@ -281,10 +263,9 @@ public class StatusCondition extends Effect {
 
         Counter counter = new Counter(RandomValues.generateInt(2, 5));
 
-        p.events().addEventSubscriber(flags[0], name, e -> {
-            counter.inc();
-            if (counter.terminated()){
-                p.clearCondition(StatusCondition.BOUND_ID);
+        p.events().addEventListener(flags[0], name, e -> {
+            if (counter.inc()){
+                p.conditions().removeCondition(name);
                 return;
             }
 
@@ -293,12 +274,6 @@ public class StatusCondition extends Effect {
             p.takeDamage(damage);
             checkIfFaints(p);
 
-        });
-
-        // Fails if already trapped
-        canApplyStatus(p, name, e -> {
-            if (!e.statusChange.equals(name)) return;
-            if (p.hasCondition(name)) throw new StatusFailedException();      
         });
 
         return new StatusCondition(p, name, flags);
@@ -314,10 +289,9 @@ public class StatusCondition extends Effect {
 
         Counter counter = new Counter(RandomValues.generateInt(2, 4));
 
-        p.events().addEventSubscriber(flags[0], name, e -> {
-            counter.inc();
-            if (counter.terminated()){
-                p.clearCondition(StatusCondition.CONFUSION_ID);
+        p.events().addEventListener(flags[0], name, e -> {
+            if (counter.inc()){
+                p.conditions().removeCondition(name);
                 return;
             }
             BattleLog.add("%s is confused!", p);
@@ -328,12 +302,6 @@ public class StatusCondition extends Effect {
             throw new PokemonCannotActException();
         });
 
-        // Fails if already confused
-        canApplyStatus(p, name, e -> {
-            if (!e.statusChange.equals(name)) return;
-            if (p.hasCondition(name)) throw new StatusFailedException();      
-        });
-
         return new StatusCondition(p, name, flags);
     }
 
@@ -341,7 +309,7 @@ public class StatusCondition extends Effect {
         String name = StatusCondition.SEEDED_ID;
         String[] flags = new String[] {GameEvent.END_OF_ROUND};
 
-        p.events().addEventSubscriber(flags[0], name, e -> {
+        p.events().addEventListener(flags[0], name, e -> {
             int damage = (int) (p.hp().max() / 8.0);
             BattleLog.add("%s drained %d HP from %s!", r, damage, p);
 
@@ -350,18 +318,100 @@ public class StatusCondition extends Effect {
             checkIfFaints(p);
         });
 
-        // Fails if already seeded or is a Grass-Type
-        canApplyStatus(p, name, e -> {
-            if (!e.statusChange.equals(name)) return;
-            if (p.isType(Type.GRASS)) throw new StatusFailedException(Move.noEffectOn(p));
-            if (p.hasCondition(name)) throw new StatusFailedException();      
+        return new StatusCondition(p, name, flags);
+    }
+
+    // Forces Pokemon to use the move chosen for n rounds
+    public static StatusCondition forcedMove(Pokemon p, Move m, int n) {
+        String name = StatusCondition.FORCED_MOVE_ID;
+        String[] flags = new String[] {GameEvent.MOVE_SELECTION, GameEvent.END_OF_ROUND};
+
+        Counter counter = new Counter(n);
+
+        p.events().addEventListener(flags[0], name, e -> p.setMove(m));
+        p.events().addEventListener(flags[1], name, e -> {
+            if (counter.inc()) p.conditions().removeCondition(name); 
         });
 
         return new StatusCondition(p, name, flags);
     }
 
+    /*
+     * Pokemon concentrates energy, and then attacks on the next turn
+     * If the Pokemon is hit with an attack, it lose it focus and
+     * their attack will fail.
+     */
+    public static StatusCondition focused(Pokemon p, Move m) {
+        String name = StatusCondition.FOCUSED_ID;
+        String[] flags = new String[] {GameEvent.MOVE_SELECTION, GameEvent.USE_MOVE, GameEvent.MOVE_HITS};
 
+        State state = new State(); // State 0: Concentrates, State 1: Attacks
+    
+        p.events().addEventListener(flags[0], name, e -> p.setMove(m));
 
+        p.events().addEventListener(flags[1], name, e -> {
+            switch (state.getInt()) {
+                case 0 -> {
+                    state.set(1);
+                    throw new MoveEndedEarlyException("%s concentrates its energy!", p);
+                }
+                case 1 -> {
+                    p.conditions().removeCondition(name);
+                    if (state.getBool()) throw new PokemonCannotActException("%s lost it's focus and couldn't move!", p);
+                    // Acts normally otherwise
+                }
+                default -> throw new IllegalArgumentException(State.INVALID);
+            }
+        });
+
+        p.events().addEventListener(flags[2], name, e -> {
+            if (!(EventData.isTarget(p, e) && state.getInt() == 0)) return;
+            state.set(true);
+        });
+
+        return new StatusCondition(p, name, flags);
+    }
+
+    // Grounded Pokemon are vulnerable to Ground-Type moves (even Flying-Types) 
+    public static StatusCondition grounded(Pokemon p) {
+        String name = StatusCondition.GROUNDED_ID;
+        String[] flags = new String[] {GameEvent.MOVE_EFFECTIVENESS};
+
+        p.events().addEventListener(flags[0], name, e -> {
+            if (!EventData.isTarget(p, e)) return;
+
+            if (e.moveUsed.isType(Type.GROUND) && e.moveEffectiveness == 0) {
+                e.moveEffectiveness = 1.0;
+            }
+        });
+
+        return new StatusCondition(p, name, flags);
+	}
+
+    /*
+     * Pokemon uses the same move 2-3 turns then becomes confused.
+     * The rampage ends early if the move is interrupted.
+     */
+    public static StatusCondition rampage(Pokemon p, Move m) {
+        String name = StatusCondition.RAMPAGE_ID;
+        String[] flags = new String[] {GameEvent.MOVE_SELECTION, GameEvent.END_OF_TURN, GameEvent.MOVE_INTERRUPTED};
+
+        Counter counter = new Counter(RandomValues.generateInt(2, 3));
+
+        p.events().addEventListener(flags[0], name, e -> p.setMove(m));
+        p.events().addEventListener(flags[1], name, e -> {
+            if (counter.inc()) {
+                p.conditions().removeCondition(name);
+                p.conditions().addCondition(confusion(p));
+            }  
+        });
+        p.events().addEventListener(flags[2], name, e -> p.conditions().removeCondition(name));
+
+        return new StatusCondition(p, name, flags);
+	}
+    
+ 
+// Public Class Methods
     public static String failMessage(String id) {
         return switch (id) {
             case StatusCondition.BURN_ID -> "is already burned!";
@@ -369,6 +419,7 @@ public class StatusCondition extends Effect {
             case StatusCondition.PARALYSIS_ID -> "is already paralyzed!";
             case StatusCondition.POISON_ID, StatusCondition.BAD_POISON_ID -> "is already poisoned!";
             case StatusCondition.SLEEP_ID -> "is already asleep!";
+            
             default -> throw new IllegalArgumentException(StatusCondition.ID_ERR);
         };
     }
