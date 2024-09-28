@@ -228,7 +228,7 @@ public class StatusCondition extends Effect {
 	}
 
     public static StatusCondition dive(Pokemon p, Move m) {
-        String name = StatusCondition.FLY_ID;
+        String name = StatusCondition.DIVE_ID;
         String[] flags = new String[] {GameEvent.MOVE_SELECTION, GameEvent.MOVE_ACCURACY};
 
         p.events().addEventListener(flags[0], name, e -> p.setMove(m));
