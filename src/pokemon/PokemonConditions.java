@@ -26,6 +26,8 @@ public class PokemonConditions {
 // Constructor
     public PokemonConditions() {
         this.conditions = new HashMap<>();
+        this.protect = new Protection();
+        this.endure = new Protection();
     }
 
 // Methods
@@ -47,6 +49,7 @@ public class PokemonConditions {
 
 // Methods
     public void clearPrimary() {
+        if (this.primaryCondition == null) return;
         this.primaryCondition.removeEffect();
         this.primaryCondition = null;
     }
@@ -56,6 +59,7 @@ public class PokemonConditions {
     }
 
     public void removeCondition(String key) {
+        if (!this.conditions.containsKey(key)) return;
         this.conditions.get(key).removeEffect();
         this.conditions.remove(key);
     }
