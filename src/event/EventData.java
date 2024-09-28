@@ -11,6 +11,7 @@ public class EventData {
     public final Move moveUsed; // Move Used
 
     public Pokemon target; // Target of the move (defaults to opponent but may well be the same as user)
+    public Pokemon effectTarget; // The target of any additional effects
 
     public int[] statChanges; // Stat Changes a Pokemon received
     public double statProb; // Probability of stat change
@@ -20,8 +21,10 @@ public class EventData {
     public double statusProb; // Probability of status change
     public boolean statusFailed; // Status failed to change (immunity/low prob roll/etc.)
 
+    public String immuneStateChange; // The immunity state a Pokemon changed to
+
     public int weatherChange; // Change in weather
-    public int immuneStateChange; // The immunity state a Pokemon changed to
+    
     public Protection protectionType; // The kind of damage nullifier
 
     public int damageDealt; // Damage dealt by attacker

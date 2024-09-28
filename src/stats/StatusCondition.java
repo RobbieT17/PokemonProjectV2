@@ -38,6 +38,7 @@ public class StatusCondition extends Effect {
     public static final String RAMPAGE_ID = "Rampage";
     public static final String RECHARGE_ID = "Recharge";
     public static final String GROUNDED_ID = "Grounded";
+    public static final String CHARGE_MOVE = "Charge Move";
 
     // Semi-Invulnerable State
     public static final String NO_INVUL_ID = "Normal State";
@@ -240,9 +241,6 @@ public class StatusCondition extends Effect {
 	}
 
  
-
-
-
     // Pokemon flinches and can't act for the round
     public static StatusCondition flinch(Pokemon p) {
         String name = StatusCondition.FLINCH_ID;
@@ -410,7 +408,21 @@ public class StatusCondition extends Effect {
         return new StatusCondition(p, name, flags);
 	}
     
- 
+    /*
+     * Pokemon takes a turn to charge a move,
+     * If not interrupted, the Pokemon acts
+     * on the next turn
+     */
+    public static StatusCondition chargeMove(Pokemon p, Move m) {
+        String name = StatusCondition.CHARGE_MOVE;
+        String[] flags = new String[] {GameEvent.MOVE_SELECTION, GameEvent.MOVE_INTERRUPTED};
+
+        p.events().addEventListener(flags[0], name, e -> p.setMove(m));
+        p.events().addEventListener(flags[1], name, e -> p.conditions().removeCondition(name));
+
+        return new StatusCondition(p, name, flags);
+	}
+    
 // Public Class Methods
     public static String failMessage(String id) {
         return switch (id) {
