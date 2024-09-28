@@ -2,7 +2,7 @@ package exceptions;
 
 import player.PokemonTrainer;
 
-public class BattleEndedException extends RuntimeException{
+public class BattleEndedException extends RuntimeException {
     
     public BattleEndedException(PokemonTrainer winner, PokemonTrainer loser) {
         super(String.format("%s is out of Pokemon! %s wins the battle!", loser, winner));

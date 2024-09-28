@@ -4,10 +4,11 @@ public class Power {
     
     private final int base;
     private int modified;
-    private boolean doubled;
+    private double ratio;
 
     public Power(int base) {
         this.base = base;
+        this.ratio = 1.0;
     }
 
     // Gets power and resets any modifications
@@ -16,10 +17,10 @@ public class Power {
         ?  this.modified
         :  this.base;
 
-        if (this.doubled) pow *= 2;
+        pow *= this.ratio;
 
-        this.doubled = false;
         this.modified = 0;
+        this.ratio = 1.0;
         return pow;
     }
 
@@ -27,7 +28,7 @@ public class Power {
         this.modified = i; 
     }
 
-    public void doubled() {
-        this.doubled = true;
+    public void ratio(double r) {
+        this.ratio = 0.01 * r;
     }
 }

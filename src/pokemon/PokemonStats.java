@@ -26,7 +26,7 @@ public interface PokemonStats {
 
     public static String showCondition(Pokemon p) {
         if (p.conditions().fainted()) return "FAINTED";
-        if (!p.hasPrimaryCondition()) return "";
+        if (!p.conditions().hasPrimary()) return "";
         return p.conditions().primaryCondition().toString();
     }
 
@@ -35,7 +35,7 @@ public interface PokemonStats {
 
 
         for (StatusCondition c : p.conditions().volatileConditions().values()) 
-            sb.append(c.toString())
+            sb.append(c.effectName())
             .append(", ");
         
         String s = sb.toString();

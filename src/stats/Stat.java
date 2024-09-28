@@ -33,6 +33,7 @@ public class Stat {
 
 	private int power; // Power depending on the current stage
 	private int stage; // Stage of the stat, max: 6 min: -6
+	private double mod; // Modified Stat Multiplier
 
 	public Stat(String name, int id, int base) {
 		this.statName = name;
@@ -40,6 +41,7 @@ public class Stat {
 		this.base = base;
 		this.power = base;
 		this.stage = 0;
+		this.mod = 1.0;
 	}
 	
 // Class Methods
@@ -123,6 +125,10 @@ public class Stat {
 		else this.changeStat(); 
 	}	
 
+	public void setMod(double percent) {
+		this.mod = 0.01 * percent;
+	}
+
 // Getters
 	public String statName() {
 		return this.statName;
@@ -137,7 +143,7 @@ public class Stat {
 	}
 
 	public int power() {
-		return this.power;
+		return (int) (this.power * this.mod);
 	}
 
 	public int stage() {

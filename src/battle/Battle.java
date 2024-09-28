@@ -1,5 +1,7 @@
 package battle;
 
+import event.EventData;
+import event.GameEvent;
 import exceptions.BattleEndedException;
 import java.util.InputMismatchException;
 import java.util.Random;
@@ -9,7 +11,7 @@ import move.MoveList;
 import player.*;
 import pokemon.Pokemon;
 import pokemon.PokemonList;
-import stats.StatusCondition;
+import stats.Ability;
 import utility.Input;
 
 public class Battle {
@@ -22,8 +24,8 @@ public class Battle {
     }
 
     // Trainer chooses a Pokemon to send out to battle
-    public static void choosePokemon(PokemonTrainer trainer) {
-        if (trainer.outOfPokemon()) return;
+    public static Pokemon choosePokemon(PokemonTrainer trainer) {
+        if (trainer.outOfPokemon()) return null;
 
         Scanner scanner = new Scanner(System.in);
         boolean done = false;
@@ -53,20 +55,22 @@ public class Battle {
         // Sets trainer's in-battle Pokemon to the one selected
         trainer.returns();
         trainer.sendOut(pokemon);
+        return pokemon;
     }
 
 
     // Pokemon chooses a move
-    public static void chooseMove(PokemonTrainer pt) {
+    public static Pokemon chooseMove(PokemonTrainer pt) {
         Pokemon p = pt.pokemonInBattle();
+        p.events().onEvent(GameEvent.MOVE_SELECTION, null);
 
         /*
          * Unable to choose a move if just switched in
          * or needs to recharge 
          */
-        if (p.conditions().switchedIn() | p.conditions().recharging()) {
-            p.conditions().setRecharging(false);
-            return; 
+        if (p.conditions().switchedIn() | p.conditions().recharge()) {
+            p.conditions().setRecharge(false);
+            return p; 
         }
         // Default to struggle if all the Pokemon's move has no more PP
         if (p.hasNoMoves()) {
@@ -74,12 +78,11 @@ public class Battle {
             p.setMove(MoveList.struggle());
         }
 
-        // Uses last move used if forced to
-        Move move = p.conditions().forcedMove() ? p.lastMove() : null;
+        Move move = p.moveSelected();
 
         if (move != null) {
             p.setMove(move);
-            return;
+            return p;
         }
 
         BattleLog.addPrintln("=====================================");
@@ -99,8 +102,8 @@ public class Battle {
                  * or Pokemon is unable to switch
                  */
                 if (Input.isChar(input, 's') && pt.pokemonAvailable() > 1){ 
-                    choosePokemon(pt);
-                    return;
+                    p = choosePokemon(pt);
+                    return p;
                 }
 
                 // Selects one of the Pokemon's move pool to use
@@ -119,23 +122,21 @@ public class Battle {
         }
         // Locks in Pokemon's chosen move
         p.setMove(move);
+        return p;
     }
 
     // Finds the order which the Pokemon in battle will move
     public static Pokemon[] turnOrder(Pokemon p1, Pokemon p2) {
+        p1.events().onEvent(GameEvent.FIND_MOVE_ORDER, null);
+        p2.events().onEvent(GameEvent.FIND_MOVE_ORDER, null);
+
         Pokemon[] order = new Pokemon[2];
 
         Move m1 = p1.moveSelected();
         Move m2 = p2.moveSelected();
 
-        // Paralyzed Pokemons' speed is reduced by half
-        int speed1 = (int) (p1.hasPrimaryCondition(StatusCondition.PARALYSIS) 
-        ? p1.speed().power() * 0.5 
-        : p1.speed().power());
-
-        int speed2 = (int) (p2.hasPrimaryCondition(StatusCondition.PARALYSIS) 
-        ? p2.speed().power() * 0.5 
-        : p2.speed().power());
+        int speed1 = p1.speed().power();
+        int speed2 = p2.speed().power();
 
         // Handles null moves (pokemon may not always have selected a move)
         if (m2 == null) {
@@ -187,7 +188,7 @@ public class Battle {
         if (a.conditions().fainted() || b.conditions().fainted() || a.moveSelected() == null) return;
 
         BattleLog.addLine();
-        a.useTurn(b);
+        a.useTurn(new EventData(a, b, a.moveSelected()));
     }
 
     /**
@@ -202,9 +203,9 @@ public class Battle {
     public static void moveSelection(PokemonTrainer pt1, PokemonTrainer pt2) {
         if (Battle.skipRound) return;
         
-        // Player choose their moves
-        chooseMove(pt1);
-        chooseMove(pt2);
+        // Player choose their moves, returns the Pokemon (in case of a switch out)
+        BattleField.pokemon1 = chooseMove(pt1);
+        BattleField.pokemon2 = chooseMove(pt2);
 
         // Order of Pokemon
         Pokemon[] order = turnOrder(pt1.pokemonInBattle(), pt2.pokemonInBattle());
@@ -220,22 +221,47 @@ public class Battle {
 
     public static void main(String[] args) {
 
+        /**
+         * TODO: Implement an algorithm to remove
+         * all listeners when a Pokemon switches out.
+         * Must re-add listener when Pokemon switches back
+         * in
+         */
+
+        Pokemon p1 = PokemonList.venusaur("Bobby");
+        p1.setAbility(Ability.chlorophyll(p1));
+
+        Pokemon p2 = PokemonList.charizard("Charlie");
+        p2.setAbility(Ability.blaze(p2));
+
+        Pokemon p3 = PokemonList.blastoise("Squirt");
+        p3.setAbility(Ability.torrent(p3));
+
+        Pokemon p4 = PokemonList.venusaur("Bub");
+        p4.setAbility(Ability.waterAbsorb(p4));
+
+        Pokemon p5 = PokemonList.charizard("Chandler");
+        p5.setAbility(Ability.solarPower(p5));
+
+        Pokemon p6 = PokemonList.blastoise("Tim");
+        p6.setAbility(Ability.rainDish(p6));
+
         PokemonTrainer player1 = new PokemonTrainerBuilder()
         .setName("Robbie")
-        .addPokemon(PokemonList.venusaur("Bobby"))
-        .addPokemon(PokemonList.charizard("Charlie"))
-        .addPokemon(PokemonList.blastoise("Squirt"))
-        .buildTrainer();
+        .addPokemon(p1)
+        .addPokemon(p2)
+        .addPokemon(p3)
+        .build();
 
         PokemonTrainer player2 = new PokemonTrainerBuilder()
         .setName("Sammi")
-        .addPokemon(PokemonList.venusaur("Bub"))
-        .addPokemon(PokemonList.charizard("Chandler"))
-        .addPokemon(PokemonList.blastoise("Tim"))
-        .buildTrainer();
+        .addPokemon(p4)
+        .addPokemon(p5)
+        .addPokemon(p6)
+        .build();
 
-        choosePokemon(player1);
-        choosePokemon(player2);
+        BattleField.pokemon1 = choosePokemon(player1);
+        BattleField.pokemon2 = choosePokemon(player2);
 
         BattleLog.out();
         Battle.skipRound = true;

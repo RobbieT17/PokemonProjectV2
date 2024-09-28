@@ -5,7 +5,6 @@ public class Counter {
 // Variables
     private final int duration; // Number of rounds counter last
     private int count; // Current count
-    private boolean terminated; // Once count exceeds the duration
 
 // Constructor
     public Counter() {
@@ -13,15 +12,15 @@ public class Counter {
     }
 
     public Counter(int duration) {
+        if (duration <= 0) throw new IllegalArgumentException("Duration must be a positive number");
         this.duration = duration;
     }
 
 // Methods
-    // Increments the counter
-    public void inc() {
+    // Increments the counter, returns true if terminated
+    public boolean inc() { 
         this.count++;
-        if (this.duration == -1) return;
-        if (this.count > this.duration) this.terminated = true;
+        return this.count > this.duration;
     }
 
     // Resets counter to 0
@@ -33,8 +32,5 @@ public class Counter {
     public int count() {
         return this.count;
     }
-    
-    public boolean terminated() {
-        return this.terminated;
-    }
+
 }

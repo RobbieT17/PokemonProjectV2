@@ -1,5 +1,6 @@
 package move;
 
+import pokemon.Pokemon;
 import pokemon.PokemonType;
 
 public class Move {
@@ -64,6 +65,10 @@ public class Move {
     }
 
 // Methods
+    public static String noEffectOn(Pokemon p) {
+        return String.format("But it doesn't affect %s...", p);
+    }
+
     /**
      * @param t A Pokemon's typing
      * @return true if the move type is one of the Pokemon's types
@@ -103,11 +108,15 @@ public class Move {
 // Setters
     // Doubles current power for the turn
     public void doublePower() {
-        this.power.doubled();
+        this.power.ratio(200);
     }
 
     public void setPower(int pow) {
         this.power.set(pow);
+    }
+
+    public void changePowerByPercent(double pow) {
+        this.power.ratio(pow);
     }
 
     // Perfect accuracy for the turn

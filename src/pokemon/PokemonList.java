@@ -20,9 +20,9 @@ public interface PokemonList {
         .setStats(82, 83, 100, 100, 80)
         .addMove(MoveList.vineWhip())
         .addMove(MoveList.solarBeam())
-        .addMove(MoveList.willOWisp())
+        .addMove(MoveList.toxic())
         .addMove(MoveList.sleepPowder())
-        .buildPokemon();
+        .build();
     }
 
     public static Pokemon charizard(String name) {
@@ -34,10 +34,10 @@ public interface PokemonList {
         .setHp(78)
         .setStats(84, 78, 109, 85, 100)
         .addMove(MoveList.flareBlitz())
-        .addMove(MoveList.dive())
-        .addMove(MoveList.focusPunch())
-        .addMove(MoveList.sandstorm())
-        .buildPokemon();
+        .addMove(MoveList.dragonClaw())
+        .addMove(MoveList.flamethrower())
+        .addMove(MoveList.sunnyDay())
+        .build();
     }    
 
 
@@ -51,9 +51,9 @@ public interface PokemonList {
         .setStats(83, 100, 85, 105, 78)
         .addMove(MoveList.waterPulse())
         .addMove(MoveList.dive())
-        .addMove(MoveList.whirlpool())
-        .addMove(MoveList.smackDown())
-        .buildPokemon();
+        .addMove(MoveList.swift())
+        .addMove(MoveList.rainDance())
+        .build();
     }
 
    

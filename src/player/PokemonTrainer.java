@@ -21,6 +21,8 @@ public class PokemonTrainer {
     public PokemonTrainer(String name, Pokemon[] team) {
         this.playerName = name;
         this.team = team;
+
+        for (Pokemon p : team) p.setOwner(this);
     }
 
 // Methods
@@ -63,6 +65,7 @@ public class PokemonTrainer {
     public void sendOut(Pokemon p) {
         this.pokemonInBattle = p;
         this.pokemonInBattle.conditions().setSwitchedIn(true);
+
         BattleLog.add("%n%s sends out %s!", this, p);
     }
 
