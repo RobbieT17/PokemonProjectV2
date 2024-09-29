@@ -10,7 +10,7 @@ public class EventData {
     public final Pokemon user; // User of the move
     public final Move moveUsed; // Move Used
 
-    public Pokemon target; // Target of the move (defaults to opponent but may well be the same as user)
+    public Pokemon attackTarget; // Target of the move (defaults to opponent but may well be the same as user)
     public Pokemon effectTarget; // The target of any additional effects
 
     public int[] statChanges; // Stat Changes a Pokemon received
@@ -39,13 +39,14 @@ public class EventData {
 
     public double recoilPercent; // Percentage of damage dealt applied to recoil
     public double drainPercent; // Percentage of damage dealt applied to heal
+    public double healPercent; // Percentage of max HP restored
 
     public String message = ""; // A message produced 
    
 
     public EventData(Pokemon a, Pokemon b, Move m) {
         this.user = a;
-        this.target = b;
+        this.attackTarget = b;
         this.effectTarget = b;
         this.moveUsed = m;
         this.otherMoveMods = 1.0;
@@ -54,7 +55,7 @@ public class EventData {
     // Methods
     public void notifyEvent(String eventName) {
         this.user.events().onEvent(eventName, this);
-        this.target.events().onEvent(eventName, this);  
+        this.attackTarget.events().onEvent(eventName, this);  
     }
 
     public static boolean isUser(Pokemon p, EventData e) {
@@ -62,7 +63,7 @@ public class EventData {
     }
 
     public static boolean isTarget(Pokemon p, EventData e) {
-        return p == e.target;
+        return p == e.attackTarget;
     }
 
 }

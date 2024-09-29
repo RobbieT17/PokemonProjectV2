@@ -3,7 +3,6 @@ package stats;
 import battle.BattleLog;
 import event.EventData;
 import event.GameEvent;
-import exceptions.MoveEndedEarlyException;
 import exceptions.MoveInterruptedException;
 import exceptions.PokemonCannotActException;
 import exceptions.PokemonFaintedException;
@@ -23,6 +22,7 @@ public class StatusCondition extends Effect {
     // Non-Volatile
     public static final String BURN_ID = "BURNED";
     public static final String FREEZE_ID = "FROZEN";
+    public static final String INFECT_ID = "INFECTED";
     public static final String PARALYSIS_ID = "PARALYZED";
     public static final String POISON_ID = "POISONED";
     public static final String BAD_POISON_ID = "BADLY POISONED";
@@ -67,26 +67,24 @@ public class StatusCondition extends Effect {
     }
 
     /*
-     * Burned Pokemon lose 1/8 of their max HP at the end of each round.
-     * Reduces physical move damage by 50%
+     * Burned Pokemon lose 1/16 of their max HP at the end of each round.
+     * Reduces physical-move damage by 50%
      */
     public static StatusCondition burn(Pokemon p) {
         String name = StatusCondition.BURN_ID;
         String[] flags = new String[] {GameEvent.END_OF_ROUND, GameEvent.DAMAGE_MULTIPLIER};
 
         p.events().addEventListener(flags[0], name, e -> {
-            int damage = (int) (p.hp().max() / 16.0);
-            BattleLog.add("%s took %d damage from the burn!", p, damage);
-            p.takeDamage(damage);
+            p.takeDamagePercentMaxHP(1.0 / 16.0, " from the burn");
             checkIfFaints(p);
         });
 
         p.events().addEventListener(flags[1], name, e -> {
-            if (!EventData.isUser(p, e) || !e.moveUsed.isCategory(Move.PHYSICAL)) return;
-            e.otherMoveMods = 0.5;
+            if (!(EventData.isUser(p, e) && e.moveUsed.isCategory(Move.PHYSICAL))) return;
+            e.otherMoveMods *= 0.5;
         });
 
-
+        BattleLog.add("%s was burned!", p);
         return new StatusCondition(p, name, flags);
     }
 
@@ -112,9 +110,48 @@ public class StatusCondition extends Effect {
             throw new PokemonCannotActException("%s is frozen solid!", p);
         });
 
-
+        BattleLog.add("%s froze!", p);
         return new StatusCondition(p, name, flags);
     }
+
+
+    /*
+     * Reduces special-move damage by 50%
+     * If the infect Pokemon uses a contact move, their target is also infected. 
+     * Zombie Pokemon gain a 200% speed boost and restore 1/16 of their max HP at the end of the round, 
+     * however only Non-Zombie Pokemon can infect Zombies.
+     */
+     public static StatusCondition infect(Pokemon p) {
+        String name = StatusCondition.INFECT_ID;
+        String[] flags = new String[] {
+            GameEvent.MOVE_MAKES_CONTACT, GameEvent.DAMAGE_MULTIPLIER, 
+            GameEvent.FIND_MOVE_ORDER, GameEvent.END_OF_ROUND
+        };
+
+        // For Non-Zombie Types
+        p.events().addEventListener(flags[0], name, e -> {
+            Pokemon t = e.effectTarget;
+            if (!EventData.isUser(p, e) || t.conditions().hasPrimary()) return;
+            t.conditions().addCondition(infect(t));
+        });  
+        p.events().addEventListener(flags[1], name, e -> {
+            if (!(EventData.isUser(p, e) && e.moveUsed.isCategory(Move.SPECIAL))) return;
+            e.otherMoveMods *= 0.5; 
+        });
+
+        // For Zombie-Types
+        p.events().addEventListener(flags[2], name, e -> {
+            if (!p.isType(Type.ZOMBIE)) return;
+            p.speed().setMod(200);
+        });
+        p.events().addEventListener(flags[3], name, e -> {
+            if (!p.isType(Type.ZOMBIE)) return;
+            p.restoreHpPercentMaxHP(1.0 / 16.0, " from the infection");
+        });      
+
+        BattleLog.add("%s was infected!", p);
+        return new StatusCondition(p, name, flags);
+     }
 
     /*
      * Paralyzed Pokemon have 50% reduced speed.
@@ -132,6 +169,7 @@ public class StatusCondition extends Effect {
 
         p.events().addEventListener(flags[1], name, e -> p.speed().setMod(50));
 
+        BattleLog.add("%s was paralyzed!", p);
         return new StatusCondition(p, name, flags);
     }
 
@@ -142,12 +180,11 @@ public class StatusCondition extends Effect {
         String[] flags = new String[] {GameEvent.END_OF_ROUND};
 
         p.events().addEventListener(flags[0], name, e -> {
-            int damage = (int) (p.hp().max() / 8.0);
-            BattleLog.add("%s took %d damage from the poison!", p, damage);
-            p.takeDamage(damage);
+            p.takeDamagePercentMaxHP(1.0 / 8.0, " from the poison");
             checkIfFaints(p);
         });
 
+        BattleLog.add("%s was poisoned!", p);
         return new StatusCondition(p, name, flags);
     }
 
@@ -163,12 +200,11 @@ public class StatusCondition extends Effect {
 
         p.events().addEventListener(flags[0], name, e -> {
             counter.inc();
-            int damage = (int) (p.hp().max() * (counter.count() / 16.0));
-            BattleLog.add("%s took %d damage from the poison!", p, damage);
-            p.takeDamage(damage);
+            p.takeDamagePercentMaxHP(counter.count() / 16.0, " from the poison");
             checkIfFaints(p);
         });
 
+        BattleLog.add("%s was badly poisoned!", p);
         return new StatusCondition(p, name, flags);
     }
 
@@ -191,6 +227,7 @@ public class StatusCondition extends Effect {
             throw new PokemonCannotActException("%s is fast asleep...", p);    
         });
 
+        BattleLog.add("%s fell asleep!", p);
         return new StatusCondition(p, name, flags);
     }
 
@@ -208,6 +245,7 @@ public class StatusCondition extends Effect {
             throw new MoveInterruptedException("But %s is high in the sky!", p);
         });
 
+        BattleLog.add("%s flew into the sky!", p);
         return new StatusCondition(p, name, flags);
 	}
 
@@ -223,6 +261,7 @@ public class StatusCondition extends Effect {
             throw new MoveInterruptedException("But %s is high in the sky!", p);
         });
 
+        BattleLog.add("%s dug underground!", p);
         return new StatusCondition(p, name, flags);
 	}
 
@@ -239,10 +278,10 @@ public class StatusCondition extends Effect {
             throw new MoveInterruptedException("But %s is underwater!", p);
         });
 
+        BattleLog.add("%s dove underwater!", p);
         return new StatusCondition(p, name, flags);
 	}
 
- 
     // Pokemon flinches and can't act for the round
     public static StatusCondition flinch(Pokemon p) {
         String name = StatusCondition.FLINCH_ID;
@@ -269,13 +308,11 @@ public class StatusCondition extends Effect {
                 return;
             }
 
-            int damage = (int) (p.hp().max() / 16.0);
-            BattleLog.add("%s took %d damage from the bound!", p, damage);
-            p.takeDamage(damage);
+            p.takeDamagePercentMaxHP(1.0 / 8.0, " from the bound");
             checkIfFaints(p);
-
         });
 
+        BattleLog.add("%s was trapped in a bound!", p);
         return new StatusCondition(p, name, flags);
     }
 
@@ -302,6 +339,7 @@ public class StatusCondition extends Effect {
             throw new PokemonCannotActException();
         });
 
+        BattleLog.add("%s became confused!", p);
         return new StatusCondition(p, name, flags);
     }
 
@@ -318,6 +356,7 @@ public class StatusCondition extends Effect {
             checkIfFaints(p);
         });
 
+        BattleLog.add("%s was seeded!", p);
         return new StatusCondition(p, name, flags);
     }
 
@@ -345,27 +384,17 @@ public class StatusCondition extends Effect {
         String name = StatusCondition.FOCUSED_ID;
         String[] flags = new String[] {GameEvent.MOVE_SELECTION, GameEvent.USE_MOVE, GameEvent.MOVE_HITS};
 
-        State state = new State(); // State 0: Concentrates, State 1: Attacks
+        State state = new State(); // State True: Lost Focus
     
         p.events().addEventListener(flags[0], name, e -> p.setMove(m));
 
         p.events().addEventListener(flags[1], name, e -> {
-            switch (state.getInt()) {
-                case 0 -> {
-                    state.set(1);
-                    throw new MoveEndedEarlyException("%s concentrates its energy!", p);
-                }
-                case 1 -> {
-                    p.conditions().removeCondition(name);
-                    if (state.getBool()) throw new PokemonCannotActException("%s lost it's focus and couldn't move!", p);
-                    // Acts normally otherwise
-                }
-                default -> throw new IllegalArgumentException(State.INVALID);
-            }
+            p.conditions().removeCondition(name);
+            if (state.getBool()) throw new PokemonCannotActException("%s lost it's focus and couldn't move!", p);     
         });
 
         p.events().addEventListener(flags[2], name, e -> {
-            if (!(EventData.isTarget(p, e) && state.getInt() == 0)) return;
+            if (!EventData.isTarget(p, e)) return;
             state.set(true);
         });
 

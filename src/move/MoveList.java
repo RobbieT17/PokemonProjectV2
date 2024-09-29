@@ -18,7 +18,7 @@ public interface MoveList {
     }
 
     private static void targetSelf(EventData data) {
-        data.target = data.user;
+        data.attackTarget = data.user;
         data.effectTarget = data.user;
     }
 
@@ -505,7 +505,7 @@ public interface MoveList {
     public static Move earthquake() {
         MoveAction action = e -> {
             // Deals double power to opponents digging
-            if (e.target.conditions().hasKey(StatusCondition.DIG_ID)) e.moveUsed.doublePower(); 
+            if (e.attackTarget.conditions().hasKey(StatusCondition.DIG_ID)) e.moveUsed.doublePower(); 
             MoveAction.dealDamage(e);
         };
 
@@ -631,7 +631,7 @@ public interface MoveList {
     public static Move falseSwipe() {
         MoveAction action = e -> {
             // Leaves opponent with at least 1 HP
-            e.target.conditions().endure().setActive(true);
+            e.attackTarget.conditions().endure().setActive(true);
             MoveAction.dealDamage(e);
         };
 
@@ -909,7 +909,7 @@ public interface MoveList {
 
     public static Move grassKnot() {
         MoveAction action = e -> {
-            Pokemon d = e.target;
+            Pokemon d = e.attackTarget;
             // Move power varies based on weight 
             e.moveUsed.setPower(
             d.weight() <= 21.8
@@ -977,7 +977,7 @@ public interface MoveList {
 
     public static Move gyroBall() {
         MoveAction action = e -> {
-            e.moveUsed.setPower((int) (25.0 * e.target.speed().power() / (double) e.user.speed().power() + 1));
+            e.moveUsed.setPower((int) (25.0 * e.attackTarget.speed().power() / (double) e.user.speed().power() + 1));
             MoveAction.dealDamage(e);
         };
 
@@ -1008,7 +1008,7 @@ public interface MoveList {
     public static Move haze() {
         MoveAction action = e -> {
             MoveAction.resetStats(e, e.user);
-            MoveAction.resetStats(e, e.target);
+            MoveAction.resetStats(e, e.attackTarget);
         };
 
         return new MoveBuilder()
@@ -1027,7 +1027,7 @@ public interface MoveList {
              * Power varies based on the weight of both user and the target
              * The greater the difference, the greater the power
              */
-            double ratio = e.user.weight() / e.target.weight();
+            double ratio = e.user.weight() / e.attackTarget.weight();
 
             e.moveUsed.setPower(
             ratio < 2
@@ -1211,6 +1211,23 @@ public interface MoveList {
         .setPP(15)
         .setPower(55)
         .setAccuracy(95)
+        .setAction(action)
+        .build();
+    }
+
+    public static Move infect() {
+        MoveAction action = e -> {
+            MoveAction.dealDamage(e);
+            MoveAction.applyCondition(e, StatusCondition.INFECT_ID);
+        };
+
+        return new MoveBuilder()
+        .setId(964)
+        .setName("Infect")
+        .setType(Type.ZOMBIE)
+        .setCategory(Move.PHYSICAL)
+        .setPP(10)
+        .setPower(30)
         .setAction(action)
         .build();
     }
@@ -1752,7 +1769,7 @@ public interface MoveList {
             }
 
             BattleLog.add("%s used %s!", a, randomMove);
-            randomMove.action().act(new EventData(a, e.target, m));
+            randomMove.action().act(new EventData(a, e.attackTarget, m));
         };
 
         return new MoveBuilder()
@@ -2055,7 +2072,7 @@ public interface MoveList {
 
     public static Move venoshock() {
         MoveAction action = e -> {
-            if (e.target.conditions().hasKey(StatusCondition.POISON_ID)) e.moveUsed.doublePower();
+            if (e.attackTarget.conditions().hasKey(StatusCondition.POISON_ID)) e.moveUsed.doublePower();
             MoveAction.dealDamage(e);
         };
 
@@ -2139,7 +2156,7 @@ public interface MoveList {
 
     public static Move whirlpool() {
         MoveAction action = e -> {
-            if (e.target.conditions().hasKey(StatusCondition.DIVE_ID)) e.moveUsed.doublePower();
+            if (e.attackTarget.conditions().hasKey(StatusCondition.DIVE_ID)) e.moveUsed.doublePower();
             MoveAction.dealDamage(e);
             MoveAction.applyCondition(e, StatusCondition.BOUND_ID);
         };

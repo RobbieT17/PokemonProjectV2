@@ -144,12 +144,22 @@ public class Pokemon {
         if (value <= 0) throw new IllegalArgumentException(Pokemon.INVALID_DAMAGE_ERR);
 
         this.conditions.setTookDamage(true);
+        this.damageReceived += value;
+
         if (this.conditions().endure().active()) {
             this.conditions.endure().setActive(false);
             takeDamageEndure(value);
         }
         else this.hp.change(-value); 
         if (this.hp.depleted()) this.faints();   
+    }
+
+    
+    // Takes damage equal to a percent of max HP
+    public void takeDamagePercentMaxHP(double percent, String message) {
+        int damage = (int) (this.hp().max() * percent);
+        BattleLog.add("%s took %d damage%s", this, damage, message + "!");
+        this.takeDamage(damage);
     }
 
     /**
@@ -177,9 +187,17 @@ public class Pokemon {
         this.hp.change(value);
     }
 
+     // Takes damage equal to a percent of max HP
+     public void restoreHpPercentMaxHP(double percent, String message) {
+        int heal = (int) (this.hp().max() * percent);
+        BattleLog.add("%s restored %d HP%s", this, heal, message + "!");
+        this.restoreHP(heal);
+    }
+
     public boolean hpLessThanPercent(double percent) {
         return this.hp.value() / (double) this.hp.max() < 0.01 * percent; 
     }
+
 
     @Override
     public String toString() {
@@ -190,7 +208,7 @@ public class Pokemon {
 // Boolean Methods
     public boolean hasNoMoves() {
         for (Move m : this.moves) 
-            if (!m.pp().depleted()) return false;
+            if (!(m.pp().depleted() || m.disabled())) return false;
         return true;
     }
 

@@ -35,7 +35,7 @@ public class Ability extends Effect{
 
             Move move = e.moveUsed;
             if (move.isType(Type.FIRE) && p.hpLessThanPercent(33)) {
-                e.otherMoveMods = 1.5;
+                e.otherMoveMods *= 1.5;
                 BattleLog.add("%s's Blaze increased the power of its Fire-Type attack!", p);
             } 
         });
@@ -67,7 +67,7 @@ public class Ability extends Effect{
 
             Move move = e.moveUsed;
             if (move.isType(Type.GRASS) && p.hpLessThanPercent(33)) {
-                e.otherMoveMods = 1.5;
+                e.otherMoveMods *= 1.5;
                 BattleLog.add("%s's Overgrow increased the power of its Grass-Type attack!", p);
             }         
         });
@@ -82,9 +82,7 @@ public class Ability extends Effect{
 
         p.events().addEventListener(flags[0], name, e -> {
             if (BattleField.currentWeather == Weather.RAIN) {
-                int heal = (int) (p.hp().max() / 16.0);
-                p.restoreHP(heal);
-                BattleLog.add("%s restore %d HP from its Rain Dish!", p, heal);
+                p.restoreHpPercentMaxHP(1.0 / 16.0, " from its Rain Dish");
             }
         });
 
@@ -110,10 +108,7 @@ public class Ability extends Effect{
 
         p.events().addEventListener(flags[1], name, e -> {
             if (BattleField.currentWeather == Weather.SUNNY && !p.conditions().fainted()) {
-                int damage = (int) (p.hp().max() / 8.0);
-                p.takeDamage(damage);
-                BattleLog.add("%s's Solar Power caused the sun to drain %d HP from it!", p, damage);
-
+                p.takeDamagePercentMaxHP(1.0 / 8.0, " from its Solar Power");
                 if (p.conditions().fainted()) throw new PokemonFaintedException();
             }
         });
@@ -131,7 +126,7 @@ public class Ability extends Effect{
 
             Move move = e.moveUsed;
             if (move.isType(Type.WATER) && p.hpLessThanPercent(33)) {
-                e.otherMoveMods = 1.5;
+                e.otherMoveMods *= 1.5; 
                 BattleLog.add("%s's Overgrow increased the power of its Water-Type attack!", p);
             }        
         });
