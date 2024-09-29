@@ -705,7 +705,7 @@ public abstract class Type {
 
 		@Override
 		public String[] weaknesses() {
-			return new String[] { Type.ICE, Type.PSYCHIC, Type.ROCK };
+			return new String[] { Type.ICE, Type.ROCK };
 		}
 
 		@Override
