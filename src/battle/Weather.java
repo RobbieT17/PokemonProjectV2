@@ -1,5 +1,8 @@
 package battle;
 
+import exceptions.PokemonFaintedException;
+import pokemon.Pokemon;
+import stats.Type;
 import utility.Counter;
 
 public interface Weather {
@@ -63,6 +66,32 @@ public interface Weather {
 
         if (change == Weather.CLEAR) BattleField.weatherCount = null; // Clear weather last indefinitely
         else BattleField.weatherCount = new Counter(5);
+    }
+
+    // Pokemon takes damage from Sandstorm / Hail Weather
+    public static void weatherEffect(Pokemon p) {
+        switch (BattleField.currentWeather) {
+            case Weather.SANDSTORM ->  {
+                // Digital, Ground, Rock, and Steel types are immune to sandstorm
+                if (p.isType(Type.DIGITAL) || 
+                    p.isType(Type.GROUND) || 
+                    p.isType(Type.ROCK) || 
+                    p.isType(Type.STEEL)) return;
+
+                int damage = (int) (p.hp().max() / 8.0);
+                BattleLog.add("%s took %d damage from the sandstorm!", p, damage);
+                p.takeDamage(damage);
+            }
+            case Weather.HAIL ->  {
+                // Digital and Ice types are immune to hail
+                if (p.isType(Type.DIGITAL) || p.isType(Type.ICE)) return;
+
+                int damage = (int) (p.hp().max() / 16.0);  
+                BattleLog.add("%s took %d damage from the hail!", p, damage);
+                p.takeDamage(damage);
+            }
+        }
+        if (p.conditions().fainted()) throw new PokemonFaintedException();
     }
 
 }

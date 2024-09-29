@@ -43,7 +43,4 @@ public class BattleField {
         isBattleOver();
         Battle.skipRound = false;
     }
-
-  
-
 }

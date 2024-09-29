@@ -1,8 +1,8 @@
-package pokemon;
+package stats;
 
-import stats.StatusCondition;
+import pokemon.Pokemon;
 
-public interface PokemonStats {
+public interface StatDisplay {
     
     public static String listStats(Pokemon p) {
         return new StringBuilder()
@@ -45,5 +45,30 @@ public interface PokemonStats {
 
     public static String showPartyStats(Pokemon p) {
         return String.format("%s (HP: %s) %s%n", p, p.hp(), showCondition(p));
+    }
+
+
+    // List Pokemon's stats
+    public static String showAllStats(Pokemon p) {
+		return new StringBuilder()
+		.append(String.format("Name: %s  |  ", p))
+		.append(String.format("Type: %s  |  ", p.pokemonType().toString()))
+        .append(String.format("LEVEL %d  |  ", p.level()))
+		.append(String.format("Pokedex #: %d%n", p.pokedexID()))
+		.append(String.format("%nHP: %s%n", p.hp().toString()))
+		.append(String.format("%n%s", listStats(p)))
+        .append(String.format("%nMOVES: %n%s", listMoves(p)))
+        .toString();
+	}
+
+    public static String showSomeStats(Pokemon p) {
+        return new StringBuilder()
+        .append(String.format("Name: %s  |  ", p))
+        .append(String.format("Type: %s%n", p.pokemonType().toString()))
+        .append(String.format("%nHP: %s%n", p.hp().toString()))
+        .append(String.format("Status Effect: %s%n", showCondition(p)))
+        .append(String.format("Other Effects: %s%n", showVolatileConditions(p)))
+        .append(String.format("%nMOVES: %n%s", listMoves(p)))
+        .toString();
     }
 }

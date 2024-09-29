@@ -8,7 +8,7 @@ import event.GameEvent;
 import exceptions.MoveInterruptedException;
 import java.util.Random;
 import pokemon.Pokemon;
-import stats.Stat;
+import pokemon.PokemonStat;
 import stats.StatusCondition;
 import stats.Type;
 import utility.Protection;
@@ -121,7 +121,7 @@ private static void defenderProtects(Pokemon p) {
      * @param atkStat attack stat 
      * @param crit if the move was a critical hit
      */
-    private static double calculateAttack(Stat atkStat, boolean crit) {
+    private static double calculateAttack(PokemonStat atkStat, boolean crit) {
         return crit && atkStat.stage() < 0 ? atkStat.base() : atkStat.power();
     }
 
@@ -132,7 +132,7 @@ private static void defenderProtects(Pokemon p) {
      * @param defStat defense stat 
      * @param crit if the move was a critical hit
      */
-    private static double calculateDefense(Stat defStat, boolean crit) {
+    private static double calculateDefense(PokemonStat defStat, boolean crit) {
         return crit && defStat.stage() > 0 ? defStat.base() : defStat.power();
     }
 
@@ -241,7 +241,7 @@ private static void defenderProtects(Pokemon p) {
 
         attacker.addDealtDamage(damage);
         defender.addDamageReceived(damage);
-        defender.takeDamage(damage);        
+        defender.takeDamage(damage);    
     }
 
     // Pokemon takes damage based on some percent of the damage dealt
@@ -261,7 +261,7 @@ private static void defenderProtects(Pokemon p) {
 
         int heal = (int) (0.01 * data.drainPercent * p.damageDealt()); 
         BattleLog.add("%s restored %d HP!", p, heal);
-        p.healDamage(heal);
+        p.restoreHP(heal);
     }
 
     // Deals damage to the target
@@ -328,7 +328,7 @@ private static void defenderProtects(Pokemon p) {
 
         int heal = (int) (0.01 * percent * p.hp().max());
         BattleLog.add("%s restored %d HP!", p, heal);
-        p.healDamage(heal);
+        p.restoreHP(heal);
     }
 
 // Bracing Functions
@@ -417,14 +417,14 @@ private static void defenderProtects(Pokemon p) {
             int change = stats[i];
             if (change == 0) continue;
         
-            Stat s = p.stats()[i];
+            PokemonStat s = p.stats()[i];
             if (s.isAtHighestOrLowestStage(change)) {
                 BattleLog.add("But %s's %s won't go any %s!", p, s, (change > 0) ? "higher" : "lower");
                 data.statFailed = true;
                 continue;
             }
             p.stats()[i].changeStage(change);
-            BattleLog.add("%s's %s %s%s!", p, s, (change > 0) ? "rose" : "fell", Stat.sizeOfChange(change));
+            BattleLog.add("%s's %s %s%s!", p, s, (change > 0) ? "rose" : "fell", PokemonStat.sizeOfChange(change));
         }  
     }
 
@@ -443,7 +443,7 @@ private static void defenderProtects(Pokemon p) {
 
     // Resets all stat changes back to neutral
     public static void resetStats(EventData data, Pokemon p) {
-        for (Stat s : p.stats()) s.setStage(0);
+        for (PokemonStat s : p.stats()) s.setStage(0);
         BattleLog.add("%s stat changes were cleared...", p);
     }
 

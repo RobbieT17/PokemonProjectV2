@@ -2,7 +2,6 @@ package pokemon;
 
 import java.util.ArrayList;
 import move.Move;
-import stats.Stat;
 import utility.Builder;
 
 // Class designed to create Pokemon objects efficiently
@@ -23,14 +22,14 @@ public class PokemonBuilder implements Builder{
     // Pokemon Stats
     private HealthPoints hp = null;
 
-    private Stat atk = null;
-    private Stat def = null;
-    private Stat spAtk = null;
-    private Stat spDef = null;
-    private Stat spd = null;
+    private PokemonStat atk = null;
+    private PokemonStat def = null;
+    private PokemonStat spAtk = null;
+    private PokemonStat spDef = null;
+    private PokemonStat spd = null;
 
-    private Stat acc = null;
-    private Stat eva = null;
+    private PokemonStat acc = null;
+    private PokemonStat eva = null;
 
     // Weight
     private double weight = 0.0;
@@ -74,8 +73,8 @@ public class PokemonBuilder implements Builder{
     public Pokemon build() {
         validBuild();
 
-        this.acc = new Stat(Stat.ACCURACY_NAME, Stat.ACCURACY, 100);
-        this.eva = new Stat(Stat.EVASION_NAME, Stat.EVASION, 100);
+        this.acc = new PokemonStat(PokemonStat.ACCURACY_NAME, PokemonStat.ACCURACY, 100);
+        this.eva = new PokemonStat(PokemonStat.EVASION_NAME, PokemonStat.EVASION, 100);
 
         return new Pokemon(
             this.level,
@@ -84,7 +83,7 @@ public class PokemonBuilder implements Builder{
             this.pokedex, 
             this.weight,
             this.hp, 
-            new Stat[] {this.atk, this.def, this.spAtk, this.spDef, this.spd, this.acc, this.eva},
+            new PokemonStat[] {this.atk, this.def, this.spAtk, this.spDef, this.spd, this.acc, this.eva},
             this.moves.toArray(Move[]::new),
             new PokemonConditions()
             );
@@ -128,11 +127,11 @@ public class PokemonBuilder implements Builder{
     }
 
     public PokemonBuilder setStats(int atk, int def, int spAtk, int spDef, int spd) {
-        this.atk = new Stat(Stat.ATTACK_NAME, Stat.ATTACK, this.calculate(atk));
-        this.def = new Stat(Stat.DEFENSE_NAME, Stat.DEFENSE, this.calculate(def));
-        this.spAtk = new Stat(Stat.SPECIAL_ATTACK_NAME, Stat.SPECIAL_ATTACK, this.calculate(spAtk));
-        this.spDef = new Stat(Stat.SPECIAL_DEFENSE_NAME, Stat.SPECIAL_DEFENSE, this.calculate(spDef));
-        this.spd = new Stat(Stat.SPEED_NAME, Stat.SPEED, this.calculate(spd));
+        this.atk = new PokemonStat(PokemonStat.ATTACK_NAME, PokemonStat.ATTACK, this.calculate(atk));
+        this.def = new PokemonStat(PokemonStat.DEFENSE_NAME, PokemonStat.DEFENSE, this.calculate(def));
+        this.spAtk = new PokemonStat(PokemonStat.SPECIAL_ATTACK_NAME, PokemonStat.SPECIAL_ATTACK, this.calculate(spAtk));
+        this.spDef = new PokemonStat(PokemonStat.SPECIAL_DEFENSE_NAME, PokemonStat.SPECIAL_DEFENSE, this.calculate(spDef));
+        this.spd = new PokemonStat(PokemonStat.SPEED_NAME, PokemonStat.SPEED, this.calculate(spd));
         return this;
     }
 

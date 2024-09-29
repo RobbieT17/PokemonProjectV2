@@ -1,6 +1,6 @@
-package stats;
+package pokemon;
 
-public class Stat {
+public class PokemonStat {
 
 // Class Variables
 	private final static int LOWEST_STAT_STAGE = -6;
@@ -35,7 +35,7 @@ public class Stat {
 	private int stage; // Stage of the stat, max: 6 min: -6
 	private double mod; // Modified Stat Multiplier
 
-	public Stat(String name, int id, int base) {
+	public PokemonStat(String name, int id, int base) {
 		this.statName = name;
 		this.statID = id; 
 		this.base = base;
@@ -68,25 +68,25 @@ public class Stat {
 	}
 
 	private boolean isAccuracyOrEvasion() {
-		return this.statID == Stat.ACCURACY || this.statID == Stat.EVASION;
+		return this.statID == PokemonStat.ACCURACY || this.statID == PokemonStat.EVASION;
 	}
 
 	// Changes a stat based on the stage and base stat
 	public void changeStat() {
-		this.power = (int) (this.base * (1 + Stat.MULTIPLIER * this.stage));
+		this.power = (int) (this.base * (1 + PokemonStat.MULTIPLIER * this.stage));
 	}
 
 	// Changes a stat based on an accuracy/evasion of 100%
 	public void changeStatForAccuracyOrEvasion() {
-		this.power = (int) (100 + Stat.MULTIPLIER * 100 * this.stage);
+		this.power = (int) (100 + PokemonStat.MULTIPLIER * 100 * this.stage);
 	}
 
 	// Changes stage of a stat. The stage should never be outside the range of -6 and 6
 	public void changeStage(int change) {
 		this.stage += change;
 
-		if (this.stage < Stat.LOWEST_STAT_STAGE) this.stage = Stat.LOWEST_STAT_STAGE;
-		else if (this.stage > Stat.HIGHEST_STAT_STAGE) this.stage = Stat.HIGHEST_STAT_STAGE;
+		if (this.stage < PokemonStat.LOWEST_STAT_STAGE) this.stage = PokemonStat.LOWEST_STAT_STAGE;
+		else if (this.stage > PokemonStat.HIGHEST_STAT_STAGE) this.stage = PokemonStat.HIGHEST_STAT_STAGE;
 
 		if (this.isAccuracyOrEvasion()) this.changeStatForAccuracyOrEvasion();
 		else this.changeStat(); 
@@ -99,7 +99,7 @@ public class Stat {
 	 */
 	public boolean isAtHighestOrLowestStage(int change) {
 		if (change == 0) throw new IllegalArgumentException("Stage change cannot be zero");
-		return change > 0 ? this.stage == Stat.HIGHEST_STAT_STAGE : this.stage == Stat.LOWEST_STAT_STAGE;
+		return change > 0 ? this.stage == PokemonStat.HIGHEST_STAT_STAGE : this.stage == PokemonStat.LOWEST_STAT_STAGE;
 	}
 
 	// Displays stat's current power and stage
@@ -125,29 +125,13 @@ public class Stat {
 		else this.changeStat(); 
 	}	
 
-	public void setMod(double percent) {
-		this.mod = 0.01 * percent;
-	}
+	public void setMod(double percent) {this.mod = 0.01 * percent;}
+	public void resetMod() {this.mod = 1.0;}
 
 // Getters
-	public String statName() {
-		return this.statName;
-	}
-
-	public int statID() {
-		return this.statID;
-	}
-
-	public int base() {
-		return this.base;
-	}
-
-	public int power() {
-		return (int) (this.power * this.mod);
-	}
-
-	public int stage() {
-		return this.stage;
-	}
-
+	public String statName() {return this.statName;}
+	public int statID() {return this.statID;}
+	public int base() {return this.base;}
+	public int power() {return (int) (this.power * this.mod);}
+	public int stage() {return this.stage;}
 }

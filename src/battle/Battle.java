@@ -12,6 +12,7 @@ import player.*;
 import pokemon.Pokemon;
 import pokemon.PokemonList;
 import stats.Ability;
+import stats.StatDisplay;
 
 
 public class Battle {
@@ -87,7 +88,7 @@ public class Battle {
         }
 
         BattleLog.addPrintln("=====================================");
-        BattleLog.addPrintln(p.showSomeStats());
+        BattleLog.addPrintln(StatDisplay.showSomeStats(p));
         BattleLog.addPrintln("[9] Switch Pokemon");
 
         Scanner scanner = new Scanner(System.in);

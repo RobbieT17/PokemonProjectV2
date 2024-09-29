@@ -15,6 +15,7 @@ public class PokemonConditions {
     private boolean hasMoved; // Pokemon has moved during the round
     private boolean interrupted; // Pokemon's last move was interrupted
     private boolean recharge; // Pokemon has to recharge before moving again
+    private boolean tookDamage; // Pokemon took damage during the round
 
     private Protection protect; 
     private Protection endure;
@@ -81,6 +82,7 @@ public class PokemonConditions {
     public void setHasMoved(boolean h) {this.hasMoved = h;}
     public void setInterrupted(boolean i) {this.interrupted = i;}
     public void setRecharge(boolean r) {this.recharge = r;}
+    public void setTookDamage(boolean d) {this.tookDamage = d;}
     public void setProtect(Protection p) {this.protect = p;}
     public void setEndure(Protection p) {this.endure = p;}
     public void setPrimaryCondition(StatusCondition c) {this.primaryCondition = c;}
@@ -92,6 +94,7 @@ public class PokemonConditions {
     public boolean hasMoved() {return this.hasMoved;}
     public boolean interrupted() {return this.interrupted;}
     public boolean recharge() {return this.recharge;}
+    public boolean tookDamage() {return this.tookDamage;}
 
     public Protection protect() {return this.protect;}
     public Protection endure() {return this.endure;}

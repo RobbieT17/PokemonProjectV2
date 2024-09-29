@@ -144,7 +144,7 @@ public interface MoveList {
 
     public static Move avalanche() {
         MoveAction action =  e -> {
-            if (e.user.hasTakenDamage()) e.moveUsed.doublePower();
+            if (e.user.conditions().tookDamage()) e.moveUsed.doublePower();
             MoveAction.dealDamage(e);
         };
 
@@ -2149,7 +2149,7 @@ public interface MoveList {
         .setType(Type.FIRE)
         .setCategory(Move.STATUS)
         .setPP(15)
-        .setAccuracy(85)
+        .setAccuracy(100) //TODO: 85
         .setAction(action)
         .build();
     }

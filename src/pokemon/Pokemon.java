@@ -1,7 +1,6 @@
 package pokemon;
 
 import battle.Battle;
-import battle.BattleField;
 import battle.BattleLog;
 import battle.Weather;
 import event.EventData;
@@ -10,9 +9,7 @@ import exceptions.*;
 import move.Move;
 import player.PokemonTrainer;
 import stats.Ability;
-import stats.Stat;
 import stats.StatusCondition;
-import stats.Type;
 
 public class Pokemon {
 
@@ -20,11 +17,8 @@ public class Pokemon {
     public static final String INVALID_DAMAGE_ERR = "Damage value must be positive";
 
 // Class Variables
-
-
     // Default Level
     public static final int DEFAULT_LEVEL = 50;
-
 
 // Object Variables
     private final int level; // Pokemon Level, higher level means a stronger pokemon 
@@ -34,7 +28,7 @@ public class Pokemon {
 
     // Pokemon Stats
     private final HealthPoints hp; // Amount of HP the Pokemon has
-    private final Stat[] stats; // [atk, def, spAtk, spDef, spd, acc, eva]
+    private final PokemonStat[] stats; // [atk, def, spAtk, spDef, spd, acc, eva]
     private final double weight; // Weight of the Pokemon
 
     // Moves
@@ -67,7 +61,7 @@ public class Pokemon {
         int id,
         double weight,
         HealthPoints hp,
-        Stat[] stats, 
+        PokemonStat[] stats, 
         Move[] moves,
         PokemonConditions conditions
     ) {
@@ -123,10 +117,6 @@ public class Pokemon {
         } catch (MoveInterruptedException | PokemonCannotActException e) {
             BattleLog.add(e.getMessage());
             this.events.onEvent(GameEvent.MOVE_INTERRUPTED, data);
-    
-            // Resets any move modifications
-            this.moveSelected().power(); 
-            this.moveSelected().accuracy();
 
             // Stops any ongoing moves
             this.conditions.removeCondition(StatusCondition.FOCUSED_ID);
@@ -148,6 +138,7 @@ public class Pokemon {
     public void takeDamage(int value) {
         if (value <= 0) throw new IllegalArgumentException(Pokemon.INVALID_DAMAGE_ERR);
 
+        this.conditions.setTookDamage(true);
         if (this.conditions().endure().active()) {
             this.conditions.endure().setActive(false);
             takeDamageEndure(value);
@@ -176,83 +167,13 @@ public class Pokemon {
      * @throws IllegalArgumentException if value isn't positive
      * @param value health restored
      */
-    public void healDamage(int value) {
+    public void restoreHP(int value) {
         if (value <= 0) throw new IllegalArgumentException(Pokemon.INVALID_DAMAGE_ERR);
         this.hp.change(value);
     }
 
     public boolean hpLessThanPercent(double percent) {
         return this.hp.value() / (double) this.hp.max() < 0.01 * percent; 
-    }
-
-    public void modifyAttackByPercent(double percent) {
-        this.attack().setMod(percent);
-    }
-
-    public void modifyDefenseByPercent(double percent) {
-        this.defense().setMod(percent);
-    }
-
-    public void modifySpAttackByPercent(double percent) {
-        this.specialAttack().setMod(percent);
-    }
-
-    public void modifySpDefenseByPercent(double percent) {
-        this.speed().setMod(percent);
-    }
-
-    public void modifySpeedByPercent(double percent) {
-        this.speed().setMod(percent);
-    }
-
-    // Takes damage from Sandstorm / Hail Weather
-    public void weatherEffect() {
-        switch (BattleField.currentWeather) {
-            case Weather.SANDSTORM ->  {
-                // Digital, Ground, Rock, and Steel types are immune to sandstorm
-                if (this.isType(Type.DIGITAL) || 
-                    this.isType(Type.GROUND) || 
-                    this.isType(Type.ROCK) || 
-                    this.isType(Type.STEEL)) return;
-
-                int damage = (int) (this.hp().max() / 8.0);
-                BattleLog.add("%s took %d damage from the sandstorm!", this, damage);
-                this.takeDamage(damage);
-            }
-            case Weather.HAIL ->  {
-                // Digital and Ice types are immune to hail
-                if (this.isType(Type.DIGITAL) || this.isType(Type.ICE)) return;
-
-                int damage = (int) (this.hp().max() / 16.0);  
-                BattleLog.add("%s took %d damage from the hail!", this, damage);
-                this.takeDamage(damage);
-            }
-        }
-        if (this.conditions.fainted()) throw new PokemonFaintedException();
-    }
-
-    // List Pokemon's stats
-    public String showAllStats() {
-		return new StringBuilder()
-		.append(String.format("Name: %s  |  ", this.pokemonName))
-		.append(String.format("Type: %s  |  ", this.pokemonType.toString()))
-        .append(String.format("LEVEL %d  |  ", this.level))
-		.append(String.format("Pokedex #: %d%n", this.pokedexID))
-		.append(String.format("%nHP: %s%n", this.hp.toString()))
-		.append(String.format("%n%s", PokemonStats.listStats(this)))
-        .append(String.format("%nMOVES: %n%s", PokemonStats.listMoves(this)))
-        .toString();
-	}
-
-    public String showSomeStats() {
-        return new StringBuilder()
-        .append(String.format("Name: %s  |  ", this.pokemonName))
-        .append(String.format("Type: %s%n", this.pokemonType.toString()))
-        .append(String.format("%nHP: %s%n", this.hp.toString()))
-        .append(String.format("Status Effect: %s%n", PokemonStats.showCondition(this)))
-        .append(String.format("Other Effects: %s%n", PokemonStats.showVolatileConditions(this)))
-        .append(String.format("%nMOVES: %n%s", PokemonStats.listMoves(this)))
-        .toString();
     }
 
     @Override
@@ -272,10 +193,6 @@ public class Pokemon {
         return (this.pokemonType.hasSecondaryType())
         ? this.pokemonType.primaryType().typeName().equals(type) || this.pokemonType.secondaryType().typeName().equals(type)
         : this.pokemonType.primaryType().typeName().equals(type);
-    }
-
-    public boolean hasTakenDamage() {
-        return this.damageReceived != 0;
     }
  
 // Setters
@@ -305,23 +222,30 @@ public class Pokemon {
     }
 
     public void resetMove() {
+        this.moveSelected.resetStats();
         this.lastMove = this.moveSelected;
         this.moveSelected = null;
     }
 
+    public void clearStatMods() {
+        for (PokemonStat s : this.stats) s.resetMod();
+    }
+
     public void afterEffects() {
+        this.clearStatMods();
         this.conditions.setSwitchedIn(false);
+        this.conditions.setTookDamage(false);
+        this.damageDealt = 0;
+        this.damageReceived = 0;
 
         if (Battle.skipRound || this.conditions.fainted()) return;
             
         this.resetMove();
-        this.damageDealt = 0;
-        this.damageReceived = 0;
-
+       
         try {
             this.events().onEvent(GameEvent.END_OF_ROUND, null);
             this.events().onEvent(GameEvent.WEATHER_EFFECT, null);
-            this.weatherEffect();
+            Weather.weatherEffect(this);
         } catch (PokemonFaintedException e) {
         }   
     }
@@ -335,6 +259,7 @@ public class Pokemon {
         this.lastMove = null;     
     }
 
+// Setters
     public void setAbility(Ability a) {this.ability = a;}
     public void setOwner(PokemonTrainer pt) {this.owner = pt;}
 
@@ -344,14 +269,14 @@ public class Pokemon {
     public PokemonType pokemonType() {return this.pokemonType;}
     public int pokedexID() {return this.pokedexID;}
     public HealthPoints hp() {return this.hp;}
-    public Stat[] stats() {return this.stats;}
-    public Stat attack() {return this.stats[Stat.ATTACK];}
-	public Stat defense() {return this.stats[Stat.DEFENSE];}
-	public Stat specialAttack() {return this.stats[Stat.SPECIAL_ATTACK];}
-	public Stat specialDefense() {return this.stats[Stat.SPECIAL_DEFENSE];}
-	public Stat speed() {return this.stats[Stat.SPEED];}
-	public Stat accuracy() {return this.stats[Stat.ACCURACY];}
-	public Stat evasion() {return this.stats[Stat.EVASION];}
+    public PokemonStat[] stats() {return this.stats;}
+    public PokemonStat attack() {return this.stats[PokemonStat.ATTACK];}
+	public PokemonStat defense() {return this.stats[PokemonStat.DEFENSE];}
+	public PokemonStat specialAttack() {return this.stats[PokemonStat.SPECIAL_ATTACK];}
+	public PokemonStat specialDefense() {return this.stats[PokemonStat.SPECIAL_DEFENSE];}
+	public PokemonStat speed() {return this.stats[PokemonStat.SPEED];}
+	public PokemonStat accuracy() {return this.stats[PokemonStat.ACCURACY];}
+	public PokemonStat evasion() {return this.stats[PokemonStat.EVASION];}
 	public double weight() {return this.weight;}
     public Move[] moves() {return this.moves;}
     public PokemonConditions conditions() {return this.conditions;}

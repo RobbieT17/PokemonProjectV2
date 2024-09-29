@@ -39,7 +39,7 @@ public class EventData {
     public double recoilPercent; // Percentage of damage dealt applied to recoil
     public double drainPercent; // Percentage of damage dealt applied to heal
 
-    public String message; // A message produced 
+    public String message = ""; // A message produced 
    
 
     public EventData(Pokemon a, Pokemon b, Move m) {

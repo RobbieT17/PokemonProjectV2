@@ -14,9 +14,9 @@ public class MoveBuilder implements Builder {
     private PowerPoints pp = null;
     private MoveAction action = null;
 
-    // Optional (pow only if status moves)
-    private Power pow = null;
-    private Accuracy acc = new Accuracy(100);
+    // Optional (pow if an only if status moves)
+    private MoveStat pow = null;
+    private MoveStat acc = new MoveStat(100);
     private int prot = 0;
     private double crit = Move.UNIVERSAL_CRIT_RATE;
     private boolean contact = false;
@@ -87,12 +87,12 @@ public class MoveBuilder implements Builder {
     }
 
     public MoveBuilder setPower(int p) {
-        this.pow = new Power(p);
+        this.pow = new MoveStat(p);
         return this;
     }
 
     public MoveBuilder setAccuracy(int a) {
-        this.acc = new Accuracy(a);
+        this.acc = new MoveStat(a);
         return this;
     }
 

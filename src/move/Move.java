@@ -30,8 +30,8 @@ public class Move {
     private final double critRate; // Chance of a critical hit
 
     private final PowerPoints pp; // Power Points (The number of uses a move has)
-	private final Power power; // Strength of the move
-	private final Accuracy accuracy; // Hit rate of the move
+	private final MoveStat power; // Strength of the move
+	private final MoveStat accuracy; // Hit rate of the move
 	private final int priority; // Moves with higher priority always move first
     private final boolean makesContact;
     
@@ -46,7 +46,7 @@ public class Move {
         String category,
         double crit,
         PowerPoints pp,
-        Power pow, Accuracy acc, 
+        MoveStat pow, MoveStat acc, 
         int prot,
         boolean contact,
         MoveAction action
@@ -87,6 +87,10 @@ public class Move {
         return this.moveType.equals(t);
     }
 
+    public boolean isCategory(String c) {
+        return this.category.equals(c);
+    }
+
     // Displays the move's name, type, and PP available
     public String moveStats() {
         return new StringBuilder()
@@ -105,75 +109,28 @@ public class Move {
         return this.moveName;
     }
 
+    public void resetStats() {
+        if (this.power != null) this.power.reset();
+        this.accuracy.reset();
+    }
+
 // Setters
-    // Doubles current power for the turn
-    public void doublePower() {
-        this.power.ratio(200);
-    }
-
-    public void setPower(int pow) {
-        this.power.set(pow);
-    }
-
-    public void changePowerByPercent(double pow) {
-        this.power.ratio(pow);
-    }
-
-    // Perfect accuracy for the turn
-    public void perfectAccuracy() {
-        this.accuracy.perfect();
-    }
-
-    public void setAccuracy(int acc) {
-        this.accuracy.set(acc);
-    }
-
-
+    public void setPower(int pow) {this.power.setPower(pow);}
+    public void doublePower() {this.power.setMod(200);}
+    public void changePowerByPercent(double pow) {this.power.setMod(pow);}
+    public void setAccuracy(int acc) {this.accuracy.setPower(acc);}
+    public void perfectAccuracy() {this.accuracy.setPower(Move.ALWAYS_HITS);}
+    
 // Getters
-    public int moveID() {
-        return this.moveID;
-    }
-
-    public String moveName() {
-        return this.moveName;
-    }
-
-    public String moveType() {
-        return this.moveType;
-    }
-
-    public String category() {
-        return this.category;
-    }
-
-    public double critRate() {
-        return this.critRate;
-    }
-
-    public PowerPoints pp() {
-        return this.pp;
-    }
-
-    public int power() {
-        return this.power != null
-        ? this.power.value()
-        : 0;
-    }
-
-    public int accuracy() {
-        return this.accuracy.value();
-    }
-
-    public int priority() {
-        return this.priority;
-    }
-
-    public boolean makesContact() {
-        return this.makesContact;
-    }
-
-    public MoveAction action() {
-        return this.action;
-    }
-
+    public int moveID() {return this.moveID;}
+    public String moveName() {return this.moveName;}
+    public String moveType() {return this.moveType;}
+    public String category() {return this.category;}
+    public double critRate() {return this.critRate;}
+    public PowerPoints pp() {return this.pp;}
+    public int power() {return this.power != null ? this.power.power(): 0;}
+    public int accuracy() {return this.accuracy.power();}
+    public int priority() {return this.priority;}
+    public boolean makesContact() {return this.makesContact;}
+    public MoveAction action() {return this.action;}
 }

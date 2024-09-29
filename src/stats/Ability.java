@@ -50,7 +50,7 @@ public class Ability extends Effect{
 
         p.events().addEventListener(flags[0], name, e -> {
             if (BattleField.currentWeather == Weather.SUNNY) {
-                p.modifySpeedByPercent(200);
+                p.speed().setMod(200);
             }
         });
 
@@ -83,7 +83,7 @@ public class Ability extends Effect{
         p.events().addEventListener(flags[0], name, e -> {
             if (BattleField.currentWeather == Weather.RAIN) {
                 int heal = (int) (p.hp().max() / 16.0);
-                p.healDamage(heal);
+                p.restoreHP(heal);
                 BattleLog.add("%s restore %d HP from its Rain Dish!", p, heal);
             }
         });

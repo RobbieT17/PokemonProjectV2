@@ -83,7 +83,7 @@ public class StatusCondition extends Effect {
         });
 
         p.events().addEventListener(flags[1], name, e -> {
-            if (!EventData.isUser(p, e))
+            if (!EventData.isUser(p, e) || !e.moveUsed.isCategory(Move.PHYSICAL)) return;
             e.moveUsed.changePowerByPercent(50);
         });
 
@@ -131,7 +131,7 @@ public class StatusCondition extends Effect {
             throw new PokemonCannotActException("%s is paralyzed and cannot move!", p);                 
         });
 
-        p.events().addEventListener(flags[1], name, e -> p.modifySpeedByPercent(50));
+        p.events().addEventListener(flags[1], name, e -> p.speed().setMod(50));
 
         return new StatusCondition(p, name, flags);
     }
@@ -314,7 +314,7 @@ public class StatusCondition extends Effect {
             int damage = (int) (p.hp().max() / 8.0);
             BattleLog.add("%s drained %d HP from %s!", r, damage, p);
 
-            r.healDamage(damage);
+            r.restoreHP(damage);
             p.takeDamage(damage);
             checkIfFaints(p);
         });
