@@ -52,6 +52,7 @@ public class Pokemon {
 
     // Other Stats
     private Move moveSelected; // Move selected for the round
+    private Move firstMove; // First move used since switched in
     private Move lastMove; // Move used the last turn
     private int damageDealt; // Amount of damage dealt during the round
     private int damageReceived; // Amount of damage received from opposing Pokemon
@@ -198,6 +199,10 @@ public class Pokemon {
         return this.hp.value() / (double) this.hp.max() < 0.01 * percent; 
     }
 
+    public boolean firstRound() {
+        return this.roundCount == 1;
+    }
+
 
     @Override
     public String toString() {
@@ -246,6 +251,8 @@ public class Pokemon {
 
     public void resetMove() {
         if (this.moveSelected == null) return;
+        if (this.firstRound()) this.firstMove = this.moveSelected;
+
         this.moveSelected.resetStats();
         this.lastMove = this.moveSelected;
         this.moveSelected = null;
@@ -256,14 +263,6 @@ public class Pokemon {
     }
 
     public void afterEffects() {
-        this.clearStatMods();
-        this.conditions.setSwitchedIn(false);
-        this.conditions.setTookDamage(false);
-        this.conditions.setHasMoved(false);
-        this.damageDealt = 0;
-        this.damageReceived = 0;
-        this.roundCount++;
-
         if (Battle.skipRound || this.conditions.fainted()) return;
             
         this.resetMove();
@@ -273,13 +272,22 @@ public class Pokemon {
             this.events().onEvent(GameEvent.WEATHER_EFFECT, null);
             Weather.weatherEffect(this);
         } catch (PokemonFaintedException e) {
-        }   
+        }  
+        
+        this.clearStatMods();
+        this.conditions.setSwitchedIn(false);
+        this.conditions.setTookDamage(false);
+        this.conditions.setHasMoved(false);
+        this.damageDealt = 0;
+        this.damageReceived = 0;
+        this.roundCount++;
     }
 
     // Clears any temporary effects and volatile conditions
     public void backToTrainer() {
         this.resetMove();
         this.conditions.clearAtReturn();
+        this.firstMove = null;
         this.lastMove = null;   
         this.damageDealt = 0;
         this.damageReceived = 0;  
@@ -309,6 +317,7 @@ public class Pokemon {
     public Move[] moves() {return this.moves;}
     public PokemonConditions conditions() {return this.conditions;}
     public Move moveSelected() {return this.moveSelected;}
+    public Move firstMove() {return this.firstMove;}
     public Move lastMove() {return this.lastMove;}
     public int damageDealt() {return this.damageDealt;}
     public int damageReceived() {return this.damageReceived;}

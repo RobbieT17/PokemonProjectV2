@@ -12,6 +12,7 @@ import player.*;
 import pokemon.Pokemon;
 import pokemon.PokemonList;
 import stats.Ability;
+import stats.HeldItem;
 import stats.StatDisplay;
 
 
@@ -228,6 +229,7 @@ public class Battle {
         
         Pokemon p1 = PokemonList.venusaur("Bobby");
         p1.setAbility(Ability.chlorophyll(p1));
+        p1.setItem(HeldItem.choiceScarf(p1));
 
         Pokemon p2 = PokemonList.charizard("Charlie");
         p2.setAbility(Ability.blaze(p2));

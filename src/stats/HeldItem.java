@@ -100,22 +100,43 @@ public class HeldItem extends Effect {
     // Boosts Attack stat by 50% but forces Pokemon to use first move selected (rests after switch out)
     public static HeldItem choiceBand(Pokemon p) {
         String name = HeldItem.CHOICE_BAND_ID;
-        String[] flags = new String[] {GameEvent.MOVE_SELECTION, GameEvent.SWITCH_OUT, GameEvent.DAMAGE_MULTIPLIER};
-
-        Move m = p.moveSelected(); // NULL when sent out
+        String[] flags = new String[] {GameEvent.MOVE_SELECTION, GameEvent.DAMAGE_MULTIPLIER};
 
         p.events().addEventListener(flags[0], name, e -> {
-            if (m == null) return;
-            p.setMove(m);
+            if (p.firstRound()) return;
+            p.setMove(p.firstMove());
         });
 
-        p.events().addEventListener(flags[1], name, e -> {
-            
+        p.events().addEventListener(flags[1], name, e -> p.attack().setMod(150));
+
+        return new HeldItem(p, name, flags);
+	}
+
+    // Boosts Attack stat by 50% but forces Pokemon to use first move selected (rests after switch out)
+    public static HeldItem choiceScarf(Pokemon p) {
+        String name = HeldItem.CHOICE_SCARF_ID;
+        String[] flags = new String[] {GameEvent.MOVE_SELECTION, GameEvent.FIND_MOVE_ORDER};
+
+        p.events().addEventListener(flags[0], name, e -> {
+            if (p.firstRound()) return;
+            p.setMove(p.firstMove());
         });
 
-        p.events().addEventListener(flags[2], name, e -> {
-            
+        p.events().addEventListener(flags[1], name, e -> p.speed().setMod(150));
+
+        return new HeldItem(p, name, flags);
+	}
+
+    public static HeldItem choiceSpecs(Pokemon p) {
+        String name = HeldItem.CHOICE_SPECS_ID;
+        String[] flags = new String[] {GameEvent.MOVE_SELECTION, GameEvent.DAMAGE_MULTIPLIER};
+
+        p.events().addEventListener(flags[0], name, e -> {
+            if (p.firstRound()) return;
+            p.setMove(p.firstMove());
         });
+
+        p.events().addEventListener(flags[1], name, e -> p.specialAttack().setMod(150));
 
         return new HeldItem(p, name, flags);
 	}
