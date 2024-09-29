@@ -118,7 +118,7 @@ public class StatusCondition extends Effect {
     /*
      * Reduces special-move damage by 50%
      * If the infect Pokemon uses a contact move, their target is also infected. 
-     * Zombie Pokemon gain a 200% speed boost and restore 1/16 of their max HP at the end of the round, 
+     * Zombie Pokemon gain a 200% speed boost and restore 1/8 of their max HP at the end of the round, 
      * however only Non-Zombie Pokemon can infect Zombies.
      */
      public static StatusCondition infect(Pokemon p) {
@@ -132,7 +132,7 @@ public class StatusCondition extends Effect {
         p.events().addEventListener(flags[0], name, e -> {
             Pokemon t = e.effectTarget;
             if (!EventData.isUser(p, e) || t.conditions().hasPrimary()) return;
-            t.conditions().addCondition(infect(t));
+            t.conditions().setPrimaryCondition(infect(t));
         });  
         p.events().addEventListener(flags[1], name, e -> {
             if (!(EventData.isUser(p, e) && e.moveUsed.isCategory(Move.SPECIAL))) return;
@@ -146,7 +146,7 @@ public class StatusCondition extends Effect {
         });
         p.events().addEventListener(flags[3], name, e -> {
             if (!p.isType(Type.ZOMBIE)) return;
-            p.restoreHpPercentMaxHP(1.0 / 16.0, " from the infection");
+            p.restoreHpPercentMaxHP(1.0 / 8.0, " from the infection");
         });      
 
         BattleLog.add("%s was infected!", p);

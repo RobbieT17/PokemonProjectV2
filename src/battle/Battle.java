@@ -233,18 +233,23 @@ public class Battle {
 
         Pokemon p2 = PokemonList.charizard("Charlie");
         p2.setAbility(Ability.blaze(p2));
+        p2.setItem(HeldItem.rockyHelmet(p2));
 
         Pokemon p3 = PokemonList.blastoise("Squirt");
         p3.setAbility(Ability.torrent(p3));
+        p3.setItem(HeldItem.choiceSpecs(p3));
 
         Pokemon p4 = PokemonList.venusaur("Bub");
         p4.setAbility(Ability.waterAbsorb(p4));
+        p4.setItem(HeldItem.blackSludge(p4));
  
         Pokemon p5 = PokemonList.charizard("Chandler");
         p5.setAbility(Ability.solarPower(p5));
+        p5.setItem(HeldItem.muscleBand(p5));
 
         Pokemon p6 = PokemonList.blastoise("Tim");
         p6.setAbility(Ability.rainDish(p6));
+        p6.setItem(HeldItem.leftovers(p6));
 
         BattleField.player1 = new PokemonTrainerBuilder()
         .setName("Robbie")

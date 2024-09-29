@@ -229,10 +229,6 @@ private static void defenderProtects(Pokemon p) {
         * stab * crit * effectiveness * random * weather * addition);
     }
 
-    private static void moveMakesContact(EventData data) {
-        if (data.moveUsed.makesContact()) data.notifyEvent(GameEvent.MOVE_MAKES_CONTACT);
-    }
-
     private static void damageTaken(EventData data, boolean multiHit) {
         Pokemon attacker = data.user;
         Pokemon defender = data.attackTarget;
@@ -248,7 +244,7 @@ private static void defenderProtects(Pokemon p) {
         defender.addDamageReceived(damage);
         defender.takeDamage(damage);    
 
-        if (!multiHit) moveMakesContact(data); 
+        if (data.moveUsed.makesContact()) data.notifyEvent(GameEvent.MOVE_MAKES_CONTACT);
     }
 
     // Pokemon takes damage based on some percent of the damage dealt
@@ -295,7 +291,6 @@ private static void defenderProtects(Pokemon p) {
         }
         BattleLog.add("It hit %d times!", data.hitCount);
         BattleLog.add(isSuperEffective(data.moveEffectiveness));
-        moveMakesContact(data);
     }
 
     // Deals damage, attacking Pokemon receives a percentage of the damage dealt

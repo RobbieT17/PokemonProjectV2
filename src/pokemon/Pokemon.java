@@ -200,7 +200,7 @@ public class Pokemon {
     }
 
     public boolean firstRound() {
-        return this.roundCount == 1;
+        return this.roundCount == 0;
     }
 
 
@@ -224,10 +224,8 @@ public class Pokemon {
     }
  
 // Setters
-    private void faints() {
+    public void faints() {
         this.conditions.setFainted(true);
-        this.conditions.clearPrimary();
-        this.conditions.clearVolatileConditions();
         BattleLog.add("%s fainted!", this);
     } 
     
@@ -263,10 +261,26 @@ public class Pokemon {
     }
 
     public void afterEffects() {
-        if (Battle.skipRound || this.conditions.fainted()) return;
+        if (Battle.skipRound) return;
+        if (this.conditions.fainted()) {
+            this.conditions.clearPrimary();
+            this.conditions.clearVolatileConditions();
+            return;
+        }
             
+        this.clearStatMods();
+        this.conditions.setTookDamage(false);
+        this.conditions.setHasMoved(false);
+        this.damageDealt = 0;
+        this.damageReceived = 0;
+    
+        if (this.conditions.switchedIn()) {
+            this.conditions.setSwitchedIn(false);
+            return;
+        }
+
         this.resetMove();
-       
+ 
         try {
             this.events().onEvent(GameEvent.END_OF_ROUND, null);
             this.events().onEvent(GameEvent.WEATHER_EFFECT, null);
@@ -274,12 +288,6 @@ public class Pokemon {
         } catch (PokemonFaintedException e) {
         }  
         
-        this.clearStatMods();
-        this.conditions.setSwitchedIn(false);
-        this.conditions.setTookDamage(false);
-        this.conditions.setHasMoved(false);
-        this.damageDealt = 0;
-        this.damageReceived = 0;
         this.roundCount++;
     }
 
@@ -292,6 +300,8 @@ public class Pokemon {
         this.damageDealt = 0;
         this.damageReceived = 0;  
         this.roundCount = 0;
+
+        this.events.onEvent(GameEvent.SWITCH_OUT, null);
     }
 
 // Setters

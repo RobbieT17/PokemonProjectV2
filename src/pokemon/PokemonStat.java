@@ -125,7 +125,7 @@ public class PokemonStat {
 		else this.changeStat(); 
 	}	
 
-	public void setMod(double percent) {this.mod = 0.01 * percent;}
+	public void setMod(double percent) {this.mod *= 0.01 * percent;}
 	public void resetMod() {this.mod = 1.0;}
 
 // Getters

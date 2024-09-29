@@ -611,7 +611,7 @@ public interface MoveList {
 
     public static Move fakeOut() {
         MoveAction action = e -> {
-            if (e.user.roundCount() > 1) throw new MoveInterruptedException(Move.FAILED);
+            if (!e.user.firstRound()) throw new MoveInterruptedException(Move.FAILED);
 
             MoveAction.dealDamage(e);
             MoveAction.applyCondition(e, StatusCondition.FLINCH_ID);
