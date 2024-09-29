@@ -47,6 +47,10 @@ public interface StatDisplay {
         return String.format("%s (HP: %s) %s%n", p, p.hp(), showCondition(p));
     }
 
+    public static String showItem(Pokemon p) {
+        return p.item() != null ? p.item().toString() : "";
+    }
+
 
     // List Pokemon's stats
     public static String showAllStats(Pokemon p) {
@@ -66,7 +70,8 @@ public interface StatDisplay {
         .append(String.format("Name: %s  |  ", p))
         .append(String.format("Type: %s%n", p.pokemonType().toString()))
         .append(String.format("%nHP: %s%n", p.hp().toString()))
-        .append(String.format("Status Effect: %s%n", showCondition(p)))
+        .append(String.format("%nItem: %s%n", showItem(p)))
+        .append(String.format("%nStatus Effect: %s%n", showCondition(p)))
         .append(String.format("Other Effects: %s%n", showVolatileConditions(p)))
         .append(String.format("%nMOVES: %n%s", listMoves(p)))
         .toString();

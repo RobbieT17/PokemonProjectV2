@@ -19,7 +19,7 @@ public interface PokemonList {
         .setHp(80)
         .setStats(82, 83, 100, 100, 80)
         .addMove(MoveList.vineWhip())
-        .addMove(MoveList.solarBeam())
+        .addMove(MoveList.petalDance())
         .addMove(MoveList.toxic())
         .addMove(MoveList.sleepPowder())
         .build();
@@ -34,7 +34,7 @@ public interface PokemonList {
         .setHp(78)
         .setStats(84, 78, 109, 85, 100)
         .addMove(MoveList.flareBlitz())
-        .addMove(MoveList.dragonClaw())
+        .addMove(MoveList.fakeOut())
         .addMove(MoveList.willOWisp())
         .addMove(MoveList.sunnyDay())
         .build();

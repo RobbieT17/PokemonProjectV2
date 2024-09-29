@@ -35,7 +35,7 @@ public class Ability extends Effect{
 
             Move move = e.moveUsed;
             if (move.isType(Type.FIRE) && p.hpLessThanPercent(33)) {
-                move.changePowerByPercent(50);
+                e.otherMoveMods = 1.5;
                 BattleLog.add("%s's Blaze increased the power of its Fire-Type attack!", p);
             } 
         });
@@ -67,7 +67,7 @@ public class Ability extends Effect{
 
             Move move = e.moveUsed;
             if (move.isType(Type.GRASS) && p.hpLessThanPercent(33)) {
-                move.changePowerByPercent(50);
+                e.otherMoveMods = 1.5;
                 BattleLog.add("%s's Overgrow increased the power of its Grass-Type attack!", p);
             }         
         });
@@ -104,7 +104,7 @@ public class Ability extends Effect{
 
             Move m = e.moveUsed;
             if (m.category().equals(Move.SPECIAL)) {
-                m.changePowerByPercent(50);
+                p.specialAttack().setMod(150);
             }
         });
 
@@ -131,7 +131,7 @@ public class Ability extends Effect{
 
             Move move = e.moveUsed;
             if (move.isType(Type.WATER) && p.hpLessThanPercent(33)) {
-                move.changePowerByPercent(50);
+                e.otherMoveMods = 1.5;
                 BattleLog.add("%s's Overgrow increased the power of its Water-Type attack!", p);
             }        
         });

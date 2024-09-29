@@ -608,6 +608,23 @@ public interface MoveList {
         .build();
     }
 
+    public static Move fakeOut() {
+        MoveAction action = e -> {
+            MoveAction.dealDamage(e);
+            MoveAction.applyCondition(e, StatusCondition.FLINCH_ID, 90);
+        };
+
+        return new MoveBuilder()
+        .setId(252)
+        .setName("Fake Out")
+        .setType(Type.DARK)
+        .setCategory(Move.PHYSICAL)
+        .setPP(10)
+        .setPower(40)
+        .setAction(action)
+        .build();
+    }
+
     public static Move falseSwipe() {
         MoveAction action = e -> {
             // Leaves opponent with at least 1 HP
@@ -2149,7 +2166,7 @@ public interface MoveList {
         .setType(Type.FIRE)
         .setCategory(Move.STATUS)
         .setPP(15)
-        .setAccuracy(100) //TODO: 85
+        .setAccuracy(85) 
         .setAction(action)
         .build();
     }

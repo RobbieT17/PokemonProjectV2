@@ -36,6 +36,8 @@ public class Move {
     private final boolean makesContact;
     
     private final MoveAction action; // What the move does (ex. Deal damage, apply status effect, etc.)
+    
+    private boolean disabled; // Move is currently unusable
 
 // Constructor
     // A move that is used by a Pokemon in battle
@@ -112,6 +114,7 @@ public class Move {
     public void resetStats() {
         if (this.power != null) this.power.reset();
         this.accuracy.reset();
+        this.disabled = false;
     }
 
 // Setters
@@ -120,6 +123,8 @@ public class Move {
     public void changePowerByPercent(double pow) {this.power.setMod(pow);}
     public void setAccuracy(int acc) {this.accuracy.setPower(acc);}
     public void perfectAccuracy() {this.accuracy.setPower(Move.ALWAYS_HITS);}
+    public void enable() {this.disabled = false;}
+    public void disable() {this.disabled = true;}
     
 // Getters
     public int moveID() {return this.moveID;}
@@ -133,4 +138,5 @@ public class Move {
     public int priority() {return this.priority;}
     public boolean makesContact() {return this.makesContact;}
     public MoveAction action() {return this.action;}
+    public boolean disabled() {return this.disabled;}
 }

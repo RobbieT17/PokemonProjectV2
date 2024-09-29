@@ -84,7 +84,7 @@ public class StatusCondition extends Effect {
 
         p.events().addEventListener(flags[1], name, e -> {
             if (!EventData.isUser(p, e) || !e.moveUsed.isCategory(Move.PHYSICAL)) return;
-            e.moveUsed.changePowerByPercent(50);
+            e.otherMoveMods = 0.5;
         });
 
 

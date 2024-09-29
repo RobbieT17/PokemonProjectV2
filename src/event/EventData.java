@@ -30,6 +30,7 @@ public class EventData {
     public int damageDealt; // Damage dealt by attacker
  
     public double moveEffectiveness; // Effectiveness of the move on the target
+    public double otherMoveMods; // Other move mod multipliers (From effects)
     public boolean moveHits; // True if the move connects
     public boolean criticalHit; // True if the move was a critical hit
     public boolean moveFailed; // Move failed to execute
@@ -47,6 +48,7 @@ public class EventData {
         this.target = b;
         this.effectTarget = b;
         this.moveUsed = m;
+        this.otherMoveMods = 1.0;
     }
 
     // Methods

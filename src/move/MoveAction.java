@@ -215,6 +215,7 @@ private static void defenderProtects(Pokemon p) {
         double crit = isCritical ? 1.5 : 1.0;
         double random = random();
         double weather = weatherBonus(move);
+        double addition = data.otherMoveMods;
 
         double attack = move.category().equals(Move.SPECIAL) 
         ? calculateAttack(attacker.specialAttack(), isCritical) 
@@ -225,7 +226,7 @@ private static void defenderProtects(Pokemon p) {
         : calculateDefense(defender.defense(), isCritical);
         
         return (int) (((((2 * attacker.level()) / 5.0 + 2) * move.power() * (attack / defense)) / 50.0 + 2) 
-        * stab * crit * effectiveness * random * weather);
+        * stab * crit * effectiveness * random * weather * addition);
     }
 
     private static void damageTaken(EventData data) {

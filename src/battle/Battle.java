@@ -110,7 +110,8 @@ public class Battle {
 
                 // Selects one of the Pokemon's move pool to use
                 move = p.moves()[input];
-                done = !move.pp().depleted();
+                // Cannot use move if disabled or out of powerpoints
+                done = !(move.pp().depleted() || move.disabled());
                 
             
             } catch (IndexOutOfBoundsException e) {
@@ -224,14 +225,7 @@ public class Battle {
     }
 
     public static void main(String[] args) {
-
-        /**
-         * TODO: Implement an algorithm to remove
-         * all listeners when a Pokemon switches out.
-         * Must re-add listener when Pokemon switches back
-         * in
-         */
-
+        
         Pokemon p1 = PokemonList.venusaur("Bobby");
         p1.setAbility(Ability.chlorophyll(p1));
 
@@ -243,7 +237,7 @@ public class Battle {
 
         Pokemon p4 = PokemonList.venusaur("Bub");
         p4.setAbility(Ability.waterAbsorb(p4));
-
+ 
         Pokemon p5 = PokemonList.charizard("Chandler");
         p5.setAbility(Ability.solarPower(p5));
 

@@ -9,6 +9,7 @@ import exceptions.*;
 import move.Move;
 import player.PokemonTrainer;
 import stats.Ability;
+import stats.HeldItem;
 import stats.StatusCondition;
 
 public class Pokemon {
@@ -39,6 +40,9 @@ public class Pokemon {
 
     // Ability
     private Ability ability;
+
+    // Held Item
+    private HeldItem item;
 
     // Owner of the Pokemon
     private PokemonTrainer owner;
@@ -222,6 +226,7 @@ public class Pokemon {
     }
 
     public void resetMove() {
+        if (this.moveSelected == null) return;
         this.moveSelected.resetStats();
         this.lastMove = this.moveSelected;
         this.moveSelected = null;
@@ -262,6 +267,7 @@ public class Pokemon {
 // Setters
     public void setAbility(Ability a) {this.ability = a;}
     public void setOwner(PokemonTrainer pt) {this.owner = pt;}
+    public void setItem(HeldItem i) {this.item = i;}
 
 // Getters
     public int level() {return this.level;}
@@ -285,6 +291,7 @@ public class Pokemon {
     public Move moveSelected() {return this.moveSelected;}
     public Move lastMove() {return this.lastMove;}
     public Ability ability() {return this.ability;}
+    public HeldItem item() {return this.item;}
     public PokemonTrainer owner() {return this.owner;}
     public GameEvent events() {return this.events;}
 
