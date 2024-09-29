@@ -4,6 +4,7 @@ import battle.BattleField;
 import battle.BattleLog;
 import battle.Weather;
 import event.EventData;
+import exceptions.MoveInterruptedException;
 import pokemon.Pokemon;
 import stats.StatusCondition;
 import stats.Type;
@@ -610,8 +611,10 @@ public interface MoveList {
 
     public static Move fakeOut() {
         MoveAction action = e -> {
+            if (e.user.roundCount() > 1) throw new MoveInterruptedException(Move.FAILED);
+
             MoveAction.dealDamage(e);
-            MoveAction.applyCondition(e, StatusCondition.FLINCH_ID, 90);
+            MoveAction.applyCondition(e, StatusCondition.FLINCH_ID);
         };
 
         return new MoveBuilder()

@@ -51,10 +51,11 @@ public class Pokemon {
     private final GameEvent events;
 
     // Other Stats
-    private int damageDealt; // Amount of damage dealt during the round
-    private int damageReceived; // Amount of damage received from opposing Pokemon
     private Move moveSelected; // Move selected for the round
     private Move lastMove; // Move used the last turn
+    private int damageDealt; // Amount of damage dealt during the round
+    private int damageReceived; // Amount of damage received from opposing Pokemon
+    private int roundCount; // Rounds since last switch-in
 
 // Constructor
     // Creates a new Pokemon for trainers to use in battle
@@ -240,8 +241,10 @@ public class Pokemon {
         this.clearStatMods();
         this.conditions.setSwitchedIn(false);
         this.conditions.setTookDamage(false);
+        this.conditions.setHasMoved(false);
         this.damageDealt = 0;
         this.damageReceived = 0;
+        this.roundCount++;
 
         if (Battle.skipRound || this.conditions.fainted()) return;
             
@@ -259,9 +262,10 @@ public class Pokemon {
     public void backToTrainer() {
         this.resetMove();
         this.conditions.clearAtReturn();
+        this.lastMove = null;   
         this.damageDealt = 0;
-        this.damageReceived = 0;
-        this.lastMove = null;     
+        this.damageReceived = 0;  
+        this.roundCount = 0;
     }
 
 // Setters
@@ -286,10 +290,11 @@ public class Pokemon {
 	public double weight() {return this.weight;}
     public Move[] moves() {return this.moves;}
     public PokemonConditions conditions() {return this.conditions;}
-    public int damageDealt() {return this.damageDealt;}
-    public int damageReceived() {return this.damageReceived;}
     public Move moveSelected() {return this.moveSelected;}
     public Move lastMove() {return this.lastMove;}
+    public int damageDealt() {return this.damageDealt;}
+    public int damageReceived() {return this.damageReceived;}
+    public int roundCount() {return this.roundCount;}
     public Ability ability() {return this.ability;}
     public HeldItem item() {return this.item;}
     public PokemonTrainer owner() {return this.owner;}

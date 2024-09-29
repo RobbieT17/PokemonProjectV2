@@ -142,12 +142,13 @@ public class Ability extends Effect{
     // Water moves deal no effect and instead heal the Pokemon
     public static Ability waterAbsorb(Pokemon p) {
         String name = Ability.WATER_ABSORB_ID;
-        String[] flags = new String[] {GameEvent.DAMAGE_MULTIPLIER};
+        String[] flags = new String[] {GameEvent.MOVE_EFFECTIVENESS};
 
         p.events().addEventListener(flags[0], name, e -> {
             if (!EventData.isTarget(p, e)) return;
 
             if (e.moveUsed.isType(Type.WATER)) {
+                e.moveEffectiveness = 0;
                 throw new MoveInterruptedException("%s's Water Absorb soaked up the water!", p);
             }
         });

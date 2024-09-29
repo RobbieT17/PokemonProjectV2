@@ -383,7 +383,6 @@ private static void defenderProtects(Pokemon p) {
         // Starts rampage
         if (!attacker.conditions().hasKey(StatusCondition.RAMPAGE_ID)) {
             attacker.conditions().addCondition(StatusCondition.rampage(attacker, data.moveUsed));
-            return;
         }
        
         dealDamage(data);       

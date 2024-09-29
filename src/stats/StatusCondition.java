@@ -58,7 +58,6 @@ public class StatusCondition extends Effect {
     @Override
     public void removeEffect() {
         this.bearer().events().removeEventListener(this.flags(), this.effectName());
-        this.bearer().events().removeEventListener(GameEvent.STATUS_CONDITION_CHANGE, this.effectName());
     }
     
 
@@ -406,7 +405,9 @@ public class StatusCondition extends Effect {
                 p.conditions().addCondition(confusion(p));
             }  
         });
-        p.events().addEventListener(flags[2], name, e -> p.conditions().removeCondition(name));
+        p.events().addEventListener(flags[2], name, e -> {
+            p.conditions().removeCondition(name);
+        });
 
         return new StatusCondition(p, name, flags);
 	}
