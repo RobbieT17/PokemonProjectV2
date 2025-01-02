@@ -12,7 +12,7 @@ I have the basics of the battle system working, it can be run in the terminal. I
 ## How to Run
 There are three applications you can run:
 
-- Start a Match: Run `Battle.java`, located in directory `src/main/java/project/battle`
-- Type Matchup Calculator: Run `TypeMatchCalculator`, located in directory `src/main/java/project/application`
-- Load JavaFX application: Run `App`, located in `src/main/java/project/application`
+- **Start a Battle**: Run `Battle.java`, located in directory `src/main/java/project/battle`
+- **Type Matchup Calculator**: Run `TypeMatchCalculator`, located in directory `src/main/java/project/application`
+- **Load JavaFX application**: Run `App`, located in `src/main/java/project/application`
 
