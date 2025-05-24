@@ -1,20 +1,21 @@
 package project.battle;
 
+import java.util.InputMismatchException;
+import java.util.Random;
+import java.util.Scanner;
+
 import project.event.EventData;
 import project.event.GameEvent;
 import project.exceptions.BattleEndedException;
 import project.move.Move;
 import project.move.MoveList;
-import project.player.*;
+import project.player.PokemonTrainer;
+import project.player.PokemonTrainerBuilder;
+import project.pokemon.Pokedex.PokedexEntry;
 import project.pokemon.Pokemon;
-import project.pokemon.PokemonList;
 import project.stats.Ability;
 import project.stats.HeldItem;
 import project.stats.StatDisplay;
-
-import java.util.InputMismatchException;
-import java.util.Random;
-import java.util.Scanner;
 
 
 public class Battle {
@@ -264,27 +265,27 @@ public class Battle {
 
     public static void main(String[] args) {
         
-        Pokemon p1 = PokemonList.venusaur("Bobby");
+        Pokemon p1 = PokedexEntry.VENUSAUR.newInstance("Bobby");
         p1.setAbility(Ability.chlorophyll(p1));
         // p1.setItem(HeldItem.choiceScarf(p1));
 
-        Pokemon p2 = PokemonList.charizard("Charlie");
+        Pokemon p2 = PokedexEntry.CHARIZARD.newInstance("Charlie");
         p2.setAbility(Ability.blaze(p2));
         p2.setItem(HeldItem.rockyHelmet(p2));
 
-        Pokemon p3 = PokemonList.blastoise("Squirt");
+        Pokemon p3 = PokedexEntry.BLASTOISE.newInstance("Squirt");
         p3.setAbility(Ability.torrent(p3));
         // p3.setItem(HeldItem.choiceSpecs(p3));
 
-        Pokemon p4 = PokemonList.venusaur("Bub");
+        Pokemon p4 = PokedexEntry.VENUSAUR.newInstance("Bub");
         p4.setAbility(Ability.waterAbsorb(p4));
         p4.setItem(HeldItem.blackSludge(p4));
  
-        Pokemon p5 = PokemonList.charizard("Chandler");
+        Pokemon p5 = PokedexEntry.CHARIZARD.newInstance("Chandler");
         p5.setAbility(Ability.solarPower(p5));
         p5.setItem(HeldItem.muscleBand(p5));
 
-        Pokemon p6 = PokemonList.blastoise("Tim");
+        Pokemon p6 = PokedexEntry.BLASTOISE.newInstance("Tim");
         p6.setAbility(Ability.rainDish(p6));
         p6.setItem(HeldItem.leftovers(p6));
 
