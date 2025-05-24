@@ -30,6 +30,17 @@ public class PokemonTrainer {
     private String listPokemon() {
         StringBuilder sb = new StringBuilder();
 
+        for (Pokemon p : this.team) {
+            sb.append(StatDisplay.showPartyStats(p));
+        }
+
+        return sb.toString();
+    }
+
+    // Formats Pokemon team info with selection option
+    private String listPokemonSelect() {
+        StringBuilder sb = new StringBuilder();
+
         for (int i = 0; i < this.team.length; i++)
             sb.append(String.format("[%d] %s", i, StatDisplay.showPartyStats(this.team[i])));
 
@@ -56,7 +67,7 @@ public class PokemonTrainer {
     // Displays trainer's Pokemon to the console
     public String showPokemon() {
         return new StringBuilder()
-        .append(String.format("%s's Pokemon:%n%n", this))
+        .append(String.format("%s's Pokemon:%n", this))
         .append(this.listPokemon())
         .toString();
     }

@@ -7,7 +7,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 
-import project.player.PokemonTrainer;
 import project.player.PokemonTrainerBuilder;
 
 // NOTE: This class is run server side
@@ -23,9 +22,12 @@ public class ClientHandler implements Runnable {
     private int clientId;
 
     private String clientName;
-    private PokemonTrainer player;
     private int playerNum;
 
+    /**
+     * Creates a new class to handle a client connection on the server side
+     * @param socket The socket the client is conencted to
+     */
     public ClientHandler(Socket socket) {
         if (ClientHandler.clientCount == Server.NUM_CLIENTS) {
             throw new IllegalStateException("Reach the maximum amount of instances");
@@ -117,14 +119,14 @@ public class ClientHandler implements Runnable {
         this.clientName = this.readFromBuffer();
         this.writeToBuffer("Hello, %s! Welcome to Pokemon Shutdown!\n", this.clientName);
 
-        System.out.printf("[PLAYER %d] Signed in as %s\n", this.playerNum, this.clientName);
+        System.out.printf("[PLAYER %d] Signed in as %s.\n", this.playerNum, this.clientName);
     }
 
     // The server prompts the user to create a Pokemon team for battle
     public void buildTeam() {
         System.out.printf("[PLAYER %d] Building team...\n", this.playerNum);
-        this.player = PokemonTrainerBuilder.createPokemonTrainer(this);
-        System.out.printf("[PLAYER %d] Ready for battle\n", this.playerNum);
+        Server.PLAYERS[this.clientId] = PokemonTrainerBuilder.createPokemonTrainer(this);
+        System.out.printf("[PLAYER %d] Ready for battle.\n", this.playerNum);
     }
 
 
