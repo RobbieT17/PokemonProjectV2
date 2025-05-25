@@ -10,26 +10,25 @@ import project.player.PokemonTrainer;
 
 
 public class Server {
-    public static final int PORT = 6575; // Change to any ephemeral you'd like 
+    public static final int PORT = 6575; // Change to any ephemeral you'd like (PORT > 1024)
     public static final int NUM_CLIENTS = 2; // Number of clients connected (Exactly 2 needed for game to start)
     public static  final PokemonTrainer[] PLAYERS = new PokemonTrainer[Server.NUM_CLIENTS];
 
     // Syncronizines client threads and server for processing
     public static final CyclicBarrier BARRIER = new CyclicBarrier(Server.NUM_CLIENTS + 1); 
 
-
     // Starts the server on the specified port
     // Waits for two clients to connect before finishing
     public static void start(ServerSocket ss) {
-        System.out.printf("[SERVER] Server started on port [%d].\n", Server.PORT);
+        Server.printout("Server started on port [%d].", Server.PORT);
         try {
             for (int i = 0; i < Server.NUM_CLIENTS; i++) { // While server is still running
                 int playerNum = i + 1;
-                System.out.printf("[SERVER] Waiting for Player %d to connect...\n", playerNum);
+                Server.printout("Waiting for Player %d to connect...", playerNum);
 
                 // Waits until a client makes a connection request
                 Socket socket = ss.accept(); 
-                System.out.printf("[PLAYER %d] Connected to server.\n", playerNum);
+                Server.printoutP(playerNum, "Connected to server.");
 
                 // Runs accepted client on a separate thread (View ClientHandler class)
                 ClientHandler clientHandler = new ClientHandler(socket);
@@ -46,17 +45,16 @@ public class Server {
     public static void beginBattle() {
        
         // Waits until both players are ready to battle
-        System.out.println("[SERVER] Both players connected. Waiting for players to setup...");
+        Server.printout("Both players connected. Waiting for players to setup...");
         Server.lock();
 
-        ClientHandler.broadcastMessageAll("The battle has begun.\n%s\n%s", 
-        Server.PLAYERS[0].showPokemon(), Server.PLAYERS[1].showPokemon());
+        Server.printout("Battle initiated");
 
         while (true) {
-            System.out.println("[SERVER] Waiting for players...");
+            Server.printout("Waiting for players...");
             Server.lock();
 
-            System.out.println("[SERVER] Next round");
+            Server.printout("Next round");
         }
             
     }
@@ -79,6 +77,16 @@ public class Server {
         } catch (InterruptedException | BrokenBarrierException e) {
             e.printStackTrace();
         } 
+    }
+
+    // Prints out a message to the server terminal
+    public static void printout(String s, Object ...args) {
+        System.out.printf("[SERVER] %s\n", String.format(s, args));
+    }
+
+    // Prints out a message to server termimal from the specific client
+    public static void printoutP(int n, String s, Object ...args) {
+        System.out.printf("[Player %d] %s\n", n, String.format(s, args));
     }
 
     public static void main(String[] args) throws IOException {

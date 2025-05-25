@@ -98,51 +98,51 @@ public class ClientHandler implements Runnable {
         return this.clientName;
     }
 
-    // Class Methods
-    // The server sends a message to itself and all connected clients
-    public static void broadcastMessageAll(String message, Object... args) {
-        String s = String.format(message, args);
-        System.out.printf("[SERVER] %s\n", s);
-
-        for (ClientHandler c : ClientHandler.clientHandlers) {
-            c.writeToBuffer(s);
-        }
-    }
-
+   
     /**
      * The server prompts the user for their name
      */
     public void setUpClient() {
-        System.out.printf("[PLAYER %d] Signing in...\n", this.playerNum);
+        Server.printoutP(this.playerNum, "Signing in...");
 
         this.writeToBuffer("Please enter your name >>");
         this.clientName = this.readFromBuffer();
         this.writeToBuffer("Hello, %s! Welcome to Pokemon Shutdown!\n", this.clientName);
 
-        System.out.printf("[PLAYER %d] Signed in as %s.\n", this.playerNum, this.clientName);
+        Server.printoutP(this.playerNum, "Signed in as %s.", this.clientName);
     }
 
-    // The server prompts the user to create a Pokemon team for battle
+    // The server prompts the user to create a Pokemon team for battle, stores
+    // the team on the server "database"
     public void buildTeam() {
-        System.out.printf("[PLAYER %d] Building team...\n", this.playerNum);
+        Server.printoutP(this.playerNum, "Building team...");
         Server.PLAYERS[this.clientId] = PokemonTrainerBuilder.createPokemonTrainer(this);
-        System.out.printf("[PLAYER %d] Ready for battle.\n", this.playerNum);
+        Server.printoutP(this.playerNum, "Ready for battle.");
     }
 
-
+    // Class Methods
+    // The server sends a message to itself and all connected clients
+    public static void broadcastMessageAll(String message, Object... args) {
+        for (ClientHandler c : ClientHandler.clientHandlers) {
+            c.writeToBuffer(String.format(message, args));
+        }
+    }
 
     @Override
     // Main Function: Clients inputs a commands to send back to the server (currenly echos what was read to terminal)
     public void run() {
         // Notifies client the server connection was successful
         this.writeToBuffer("You are now connected to the server.");
+
+        // Build Process
         this.setUpClient();
         this.buildTeam();
 
         // Waits for other client to finish setup
-        this.writeToBuffer("Waiting for other player...");
+        this.writeToBuffer("You are Player %d, waiting for other player...", this.playerNum);
         Server.lock();
         
+        // Battle Process
         while (this.socket.isConnected()) {
             this.writeToBuffer(">> ");
             this.readFromBuffer(); // Waits for user-input
