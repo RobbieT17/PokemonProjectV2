@@ -7,14 +7,12 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 
-import project.player.PokemonTrainerBuilder;
+import project.player.*;
+import project.pokemon.Pokemon;
+import project.utility.Time;
 
 // NOTE: This class is run server side
 public class ClientHandler implements Runnable {
-
-    // A list of all connected clients
-    private static final ClientHandler[] clientHandlers = new ClientHandler[Server.NUM_CLIENTS];
-    private static int clientCount = 0;
 
     private Socket socket;
     private BufferedReader bufferedReader;
@@ -23,13 +21,14 @@ public class ClientHandler implements Runnable {
 
     private String clientName;
     private int playerNum;
+    private PokemonTrainer player;
 
     /**
      * Creates a new class to handle a client connection on the server side
      * @param socket The socket the client is conencted to
      */
     public ClientHandler(Socket socket) {
-        if (ClientHandler.clientCount == Server.NUM_CLIENTS) {
+        if (Server.clientCount == Server.NUM_CLIENTS) {
             throw new IllegalStateException("Reach the maximum amount of instances");
         }
 
@@ -37,10 +36,10 @@ public class ClientHandler implements Runnable {
             this.socket = socket;
             this.bufferedReader = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
             this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(this.socket.getOutputStream()));
-            this.clientId = ClientHandler.clientCount++;
+            this.clientId = Server.clientCount++;
             this.playerNum = clientId + 1;
 
-            ClientHandler.clientHandlers[this.clientId] = this;
+            Server.CLIENTS[this.clientId] = this;
         } catch (IOException e) {
             this.closeAll();
         }
@@ -88,6 +87,50 @@ public class ClientHandler implements Runnable {
         }
 
     }
+ 
+    /**
+     * The server prompts the user for their name
+     */
+    public void setUpClient() {
+        Server.printoutP(this.playerNum, "Signing in...");
+
+        this.writeToBuffer("Please enter your name >>");
+        this.clientName = this.readFromBuffer();
+        
+        // Welcome message
+        this.writeToBuffer("=======================================");
+        this.writeToBuffer("Hello, %s! Welcome to Pokemon Shutdown!", this.clientName);
+        this.writeToBuffer("This is a simple Pokemon battle simulator");
+        this.writeToBuffer("where you build a team of pokemon and battle");
+        this.writeToBuffer("an opponent. Good luck, and have fun!");
+        this.writeToBuffer("=======================================");
+
+        Server.printoutP(this.playerNum, "Signed in as %s.", this.clientName);
+    }
+
+    // The server prompts the user to create a Pokemon team for battle, stores
+    // the team on the server "database"
+    public void buildTeam() {
+        Server.printoutP(this.playerNum, "Building team...");
+        Server.PLAYERS[this.clientId] = PokemonTrainerBuilder.createPokemonTrainer(this);
+        this.player = Server.PLAYERS[this.clientId]; // Adds a reference to the trainer object for easier access
+        Server.printoutP(this.playerNum, "Ready for battle.");
+    }
+
+    // Prompts user to select a pokemon to send into battle
+    public int selectPokemon() {
+        Server.printoutP(this.playerNum, "Selecting a pokemon...");
+        Pokemon p = this.player.choosePokemon(this);
+
+        if (p == null) {
+            Server.broadcast("Player %d is out of Pokemon!", this.playerNum);
+            return 1;
+        }
+
+        this.player.sendOut(p);
+        Server.printoutP(this.playerNum, "Sent out %s.", this.player.pokemonInBattle().pokemonName());
+        return 0;
+    }
 
     // Getters
     public int clientId() {
@@ -98,38 +141,8 @@ public class ClientHandler implements Runnable {
         return this.clientName;
     }
 
-   
-    /**
-     * The server prompts the user for their name
-     */
-    public void setUpClient() {
-        Server.printoutP(this.playerNum, "Signing in...");
-
-        this.writeToBuffer("Please enter your name >>");
-        this.clientName = this.readFromBuffer();
-        this.writeToBuffer("Hello, %s! Welcome to Pokemon Shutdown!\n", this.clientName);
-
-        Server.printoutP(this.playerNum, "Signed in as %s.", this.clientName);
-    }
-
-    // The server prompts the user to create a Pokemon team for battle, stores
-    // the team on the server "database"
-    public void buildTeam() {
-        Server.printoutP(this.playerNum, "Building team...");
-        Server.PLAYERS[this.clientId] = PokemonTrainerBuilder.createPokemonTrainer(this);
-        Server.printoutP(this.playerNum, "Ready for battle.");
-    }
-
-    // Class Methods
-    // The server sends a message to itself and all connected clients
-    public static void broadcastMessageAll(String message, Object... args) {
-        for (ClientHandler c : ClientHandler.clientHandlers) {
-            c.writeToBuffer(String.format(message, args));
-        }
-    }
-
+// Main Function: Clients inputs a commands to send back to the server (currenly echos what was read to terminal)
     @Override
-    // Main Function: Clients inputs a commands to send back to the server (currenly echos what was read to terminal)
     public void run() {
         // Notifies client the server connection was successful
         this.writeToBuffer("You are now connected to the server.");
@@ -139,13 +152,32 @@ public class ClientHandler implements Runnable {
         this.buildTeam();
 
         // Waits for other client to finish setup
-        this.writeToBuffer("You are Player %d, waiting for other player...", this.playerNum);
+        this.writeToBuffer("You are Player %d, waiting for opponent...", this.playerNum);
         Server.lock();
-        
+
+        this.writeToBuffer("==================================\n==================================");
+        this.writeToBuffer("Let the battle begin!");
+        this.writeToBuffer("Your opponent:\n%s", Server.CLIENTS[(this.clientId + 1) % 2].player.showPokemon());
+        this.writeToBuffer("==================================");
+
+        this.selectPokemon();
+
+        // Waits for other player to finish setup
+        this.writeToBuffer("You sent out %s.\nWaiting for opponent...", this.player.pokemonInBattle().pokemonName(), 
+        this.playerNum);
+        Server.lock();
+
         // Battle Process
         while (this.socket.isConnected()) {
-            this.writeToBuffer(">> ");
+            Server.lock(); // Waits for server to finish processing
+            Server.printoutP(this.playerNum, "Selecting option...");
+
+            this.writeToBuffer("Hit enter to confirm >> ");
             this.readFromBuffer(); // Waits for user-input
+
+            Server.printoutP(this.playerNum, "Option confirmed.");
+            this.writeToBuffer("Waiting for opponent....");
+            Server.lock(); // Waits for opponent
 
             if (this.socket.isClosed()) { // Checks if socket was closed
                 break;
