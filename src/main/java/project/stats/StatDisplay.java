@@ -44,7 +44,7 @@ public interface StatDisplay {
     }
 
     public static String showPartyStats(Pokemon p) {
-        return String.format("%s (HP: %s) %s%n", p, p.hp(), showCondition(p));
+        return String.format("- %s <%s> (HP: %s) %s%n", p, p.pokemonType(), p.hp(), showCondition(p));
     }
 
     public static String showItem(Pokemon p) {
