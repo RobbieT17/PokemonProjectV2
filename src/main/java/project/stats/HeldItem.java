@@ -78,7 +78,7 @@ public class HeldItem extends Effect {
         String name = HeldItem.BOMB_SURPRISE_ID;
         String[] flags = new String[] {GameEvent.BEFORE_MOVE, GameEvent.SWITCH_OUT};
 
-        Counter c = new Counter(2);
+        Counter c = new Counter(5);
 
         p.events().addEventListener(flags[0], name, e -> {
             if (c.inc()) {
