@@ -28,15 +28,16 @@ public class Client {
     // Sends a message to the server
     public void sendToServer() {
         try {
-            Scanner scanner = new Scanner(System.in);
-            // Loops until user disconnects
-            while (this.socket.isConnected()) {
-                String input = scanner.nextLine();
+            try (Scanner scanner = new Scanner(System.in)) {
+                // Loops until user disconnects
+                while (this.socket.isConnected()) {
+                    String input = scanner.nextLine();
 
-                // Sends message to server
-                this.bufferedWriter.write(input);
-                this.bufferedWriter.newLine();
-                this.bufferedWriter.flush();
+                    // Sends message to server
+                    this.bufferedWriter.write(input);
+                    this.bufferedWriter.newLine();
+                    this.bufferedWriter.flush();
+                }
             }
             
         } catch (IOException | NoSuchElementException e) {
