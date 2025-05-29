@@ -21,7 +21,7 @@ public class Client {
             this.bufferedReader = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
             this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(this.socket.getOutputStream()));
         } catch (IOException e) {
-            closeAll();
+            closeAll(1);
         }  
     }
 
@@ -40,7 +40,7 @@ public class Client {
             }
             
         } catch (IOException | NoSuchElementException e) {
-            closeAll();
+            closeAll(1);
         }
     }
 
@@ -50,15 +50,21 @@ public class Client {
             while (socket.isConnected()) {
                 try {
                     String message = bufferedReader.readLine();
+
+                    if (message == null) {
+                        System.out.println("[ERROR] Server connection lost. Program terminated.");
+                        closeAll(1);
+                    }
+
                     System.out.println(message);
                 } catch (IOException | NoSuchElementException e) {
-                    closeAll();
+                    closeAll(1);
                 }
             }
         }).start();
     }
 
-    public void closeAll() {
+    public void closeAll(int status) {
         try {
             if (this.bufferedReader != null) {
                 this.bufferedReader.close();
@@ -75,6 +81,7 @@ public class Client {
             e.printStackTrace();
         }
 
+        System.exit(status);
     }
 
     public static void main(String[] args) throws IOException {
