@@ -6,6 +6,7 @@ import java.net.Socket;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
+import project.move.Move;
 import project.player.PokemonTrainer;
 import project.utility.Time;
 
@@ -57,27 +58,48 @@ public class Server {
     }
 
     // Prints out a message to the server terminal
-    public static void printout(String s, Object ...args) {
+    public static void log(String s, Object ...args) {
         System.out.printf("[SERVER] %s\n", String.format(s, args));
     }
 
     // Prints out a message to server termimal from the specific client
-    public static void printoutP(int n, String s, Object ...args) {
+    public static void logp(int n, String s, Object ...args) {
         System.out.printf("[PLAYER %d] %s\n", n, String.format(s, args));
+    }
+
+    /**
+     * Processes a round, does neccessialy calculation based on the
+     * moves choosen by the players
+     */
+    public static void processRound() {
+        Move m1 = Server.PLAYERS[0].pokemonInBattle().moveSelected();
+        Move m2 = Server.PLAYERS[1].pokemonInBattle().moveSelected();
+
+        m1.pp().decrement(false);
+        m2.pp().decrement(false);
+
+        Server.broadcast("%s used %s!", Server.PLAYERS[0].pokemonInBattle(), m1);
+
+        Time.hold(1.5);
+
+        Server.broadcast("%s used %s!", Server.PLAYERS[1].pokemonInBattle(), m2);
+
+        Time.hold(1.5);
+
     }
 
     // Starts the server on the specified port
     // Waits for two clients to connect before finishing
     public static void start(ServerSocket ss) {
-        Server.printout("Server started on port %d.", Server.PORT);
+        Server.log("Server started on port %d.", Server.PORT);
         try {
             for (int i = 0; i < Server.NUM_CLIENTS; i++) { // While server is still running
                 int playerNum = i + 1;
-                Server.printout("Waiting for Player %d to connect...", playerNum);
+                Server.log("Waiting for Player %d to connect...", playerNum);
 
                 // Waits until a client makes a connection request
                 Socket socket = ss.accept(); 
-                Server.printoutP(playerNum, "Connected to server.");
+                Server.logp(playerNum, "Connected to server.");
 
                 // Runs accepted client on a separate thread (View ClientHandler class)
                 ClientHandler clientHandler = new ClientHandler(socket);
@@ -95,10 +117,10 @@ public class Server {
     public static void beginBattle() {
        
         // Waits until both players are ready to battle
-        Server.printout("Both players connected. Waiting for players to setup...");
+        Server.log("Both players connected. Waiting for players to setup...");
         Server.lock();
 
-        Server.printout("Battle initiated");
+        Server.log("Battle initiated");
 
         // Waits for players to select starting pokemon
         Server.lock();
@@ -106,23 +128,27 @@ public class Server {
         Server.broadcast("%s sent out %s!", Server.PLAYERS[0].playerName(),
         Server.PLAYERS[0].pokemonInBattle().pokemonName());
         
-        Time.hold(2);
+        Time.hold(1.5);
 
         Server.broadcast("%s sent out %s!", Server.PLAYERS[1].playerName(),
         Server.PLAYERS[1].pokemonInBattle().pokemonName());
 
-        Time.hold(2);
+        Time.hold(1.5);
 
         Server.lock();
 
         while (true) {
-            Server.printout("Waiting for players...");
-            Server.lock();
+            Server.log("Waiting for players...");
+            Server.lock(); // Waits for players to choose a move
 
-            Server.broadcast("Doing battle things!!!");
-            Time.hold(2);
-            Server.printout("Round %d", ++Server.round);
-            
+
+            Time.hold(3); // Holds to simulate buffering
+
+            Server.log("Processing round...");
+            processRound();
+
+            Server.log("Round %d", ++Server.round);
+
             Server.lock();
         }
             

@@ -5,15 +5,12 @@ import project.battle.BattleLog;
 import project.battle.Weather;
 import project.event.EventData;
 import project.event.GameEvent;
-import project.exceptions.MoveEndedEarlyException;
-import project.exceptions.MoveInterruptedException;
-import project.exceptions.PokemonCannotActException;
-import project.exceptions.PokemonFaintedException;
+import project.exceptions.*;
 import project.move.Move;
+import project.network.ClientHandler;
 import project.player.PokemonTrainer;
-import project.stats.Ability;
-import project.stats.HeldItem;
-import project.stats.StatusCondition;
+import project.stats.*;
+
 
 public class Pokemon {
 
@@ -101,7 +98,7 @@ public class Pokemon {
         BattleLog.add("%s used %s!", this, this.moveSelected);
         try {
             this.events.onEvent(GameEvent.USE_MOVE, data);
-            this.moveSelected.pp().decrement(this);
+            this.moveSelected.pp().decrement(this.conditions().hasKey(StatusCondition.FORCED_MOVE_ID));
             this.moveSelected.action().act(data);
         } catch (MoveEndedEarlyException e) {
             BattleLog.add(e.getMessage());
@@ -199,6 +196,15 @@ public class Pokemon {
         this.restoreHP(heal);
     }
 
+    public String listMoveSelect() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(StatDisplay.showSomeStats(this));
+        sb.append("\nPlease select a move >>");
+
+        return sb.toString();
+    }
+
     public boolean hpLessThanPercent(double percent) {
         return this.hp.value() / (double) this.hp.max() < 0.01 * percent; 
     }
@@ -206,6 +212,31 @@ public class Pokemon {
     public boolean firstRound() {
         return this.roundCount == 0;
     }
+
+
+    // User selects a move through input
+    public Move chooseMove(ClientHandler c) {
+        Move m = null;
+
+        while (true) {
+            try {
+                c.writeToBuffer(this.listMoveSelect());
+                String input = c.readFromBuffer();
+                int i = Integer.parseInt(input);
+
+                m = this.moves[i];
+                if (!(m.pp().depleted() || m.disabled())) {
+                    break;
+                }
+
+            } catch (IndexOutOfBoundsException | NumberFormatException e) {
+                c.writeToBuffer("Invalid input, try again.");
+            }
+
+        }
+        return m;
+    }
+
 
     @Override
     public String toString() {
@@ -221,9 +252,7 @@ public class Pokemon {
     }
 
     public boolean isType(String type) {
-        return (this.pokemonType.hasSecondaryType())
-        ? this.pokemonType.primaryType().typeName().equals(type) || this.pokemonType.secondaryType().typeName().equals(type)
-        : this.pokemonType.primaryType().typeName().equals(type);
+        return this.pokemonType.typeEquals(type);
     }
  
 // Setters
