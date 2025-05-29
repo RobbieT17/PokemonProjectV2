@@ -1,6 +1,5 @@
 package project.player;
 
-import project.battle.BattleLog;
 import project.network.ClientHandler;
 import project.pokemon.Pokemon;
 import project.stats.StatDisplay;
@@ -23,6 +22,7 @@ public class PokemonTrainer {
         this.playerName = name;
         this.team = team;
 
+        // Sets the pokemons' owner to the this trainer
         for (Pokemon p : team) p.setOwner(this);
     }
 
@@ -85,15 +85,12 @@ public class PokemonTrainer {
     public void sendOut(Pokemon p) {
         this.pokemonInBattle = p;
         this.pokemonInBattle.conditions().setSwitchedIn(true);
-
-        BattleLog.add("%n%s sends out %s!", this, p);
     }
 
     // Returns the Pokemon on the battle
     public void returns() {
         if (this.pokemonInBattle == null) return;
-        
-        BattleLog.add("%n%s returns %s!", this, this.pokemonInBattle);
+    
         this.pokemonInBattle.backToTrainer();
         this.pokemonInBattle = null;
     }
