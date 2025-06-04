@@ -180,7 +180,7 @@ public class ClientHandler implements Runnable {
         this.selectPokemon();
 
         // Waits for other player to finish setup
-        this.writeToBuffer("You sent out %s.\nWaiting for opponent...", this.player.pokemonInBattle().pokemonName(), 
+        this.writeToBuffer("You sent out %s.\nWaiting for opponent...", this.player.pokemonInBattle(), 
         this.playerNum);
         Server.lock();
 
@@ -192,7 +192,7 @@ public class ClientHandler implements Runnable {
             this.writeToBuffer("Waiting for opponent....");
 
             Server.lock(); // Waits for opponent
-            this.writeToBuffer("Opponent ready. Waiting for server...");
+            this.writeToBuffer("Waiting for server...");
 
             if (this.socket.isClosed()) { // Checks if socket was closed
                 break;
