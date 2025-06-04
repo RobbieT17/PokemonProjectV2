@@ -2,6 +2,7 @@ package project.battle;
 import java.util.Deque;
 import java.util.LinkedList;
 
+import project.network.Server;
 import project.utility.Time;
 
 public interface BattleLog {
@@ -57,16 +58,16 @@ public interface BattleLog {
 	}
 	
 	/**
-	 * Prints out all the messages to the terminal in order which they were added to
-	 * The queue is cleared
+	 * Prints out all the messages to the terminal in order which they were added.
+	 * The queue is cleared.
 	 */
 	public static void out() {
 		while (!MESSAGE_QUEUE.isEmpty()) {
 			String message = MESSAGE_QUEUE.poll();
 			if (message.equals("")|| message.equals("\n")) 
-				System.out.print(message);
+				Server.broadcast(message);
 			else {
-				System.out.println(message);
+				Server.broadcast("%s\n", message);
 				Time.hold();
 			}
 		}

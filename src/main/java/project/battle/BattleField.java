@@ -41,6 +41,6 @@ public class BattleField {
         player1.pokemonInBattle().afterEffects();
         player2.pokemonInBattle().afterEffects();
         isBattleOver();
-        Battle.skipRound = false;
+        BattleA.skipRound = false;
     }
 }

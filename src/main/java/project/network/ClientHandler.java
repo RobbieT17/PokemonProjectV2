@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 
+import project.battle.BattleLog;
 import project.move.Move;
 import project.player.*;
 import project.pokemon.Pokemon;
@@ -128,7 +129,7 @@ public class ClientHandler implements Runnable {
         }
 
         this.player.sendOut(p);
-        Server.logp(this.playerNum, "Sent out %s.", this.player.pokemonInBattle().pokemonName());
+        Server.logp(this.playerNum, "Sent out %s.", this.player.pokemonInBattle());
         return p;
     }
 
@@ -177,6 +178,7 @@ public class ClientHandler implements Runnable {
         this.writeToBuffer("Your opponent:\n%s", Server.CLIENTS[(this.clientId + 1) % 2].player.showPokemon());
         this.writeToBuffer("==================================");
 
+        // Client chooses a pokemon to first use in battle.
         this.selectPokemon();
 
         // Waits for other player to finish setup
@@ -190,8 +192,8 @@ public class ClientHandler implements Runnable {
 
             this.selectMove(this.player.pokemonInBattle());
             this.writeToBuffer("Waiting for opponent....");
-
             Server.lock(); // Waits for opponent
+
             this.writeToBuffer("Waiting for server...");
 
             if (this.socket.isClosed()) { // Checks if socket was closed

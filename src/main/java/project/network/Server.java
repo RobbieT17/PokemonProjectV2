@@ -6,12 +6,15 @@ import java.net.Socket;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
+import project.battle.Battle;
+import project.battle.BattleLog;
 import project.move.Move;
 import project.player.PokemonTrainer;
 import project.utility.Time;
 
 
 public class Server {
+// Class Variables
     public static final int PORT = 6575; // Change to any ephemeral you'd like (PORT > 1024)
     public static final int NUM_CLIENTS = 2; // Number of clients connected (Exactly 2 needed for game to start)
 
@@ -19,15 +22,14 @@ public class Server {
     public static final ClientHandler[] CLIENTS = new ClientHandler[Server.NUM_CLIENTS];
     public static int clientCount = 0;
 
-    // Syncronizines client threads and server for processing
-    public static final CyclicBarrier BARRIER = new CyclicBarrier(Server.NUM_CLIENTS + 1); 
-
     // Stores player data (name and pokemon team)
     public static final PokemonTrainer[] PLAYERS = new PokemonTrainer[Server.NUM_CLIENTS];
 
+    // Syncronizines client threads and server for processing
+    public static final CyclicBarrier BARRIER = new CyclicBarrier(Server.NUM_CLIENTS + 1); 
     public static int round = 0; // The current round number of the battle
 
-    // Class Methods
+// Class Methods
     /**
      * The server broadcasts a message to all connected clients
      */
@@ -67,27 +69,6 @@ public class Server {
         System.out.printf("[PLAYER %d] %s\n", n, String.format(s, args));
     }
 
-    /**
-     * Processes a round, does neccessialy calculation based on the
-     * moves choosen by the players
-     */
-    public static void processRound() {
-        Move m1 = Server.PLAYERS[0].pokemonInBattle().moveSelected();
-        Move m2 = Server.PLAYERS[1].pokemonInBattle().moveSelected();
-
-        m1.pp().decrement(false);
-        m2.pp().decrement(false);
-
-        Server.broadcast("%s used %s!", Server.PLAYERS[0].pokemonInBattle(), m1);
-
-        Time.hold(1.5);
-
-        Server.broadcast("%s used %s!", Server.PLAYERS[1].pokemonInBattle(), m2);
-
-        Time.hold(1.5);
-
-    }
-
     // Starts the server on the specified port
     // Waits for two clients to connect before finishing
     public static void start(ServerSocket ss) {
@@ -115,25 +96,17 @@ public class Server {
 
     // Starts a new Pokemon battle
     public static void beginBattle() {
-       
         // Waits until both players are ready to battle
         Server.log("Both players connected. Waiting for players to setup...");
         Server.lock();
 
+        Battle battle = new Battle(Server.PLAYERS[0], Server.PLAYERS[1]);
         Server.log("Battle initiated");
 
         // Waits for players to select starting pokemon
         Server.lock();
 
-        Server.broadcast("%s sent out %s!", Server.PLAYERS[0].playerName(),
-        Server.PLAYERS[0].pokemonInBattle().pokemonName());
-        
-        Time.hold(1.5);
-
-        Server.broadcast("%s sent out %s!", Server.PLAYERS[1].playerName(),
-        Server.PLAYERS[1].pokemonInBattle().pokemonName());
-
-        Time.hold(1.5);
+        battle.initiatationMessage();
 
         Server.lock();
 
@@ -141,11 +114,11 @@ public class Server {
             Server.log("Waiting for players...");
             Server.lock(); // Waits for players to choose a move
 
-
-            Time.hold(3); // Holds to simulate buffering
+            Time.hold(3); // Holds to simulate server delay
 
             Server.log("Processing round...");
-            processRound();
+            
+            battle.processRound();
 
             Server.log("Round %d", ++Server.round);
 

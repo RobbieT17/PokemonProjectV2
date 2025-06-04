@@ -1,6 +1,6 @@
 package project.pokemon;
 
-import project.battle.Battle;
+import project.battle.BattleA;
 import project.battle.BattleLog;
 import project.battle.Weather;
 import project.event.EventData;
@@ -293,7 +293,7 @@ public class Pokemon {
     }
 
     public void afterEffects() {
-        if (Battle.skipRound) {
+        if (BattleA.skipRound) {
             this.conditions.setSwitchedIn(false);
             return;
         }
