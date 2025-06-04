@@ -36,6 +36,13 @@ public class PokemonType {
 		return this.secondary != null;
 	}
 
+	// Returns true if the types matches
+	public boolean typeEquals(String type) {
+		return (this.hasSecondaryType()) 
+		? this.primary.isType(type) || this.secondary.isType(type)
+		: this.primary.isType(type);
+	}
+
 	@Override
 	public String toString() {
 		return new StringBuilder()
