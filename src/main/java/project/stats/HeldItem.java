@@ -31,8 +31,8 @@ public class HeldItem extends Effect {
 
     @Override
     public void removeEffect() {
-        this.bearer().events().removeEventListener(this.flags(), this.effectName());
-        this.bearer().setItem(null);
+        this.getBearer().getEvents().removeEventListener(this.getFlags(), this.getEffectName());
+        this.getBearer().setItem(null);
     }
 
 // Class Methods
@@ -42,15 +42,15 @@ public class HeldItem extends Effect {
         String name = HeldItem.ASSAULT_VEST_ID;
         String[] flags = new String[] {GameEvent.MOVE_SELECTION, GameEvent.DAMAGE_MULTIPLIER};
 
-        p.events().addEventListener(flags[0], name, e -> {
-            for (Move m : p.moves()) {
+        p.getEvents().addEventListener(flags[0], name, e -> {
+            for (Move m : p.getMoves()) {
                 if (m.isCategory(Move.STATUS)) m.disable();
             }
         });
 
-        p.events().addEventListener(flags[1], name, e -> {
+        p.getEvents().addEventListener(flags[1], name, e -> {
             if (!EventData.isTarget(p, e)) return;
-            p.specialDefense().setMod(150);
+            p.getSpecialDefense().setMod(150);
         });
 
         return new HeldItem(p, name, flags);
@@ -61,7 +61,7 @@ public class HeldItem extends Effect {
         String name = HeldItem.BLACK_SLUDGE_ID;
         String[] flags = new String[] {GameEvent.END_OF_ROUND};
 
-        p.events().addEventListener(flags[0], name, e -> {
+        p.getEvents().addEventListener(flags[0], name, e -> {
             double percent = 1.0 / 16.0;
             if (p.isType(Type.POISON)) {
                 p.restoreHpPercentMaxHP(percent, " from its Black Sludge");
@@ -80,17 +80,17 @@ public class HeldItem extends Effect {
 
         Counter c = new Counter(5);
 
-        p.events().addEventListener(flags[0], name, e -> {
+        p.getEvents().addEventListener(flags[0], name, e -> {
             if (c.inc()) {
                 BattleLog.add("Surprise! %s's Bomb Surprise goes off!", p);
-                BattleField.player1.pokemonInBattle().faints();
-                BattleField.player2.pokemonInBattle().faints();
+                BattleField.player1.getPokemonInBattle().faints();
+                BattleField.player2.getPokemonInBattle().faints();
                 
                 throw new MoveInterruptedException();
             }
         });
 
-        p.events().addEventListener(flags[1], name, e -> c.reset());
+        p.getEvents().addEventListener(flags[1], name, e -> c.reset());
 
         return new HeldItem(p, name, flags);
 	}
@@ -100,12 +100,12 @@ public class HeldItem extends Effect {
         String name = HeldItem.CHOICE_BAND_ID;
         String[] flags = new String[] {GameEvent.MOVE_SELECTION, GameEvent.DAMAGE_MULTIPLIER};
 
-        p.events().addEventListener(flags[0], name, e -> {
+        p.getEvents().addEventListener(flags[0], name, e -> {
             if (p.firstRound()) return;
-            p.setMove(p.firstMove());
+            p.setMove(p.getFirstMove());
         });
 
-        p.events().addEventListener(flags[1], name, e -> p.attack().setMod(150));
+        p.getEvents().addEventListener(flags[1], name, e -> p.getAttack().setMod(150));
 
         return new HeldItem(p, name, flags);
 	}
@@ -115,12 +115,12 @@ public class HeldItem extends Effect {
         String name = HeldItem.CHOICE_SCARF_ID;
         String[] flags = new String[] {GameEvent.MOVE_SELECTION, GameEvent.FIND_MOVE_ORDER};
 
-        p.events().addEventListener(flags[0], name, e -> {
+        p.getEvents().addEventListener(flags[0], name, e -> {
             if (p.firstRound()) return;
-            p.setMove(p.firstMove());
+            p.setMove(p.getFirstMove());
         });
 
-        p.events().addEventListener(flags[1], name, e -> p.speed().setMod(150));
+        p.getEvents().addEventListener(flags[1], name, e -> p.getSpeed().setMod(150));
 
         return new HeldItem(p, name, flags);
 	}
@@ -130,12 +130,12 @@ public class HeldItem extends Effect {
         String name = HeldItem.CHOICE_SPECS_ID;
         String[] flags = new String[] {GameEvent.MOVE_SELECTION, GameEvent.DAMAGE_MULTIPLIER};
 
-        p.events().addEventListener(flags[0], name, e -> {
+        p.getEvents().addEventListener(flags[0], name, e -> {
             if (p.firstRound()) return;
-            p.setMove(p.firstMove());
+            p.setMove(p.getFirstMove());
         });
 
-        p.events().addEventListener(flags[1], name, e -> p.specialAttack().setMod(150));
+        p.getEvents().addEventListener(flags[1], name, e -> p.getSpecialAttack().setMod(150));
 
         return new HeldItem(p, name, flags);
 	}
@@ -145,7 +145,7 @@ public class HeldItem extends Effect {
         String name = HeldItem.LEFTOVERS_ID;
         String[] flags = new String[] {GameEvent.END_OF_ROUND};
 
-        p.events().addEventListener(flags[0], name, e -> p.restoreHpPercentMaxHP(1.0 / 16.0, " from its Leftovers"));
+        p.getEvents().addEventListener(flags[0], name, e -> p.restoreHpPercentMaxHP(1.0 / 16.0, " from its Leftovers"));
 
         return new HeldItem(p, name, flags);
 	}
@@ -155,7 +155,7 @@ public class HeldItem extends Effect {
         String name = HeldItem.MUSCLE_BAND_ID;
         String[] flags = new String[] {GameEvent.DAMAGE_MULTIPLIER};
 
-        p.events().addEventListener(flags[0], name, e -> {
+        p.getEvents().addEventListener(flags[0], name, e -> {
             if (!(EventData.isUser(p, e) && e.moveUsed.isCategory(Move.PHYSICAL))) return;
             e.otherMoveMods *= 1.1;
         });
@@ -168,7 +168,7 @@ public class HeldItem extends Effect {
         String name = HeldItem.ROCKY_HELMET_ID;
         String[] flags = new String[] {GameEvent.MOVE_MAKES_CONTACT};
 
-        p.events().addEventListener(flags[0], name, e -> {
+        p.getEvents().addEventListener(flags[0], name, e -> {
             if (!EventData.isTarget(p, e)) return;
 
             e.user.takeDamagePercentMaxHP(1.0 / 6.0, String.format(" from %s's Rocky Helmet", p));
@@ -182,7 +182,7 @@ public class HeldItem extends Effect {
         String name = HeldItem.WISE_GLASSES_ID;
         String[] flags = new String[] {GameEvent.DAMAGE_MULTIPLIER};
 
-        p.events().addEventListener(flags[0], name, e -> {
+        p.getEvents().addEventListener(flags[0], name, e -> {
             if (!(EventData.isUser(p, e) && e.moveUsed.isCategory(Move.SPECIAL))) return;
             e.otherMoveMods *= 1.1;
         });

@@ -44,7 +44,7 @@ public class PokemonStat {
 		this.mod = 1.0;
 	}
 	
-// Class Methods
+// Class Function
 	private static String sign(int i) {
 		return String.format("%s%d", (i < 0) ? "-" : "+", Math.abs(i));
 	}
@@ -129,9 +129,9 @@ public class PokemonStat {
 	public void resetMod() {this.mod = 1.0;}
 
 // Getters
-	public String statName() {return this.statName;}
-	public int statID() {return this.statID;}
-	public int base() {return this.base;}
-	public int power() {return (int) (this.power * this.mod);}
-	public int stage() {return this.stage;}
+	public String getStatName() {return this.statName;}
+	public int getStatID() {return this.statID;}
+	public int getBase() {return this.base;}
+	public int getPower() {return (int) (this.power * this.mod);}
+	public int getStage() {return this.stage;}
 }

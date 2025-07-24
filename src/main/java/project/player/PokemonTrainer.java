@@ -29,7 +29,7 @@ public class PokemonTrainer {
 // Methods
     // Checks if a the select pokemon is valid. (1. Cannot be fainted and cannot already be on the field)
     private boolean validPokemonChoice(Pokemon p) {
-        return !p.conditions().fainted() && (this.pokemonInBattle() != null) ? !this.pokemonInBattle().equals(p) : true;
+        return !p.getConditions().isFainted() && (this.getPokemonInBattle() != null) ? !this.getPokemonInBattle().equals(p) : true;
     }
 
     // Formats Pokemon team info
@@ -59,7 +59,7 @@ public class PokemonTrainer {
     // True when all the trainer's Pokemon have fainted
     public boolean outOfPokemon() {
         for (Pokemon p : this.team)
-            if (!p.conditions().fainted()) return false;
+            if (!p.getConditions().isFainted()) return false;
         return true;
     }
 
@@ -68,7 +68,7 @@ public class PokemonTrainer {
         int count = 0;
 
         for (Pokemon p : this.team)
-            if (!p.conditions().fainted()) count++;
+            if (!p.getConditions().isFainted()) count++;
 
         return count;
     }
@@ -84,7 +84,7 @@ public class PokemonTrainer {
     // Sends a Pokemon to the battle, the Pokemon cannot act until the next turn
     public void sendOut(Pokemon p) {
         this.pokemonInBattle = p;
-        this.pokemonInBattle.conditions().setSwitchedIn(true);
+        this.pokemonInBattle.getConditions().setSwitchedIn(true);
     }
 
     // Returns the Pokemon on the battle
@@ -135,15 +135,15 @@ public class PokemonTrainer {
     }
 
 // Getters
-    public String playerName() {
+    public String getPlayerName() {
         return this.playerName;
     }
 
-    public Pokemon[] team() {
+    public Pokemon[] getTeam() {
         return this.team;
     }
 
-    public Pokemon pokemonInBattle() {
+    public Pokemon getPokemonInBattle() {
         return this.pokemonInBattle;
     }
 }

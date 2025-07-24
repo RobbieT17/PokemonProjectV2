@@ -54,8 +54,8 @@ public class EventData {
 
     // Methods
     public void notifyEvent(String eventName) {
-        this.user.events().onEvent(eventName, this);
-        this.attackTarget.events().onEvent(eventName, this);  
+        this.user.getEvents().updateOnEvent(eventName, this);
+        this.attackTarget.getEvents().updateOnEvent(eventName, this);  
     }
 
     public static boolean isUser(Pokemon p, EventData e) {

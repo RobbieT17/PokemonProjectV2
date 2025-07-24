@@ -57,13 +57,13 @@ public class StatusCondition extends Effect {
 
     @Override
     public void removeEffect() {
-        this.bearer().events().removeEventListener(this.flags(), this.effectName());
+        this.getBearer().getEvents().removeEventListener(this.getFlags(), this.getEffectName());
     }
     
 
 // Static Methods
     private static void checkIfFaints(Pokemon p) {
-        if (p.conditions().fainted()) throw new PokemonFaintedException();
+        if (p.getConditions().isFainted()) throw new PokemonFaintedException();
     }
 
     /*
@@ -74,12 +74,12 @@ public class StatusCondition extends Effect {
         String name = StatusCondition.BURN_ID;
         String[] flags = new String[] {GameEvent.END_OF_ROUND, GameEvent.DAMAGE_MULTIPLIER};
 
-        p.events().addEventListener(flags[0], name, e -> {
+        p.getEvents().addEventListener(flags[0], name, e -> {
             p.takeDamagePercentMaxHP(1.0 / 16.0, " from the burn");
             checkIfFaints(p);
         });
 
-        p.events().addEventListener(flags[1], name, e -> {
+        p.getEvents().addEventListener(flags[1], name, e -> {
             if (!(EventData.isUser(p, e) && e.moveUsed.isCategory(Move.PHYSICAL))) return;
             e.otherMoveMods *= 0.5;
         });
@@ -97,16 +97,16 @@ public class StatusCondition extends Effect {
         String name = StatusCondition.FREEZE_ID;
         String[] flags = new String[] {GameEvent.PRIMARY_STATUS_BEFORE};
 
-        p.events().addEventListener(flags[0], name, e -> {
-            if (p.moveSelected().moveID() == 815) return;
+        p.getEvents().addEventListener(flags[0], name, e -> {
+            if (p.getMoveSelected().getMoveID() == 815) return;
 
             if (RandomValues.chance(20)) {
-                p.conditions().setImmobilized(false);
-                p.conditions().clearPrimary();
+                p.getConditions().setImmobilized(false);
+                p.getConditions().clearPrimary();
                 BattleLog.add("%s thawed!", p);
                 return;
             }
-            p.conditions().setImmobilized(true);
+            p.getConditions().setImmobilized(true);
             throw new PokemonCannotActException("%s is frozen solid!", p);
         });
 
@@ -129,22 +129,22 @@ public class StatusCondition extends Effect {
         };
 
         // For Non-Zombie Types
-        p.events().addEventListener(flags[0], name, e -> {
+        p.getEvents().addEventListener(flags[0], name, e -> {
             Pokemon t = e.effectTarget;
-            if (!EventData.isUser(p, e) || t.conditions().hasPrimary()) return;
-            t.conditions().setPrimaryCondition(infect(t));
+            if (!EventData.isUser(p, e) || t.getConditions().hasPrimary()) return;
+            t.getConditions().setPrimaryCondition(infect(t));
         });  
-        p.events().addEventListener(flags[1], name, e -> {
+        p.getEvents().addEventListener(flags[1], name, e -> {
             if (!(EventData.isUser(p, e) && e.moveUsed.isCategory(Move.SPECIAL))) return;
             e.otherMoveMods *= 0.5; 
         });
 
         // For Zombie-Types
-        p.events().addEventListener(flags[2], name, e -> {
+        p.getEvents().addEventListener(flags[2], name, e -> {
             if (!p.isType(Type.ZOMBIE)) return;
-            p.speed().setMod(200);
+            p.getSpeed().setMod(200);
         });
-        p.events().addEventListener(flags[3], name, e -> {
+        p.getEvents().addEventListener(flags[3], name, e -> {
             if (!p.isType(Type.ZOMBIE)) return;
             p.restoreHpPercentMaxHP(1.0 / 8.0, " from the infection");
         });      
@@ -162,12 +162,12 @@ public class StatusCondition extends Effect {
         String name = StatusCondition.PARALYSIS_ID;
         String[] flags = new String[] {GameEvent.PRIMARY_STATUS_BEFORE, GameEvent.FIND_MOVE_ORDER};
 
-        p.events().addEventListener(flags[0], name, e -> {
+        p.getEvents().addEventListener(flags[0], name, e -> {
             if (!RandomValues.chance(50)) return;
             throw new PokemonCannotActException("%s is paralyzed and cannot move!", p);                 
         });
 
-        p.events().addEventListener(flags[1], name, e -> p.speed().setMod(50));
+        p.getEvents().addEventListener(flags[1], name, e -> p.getSpeed().setMod(50));
 
         BattleLog.add("%s was paralyzed!", p);
         return new StatusCondition(p, name, flags);
@@ -179,7 +179,7 @@ public class StatusCondition extends Effect {
         String name = StatusCondition.POISON_ID;
         String[] flags = new String[] {GameEvent.END_OF_ROUND};
 
-        p.events().addEventListener(flags[0], name, e -> {
+        p.getEvents().addEventListener(flags[0], name, e -> {
             p.takeDamagePercentMaxHP(1.0 / 8.0, " from the poison");
             checkIfFaints(p);
         });
@@ -198,9 +198,9 @@ public class StatusCondition extends Effect {
 
         Counter counter = new Counter();
 
-        p.events().addEventListener(flags[0], name, e -> {
+        p.getEvents().addEventListener(flags[0], name, e -> {
             counter.inc();
-            p.takeDamagePercentMaxHP(counter.count() / 16.0, " from the poison");
+            p.takeDamagePercentMaxHP(counter.getCount() / 16.0, " from the poison");
             checkIfFaints(p);
         });
 
@@ -215,15 +215,15 @@ public class StatusCondition extends Effect {
 
         Counter counter = new Counter(RandomValues.generateInt(1, 3));
 
-        p.events().addEventListener(flags[0], name, e -> {
+        p.getEvents().addEventListener(flags[0], name, e -> {
             if (counter.inc()) {
-                p.conditions().setImmobilized(false);
-                p.conditions().clearPrimary();
+                p.getConditions().setImmobilized(false);
+                p.getConditions().clearPrimary();
                 BattleLog.add("%s woke up!", p);
                 return;
             } 
-            p.conditions().setImmobilized(true);
-            if (p.moveSelected().moveID() == 214) return; // 214: Sleep Talk
+            p.getConditions().setImmobilized(true);
+            if (p.getMoveSelected().getMoveID() == 214) return; // 214: Sleep Talk
             throw new PokemonCannotActException("%s is fast asleep...", p);    
         });
 
@@ -236,11 +236,11 @@ public class StatusCondition extends Effect {
         String name = StatusCondition.FLY_ID;
         String[] flags = new String[] {GameEvent.MOVE_SELECTION, GameEvent.MOVE_ACCURACY};
 
-        p.events().addEventListener(flags[0], name, e -> p.setMove(m));
-        p.events().addEventListener(flags[1], name, e -> {
+        p.getEvents().addEventListener(flags[0], name, e -> p.setMove(m));
+        p.getEvents().addEventListener(flags[1], name, e -> {
             Move a = e.moveUsed;
             if (!EventData.isTarget(p, e)) return;
-            if (a.moveID() == 479 ||  a.moveID() == 542) return;
+            if (a.getMoveID() == 479 ||  a.getMoveID() == 542) return;
             
             throw new MoveInterruptedException("But %s is high in the sky!", p);
         });
@@ -253,10 +253,10 @@ public class StatusCondition extends Effect {
         String name = StatusCondition.FLY_ID;
         String[] flags = new String[] {GameEvent.MOVE_SELECTION, GameEvent.MOVE_ACCURACY};
 
-        p.events().addEventListener(flags[0], name, e -> p.setMove(m));
-        p.events().addEventListener(flags[1], name, e -> {
+        p.getEvents().addEventListener(flags[0], name, e -> p.setMove(m));
+        p.getEvents().addEventListener(flags[1], name, e -> {
             if (!EventData.isTarget(p, e)) return;
-            if (e.moveUsed.moveID() == 89) return;
+            if (e.moveUsed.getMoveID() == 89) return;
 
             throw new MoveInterruptedException("But %s is high in the sky!", p);
         });
@@ -269,11 +269,11 @@ public class StatusCondition extends Effect {
         String name = StatusCondition.DIVE_ID;
         String[] flags = new String[] {GameEvent.MOVE_SELECTION, GameEvent.MOVE_ACCURACY};
 
-        p.events().addEventListener(flags[0], name, e -> p.setMove(m));
-        p.events().addEventListener(flags[1], name, e -> {
+        p.getEvents().addEventListener(flags[0], name, e -> p.setMove(m));
+        p.getEvents().addEventListener(flags[1], name, e -> {
             Move a = e.moveUsed;
             if (!EventData.isTarget(p, e)) return; 
-            if (a.moveID() == 57 || a.moveID() == 250) return;
+            if (a.getMoveID() == 57 || a.getMoveID() == 250) return;
 
             throw new MoveInterruptedException("But %s is underwater!", p);
         });
@@ -287,8 +287,8 @@ public class StatusCondition extends Effect {
         String name = StatusCondition.FLINCH_ID;
         String[] flags = new String[] {GameEvent.BEFORE_MOVE};
 
-        p.events().addEventListener(flags[0], name, e -> {
-            p.conditions().removeCondition(name);
+        p.getEvents().addEventListener(flags[0], name, e -> {
+            p.getConditions().removeCondition(name);
             throw new PokemonCannotActException("%s flinched and couldn't move!", p);
         });
 
@@ -302,9 +302,9 @@ public class StatusCondition extends Effect {
 
         Counter counter = new Counter(RandomValues.generateInt(2, 5));
 
-        p.events().addEventListener(flags[0], name, e -> {
+        p.getEvents().addEventListener(flags[0], name, e -> {
             if (counter.inc()){
-                p.conditions().removeCondition(name);
+                p.getConditions().removeCondition(name);
                 return;
             }
 
@@ -326,9 +326,9 @@ public class StatusCondition extends Effect {
 
         Counter counter = new Counter(RandomValues.generateInt(2, 4));
 
-        p.events().addEventListener(flags[0], name, e -> {
+        p.getEvents().addEventListener(flags[0], name, e -> {
             if (counter.inc()){
-                p.conditions().removeCondition(name);
+                p.getConditions().removeCondition(name);
                 return;
             }
             BattleLog.add("%s is confused!", p);
@@ -347,8 +347,8 @@ public class StatusCondition extends Effect {
         String name = StatusCondition.SEEDED_ID;
         String[] flags = new String[] {GameEvent.END_OF_ROUND};
 
-        p.events().addEventListener(flags[0], name, e -> {
-            int damage = (int) (p.hp().max() / 8.0);
+        p.getEvents().addEventListener(flags[0], name, e -> {
+            int damage = (int) (p.getHp().getMaxHealthPoints() / 8.0);
             BattleLog.add("%s drained %d HP from %s!", r, damage, p);
 
             r.restoreHP(damage);
@@ -367,9 +367,9 @@ public class StatusCondition extends Effect {
 
         Counter counter = new Counter(n);
 
-        p.events().addEventListener(flags[0], name, e -> p.setMove(m));
-        p.events().addEventListener(flags[1], name, e -> {
-            if (counter.inc()) p.conditions().removeCondition(name); 
+        p.getEvents().addEventListener(flags[0], name, e -> p.setMove(m));
+        p.getEvents().addEventListener(flags[1], name, e -> {
+            if (counter.inc()) p.getConditions().removeCondition(name); 
         });
 
         return new StatusCondition(p, name, flags);
@@ -386,14 +386,14 @@ public class StatusCondition extends Effect {
 
         State state = new State(); // State True: Lost Focus
     
-        p.events().addEventListener(flags[0], name, e -> p.setMove(m));
+        p.getEvents().addEventListener(flags[0], name, e -> p.setMove(m));
 
-        p.events().addEventListener(flags[1], name, e -> {
-            p.conditions().removeCondition(name);
+        p.getEvents().addEventListener(flags[1], name, e -> {
+            p.getConditions().removeCondition(name);
             if (state.getBool()) throw new PokemonCannotActException("%s lost it's focus and couldn't move!", p);     
         });
 
-        p.events().addEventListener(flags[2], name, e -> {
+        p.getEvents().addEventListener(flags[2], name, e -> {
             if (!EventData.isTarget(p, e)) return;
             state.set(true);
         });
@@ -406,7 +406,7 @@ public class StatusCondition extends Effect {
         String name = StatusCondition.GROUNDED_ID;
         String[] flags = new String[] {GameEvent.MOVE_EFFECTIVENESS};
 
-        p.events().addEventListener(flags[0], name, e -> {
+        p.getEvents().addEventListener(flags[0], name, e -> {
             if (!EventData.isTarget(p, e)) return;
 
             if (e.moveUsed.isType(Type.GROUND) && e.moveEffectiveness == 0) {
@@ -427,15 +427,15 @@ public class StatusCondition extends Effect {
 
         Counter counter = new Counter(RandomValues.generateInt(2, 3));
 
-        p.events().addEventListener(flags[0], name, e -> p.setMove(m));
-        p.events().addEventListener(flags[1], name, e -> {
+        p.getEvents().addEventListener(flags[0], name, e -> p.setMove(m));
+        p.getEvents().addEventListener(flags[1], name, e -> {
             if (counter.inc()) {
-                p.conditions().removeCondition(name);
-                p.conditions().addCondition(confusion(p));
+                p.getConditions().removeCondition(name);
+                p.getConditions().addCondition(confusion(p));
             }  
         });
-        p.events().addEventListener(flags[2], name, e -> {
-            p.conditions().removeCondition(name);
+        p.getEvents().addEventListener(flags[2], name, e -> {
+            p.getConditions().removeCondition(name);
         });
 
         return new StatusCondition(p, name, flags);
@@ -450,8 +450,8 @@ public class StatusCondition extends Effect {
         String name = StatusCondition.CHARGE_MOVE;
         String[] flags = new String[] {GameEvent.MOVE_SELECTION, GameEvent.MOVE_INTERRUPTED};
 
-        p.events().addEventListener(flags[0], name, e -> p.setMove(m));
-        p.events().addEventListener(flags[1], name, e -> p.conditions().removeCondition(name));
+        p.getEvents().addEventListener(flags[0], name, e -> p.setMove(m));
+        p.getEvents().addEventListener(flags[1], name, e -> p.getConditions().removeCondition(name));
 
         return new StatusCondition(p, name, flags);
 	}

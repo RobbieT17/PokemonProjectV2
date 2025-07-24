@@ -50,7 +50,7 @@ public class PokemonBuilder implements Builder{
     // Has two or more of the same moves in the move array
     private boolean duplicateMove(Move m) {
         for (Move move : this.moves)
-            if (move.moveID() == m.moveID()) return true;
+            if (move.getMoveID() == m.getMoveID()) return true;
         return false;
     }
 

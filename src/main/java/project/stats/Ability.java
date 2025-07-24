@@ -26,8 +26,8 @@ public class Ability extends Effect {
 
     @Override
     public void removeEffect() {
-        this.bearer().events().removeEventListener(this.flags(), this.effectName());
-        this.bearer().setAbility(null);
+        this.getBearer().getEvents().removeEventListener(this.getFlags(), this.getEffectName());
+        this.getBearer().setAbility(null);
     }
 
 // Public Class Methods
@@ -36,7 +36,7 @@ public class Ability extends Effect {
         String name = Ability.BLAZE_ID;
         String[] flags = new String[] {GameEvent.DAMAGE_MULTIPLIER};
 
-        p.events().addEventListener(flags[0], name , e -> {
+        p.getEvents().addEventListener(flags[0], name , e -> {
             if (!EventData.isUser(p, e)) return;
 
             Move move = e.moveUsed;
@@ -54,9 +54,9 @@ public class Ability extends Effect {
         String name = Ability.CHLOROPHYLL_ID;
         String[] flags = new String[] {GameEvent.FIND_MOVE_ORDER};
 
-        p.events().addEventListener(flags[0], name, e -> {
+        p.getEvents().addEventListener(flags[0], name, e -> {
             if (BattleField.currentWeather == Weather.SUNNY) {
-                p.speed().setMod(200);
+                p.getSpeed().setMod(200);
             }
         });
 
@@ -68,7 +68,7 @@ public class Ability extends Effect {
         String name = Ability.OVERGROW_ID;
         String[] flags = new String[] {GameEvent.DAMAGE_MULTIPLIER};
 
-        p.events().addEventListener(flags[0], name, e -> {
+        p.getEvents().addEventListener(flags[0], name, e -> {
             if (!EventData.isUser(p, e)) return;
 
             Move move = e.moveUsed;
@@ -86,7 +86,7 @@ public class Ability extends Effect {
         String name = Ability.RAIN_DISH_ID;
         String[] flags = new String[] {GameEvent.WEATHER_EFFECT};
 
-        p.events().addEventListener(flags[0], name, e -> {
+        p.getEvents().addEventListener(flags[0], name, e -> {
             if (BattleField.currentWeather == Weather.RAIN) {
                 p.restoreHpPercentMaxHP(1.0 / 16.0, " from its Rain Dish");
             }
@@ -103,19 +103,19 @@ public class Ability extends Effect {
         String name = Ability.SOLAR_POWER_ID;
         String[] flags = new String[] {GameEvent.DAMAGE_MULTIPLIER, GameEvent.WEATHER_EFFECT};
 
-        p.events().addEventListener(flags[0], name, e -> {
+        p.getEvents().addEventListener(flags[0], name, e -> {
             if (!EventData.isUser(p, e)) return;
 
             Move m = e.moveUsed;
-            if (m.category().equals(Move.SPECIAL)) {
-                p.specialAttack().setMod(150);
+            if (m.getCategory().equals(Move.SPECIAL)) {
+                p.getSpecialAttack().setMod(150);
             }
         });
 
-        p.events().addEventListener(flags[1], name, e -> {
-            if (BattleField.currentWeather == Weather.SUNNY && !p.conditions().fainted()) {
+        p.getEvents().addEventListener(flags[1], name, e -> {
+            if (BattleField.currentWeather == Weather.SUNNY && !p.getConditions().isFainted()) {
                 p.takeDamagePercentMaxHP(1.0 / 8.0, " from its Solar Power");
-                if (p.conditions().fainted()) throw new PokemonFaintedException();
+                if (p.getConditions().isFainted()) throw new PokemonFaintedException();
             }
         });
 
@@ -127,7 +127,7 @@ public class Ability extends Effect {
         String name = Ability.TORRENT_ID;
         String[] flags = new String[] {GameEvent.DAMAGE_MULTIPLIER};
 
-        p.events().addEventListener(flags[0], name, e -> {
+        p.getEvents().addEventListener(flags[0], name, e -> {
             if (!EventData.isUser(p, e)) return;
 
             Move move = e.moveUsed;
@@ -145,7 +145,7 @@ public class Ability extends Effect {
         String name = Ability.WATER_ABSORB_ID;
         String[] flags = new String[] {GameEvent.MOVE_EFFECTIVENESS};
 
-        p.events().addEventListener(flags[0], name, e -> {
+        p.getEvents().addEventListener(flags[0], name, e -> {
             if (!EventData.isTarget(p, e)) return;
 
             if (e.moveUsed.isType(Type.WATER)) {

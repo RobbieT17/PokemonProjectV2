@@ -78,7 +78,7 @@ public interface Weather {
                     p.isType(Type.ROCK) || 
                     p.isType(Type.STEEL)) return;
 
-                int damage = (int) (p.hp().max() / 8.0);
+                int damage = (int) (p.getHp().getMaxHealthPoints() / 8.0);
                 BattleLog.add("%s took %d damage from the sandstorm!", p, damage);
                 p.takeDamage(damage);
             }
@@ -86,12 +86,12 @@ public interface Weather {
                 // Digital and Ice types are immune to hail
                 if (p.isType(Type.DIGITAL) || p.isType(Type.ICE)) return;
 
-                int damage = (int) (p.hp().max() / 16.0);  
+                int damage = (int) (p.getHp().getMaxHealthPoints() / 16.0);  
                 BattleLog.add("%s took %d damage from the hail!", p, damage);
                 p.takeDamage(damage);
             }
         }
-        if (p.conditions().fainted()) throw new PokemonFaintedException();
+        if (p.getConditions().isFainted()) throw new PokemonFaintedException();
     }
 
 }

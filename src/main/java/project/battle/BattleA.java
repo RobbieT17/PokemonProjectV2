@@ -24,7 +24,7 @@ public class BattleA {
 
     // Can't switch pokemon if and only if the Pokemon has fainted or is the current one out
     public static boolean validPokemonChoice(PokemonTrainer pt, Pokemon p) {
-        return !p.conditions().fainted() && (pt.pokemonInBattle() != null) ? !pt.pokemonInBattle().equals(p) : true;
+        return !p.getConditions().isFainted() && (pt.getPokemonInBattle() != null) ? !pt.getPokemonInBattle().equals(p) : true;
     }
 
     // Trainer chooses a Pokemon to send out to battle
@@ -33,7 +33,7 @@ public class BattleA {
 
         Scanner scanner = new Scanner(System.in);
         boolean done = false;
-        Pokemon pokemon = trainer.pokemonInBattle();
+        Pokemon pokemon = trainer.getPokemonInBattle();
 
         BattleLog.addPrintln("\n" + trainer.showPokemon());
 
@@ -42,7 +42,7 @@ public class BattleA {
                 BattleLog.addPrint("%s, choose a Pokemon: ", trainer);
                 int i = scanner.nextInt();
 
-                pokemon = trainer.team()[i];
+                pokemon = trainer.getTeam()[i];
 
                 // Pokemon selected cannot be fainted or the same one that is already out
                 done = validPokemonChoice(trainer, pokemon);
@@ -66,15 +66,15 @@ public class BattleA {
 
     // Pokemon chooses a move
     public static Pokemon chooseMove(PokemonTrainer pt) {
-        Pokemon p = pt.pokemonInBattle();
-        p.events().onEvent(GameEvent.MOVE_SELECTION, null);
+        Pokemon p = pt.getPokemonInBattle();
+        p.getEvents().updateOnEvent(GameEvent.MOVE_SELECTION, null);
 
         /*
          * Unable to choose a move if just switched in
          * or needs to recharge 
          */
-        if (p.conditions().switchedIn() | p.conditions().recharge()) {
-            p.conditions().setRecharge(false);
+        if (p.getConditions().isSwitchedIn() | p.getConditions().isRecharge()) {
+            p.getConditions().setRecharge(false);
             return p; 
         }
         // Default to struggle if all the Pokemon's move has no more PP
@@ -83,7 +83,7 @@ public class BattleA {
             p.setMove(MoveList.struggle());
         }
 
-        Move move = p.moveSelected();
+        Move move = p.getMoveSelected();
 
         if (move != null) {
             p.setMove(move);
@@ -144,9 +144,9 @@ public class BattleA {
                 }
 
                 // Selects one of the Pokemon's move pool to use
-                move = p.moves()[input];
+                move = p.getMoves()[input];
                 // Cannot use move if disabled or out of powerpoints
-                done = !(move.pp().depleted() || move.disabled());
+                done = !(move.getPp().depleted() || move.getDisabled());
                 
             
             } catch (IndexOutOfBoundsException e) {
@@ -164,16 +164,16 @@ public class BattleA {
 
     // Finds the order which the Pokemon in battle will move
     public static Pokemon[] turnOrder(Pokemon p1, Pokemon p2) {
-        p1.events().onEvent(GameEvent.FIND_MOVE_ORDER, null);
-        p2.events().onEvent(GameEvent.FIND_MOVE_ORDER, null);
+        p1.getEvents().updateOnEvent(GameEvent.FIND_MOVE_ORDER, null);
+        p2.getEvents().updateOnEvent(GameEvent.FIND_MOVE_ORDER, null);
 
         Pokemon[] order = new Pokemon[2];
 
-        Move m1 = p1.moveSelected();
-        Move m2 = p2.moveSelected();
+        Move m1 = p1.getMoveSelected();
+        Move m2 = p2.getMoveSelected();
 
-        int speed1 = p1.speed().power();
-        int speed2 = p2.speed().power();
+        int speed1 = p1.getSpeed().getPower();
+        int speed2 = p2.getSpeed().getPower();
 
         // Handles null moves (pokemon may not always have selected a move)
         if (m2 == null) {
@@ -188,11 +188,11 @@ public class BattleA {
         }
 
         // Higher Priority Moves act first
-        if (m1.priority() > m2.priority()) {
+        if (m1.getPriority() > m2.getPriority()) {
             order[0] = p1; 
             order[1] = p2;
         }
-        else if (m1.priority() < m2.priority()) {
+        else if (m1.getPriority() < m2.getPriority()) {
             order[0] = p2; 
             order[1] = p1;
         }
@@ -222,14 +222,14 @@ public class BattleA {
     
     // Pokemon uses a turn, nothing happens if the Pokemon did not select a move or one fainted
     public static void pokemonTurn(Pokemon a, Pokemon b) {
-        if (a.conditions().fainted() || b.conditions().fainted() || a.moveSelected() == null) return;
+        if (a.getConditions().isFainted() || b.getConditions().isFainted() || a.getMoveSelected() == null) return;
 
         BattleLog.addLine();
-        a.useTurn(new EventData(a, b, a.moveSelected()));
+        a.useTurn(new EventData(a, b, a.getMoveSelected()));
 
         // Updates an event listener for added status conditions
-        a.events().updateEventMaps();
-        b.events().updateEventMaps();
+        a.getEvents().updateEventMaps();
+        b.getEvents().updateEventMaps();
     }
 
     /**
@@ -252,7 +252,7 @@ public class BattleA {
         chooseMove(pt2);
 
         // Order of Pokemon
-        Pokemon[] order = turnOrder(pt1.pokemonInBattle(), pt2.pokemonInBattle());
+        Pokemon[] order = turnOrder(pt1.getPokemonInBattle(), pt2.getPokemonInBattle());
 
         Pokemon p1 = order[0];
         Pokemon p2 = order[1];
@@ -315,15 +315,15 @@ public class BattleA {
         // Game ends when one trainer is out of Pokemon
         try {
             while (true) { // Continues forever
-                while (!pt1.pokemonInBattle().conditions().fainted() && !pt2.pokemonInBattle().conditions().fainted()) {     
+                while (!pt1.getPokemonInBattle().getConditions().isFainted() && !pt2.getPokemonInBattle().getConditions().isFainted()) {     
                     moveSelection();    
                     BattleField.endOfRound();      
                     BattleLog.out();  // Plays out the round messages
                 }
                 
                 BattleA.skipRound = true;
-                if (pt1.pokemonInBattle().conditions().fainted()) choosePokemon(pt1);
-                else if (pt2.pokemonInBattle().conditions().fainted()) choosePokemon(pt2);
+                if (pt1.getPokemonInBattle().getConditions().isFainted()) choosePokemon(pt1);
+                else if (pt2.getPokemonInBattle().getConditions().isFainted()) choosePokemon(pt2);
                 else throw new IllegalStateException("Pokemon must've fainted, what happened???");
             }
         } catch (BattleEndedException e) {

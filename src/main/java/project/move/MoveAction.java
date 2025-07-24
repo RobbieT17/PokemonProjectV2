@@ -24,9 +24,9 @@ public interface MoveAction {
 
 // Protection Functions
 private static void defenderProtects(Pokemon p) {
-    if (!p.conditions().protect().active()) return;
+    if (!p.getConditions().getProtect().isActive()) return;
         
-    p.conditions().protect().setActive(false);
+    p.getConditions().getProtect().setActive(false);
     throw new MoveInterruptedException("But %s protected itself!", p);
 }
 
@@ -39,16 +39,16 @@ private static void defenderProtects(Pokemon p) {
         data.notifyEvent(GameEvent.MOVE_ACCURACY);
         defenderProtects(defender);
 
-        int accuracy = move.accuracy();
+        int accuracy = move.getAccuracy();
 
-        if (accuracy == Move.ALWAYS_HITS || defender.conditions().immobilized()) {
+        if (accuracy == Move.ALWAYS_HITS || defender.getConditions().isImmobilized()) {
             data.moveHits = true;
             data.notifyEvent(GameEvent.MOVE_HITS);
             return;
         }
 		
         double modifiedAccuracy = 0.01 * accuracy
-        * ((double) attacker.accuracy().power() / (double) defender.evasion().power());
+        * ((double) attacker.getAccuracy().getPower() / (double) defender.getEvasion().getPower());
 
         if (new Random().nextDouble() > modifiedAccuracy) {
             data.moveHits = false;
@@ -69,13 +69,13 @@ private static void defenderProtects(Pokemon p) {
     private static double typeEffectiveness(String type, Pokemon p){
         double effect = 1.0; // Default type effectiveness
 
-        for (String t : p.pokemonType().typeResistances()) // Pokemon resists type, halves damage
+        for (String t : p.getPokemonType().getTypeResistances()) // Pokemon resists type, halves damage
             if (t.equals(type)) effect *= 0.5;
         
-        for (String t : p.pokemonType().typeWeaknesses()) // Pokemon weak to type, doubles damage
+        for (String t : p.getPokemonType().getTypeWeaknesses()) // Pokemon weak to type, doubles damage
             if (t.equals(type)) effect *= 2;
 
-        for (String t : p.pokemonType().typeImmunities()) { // Pokemon immune to type, nullifies damage
+        for (String t : p.getPokemonType().getTypeImmunities()) { // Pokemon immune to type, nullifies damage
             // if (immunityExceptionFound(type, p)) break;
             if (t.equals(type)) effect = 0;
         } 
@@ -89,7 +89,7 @@ private static void defenderProtects(Pokemon p) {
     */
     private static void moveEffectiveness(EventData data) {
         Pokemon p = data.attackTarget;
-        double effectiveness = typeEffectiveness(data.moveUsed.moveType(), p);
+        double effectiveness = typeEffectiveness(data.moveUsed.getMoveType(), p);
 
         data.moveEffectiveness = effectiveness;
 
@@ -123,7 +123,7 @@ private static void defenderProtects(Pokemon p) {
      * @param crit if the move was a critical hit
      */
     private static double calculateAttack(PokemonStat atkStat, boolean crit) {
-        return crit && atkStat.stage() < 0 ? atkStat.base() : atkStat.power();
+        return crit && atkStat.getStage() < 0 ? atkStat.getBase() : atkStat.getPower();
     }
 
     /**
@@ -134,7 +134,7 @@ private static void defenderProtects(Pokemon p) {
      * @param crit if the move was a critical hit
      */
     private static double calculateDefense(PokemonStat defStat, boolean crit) {
-        return crit && defStat.stage() > 0 ? defStat.base() : defStat.power();
+        return crit && defStat.getStage() > 0 ? defStat.getBase() : defStat.getPower();
     }
 
     /*
@@ -142,7 +142,7 @@ private static void defenderProtects(Pokemon p) {
      * move it uses matches one of its types.
      */
     private static double sameTypeAttackBonus(Pokemon p, Move m){
-        return (m.isType(p.pokemonType())) ? 1.5 : 1.0;
+        return (m.isType(p.getPokemonType())) ? 1.5 : 1.0;
     }
 
     /*
@@ -203,7 +203,7 @@ private static void defenderProtects(Pokemon p) {
      * @return calculated damage
      */
     private static int calculateDamage(EventData data) { 
-        criticalHit(data.moveUsed.critRate()); // Rolls for a critical hit
+        criticalHit(data.moveUsed.getCritRate()); // Rolls for a critical hit
         data.notifyEvent(GameEvent.DAMAGE_MULTIPLIER);
         
         Pokemon attacker = data.user;
@@ -218,15 +218,15 @@ private static void defenderProtects(Pokemon p) {
         double weather = weatherBonus(move);
         double addition = data.otherMoveMods;
 
-        double attack = move.category().equals(Move.SPECIAL) 
-        ? calculateAttack(attacker.specialAttack(), isCritical) 
-        : calculateAttack(attacker.attack(), isCritical);
+        double attack = move.getCategory().equals(Move.SPECIAL) 
+        ? calculateAttack(attacker.getSpecialAttack(), isCritical) 
+        : calculateAttack(attacker.getAttack(), isCritical);
 
-        double defense = move.category().equals(Move.SPECIAL) 
-        ? calculateDefense(defender.specialDefense(), isCritical) 
-        : calculateDefense(defender.defense(), isCritical);
+        double defense = move.getCategory().equals(Move.SPECIAL) 
+        ? calculateDefense(defender.getSpecialDefense(), isCritical) 
+        : calculateDefense(defender.getDefense(), isCritical);
         
-        return (int) (((((2 * attacker.level()) / 5.0 + 2) * move.power() * (attack / defense)) / 50.0 + 2) 
+        return (int) (((((2 * attacker.getLevel()) / 5.0 + 2) * move.getPower() * (attack / defense)) / 50.0 + 2) 
         * stab * crit * effectiveness * random * weather * addition);
     }
 
@@ -245,15 +245,15 @@ private static void defenderProtects(Pokemon p) {
         defender.addDamageReceived(damage);
         defender.takeDamage(damage);    
 
-        if (data.moveUsed.makesContact()) data.notifyEvent(GameEvent.MOVE_MAKES_CONTACT);
+        if (data.moveUsed.getMakesContact()) data.notifyEvent(GameEvent.MOVE_MAKES_CONTACT);
     }
 
     // Pokemon takes damage based on some percent of the damage dealt
     private static void recoilDamage(EventData data) {
         Pokemon p = data.user;
-        if (p.damageDealt() == 0) return;
+        if (p.getDamageDealt() == 0) return;
 
-        int damage = (int) (0.01 * data.recoilPercent * p.damageDealt()); 
+        int damage = (int) (0.01 * data.recoilPercent * p.getDamageDealt()); 
         BattleLog.add("%s took %d damage from the recoil!", p, damage);
         p.addDamageReceived(damage);
         p.takeDamage(damage);
@@ -261,9 +261,9 @@ private static void defenderProtects(Pokemon p) {
 
     private static void drainHP(EventData data) {
         Pokemon p = data.user;
-        if (p.damageDealt() == 0) return;
+        if (p.getDamageDealt() == 0) return;
 
-        int heal = (int) (0.01 * data.drainPercent * p.damageDealt()); 
+        int heal = (int) (0.01 * data.drainPercent * p.getDamageDealt()); 
         BattleLog.add("%s restored %d HP!", p, heal);
         p.restoreHP(heal);
     }
@@ -285,7 +285,7 @@ private static void defenderProtects(Pokemon p) {
 
         for (int i = 0; i < data.hitCount; i++) {
             damageTaken(data, true);
-            if (defender.conditions().fainted()) {
+            if (defender.getConditions().isFainted()) {
                 data.hitCount = i;
                 break;
             }
@@ -313,7 +313,7 @@ private static void defenderProtects(Pokemon p) {
      * It cannot score a critical hit, and does not receive STAB
      */
     public static void takeConfusionDamage(Pokemon p) {
-        int damage = (int) (((((2 * p.level()) / 5.0 + 2) * 40 * (p.attack().power() / (double) p.defense().power())) / 50.0 + 2)); 
+        int damage = (int) (((((2 * p.getLevel()) / 5.0 + 2) * 40 * (p.getAttack().getPower() / (double) p.getDefense().getPower())) / 50.0 + 2)); 
         BattleLog.add("%s took %d damage from their own confusion!", p, damage);
         p.addDamageReceived(damage);
         p.takeDamage(damage); 
@@ -327,7 +327,7 @@ private static void defenderProtects(Pokemon p) {
     public static void restoreHp(EventData data, double percent) {
         Pokemon p = data.attackTarget;
         data.healPercent = percent;
-        if (p.hp().atFullHP()) throw new MoveInterruptedException("But %s is already at full health!", p);
+        if (p.getHp().atFullHP()) throw new MoveInterruptedException("But %s is already at full health!", p);
         p.restoreHpPercentMaxHP(percent, "");
     }
 
@@ -337,12 +337,12 @@ private static void defenderProtects(Pokemon p) {
         data.protectionType = b;
         data.message = success;
 
-        if (p.moveSelected().equals(p.lastMove())) b.set();
+        if (p.getMoveSelected().equals(p.getLastMove())) b.set();
         else {
             b.reset();
             b.set();   
         }
-        BattleLog.add(b.active() ? success : Move.FAILED);
+        BattleLog.add(b.isActive() ? success : Move.FAILED);
     }
 
 // Charge Functions
@@ -353,13 +353,13 @@ private static void defenderProtects(Pokemon p) {
      */
     public static void chargeMove(EventData data) {
         Pokemon attacker = data.user;
-        if (!attacker.conditions().hasKey(StatusCondition.CHARGE_MOVE)) {
-            attacker.conditions().addCondition(StatusCondition.chargeMove(attacker, data.moveUsed));    
+        if (!attacker.getConditions().hasKey(StatusCondition.CHARGE_MOVE)) {
+            attacker.getConditions().addCondition(StatusCondition.chargeMove(attacker, data.moveUsed));    
             BattleLog.add("%s begins charging!", attacker);
             return;
         }
         
-        attacker.conditions().removeCondition(StatusCondition.CHARGE_MOVE);
+        attacker.getConditions().removeCondition(StatusCondition.CHARGE_MOVE);
         dealDamage(data); 
     }
 
@@ -369,7 +369,7 @@ private static void defenderProtects(Pokemon p) {
     }
 
     public static void rechargeMove(EventData data) {
-        data.user.conditions().setRecharge(true);
+        data.user.getConditions().setRecharge(true);
     }
 
     /**
@@ -380,8 +380,8 @@ private static void defenderProtects(Pokemon p) {
     public static void rampageMove(EventData data) {
         Pokemon attacker = data.user;
         // Starts rampage
-        if (!attacker.conditions().hasKey(StatusCondition.RAMPAGE_ID)) {
-            attacker.conditions().addCondition(StatusCondition.rampage(attacker, data.moveUsed));
+        if (!attacker.getConditions().hasKey(StatusCondition.RAMPAGE_ID)) {
+            attacker.getConditions().addCondition(StatusCondition.rampage(attacker, data.moveUsed));
         }
        
         dealDamage(data);       
@@ -416,20 +416,20 @@ private static void defenderProtects(Pokemon p) {
             int change = stats[i];
             if (change == 0) continue;
         
-            PokemonStat s = p.stats()[i];
+            PokemonStat s = p.getStats()[i];
             if (s.isAtHighestOrLowestStage(change)) {
                 BattleLog.add("But %s's %s won't go any %s!", p, s, (change > 0) ? "higher" : "lower");
                 data.statFailed = true;
                 continue;
             }
-            p.stats()[i].changeStage(change);
+            p.getStats()[i].changeStage(change);
             BattleLog.add("%s's %s %s%s!", p, s, (change > 0) ? "rose" : "fell", PokemonStat.sizeOfChange(change));
         }  
     }
 
     public static void changeStats(EventData data, int[] stats, double chance) {
         data.statProb = chance;
-        if (data.user.conditions().fainted() || new Random().nextDouble() > chance * 0.01) {
+        if (data.user.getConditions().isFainted() || new Random().nextDouble() > chance * 0.01) {
             data.statFailed = true;
             return;
         }
@@ -442,7 +442,7 @@ private static void defenderProtects(Pokemon p) {
 
     // Resets all stat changes back to neutral
     public static void resetStats(EventData data, Pokemon p) {
-        for (PokemonStat s : p.stats()) s.setStage(0);
+        for (PokemonStat s : p.getStats()) s.setStage(0);
         BattleLog.add("%s stat changes were cleared...", p);
     }
 
@@ -450,88 +450,88 @@ private static void defenderProtects(Pokemon p) {
 
     // Applies Burn Condition
     private static void applyBurn(Pokemon p) { 
-        p.conditions().setPrimaryCondition(StatusCondition.burn(p));
+        p.getConditions().setPrimaryCondition(StatusCondition.burn(p));
     }
 
     // Applies Freeze Condition
     private static void applyFreeze(Pokemon p) {
-        p.conditions().setPrimaryCondition(StatusCondition.freeze(p));
+        p.getConditions().setPrimaryCondition(StatusCondition.freeze(p));
     }
 
     // Applies Infect Condition
     private static void applyInfect(Pokemon p) {
-        p.conditions().setPrimaryCondition(StatusCondition.infect(p));
+        p.getConditions().setPrimaryCondition(StatusCondition.infect(p));
     }
 
     // Applies Paralysis Condition
     private static void applyParalysis(Pokemon p) {
-        p.conditions().setPrimaryCondition(StatusCondition.paralysis(p));
+        p.getConditions().setPrimaryCondition(StatusCondition.paralysis(p));
     }
 
     // Applies Poison Condition
     private static void applyPoison(Pokemon p) {
-        p.conditions().setPrimaryCondition(StatusCondition.poisoned(p));
+        p.getConditions().setPrimaryCondition(StatusCondition.poisoned(p));
     }
 
     // Applies Badly Poison Condition
     private static void applyBadlyPoison(Pokemon p) {
-        p.conditions().setPrimaryCondition(StatusCondition.badlyPoisoned(p));
+        p.getConditions().setPrimaryCondition(StatusCondition.badlyPoisoned(p));
     }
 
     // Applies Sleep Condition
     private static void applySleep(Pokemon p) {
-        p.conditions().setPrimaryCondition(StatusCondition.sleep(p));
+        p.getConditions().setPrimaryCondition(StatusCondition.sleep(p));
     }
 
     private static void flyState(EventData data) {
         Pokemon p = data.user;
-        p.conditions().addCondition(StatusCondition.fly(p, data.moveUsed));
+        p.getConditions().addCondition(StatusCondition.fly(p, data.moveUsed));
     }
 
     private static void digState(EventData data) {
         Pokemon p = data.user;
-        p.conditions().addCondition(StatusCondition.dig(p, data.moveUsed));
+        p.getConditions().addCondition(StatusCondition.dig(p, data.moveUsed));
     }
 
     private static void diveState(EventData data) {
         Pokemon p = data.user;
-        p.conditions().addCondition(StatusCondition.dive(p, data.moveUsed));
+        p.getConditions().addCondition(StatusCondition.dive(p, data.moveUsed));
     }
 
     private static void applyFlinch(Pokemon p) {
-        p.conditions().addCondition(StatusCondition.flinch(p));
+        p.getConditions().addCondition(StatusCondition.flinch(p));
     }
 
     // Applies Confusion Condition
     private static void applyBound(Pokemon p) {
-        p.conditions().addCondition(StatusCondition.bound(p));
+        p.getConditions().addCondition(StatusCondition.bound(p));
     }
 
     private static void applyConfusion(Pokemon p) {
-        p.conditions().addCondition(StatusCondition.confusion(p));
+        p.getConditions().addCondition(StatusCondition.confusion(p));
     }
 
     private static void applySeeded(Pokemon p, Pokemon r) {
-        p.conditions().addCondition(StatusCondition.seeded(p, r));
+        p.getConditions().addCondition(StatusCondition.seeded(p, r));
     }
 
     
 
     private static boolean cannotApplyCondition(Pokemon p, String id) {
         return switch (id) {
-            case StatusCondition.BURN_ID -> p.isType(Type.FIRE) || p.conditions().hasPrimary();
-            case StatusCondition.FREEZE_ID -> p.isType(Type.ICE) || p.conditions().hasPrimary();
-            case StatusCondition.INFECT_ID -> p.conditions().hasPrimary();
-            case StatusCondition.PARALYSIS_ID -> p.isType(Type.ELECTRIC) || p.conditions().hasPrimary();
+            case StatusCondition.BURN_ID -> p.isType(Type.FIRE) || p.getConditions().hasPrimary();
+            case StatusCondition.FREEZE_ID -> p.isType(Type.ICE) || p.getConditions().hasPrimary();
+            case StatusCondition.INFECT_ID -> p.getConditions().hasPrimary();
+            case StatusCondition.PARALYSIS_ID -> p.isType(Type.ELECTRIC) || p.getConditions().hasPrimary();
             case 
                 StatusCondition.POISON_ID, 
-                StatusCondition.BAD_POISON_ID -> p.isType(Type.POISON) || p.isType(Type.STEEL) || p.conditions().hasPrimary();
-            case StatusCondition.SLEEP_ID -> p.isType(Type.DIGITAL) || p.conditions().hasPrimary();
-            case StatusCondition.FLINCH_ID -> p.conditions().hasMoved();
+                StatusCondition.BAD_POISON_ID -> p.isType(Type.POISON) || p.isType(Type.STEEL) || p.getConditions().hasPrimary();
+            case StatusCondition.SLEEP_ID -> p.isType(Type.DIGITAL) || p.getConditions().hasPrimary();
+            case StatusCondition.FLINCH_ID -> p.getConditions().hasMoved();
             case 
                 StatusCondition.BOUND_ID,
-                StatusCondition.CONFUSION_ID -> p.conditions().hasKey(id);
-            case StatusCondition.SEEDED_ID -> p.isType(Type.GRASS) || p.conditions().hasKey(id);
+                StatusCondition.CONFUSION_ID -> p.getConditions().hasKey(id);
+            case StatusCondition.SEEDED_ID -> p.isType(Type.GRASS) || p.getConditions().hasKey(id);
             default -> false;
         };
     }
@@ -541,7 +541,7 @@ private static void defenderProtects(Pokemon p) {
         data.statusChange = id;
         data.statusProb = chance;
         
-        if (cannotApplyCondition(p, id) || p.conditions().fainted()) {
+        if (cannotApplyCondition(p, id) || p.getConditions().isFainted()) {
             data.statusFailed = true;
             data.message = Move.FAILED;
             return;
@@ -586,12 +586,12 @@ private static void defenderProtects(Pokemon p) {
         data.immuneStateChange = state;
 
         // Enters state
-        if (!attacker.conditions().inImmuneState()) {
+        if (!attacker.getConditions().inImmuneState()) {
             applyCondition(data, state, 100);
             return;
         }
 
-        attacker.conditions().removeCondition(data.immuneStateChange);
+        attacker.getConditions().removeCondition(data.immuneStateChange);
         dealDamage(data);
     }
 
@@ -602,9 +602,9 @@ private static void defenderProtects(Pokemon p) {
         Pokemon p = data.attackTarget;
         data.immuneStateChange = StatusCondition.NO_INVUL_ID;
     
-        if (p.conditions().fainted() || !p.conditions().hasKey(state)) return;
-        p.conditions().removeCondition(state);
-        p.conditions().setInterrupted(true);
+        if (p.getConditions().isFainted() || !p.getConditions().hasKey(state)) return;
+        p.getConditions().removeCondition(state);
+        p.getConditions().setInterrupted(true);
         p.resetMove();
         BattleLog.add(message);
     }

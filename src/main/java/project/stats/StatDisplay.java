@@ -6,36 +6,36 @@ public interface StatDisplay {
     
     public static String listStats(Pokemon p) {
         return new StringBuilder()
-        .append(p.attack().showStat())
-        .append(p.defense().showStat())
-        .append(p.specialAttack().showStat())
-        .append(p.specialDefense().showStat())
-        .append(p.speed().showStat())
-        .append(p.accuracy().showStat())
-        .append(p.evasion().showStat())
+        .append(p.getAttack().showStat())
+        .append(p.getDefense().showStat())
+        .append(p.getSpecialAttack().showStat())
+        .append(p.getSpecialDefense().showStat())
+        .append(p.getSpeed().showStat())
+        .append(p.getAccuracy().showStat())
+        .append(p.getEvasion().showStat())
         .toString();
     }
 
     public static String listMoves(Pokemon p) {
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < p.moves().length; i++) 
-            sb.append(String.format("[%d] %s", i, p.moves()[i].moveStats())); 
+        for (int i = 0; i < p.getMoves().length; i++) 
+            sb.append(String.format("[%d] %s", i, p.getMoves()[i].moveStats())); 
             
         return sb.toString();
     }
 
     public static String showCondition(Pokemon p) {
-        if (p.conditions().fainted()) return "FAINTED";
-        if (!p.conditions().hasPrimary()) return "";
-        return p.conditions().primaryCondition().toString();
+        if (p.getConditions().isFainted()) return "FAINTED";
+        if (!p.getConditions().hasPrimary()) return "";
+        return p.getConditions().getPrimaryCondition().toString();
     }
 
     public static String showVolatileConditions(Pokemon p) {
         StringBuilder sb = new StringBuilder();
 
 
-        for (StatusCondition c : p.conditions().volatileConditions().values()) 
-            sb.append(c.effectName())
+        for (StatusCondition c : p.getConditions().getVolatileConditions().values()) 
+            sb.append(c.getEffectName())
             .append(", ");
         
         String s = sb.toString();
@@ -44,11 +44,11 @@ public interface StatDisplay {
     }
 
     public static String showPartyStats(Pokemon p) {
-        return String.format("- %s <%s> (HP: %s) %s%n", p, p.pokemonType(), p.hp(), showCondition(p));
+        return String.format("- %s <%s> (HP: %s) %s%n", p, p.getPokemonType(), p.getHp(), showCondition(p));
     }
 
     public static String showItem(Pokemon p) {
-        return p.item() != null ? p.item().toString() : "";
+        return p.getItem() != null ? p.getItem().toString() : "";
     }
 
 
@@ -56,10 +56,10 @@ public interface StatDisplay {
     public static String showAllStats(Pokemon p) {
 		return new StringBuilder()
 		.append(String.format("Name: %s  |  ", p))
-		.append(String.format("Type: %s  |  ", p.pokemonType().toString()))
-        .append(String.format("LEVEL %d  |  ", p.level()))
-		.append(String.format("Pokedex #: %d%n", p.pokedexID()))
-		.append(String.format("%nHP: %s%n", p.hp().toString()))
+		.append(String.format("Type: %s  |  ", p.getPokemonType().toString()))
+        .append(String.format("LEVEL %d  |  ", p.getLevel()))
+		.append(String.format("Pokedex #: %d%n", p.getPokedexID()))
+		.append(String.format("%nHP: %s%n", p.getHp().toString()))
 		.append(String.format("%n%s", listStats(p)))
         .append(String.format("%nMOVES: %n%s", listMoves(p)))
         .toString();
@@ -68,8 +68,8 @@ public interface StatDisplay {
     public static String showSomeStats(Pokemon p) {
         return new StringBuilder()
         .append(String.format("Name: %s  |  ", p))
-        .append(String.format("Type: %s%n", p.pokemonType().toString()))
-        .append(String.format("%nHP: %s%n", p.hp().toString()))
+        .append(String.format("Type: %s%n", p.getPokemonType().toString()))
+        .append(String.format("%nHP: %s%n", p.getHp().toString()))
         .append(String.format("%nItem: %s%n", showItem(p)))
         .append(String.format("%nStatus Effect: %s%n", showCondition(p)))
         .append(String.format("Other Effects: %s%n", showVolatileConditions(p)))

@@ -59,6 +59,6 @@ public class Event implements Subscriber {
 
 
     // Getters
-    public String eventId() {return this.eventId;}
-    public HashMap<String, Observer> eventListeners() {return this.eventListeners;}
+    public String getEventId() {return this.eventId;}
+    public HashMap<String, Observer> getEventListeners() {return this.eventListeners;}
 }

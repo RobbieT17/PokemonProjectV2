@@ -77,8 +77,8 @@ public class Move {
      */
     public boolean isType(PokemonType t) {
         return (t.hasSecondaryType()) 
-        ? this.moveType.equals(t.primaryType().typeName())  || this.moveType.equals(t.secondaryType().typeName()) 
-        : this.moveType.equals(t.primaryType().typeName());
+        ? this.moveType.equals(t.getPrimaryType().typeName())  || this.moveType.equals(t.getSecondaryType().typeName()) 
+        : this.moveType.equals(t.getPrimaryType().typeName());
     }
 
     /**
@@ -127,16 +127,16 @@ public class Move {
     public void disable() {this.disabled = true;}
     
 // Getters
-    public int moveID() {return this.moveID;}
-    public String moveName() {return this.moveName;}
-    public String moveType() {return this.moveType;}
-    public String category() {return this.category;}
-    public double critRate() {return this.critRate;}
-    public PowerPoints pp() {return this.pp;}
-    public int power() {return this.power != null ? this.power.power(): 0;}
-    public int accuracy() {return this.accuracy.power();}
-    public int priority() {return this.priority;}
-    public boolean makesContact() {return this.makesContact;}
-    public MoveAction action() {return this.action;}
-    public boolean disabled() {return this.disabled;}
+    public int getMoveID() {return this.moveID;}
+    public String getMoveName() {return this.moveName;}
+    public String getMoveType() {return this.moveType;}
+    public String getCategory() {return this.category;}
+    public double getCritRate() {return this.critRate;}
+    public PowerPoints getPp() {return this.pp;}
+    public int getPower() {return this.power != null ? this.power.power(): 0;}
+    public int getAccuracy() {return this.accuracy.power();}
+    public int getPriority() {return this.priority;}
+    public boolean getMakesContact() {return this.makesContact;}
+    public MoveAction getAction() {return this.action;}
+    public boolean getDisabled() {return this.disabled;}
 }

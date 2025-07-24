@@ -29,7 +29,7 @@ public class Counter {
     }
 
 // Getters
-    public int count() {
+    public int getCount() {
         return this.count;
     }
 

@@ -7,8 +7,6 @@ import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
 import project.battle.Battle;
-import project.battle.BattleLog;
-import project.move.Move;
 import project.player.PokemonTrainer;
 import project.utility.Time;
 
@@ -116,12 +114,10 @@ public class Server {
 
             Time.hold(3); // Holds to simulate server delay
 
-            Server.log("Processing round...");
-            
+            Server.log("Processing round...");  
             battle.processRound();
 
             Server.log("Round %d", ++Server.round);
-
             Server.lock();
         }
             

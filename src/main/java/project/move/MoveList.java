@@ -145,7 +145,7 @@ public interface MoveList {
 
     public static Move avalanche() {
         MoveAction action =  e -> {
-            if (e.user.conditions().tookDamage()) e.moveUsed.doublePower();
+            if (e.user.getConditions().tookDamage()) e.moveUsed.doublePower();
             MoveAction.dealDamage(e);
         };
 
@@ -522,7 +522,7 @@ public interface MoveList {
     public static Move earthquake() {
         MoveAction action = e -> {
             // Deals double power to opponents digging
-            if (e.attackTarget.conditions().hasKey(StatusCondition.DIG_ID)) e.moveUsed.doublePower(); 
+            if (e.attackTarget.getConditions().hasKey(StatusCondition.DIG_ID)) e.moveUsed.doublePower(); 
             MoveAction.dealDamage(e);
         };
 
@@ -580,7 +580,7 @@ public interface MoveList {
         .setCategory(Move.STATUS)
         .setPP(10)
         .setPriority(4)
-        .setAction(e -> MoveAction.pokemonProtects(e, e.user.conditions().endure(), e.user + " braced itself!"))
+        .setAction(e -> MoveAction.pokemonProtects(e, e.user.getConditions().getEndure(), e.user + " braced itself!"))
         .build();
     }
 
@@ -607,9 +607,9 @@ public interface MoveList {
         MoveAction action = e -> {
             Pokemon a = e.user;
             // Double power (140) if user is burned, paralyzed, or poisoned
-            if (a.conditions().hasKey(StatusCondition.BURN_ID) |
-            a.conditions().hasKey(StatusCondition.PARALYSIS_ID) |
-            a.conditions().hasKey(StatusCondition.POISON_ID))
+            if (a.getConditions().hasKey(StatusCondition.BURN_ID) |
+            a.getConditions().hasKey(StatusCondition.PARALYSIS_ID) |
+            a.getConditions().hasKey(StatusCondition.POISON_ID))
                 e.moveUsed.doublePower();
 
             MoveAction.dealDamage(e);
@@ -648,7 +648,7 @@ public interface MoveList {
     public static Move falseSwipe() {
         MoveAction action = e -> {
             // Leaves opponent with at least 1 HP
-            e.attackTarget.conditions().endure().setActive(true);
+            e.attackTarget.getConditions().getEndure().setActive(true);
             MoveAction.dealDamage(e);
         };
 
@@ -929,15 +929,15 @@ public interface MoveList {
             Pokemon d = e.attackTarget;
             // Move power varies based on weight 
             e.moveUsed.setPower(
-            d.weight() <= 21.8
+            d.getWeight() <= 21.8
                 ? 20
-                : d.weight() <= 54.9
+                : d.getWeight() <= 54.9
                     ? 40
-                    : d.weight() <= 110
+                    : d.getWeight() <= 110
                         ? 60
-                        : d.weight() < 220.2
+                        : d.getWeight() < 220.2
                             ? 80
-                            : d.weight() < 440.7
+                            : d.getWeight() < 440.7
                                 ? 100
                                 : 120);
             MoveAction.dealDamage(e);
@@ -994,7 +994,7 @@ public interface MoveList {
 
     public static Move gyroBall() {
         MoveAction action = e -> {
-            e.moveUsed.setPower((int) (25.0 * e.attackTarget.speed().power() / (double) e.user.speed().power() + 1));
+            e.moveUsed.setPower((int) (25.0 * e.attackTarget.getSpeed().getPower() / (double) e.user.getSpeed().getPower() + 1));
             MoveAction.dealDamage(e);
         };
 
@@ -1044,7 +1044,7 @@ public interface MoveList {
              * Power varies based on the weight of both user and the target
              * The greater the difference, the greater the power
              */
-            double ratio = e.user.weight() / e.attackTarget.weight();
+            double ratio = e.user.getWeight() / e.attackTarget.getWeight();
 
             e.moveUsed.setPower(
             ratio < 2
@@ -1514,7 +1514,7 @@ public interface MoveList {
         .setCategory(Move.STATUS)
         .setPP(10)
         .setPriority(4)
-        .setAction(e -> MoveAction.pokemonProtects(e, e.user.conditions().protect(), e.user + " protected itself!"))
+        .setAction(e -> MoveAction.pokemonProtects(e, e.user.getConditions().getProtect(), e.user + " protected itself!"))
         .build();
     }
 
@@ -1681,7 +1681,7 @@ public interface MoveList {
 
     public static Move scorchingSands() {
         MoveAction action = e -> {
-            e.user.conditions().removeCondition(StatusCondition.FREEZE_ID);
+            e.user.getConditions().removeCondition(StatusCondition.FREEZE_ID);
             MoveAction.dealDamage(e);
             MoveAction.applyCondition(e, StatusCondition.BURN_ID, 30);
         };
@@ -1775,7 +1775,7 @@ public interface MoveList {
             Pokemon a = e.user;
             Move m = e.moveUsed;
             // Only works when Pokemon is asleep
-            if (!a.conditions().hasKey(StatusCondition.SLEEP_ID)){
+            if (!a.getConditions().hasKey(StatusCondition.SLEEP_ID)){
                 BattleLog.add(Move.FAILED);
                 return;
             }
@@ -1783,12 +1783,12 @@ public interface MoveList {
             // Uses random move in moveset, doesn't choose Sleep Talk
             Move randomMove = m;
             while (randomMove.equals(m)) {
-                int i = RandomValues.generateInt(0, a.moves().length - 1);
-                randomMove = a.moves()[i];
+                int i = RandomValues.generateInt(0, a.getMoves().length - 1);
+                randomMove = a.getMoves()[i];
             }
 
             BattleLog.add("%s used %s!", a, randomMove);
-            randomMove.action().act(new EventData(a, e.attackTarget, m));
+            randomMove.getAction().act(new EventData(a, e.attackTarget, m));
         };
 
         return new MoveBuilder()
@@ -1855,7 +1855,7 @@ public interface MoveList {
 
     public static Move stompingTantrum() {
         MoveAction action = e -> {
-            if (e.user.conditions().interrupted()) e.moveUsed.doublePower();
+            if (e.user.getConditions().isInterrupted()) e.moveUsed.doublePower();
             MoveAction.dealDamage(e);
         };
 
@@ -2019,7 +2019,7 @@ public interface MoveList {
 
     public static Move temperFlare() {
         MoveAction action = e -> {
-            if (e.user.conditions().interrupted()) e.moveUsed.doublePower();
+            if (e.user.getConditions().isInterrupted()) e.moveUsed.doublePower();
             MoveAction.dealDamage(e);
         };
 
@@ -2091,7 +2091,7 @@ public interface MoveList {
 
     public static Move venoshock() {
         MoveAction action = e -> {
-            if (e.attackTarget.conditions().hasKey(StatusCondition.POISON_ID)) e.moveUsed.doublePower();
+            if (e.attackTarget.getConditions().hasKey(StatusCondition.POISON_ID)) e.moveUsed.doublePower();
             MoveAction.dealDamage(e);
         };
 
@@ -2175,7 +2175,7 @@ public interface MoveList {
 
     public static Move whirlpool() {
         MoveAction action = e -> {
-            if (e.attackTarget.conditions().hasKey(StatusCondition.DIVE_ID)) e.moveUsed.doublePower();
+            if (e.attackTarget.getConditions().hasKey(StatusCondition.DIVE_ID)) e.moveUsed.doublePower();
             MoveAction.dealDamage(e);
             MoveAction.applyCondition(e, StatusCondition.BOUND_ID);
         };

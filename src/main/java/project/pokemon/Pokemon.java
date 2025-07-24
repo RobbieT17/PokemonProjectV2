@@ -97,9 +97,9 @@ public class Pokemon {
     public void useMove(EventData data) {
         BattleLog.add("%s used %s!", this, this.moveSelected);
         try {
-            this.events.onEvent(GameEvent.USE_MOVE, data);
-            this.moveSelected.pp().decrement(this.conditions().hasKey(StatusCondition.FORCED_MOVE_ID));
-            this.moveSelected.action().act(data);
+            this.events.updateOnEvent(GameEvent.USE_MOVE, data);
+            this.moveSelected.getPp().decrement(this.getConditions().hasKey(StatusCondition.FORCED_MOVE_ID));
+            this.moveSelected.getAction().act(data);
         } catch (MoveEndedEarlyException e) {
             BattleLog.add(e.getMessage());
         }
@@ -115,15 +115,15 @@ public class Pokemon {
      */
     public void useTurn(EventData data){
         try {
-            this.events().onEvent(GameEvent.BEFORE_MOVE, data);
-            this.events().onEvent(GameEvent.PRIMARY_STATUS_BEFORE, data);
-            this.events().onEvent(GameEvent.STATUS_BEFORE, data);
+            this.getEvents().updateOnEvent(GameEvent.BEFORE_MOVE, data);
+            this.getEvents().updateOnEvent(GameEvent.PRIMARY_STATUS_BEFORE, data);
+            this.getEvents().updateOnEvent(GameEvent.STATUS_BEFORE, data);
 
             this.useMove(data);
             this.conditions.setInterrupted(false); // Successful Move
         } catch (MoveInterruptedException | PokemonCannotActException e) {
             BattleLog.add(e.getMessage());
-            this.events.onEvent(GameEvent.MOVE_INTERRUPTED, data);
+            this.events.updateOnEvent(GameEvent.MOVE_INTERRUPTED, data);
 
             // Stops any ongoing moves
             this.conditions.removeCondition(StatusCondition.FOCUSED_ID);
@@ -132,7 +132,7 @@ public class Pokemon {
             this.conditions.setInterrupted(true);
         } 
         this.conditions.setHasMoved(true); 
-        this.events.onEvent(GameEvent.END_OF_TURN, data);
+        this.events.updateOnEvent(GameEvent.END_OF_TURN, data);
     }
 
     /**
@@ -148,8 +148,8 @@ public class Pokemon {
         this.conditions.setTookDamage(true);
         this.damageReceived += value;
 
-        if (this.conditions().endure().active()) {
-            this.conditions.endure().setActive(false);
+        if (this.getConditions().getEndure().isActive()) {
+            this.conditions.getEndure().setActive(false);
             takeDamageEndure(value);
         }
         else this.hp.change(-value); 
@@ -159,7 +159,7 @@ public class Pokemon {
     
     // Takes damage equal to a percent of max HP
     public void takeDamagePercentMaxHP(double percent, String message) {
-        int damage = (int) (this.hp().max() * percent);
+        int damage = (int) (this.getHp().getCurrentHealthPoints() * percent);
         BattleLog.add("%s took %d damage%s", this, damage, message + "!");
         this.takeDamage(damage);
     }
@@ -191,7 +191,7 @@ public class Pokemon {
 
      // Takes damage equal to a percent of max HP
      public void restoreHpPercentMaxHP(double percent, String message) {
-        int heal = (int) (this.hp().max() * percent);
+        int heal = (int) (this.hp.getCurrentHealthPoints() * percent);
         BattleLog.add("%s restored %d HP%s", this, heal, message + "!");
         this.restoreHP(heal);
     }
@@ -206,7 +206,7 @@ public class Pokemon {
     }
 
     public boolean hpLessThanPercent(double percent) {
-        return this.hp.value() / (double) this.hp.max() < 0.01 * percent; 
+        return this.hp.getCurrentHealthPoints() / (double) this.hp.getMaxHealthPoints() < 0.01 * percent; 
     }
 
     public boolean firstRound() {
@@ -225,7 +225,7 @@ public class Pokemon {
                 int i = Integer.parseInt(input);
 
                 m = this.moves[i];
-                if (!(m.pp().depleted() || m.disabled())) {
+                if (!(m.getPp().depleted() || m.getDisabled())) {
                     break;
                 }
 
@@ -247,7 +247,7 @@ public class Pokemon {
 // Boolean Methods
     public boolean hasNoMoves() {
         for (Move m : this.moves) 
-            if (!(m.pp().depleted() || m.disabled())) return false;
+            if (!(m.getPp().depleted() || m.getDisabled())) return false;
         return true;
     }
 
@@ -297,7 +297,7 @@ public class Pokemon {
             this.conditions.setSwitchedIn(false);
             return;
         }
-        if (this.conditions.fainted()) {
+        if (this.conditions.isFainted()) {
             this.conditions.clearPrimary();
             this.conditions.clearVolatileConditions();
             return;
@@ -308,7 +308,7 @@ public class Pokemon {
         this.conditions.setHasMoved(false);
      
     
-        if (this.conditions.switchedIn()) {
+        if (this.conditions.isSwitchedIn()) {
             this.conditions.setSwitchedIn(false);
             return;
         }
@@ -316,8 +316,8 @@ public class Pokemon {
         this.resetMove();
  
         try {
-            this.events().onEvent(GameEvent.END_OF_ROUND, null);
-            this.events().onEvent(GameEvent.WEATHER_EFFECT, null);
+            this.getEvents().updateOnEvent(GameEvent.END_OF_ROUND, null);
+            this.getEvents().updateOnEvent(GameEvent.WEATHER_EFFECT, null);
             Weather.weatherEffect(this);
         } catch (PokemonFaintedException e) {
         }  
@@ -337,7 +337,7 @@ public class Pokemon {
         this.damageReceived = 0;  
         this.roundCount = 0;
 
-        this.events.onEvent(GameEvent.SWITCH_OUT, null);
+        this.events.updateOnEvent(GameEvent.SWITCH_OUT, null);
     }
 
     public void removeItem() {
@@ -351,31 +351,31 @@ public class Pokemon {
     public void setItem(HeldItem i) {this.item = i;}
 
 // Getters
-    public int level() {return this.level;}
-    public String pokemonName() {return this.pokemonName;}
-    public PokemonType pokemonType() {return this.pokemonType;}
-    public int pokedexID() {return this.pokedexID;}
-    public HealthPoints hp() {return this.hp;}
-    public PokemonStat[] stats() {return this.stats;}
-    public PokemonStat attack() {return this.stats[PokemonStat.ATTACK];}
-	public PokemonStat defense() {return this.stats[PokemonStat.DEFENSE];}
-	public PokemonStat specialAttack() {return this.stats[PokemonStat.SPECIAL_ATTACK];}
-	public PokemonStat specialDefense() {return this.stats[PokemonStat.SPECIAL_DEFENSE];}
-	public PokemonStat speed() {return this.stats[PokemonStat.SPEED];}
-	public PokemonStat accuracy() {return this.stats[PokemonStat.ACCURACY];}
-	public PokemonStat evasion() {return this.stats[PokemonStat.EVASION];}
-	public double weight() {return this.weight;}
-    public Move[] moves() {return this.moves;}
-    public PokemonConditions conditions() {return this.conditions;}
-    public Move moveSelected() {return this.moveSelected;}
-    public Move firstMove() {return this.firstMove;}
-    public Move lastMove() {return this.lastMove;}
-    public int damageDealt() {return this.damageDealt;}
-    public int damageReceived() {return this.damageReceived;}
-    public int roundCount() {return this.roundCount;}
-    public Ability ability() {return this.ability;}
-    public HeldItem item() {return this.item;}
-    public PokemonTrainer owner() {return this.owner;}
-    public GameEvent events() {return this.events;}
+    public int getLevel() {return this.level;}
+    public String getPokemonName() {return this.pokemonName;}
+    public PokemonType getPokemonType() {return this.pokemonType;}
+    public int getPokedexID() {return this.pokedexID;}
+    public HealthPoints getHp() {return this.hp;}
+    public PokemonStat[] getStats() {return this.stats;}
+    public PokemonStat getAttack() {return this.stats[PokemonStat.ATTACK];}
+	public PokemonStat getDefense() {return this.stats[PokemonStat.DEFENSE];}
+	public PokemonStat getSpecialAttack() {return this.stats[PokemonStat.SPECIAL_ATTACK];}
+	public PokemonStat getSpecialDefense() {return this.stats[PokemonStat.SPECIAL_DEFENSE];}
+	public PokemonStat getSpeed() {return this.stats[PokemonStat.SPEED];}
+	public PokemonStat getAccuracy() {return this.stats[PokemonStat.ACCURACY];}
+	public PokemonStat getEvasion() {return this.stats[PokemonStat.EVASION];}
+	public double getWeight() {return this.weight;}
+    public Move[] getMoves() {return this.moves;}
+    public PokemonConditions getConditions() {return this.conditions;}
+    public Move getMoveSelected() {return this.moveSelected;}
+    public Move getFirstMove() {return this.firstMove;}
+    public Move getLastMove() {return this.lastMove;}
+    public int getDamageDealt() {return this.damageDealt;}
+    public int getDamageReceived() {return this.damageReceived;}
+    public int getRoundCount() {return this.roundCount;}
+    public Ability getAbility() {return this.ability;}
+    public HeldItem getItem() {return this.item;}
+    public PokemonTrainer getOwner() {return this.owner;}
+    public GameEvent getEvents() {return this.events;}
 
 }

@@ -129,7 +129,7 @@ public class ClientHandler implements Runnable {
         }
 
         this.player.sendOut(p);
-        Server.logp(this.playerNum, "Sent out %s.", this.player.pokemonInBattle());
+        Server.logp(this.playerNum, "Sent out %s.", this.player.getPokemonInBattle());
         return p;
     }
 
@@ -145,7 +145,7 @@ public class ClientHandler implements Runnable {
         p.setMove(m);
 
         Server.logp(this.playerNum, "Move selected.");
-        this.writeToBuffer("You selected %s", p.moveSelected());
+        this.writeToBuffer("You selected %s", p.getMoveSelected());
          
         return m;
     }
@@ -182,7 +182,7 @@ public class ClientHandler implements Runnable {
         this.selectPokemon();
 
         // Waits for other player to finish setup
-        this.writeToBuffer("You sent out %s.\nWaiting for opponent...", this.player.pokemonInBattle(), 
+        this.writeToBuffer("You sent out %s.\nWaiting for opponent...", this.player.getPokemonInBattle(), 
         this.playerNum);
         Server.lock();
 
@@ -190,7 +190,7 @@ public class ClientHandler implements Runnable {
         while (this.socket.isConnected()) {
             Server.lock(); // Waits for server to finish processing
 
-            this.selectMove(this.player.pokemonInBattle());
+            this.selectMove(this.player.getPokemonInBattle());
             this.writeToBuffer("Waiting for opponent....");
             Server.lock(); // Waits for opponent
 
