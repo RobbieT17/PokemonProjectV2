@@ -1,5 +1,6 @@
 package project.move;
 
+import project.move.moveactions.MoveAction;
 import project.pokemon.Pokemon;
 import project.pokemon.PokemonType;
 

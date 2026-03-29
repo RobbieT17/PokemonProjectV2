@@ -1,13 +1,13 @@
 package project.stats;
 
+import project.battle.BattleLog;
 import project.event.EventData;
 import project.event.GameEvent;
-import project.battle.BattleLog;
 import project.exceptions.MoveInterruptedException;
 import project.exceptions.PokemonCannotActException;
 import project.exceptions.PokemonFaintedException;
 import project.move.Move;
-import project.move.MoveAction;
+import project.move.moveactions.MoveActionAttackDamage;
 import project.pokemon.Pokemon;
 import project.utility.Counter;
 import project.utility.RandomValues;
@@ -334,7 +334,7 @@ public class StatusCondition extends Effect {
             BattleLog.add("%s is confused!", p);
             if (!RandomValues.chance(50)) return;
 
-            MoveAction.takeConfusionDamage(p);
+            MoveActionAttackDamage.takeConfusionDamage(p);
             checkIfFaints(p);
             throw new PokemonCannotActException();
         });

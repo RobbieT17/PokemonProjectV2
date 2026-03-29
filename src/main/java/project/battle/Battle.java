@@ -8,7 +8,7 @@ import project.event.EventData;
 import project.event.GameEvent;
 import project.exceptions.BattleEndedException;
 import project.move.Move;
-import project.move.MoveList;
+import project.move.movelist.MoveList;
 import project.player.PokemonTrainer;
 import project.player.PokemonTrainerBuilder;
 import project.pokemon.Pokedex.PokedexEntry;
