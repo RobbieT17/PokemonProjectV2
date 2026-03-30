@@ -8,7 +8,7 @@ import project.event.EventData;
 import project.event.GameEvent;
 import project.exceptions.BattleEndedException;
 import project.move.Move;
-import project.move.movelist.MoveList;
+import project.move.movelist.NormalMoveList;
 import project.player.PokemonTrainer;
 import project.player.PokemonTrainerBuilder;
 import project.pokemon.Pokedex.PokedexEntry;
@@ -80,7 +80,7 @@ public class BattleA {
         // Default to struggle if all the Pokemon's move has no more PP
         if (p.hasNoMoves()) {
             BattleLog.add("%s has no moves!", p);
-            p.setMove(MoveList.struggle());
+            p.setMove(NormalMoveList.struggle());
         }
 
         Move move = p.getMoveSelected();
