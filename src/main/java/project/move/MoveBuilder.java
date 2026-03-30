@@ -1,5 +1,6 @@
 package project.move;
 
+import project.move.moveactions.MoveAction;
 import project.utility.Builder;
 
 public class MoveBuilder implements Builder {

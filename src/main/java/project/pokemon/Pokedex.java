@@ -1,6 +1,6 @@
 package project.pokemon;
 
-import project.move.MoveList;
+import project.move.movelist.MoveList;
 import project.stats.Type;
 
 // List of Pokemon (Listed in pokedex order)
