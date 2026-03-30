@@ -156,7 +156,7 @@ public interface MoveList {
 
     public static Move avalanche() {
         MoveAction action =  e -> {
-            if (e.user.conditions().tookDamage()) e.moveUsed.doublePower();
+            if (e.user.getConditions().tookDamage()) e.moveUsed.doublePower();
             MoveActionAttackDamage.dealDamage(e);
         };
 
@@ -533,7 +533,7 @@ public interface MoveList {
     public static Move earthquake() {
         MoveAction action = e -> {
             // Deals double power to opponents digging
-            if (e.attackTarget.conditions().hasKey(StatusCondition.DIG_ID)) e.moveUsed.doublePower(); 
+            if (e.attackTarget.getConditions().hasKey(StatusCondition.DIG_ID)) e.moveUsed.doublePower(); 
             MoveActionAttackDamage.dealDamage(e);
         };
 
@@ -591,7 +591,7 @@ public interface MoveList {
         .setCategory(Move.STATUS)
         .setPP(10)
         .setPriority(4)
-        .setAction(e -> MoveActionBracing.pokemonProtects(e, e.user.conditions().endure(), e.user + " braced itself!"))
+        .setAction(e -> MoveActionBracing.pokemonProtects(e, e.user.getConditions().getEndure(), e.user + " braced itself!"))
         .build();
     }
 
@@ -659,7 +659,7 @@ public interface MoveList {
     public static Move falseSwipe() {
         MoveAction action = e -> {
             // Leaves opponent with at least 1 HP
-            e.attackTarget.conditions().endure().setActive(true);
+            e.attackTarget.getConditions().getEndure().setActive(true);
             MoveActionAttackDamage.dealDamage(e);
         };
 
@@ -1005,7 +1005,7 @@ public interface MoveList {
 
     public static Move gyroBall() {
         MoveAction action = e -> {
-            e.moveUsed.setPower((int) (25.0 * e.attackTarget.speed().power() / (double) e.user.speed().power() + 1));
+            e.moveUsed.setPower((int) (25.0 * e.attackTarget.getSpeed().getPower() / (double) e.user.getSpeed().getPower() + 1));
             MoveActionAttackDamage.dealDamage(e);
         };
 
@@ -1525,7 +1525,7 @@ public interface MoveList {
         .setCategory(Move.STATUS)
         .setPP(10)
         .setPriority(4)
-        .setAction(e -> MoveActionBracing.pokemonProtects(e, e.user.conditions().protect(), e.user + " protected itself!"))
+        .setAction(e -> MoveActionBracing.pokemonProtects(e, e.user.getConditions().getProtect(), e.user + " protected itself!"))
         .build();
     }
 
@@ -1692,7 +1692,7 @@ public interface MoveList {
 
     public static Move scorchingSands() {
         MoveAction action = e -> {
-            e.user.conditions().removeCondition(StatusCondition.FREEZE_ID);
+            e.user.getConditions().removeCondition(StatusCondition.FREEZE_ID);
             MoveActionAttackDamage.dealDamage(e);
             MoveActionChangeCondition.applyCondition(e, StatusCondition.BURN_ID, 30);
         };
@@ -1870,7 +1870,7 @@ public interface MoveList {
 
     public static Move stompingTantrum() {
         MoveAction action = e -> {
-            if (e.user.conditions().interrupted()) e.moveUsed.doublePower();
+            if (e.user.getConditions().isInterrupted()) e.moveUsed.doublePower();
             MoveActionAttackDamage.dealDamage(e);
         };
 
@@ -2034,7 +2034,7 @@ public interface MoveList {
 
     public static Move temperFlare() {
         MoveAction action = e -> {
-            if (e.user.conditions().interrupted()) e.moveUsed.doublePower();
+            if (e.user.getConditions().isInterrupted()) e.moveUsed.doublePower();
             MoveActionAttackDamage.dealDamage(e);
         };
 
@@ -2106,7 +2106,7 @@ public interface MoveList {
 
     public static Move venoshock() {
         MoveAction action = e -> {
-            if (e.attackTarget.conditions().hasKey(StatusCondition.POISON_ID)) e.moveUsed.doublePower();
+            if (e.attackTarget.getConditions().hasKey(StatusCondition.POISON_ID)) e.moveUsed.doublePower();
             MoveActionAttackDamage.dealDamage(e);
         };
 
@@ -2190,7 +2190,7 @@ public interface MoveList {
 
     public static Move whirlpool() {
         MoveAction action = e -> {
-            if (e.attackTarget.conditions().hasKey(StatusCondition.DIVE_ID)) e.moveUsed.doublePower();
+            if (e.attackTarget.getConditions().hasKey(StatusCondition.DIVE_ID)) e.moveUsed.doublePower();
             MoveActionAttackDamage.dealDamage(e);
             MoveActionChangeCondition.applyCondition(e, StatusCondition.BOUND_ID);
         };

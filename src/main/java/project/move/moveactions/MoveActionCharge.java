@@ -12,13 +12,13 @@ public interface MoveActionCharge extends MoveAction{
      */
     public static void chargeMove(EventData data) {
         Pokemon attacker = data.user;
-        if (!attacker.conditions().hasKey(StatusCondition.CHARGE_MOVE)) {
-            attacker.conditions().addCondition(StatusCondition.chargeMove(attacker, data.moveUsed));    
+        if (!attacker.getConditions().hasKey(StatusCondition.CHARGE_MOVE)) {
+            attacker.getConditions().addCondition(StatusCondition.chargeMove(attacker, data.moveUsed));    
             BattleLog.add("%s begins charging!", attacker);
             return;
         }
         
-        attacker.conditions().removeCondition(StatusCondition.CHARGE_MOVE);
+        attacker.getConditions().removeCondition(StatusCondition.CHARGE_MOVE);
         MoveActionAttackDamage.dealDamage(data); 
     }
 
@@ -28,7 +28,7 @@ public interface MoveActionCharge extends MoveAction{
     }
 
     public static void rechargeMove(EventData data) {
-        data.user.conditions().setRecharge(true);
+        data.user.getConditions().setRecharge(true);
     }
 
     /**
@@ -39,8 +39,8 @@ public interface MoveActionCharge extends MoveAction{
     public static void rampageMove(EventData data) {
         Pokemon attacker = data.user;
         // Starts rampage
-        if (!attacker.conditions().hasKey(StatusCondition.RAMPAGE_ID)) {
-            attacker.conditions().addCondition(StatusCondition.rampage(attacker, data.moveUsed));
+        if (!attacker.getConditions().hasKey(StatusCondition.RAMPAGE_ID)) {
+            attacker.getConditions().addCondition(StatusCondition.rampage(attacker, data.moveUsed));
         }
        
         MoveActionAttackDamage.dealDamage(data);       

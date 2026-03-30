@@ -28,20 +28,20 @@ public interface MoveActionChangeStat extends  MoveAction{
                 continue;
             }
         
-            PokemonStat s = p.stats()[i];
+            PokemonStat s = p.getStats()[i];
             if (s.isAtHighestOrLowestStage(change)) {
                 BattleLog.add("But %s's %s won't go any %s!", p, s, (change > 0) ? "higher" : "lower");
                 data.statFailed = true;
                 continue;
             }
-            p.stats()[i].changeStage(change);
+            p.getStats()[i].changeStage(change);
             BattleLog.add("%s's %s %s%s!", p, s, (change > 0) ? "rose" : "fell", PokemonStat.sizeOfChange(change));
         }  
     }
 
     public static void changeStats(EventData data, int[] stats, double chance) {
         data.statProb = chance;
-        if (data.user.conditions().fainted() || new Random().nextDouble() > chance * 0.01) {
+        if (data.user.getConditions().isFainted() || new Random().nextDouble() > chance * 0.01) {
             data.statFailed = true;
             return;
         }
@@ -54,7 +54,7 @@ public interface MoveActionChangeStat extends  MoveAction{
 
     // Resets all stat changes back to neutral
     public static void resetStats(EventData data, Pokemon p) {
-        for (PokemonStat s : p.stats()) s.setStage(0);
+        for (PokemonStat s : p.getStats()) s.setStage(0);
         BattleLog.add("%s stat changes were cleared...", p);
     }
 

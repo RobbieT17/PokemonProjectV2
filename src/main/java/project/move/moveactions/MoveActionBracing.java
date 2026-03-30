@@ -12,11 +12,11 @@ public interface  MoveActionBracing extends MoveAction {
         data.protectionType = b;
         data.message = success;
 
-        if (p.moveSelected().equals(p.lastMove())) b.set();
+        if (p.getMoveSelected().equals(p.getLastMove())) b.set();
         else {
             b.reset();
             b.set();   
         }
-        BattleLog.add(b.active() ? success : Move.FAILED);
+        BattleLog.add(b.isActive() ? success : Move.FAILED);
     }
 }

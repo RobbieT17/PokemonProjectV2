@@ -17,7 +17,7 @@ public interface AttackMoveCalculations {
      * move it uses matches one of its types.
      */
     private static double sameTypeAttackBonus(Pokemon p, Move m){
-        return (m.isType(p.pokemonType())) ? 1.5 : 1.0;
+        return (m.isType(p.getPokemonType())) ? 1.5 : 1.0;
     }
 
     /*
@@ -52,7 +52,7 @@ public interface AttackMoveCalculations {
      * @param crit if the move was a critical hit
      */
     private static double calculateAttack(PokemonStat atkStat, boolean crit) {
-        return crit && atkStat.stage() < 0 ? atkStat.base() : atkStat.power();
+        return crit && atkStat.getStage() < 0 ? atkStat.getBase() : atkStat.getPower();
     }
 
     /**
@@ -63,7 +63,7 @@ public interface AttackMoveCalculations {
      * @param crit if the move was a critical hit
      */
     private static double calculateDefense(PokemonStat defStat, boolean crit) {
-        return crit && defStat.stage() > 0 ? defStat.base() : defStat.power();
+        return crit && defStat.getStage() > 0 ? defStat.getBase() : defStat.getPower();
     }
 
     /**
@@ -89,7 +89,7 @@ public interface AttackMoveCalculations {
      * @return calculated damage
      */
     public static int calculateDamage(EventData data) { 
-        criticalHit(data.moveUsed.critRate()); // Rolls for a critical hit
+        criticalHit(data.moveUsed.getCritRate()); // Rolls for a critical hit
         data.notifyEvent(GameEvent.DAMAGE_MULTIPLIER);
         
         Pokemon attacker = data.user;
@@ -104,15 +104,15 @@ public interface AttackMoveCalculations {
         double random = random();
         double addition = data.otherMoveMods;
 
-        double attack = move.category().equals(Move.SPECIAL) 
-        ? calculateAttack(attacker.specialAttack(), isCritical) 
-        : calculateAttack(attacker.attack(), isCritical);
+        double attack = move.getCategory().equals(Move.SPECIAL) 
+        ? calculateAttack(attacker.getSpecialAttack(), isCritical) 
+        : calculateAttack(attacker.getAttack(), isCritical);
 
-        double defense = move.category().equals(Move.SPECIAL) 
-        ? calculateDefense(defender.specialDefense(), isCritical) 
-        : calculateDefense(defender.defense(), isCritical);
+        double defense = move.getCategory().equals(Move.SPECIAL) 
+        ? calculateDefense(defender.getSpecialDefense(), isCritical) 
+        : calculateDefense(defender.getDefense(), isCritical);
         
-        return (int) (((((2 * attacker.level()) / 5.0 + 2) * move.power() * (attack / defense)) / 50.0 + 2) 
+        return (int) (((((2 * attacker.getLevel()) / 5.0 + 2) * move.getPower() * (attack / defense)) / 50.0 + 2) 
         * stab * crit * effectiveness * random * weather * addition);
     }
 

@@ -15,82 +15,82 @@ public interface MoveActionChangeCondition extends MoveAction {
 
     // Applies Burn Condition
     private static void applyBurn(Pokemon p) { 
-        p.conditions().setPrimaryCondition(StatusCondition.burn(p));
+        p.getConditions().setPrimaryCondition(StatusCondition.burn(p));
     }
 
     // Applies Freeze Condition
     private static void applyFreeze(Pokemon p) {
-        p.conditions().setPrimaryCondition(StatusCondition.freeze(p));
+        p.getConditions().setPrimaryCondition(StatusCondition.freeze(p));
     }
 
     // Applies Infect Condition
     private static void applyInfect(Pokemon p) {
-        p.conditions().setPrimaryCondition(StatusCondition.infect(p));
+        p.getConditions().setPrimaryCondition(StatusCondition.infect(p));
     }
 
     // Applies Paralysis Condition
     private static void applyParalysis(Pokemon p) {
-        p.conditions().setPrimaryCondition(StatusCondition.paralysis(p));
+        p.getConditions().setPrimaryCondition(StatusCondition.paralysis(p));
     }
 
     // Applies Poison Condition
     private static void applyPoison(Pokemon p) {
-        p.conditions().setPrimaryCondition(StatusCondition.poisoned(p));
+        p.getConditions().setPrimaryCondition(StatusCondition.poisoned(p));
     }
 
     // Applies Badly Poison Condition
     private static void applyBadlyPoison(Pokemon p) {
-        p.conditions().setPrimaryCondition(StatusCondition.badlyPoisoned(p));
+        p.getConditions().setPrimaryCondition(StatusCondition.badlyPoisoned(p));
     }
 
     // Applies Sleep Condition
     private static void applySleep(Pokemon p) {
-        p.conditions().setPrimaryCondition(StatusCondition.sleep(p));
+        p.getConditions().setPrimaryCondition(StatusCondition.sleep(p));
     }
 
     private static void flyState(EventData data) {
         Pokemon p = data.user;
-        p.conditions().addCondition(StatusCondition.fly(p, data.moveUsed));
+        p.getConditions().addCondition(StatusCondition.fly(p, data.moveUsed));
     }
 
     private static void digState(EventData data) {
         Pokemon p = data.user;
-        p.conditions().addCondition(StatusCondition.dig(p, data.moveUsed));
+        p.getConditions().addCondition(StatusCondition.dig(p, data.moveUsed));
     }
 
     private static void diveState(EventData data) {
         Pokemon p = data.user;
-        p.conditions().addCondition(StatusCondition.dive(p, data.moveUsed));
+        p.getConditions().addCondition(StatusCondition.dive(p, data.moveUsed));
     }
 
     private static void applyFlinch(Pokemon p) {
-        p.conditions().addCondition(StatusCondition.flinch(p));
+        p.getConditions().addCondition(StatusCondition.flinch(p));
     }
 
     // Applies Confusion Condition
     private static void applyBound(Pokemon p) {
-        p.conditions().addCondition(StatusCondition.bound(p));
+        p.getConditions().addCondition(StatusCondition.bound(p));
     }
 
     private static void applyConfusion(Pokemon p) {
-        p.conditions().addCondition(StatusCondition.confusion(p));
+        p.getConditions().addCondition(StatusCondition.confusion(p));
     }
 
     private static void applySeeded(Pokemon p, Pokemon r) {
-        p.conditions().addCondition(StatusCondition.seeded(p, r));
+        p.getConditions().addCondition(StatusCondition.seeded(p, r));
     }
 
     private static boolean cannotApplyCondition(Pokemon p, String id) {
         return switch (id) {
-            case StatusCondition.BURN_ID -> p.isType(Type.FIRE) || p.conditions().hasPrimary();
-            case StatusCondition.FREEZE_ID -> p.isType(Type.ICE) || p.conditions().hasPrimary();
-            case StatusCondition.INFECT_ID -> p.conditions().hasPrimary();
-            case StatusCondition.PARALYSIS_ID -> p.isType(Type.ELECTRIC) || p.conditions().hasPrimary();
-            case StatusCondition.POISON_ID, StatusCondition.BAD_POISON_ID -> p.isType(Type.POISON) || p.isType(Type.STEEL) || p.conditions().hasPrimary();
-            case StatusCondition.SLEEP_ID -> p.isType(Type.DIGITAL) || p.conditions().hasPrimary();
-            case StatusCondition.FLINCH_ID -> p.conditions().hasMoved();
-            case StatusCondition.BOUND_ID, StatusCondition.CONFUSION_ID -> p.conditions().hasKey(id);
-            case StatusCondition.SEEDED_ID -> p.isType(Type.GRASS) || p.conditions().hasKey(id);
+            case StatusCondition.BURN_ID -> p.isType(Type.FIRE) || p.getConditions().hasPrimary();
+            case StatusCondition.FREEZE_ID -> p.isType(Type.ICE) || p.getConditions().hasPrimary();
+            case StatusCondition.INFECT_ID -> p.getConditions().hasPrimary();
+            case StatusCondition.PARALYSIS_ID -> p.isType(Type.ELECTRIC) || p.getConditions().hasPrimary();
+            case StatusCondition.POISON_ID, StatusCondition.BAD_POISON_ID -> p.isType(Type.POISON) || p.isType(Type.STEEL) || p.getConditions().hasPrimary();
+            case StatusCondition.SLEEP_ID -> p.isType(Type.DIGITAL) || p.getConditions().hasPrimary();
+            case StatusCondition.FLINCH_ID -> p.getConditions().hasMoved();
+            case StatusCondition.BOUND_ID, StatusCondition.CONFUSION_ID -> p.getConditions().hasKey(id);
+            case StatusCondition.SEEDED_ID -> p.isType(Type.GRASS) || p.getConditions().hasKey(id);
             default -> false;
         };
     }
@@ -100,7 +100,7 @@ public interface MoveActionChangeCondition extends MoveAction {
         data.statusChange = id;
         data.statusProb = chance;
         
-        if (cannotApplyCondition(p, id) || p.conditions().fainted()) {
+        if (cannotApplyCondition(p, id) || p.getConditions().isFainted()) {
             data.statusFailed = true;
             data.message = Move.FAILED;
             return;
@@ -145,12 +145,12 @@ public interface MoveActionChangeCondition extends MoveAction {
         data.immuneStateChange = state;
 
         // Enters state
-        if (!attacker.conditions().inImmuneState()) {
+        if (!attacker.getConditions().inImmuneState()) {
             applyCondition(data, state, 100);
             return;
         }
 
-        attacker.conditions().removeCondition(data.immuneStateChange);
+        attacker.getConditions().removeCondition(data.immuneStateChange);
         MoveActionAttackDamage.dealDamage(data);
     }
 
@@ -161,12 +161,12 @@ public interface MoveActionChangeCondition extends MoveAction {
         Pokemon p = data.attackTarget;
         data.immuneStateChange = StatusCondition.NO_INVUL_ID;
     
-        if (p.conditions().fainted() || !p.conditions().hasKey(state)) {
+        if (p.getConditions().isFainted() || !p.getConditions().hasKey(state)) {
             return;
         }
 
-        p.conditions().removeCondition(state);
-        p.conditions().setInterrupted(true);
+        p.getConditions().removeCondition(state);
+        p.getConditions().setInterrupted(true);
         p.resetMove();
         BattleLog.add(message);
     }

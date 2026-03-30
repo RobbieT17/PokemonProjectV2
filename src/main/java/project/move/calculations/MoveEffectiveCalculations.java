@@ -15,13 +15,13 @@ public interface MoveEffectiveCalculations {
     public static double typeEffectiveness(String type, Pokemon p){
         double effect = 1.0; // Default type effectiveness
 
-        for (String t : p.pokemonType().typeResistances()) // Pokemon resists type, halves damage
+        for (String t : p.getPokemonType().getTypeResistances()) // Pokemon resists type, halves damage
             if (t.equals(type)) effect *= 0.5;
         
-        for (String t : p.pokemonType().typeWeaknesses()) // Pokemon weak to type, doubles damage
+        for (String t : p.getPokemonType().getTypeWeaknesses()) // Pokemon weak to type, doubles damage
             if (t.equals(type)) effect *= 2;
 
-        for (String t : p.pokemonType().typeImmunities()) { // Pokemon immune to type, nullifies damage
+        for (String t : p.getPokemonType().getTypeImmunities()) { // Pokemon immune to type, nullifies damage
             // if (immunityExceptionFound(type, p)) break;
             if (t.equals(type)) effect = 0;
         } 
@@ -35,7 +35,7 @@ public interface MoveEffectiveCalculations {
     */
     public static void moveEffectiveness(EventData data) {
         Pokemon p = data.attackTarget;
-        double effectiveness = typeEffectiveness(data.moveUsed.moveType(), p);
+        double effectiveness = typeEffectiveness(data.moveUsed.getMoveType(), p);
 
         data.moveEffectiveness = effectiveness;
 

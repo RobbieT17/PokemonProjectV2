@@ -11,11 +11,11 @@ import project.pokemon.Pokemon;
 public interface MoveActionAccuracy {
     // Protection Functions
 private static void defenderProtects(Pokemon p) {
-    if (!p.conditions().protect().active()) {
+    if (!p.getConditions().getProtect().isActive()) {
         return;
     }
         
-    p.conditions().protect().setActive(false);
+    p.getConditions().getProtect().setActive(false);
     throw new MoveInterruptedException("But %s protected itself!", p);
 }
 
@@ -28,16 +28,16 @@ private static void defenderProtects(Pokemon p) {
         data.notifyEvent(GameEvent.MOVE_ACCURACY);
         defenderProtects(defender);
 
-        int accuracy = move.accuracy();
+        int accuracy = move.getAccuracy();
 
-        if (accuracy == Move.ALWAYS_HITS || defender.conditions().immobilized()) {
+        if (accuracy == Move.ALWAYS_HITS || defender.getConditions().isImmobilized()) {
             data.moveHits = true;
             data.notifyEvent(GameEvent.MOVE_HITS);
             return;
         }
 		
         double modifiedAccuracy = 0.01 * accuracy
-        * ((double) attacker.accuracy().power() / (double) defender.evasion().power());
+        * ((double) attacker.getAccuracy().getPower() / (double) defender.getEvasion().getPower());
 
         if (new Random().nextDouble() > modifiedAccuracy) {
             data.moveHits = false;

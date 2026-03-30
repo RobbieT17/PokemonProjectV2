@@ -47,15 +47,15 @@ public interface MoveActionAttackDamage extends MoveAction {
         defender.addDamageReceived(damage);
         defender.takeDamage(damage);    
 
-        if (data.moveUsed.makesContact()) data.notifyEvent(GameEvent.MOVE_MAKES_CONTACT);
+        if (data.moveUsed.getMakesContact()) data.notifyEvent(GameEvent.MOVE_MAKES_CONTACT);
     }
 
     // Pokemon takes damage based on some percent of the damage dealt
     private static void recoilDamage(EventData data) {
         Pokemon p = data.user;
-        if (p.damageDealt() == 0) return;
+        if (p.getDamageDealt() == 0) return;
 
-        int damage = (int) (0.01 * data.recoilPercent * p.damageDealt()); 
+        int damage = (int) (0.01 * data.recoilPercent * p.getDamageDealt()); 
         BattleLog.add("%s took %d damage from the recoil!", p, damage);
         p.addDamageReceived(damage);
         p.takeDamage(damage);
@@ -63,9 +63,9 @@ public interface MoveActionAttackDamage extends MoveAction {
 
     private static void drainHP(EventData data) {
         Pokemon p = data.user;
-        if (p.damageDealt() == 0) return;
+        if (p.getDamageDealt() == 0) return;
 
-        int heal = (int) (0.01 * data.drainPercent * p.damageDealt()); 
+        int heal = (int) (0.01 * data.drainPercent * p.getDamageDealt()); 
         BattleLog.add("%s restored %d HP!", p, heal);
         p.restoreHP(heal);
     }
@@ -87,7 +87,7 @@ public interface MoveActionAttackDamage extends MoveAction {
 
         for (int i = 0; i < data.hitCount; i++) {
             damageTaken(data, true);
-            if (defender.conditions().fainted()) {
+            if (defender.getConditions().isFainted()) {
                 data.hitCount = i;
                 break;
             }
@@ -115,7 +115,7 @@ public interface MoveActionAttackDamage extends MoveAction {
      * It cannot score a critical hit, and does not receive STAB
      */
     public static void takeConfusionDamage(Pokemon p) {
-        int damage = (int) (((((2 * p.level()) / 5.0 + 2) * 40 * (p.attack().power() / (double) p.defense().power())) / 50.0 + 2)); 
+        int damage = (int) (((((2 * p.getLevel()) / 5.0 + 2) * 40 * (p.getAttack().getPower() / (double) p.getDefense().getPower())) / 50.0 + 2)); 
         BattleLog.add("%s took %d damage from their own confusion!", p, damage);
         p.addDamageReceived(damage);
         p.takeDamage(damage); 
