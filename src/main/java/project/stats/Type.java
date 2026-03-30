@@ -74,6 +74,11 @@ public abstract class Type {
 		};
 	}
 
+	// Checks if type matches specified type
+	public boolean isType(String type) {
+		return this.typeName().equals(type);
+	}
+
 	// Class Getters
 	public static Type bugType() {
 		return new BugType();

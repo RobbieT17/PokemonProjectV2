@@ -36,6 +36,13 @@ public class PokemonType {
 		return this.secondary != null;
 	}
 
+	// Returns true if the types matches
+	public boolean typeEquals(String type) {
+		return (this.hasSecondaryType()) 
+		? this.primary.isType(type) || this.secondary.isType(type)
+		: this.primary.isType(type);
+	}
+
 	@Override
 	public String toString() {
 		return new StringBuilder()
@@ -45,24 +52,10 @@ public class PokemonType {
 	}
 	
 // Getters
-	public Type primaryType() {
-		return this.primary;
-	}
-	
-	public Type secondaryType() {
-		return this.secondary;
-	}
-	
-	public String[]  typeResistances() {
-		return this.typeResistances;
-	}
-	
-	public String[]  typeWeaknesses() {
-		return this.typeWeaknesses;
-	}
-	
-	public String[]  typeImmunities() {
-		return this.typeImmunities;
-	}
+	public Type getPrimaryType() {return this.primary;}
+	public Type getSecondaryType() {return this.secondary;}
+	public String[] getTypeResistances() {return this.typeResistances;}
+	public String[] getTypeWeaknesses() {return this.typeWeaknesses;}
+	public String[] getTypeImmunities() {return this.typeImmunities;}
 }
 

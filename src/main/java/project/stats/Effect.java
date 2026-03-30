@@ -21,7 +21,8 @@ public abstract class Effect {
         return this.effectName;
     }
 
-    public String effectName() {return this.effectName;}
-    public String[] flags() {return this.flags;}
-    public Pokemon bearer() {return this.bearer;}
+// Getters
+    public String getEffectName() {return this.effectName;}
+    public String[] getFlags() {return this.flags;}
+    public Pokemon getBearer() {return this.bearer;}
 }

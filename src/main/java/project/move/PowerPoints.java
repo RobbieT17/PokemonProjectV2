@@ -1,8 +1,5 @@
 package project.move;
 
-import project.pokemon.Pokemon;
-import project.stats.StatusCondition;
-
 public class PowerPoints {
 
 // Object Variables
@@ -22,10 +19,10 @@ public class PowerPoints {
 // Methods
     /**
      *  Decrements PP (cannot go below 0)
-     *  Doesn't decrement if Pokemon is in the charging phase or move is multi-turn
+     *  Doesn't decrement if a special condition is meet
      */
-    public void decrement(Pokemon p) {
-        if (p.conditions().hasKey(StatusCondition.FORCED_MOVE_ID)) return;
+    public void decrement(boolean cond) {
+        if (cond) return;
         this.powerPoints--;
         if (this.powerPoints < 0) this.powerPoints = 0;
     }

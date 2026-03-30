@@ -3,7 +3,7 @@ package project.pokemon;
 public class HealthPoints {
 // Object Variables
     private final int maxHealthPoints; // Max HP
-    private int healthPoints; // Current HP
+    private int currentHealthPoints; // Current HP
 
  // Constructor
     /**
@@ -12,40 +12,40 @@ public class HealthPoints {
      */
     public HealthPoints(int health) {
         this.maxHealthPoints = health;
-        this.healthPoints = health;
+        this.currentHealthPoints = health;
     }
 
 // Methods
 
     // Pokemon's current HP is at the max
     public boolean atFullHP() {
-        return this.healthPoints == this.maxHealthPoints;
+        return this.currentHealthPoints == this.maxHealthPoints;
     }
 
     // Change current HP by some value. Cannot exceed max or drop below 0
     public void change(int value) {
-        this.healthPoints += value;
+        this.currentHealthPoints += value;
 
-        if (this.healthPoints > this.maxHealthPoints) this.healthPoints = this.maxHealthPoints;
-        if (this.healthPoints < 0) this.healthPoints = 0;
+        if (this.currentHealthPoints > this.maxHealthPoints) this.currentHealthPoints = this.maxHealthPoints;
+        if (this.currentHealthPoints < 0) this.currentHealthPoints = 0;
     }
 
     // Out of HP when it reaches 0
     public boolean depleted() {
-        return this.healthPoints == 0;
+        return this.currentHealthPoints == 0;
     }
 
     @Override
     public String toString() {
-        return String.format("%d / %d", this.healthPoints, this.maxHealthPoints);
+        return String.format("%d / %d", this.currentHealthPoints, this.maxHealthPoints);
     }
 
     // Getters
-    public int max() {
+    public int getMaxHealthPoints() {
         return this.maxHealthPoints;
     }
 
-    public int value() {
-        return this.healthPoints;
+    public int getCurrentHealthPoints() {
+        return this.currentHealthPoints;
     }
 }

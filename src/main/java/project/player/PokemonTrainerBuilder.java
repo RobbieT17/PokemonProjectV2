@@ -81,7 +81,7 @@ public class PokemonTrainerBuilder implements Builder {
             
                 // Adds Pokemon to the party
                 ptb.addPokemon(p);
-                c.writeToBuffer("Added %s to your party!\n\n", p.pokemonName());
+                c.writeToBuffer("Added %s to your party!\n\n", p);
 
             } catch (IndexOutOfBoundsException | NumberFormatException e) {
                 c.writeToBuffer("Invalid input, try again.\n");

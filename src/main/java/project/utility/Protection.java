@@ -4,13 +4,13 @@ public class Protection {
     
 // Variables
     private int count; // Consecutive usage
-    private boolean active; // Condition is active
+    private boolean isActive; // Condition is active
 
 
 // Setters
     public void set() {
         if (RandomValues.chance(100 - (this.count * 33.3))) {
-            this.active = true;
+            this.isActive = true;
             this.count++;
             return;
         }
@@ -18,17 +18,17 @@ public class Protection {
     }
 
     public void reset() {
-        this.active = false;
+        this.isActive = false;
         this.count = 0;
     }
 
     public void setActive(boolean a) {
-        this.active = a;
+        this.isActive = a;
     }
 
 // Getters
-    public boolean active() {
-        return this.active;
+    public boolean isActive() {
+        return this.isActive;
     }
 
 }

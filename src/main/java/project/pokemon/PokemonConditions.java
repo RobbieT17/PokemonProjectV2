@@ -57,7 +57,7 @@ public class PokemonConditions {
     }
 
     public void addCondition(StatusCondition condition) {
-        this.conditions.put(condition.effectName(), condition);
+        this.conditions.put(condition.getEffectName(), condition);
     }
 
     public void removeCondition(String key) {
@@ -89,18 +89,18 @@ public class PokemonConditions {
     public void setPrimaryCondition(StatusCondition c) {this.primaryCondition = c;}
 
 // Getters
-    public boolean immobilized() {return this.immobilized;}
-    public boolean fainted() {return this.fainted;}
-    public boolean switchedIn() {return this.switchedIn;}
+    public boolean isImmobilized() {return this.immobilized;}
+    public boolean isFainted() {return this.fainted;}
+    public boolean isSwitchedIn() {return this.switchedIn;}
     public boolean hasMoved() {return this.hasMoved;}
-    public boolean interrupted() {return this.interrupted;}
-    public boolean recharge() {return this.recharge;}
+    public boolean isInterrupted() {return this.interrupted;}
+    public boolean isRecharge() {return this.recharge;}
     public boolean tookDamage() {return this.tookDamage;}
 
-    public Protection protect() {return this.protect;}
-    public Protection endure() {return this.endure;}
+    public Protection getProtect() {return this.protect;}
+    public Protection getEndure() {return this.endure;}
 
-    public StatusCondition primaryCondition() {return this.primaryCondition;}
-    public HashMap<String, StatusCondition> volatileConditions() {return this.conditions;}
+    public StatusCondition getPrimaryCondition() {return this.primaryCondition;}
+    public HashMap<String, StatusCondition> getVolatileConditions() {return this.conditions;}
 
 }

@@ -1,6 +1,6 @@
 package project.player;
 
-import project.battle.BattleLog;
+import project.network.ClientHandler;
 import project.pokemon.Pokemon;
 import project.stats.StatDisplay;
 
@@ -22,10 +22,16 @@ public class PokemonTrainer {
         this.playerName = name;
         this.team = team;
 
+        // Sets the pokemons' owner to the this trainer
         for (Pokemon p : team) p.setOwner(this);
     }
 
 // Methods
+    // Checks if a the select pokemon is valid. (1. Cannot be fainted and cannot already be on the field)
+    private boolean validPokemonChoice(Pokemon p) {
+        return !p.getConditions().isFainted() && (this.getPokemonInBattle() != null) ? !this.getPokemonInBattle().equals(p) : true;
+    }
+
     // Formats Pokemon team info
     private String listPokemon() {
         StringBuilder sb = new StringBuilder();
@@ -41,8 +47,11 @@ public class PokemonTrainer {
     private String listPokemonSelect() {
         StringBuilder sb = new StringBuilder();
 
-        for (int i = 0; i < this.team.length; i++)
+        for (int i = 0; i < this.team.length; i++) {
             sb.append(String.format("[%d] %s", i, StatDisplay.showPartyStats(this.team[i])));
+        }
+
+        sb.append("\nPlease select a pokemon >>");
 
         return sb.toString();
     }
@@ -50,7 +59,7 @@ public class PokemonTrainer {
     // True when all the trainer's Pokemon have fainted
     public boolean outOfPokemon() {
         for (Pokemon p : this.team)
-            if (!p.conditions().fainted()) return false;
+            if (!p.getConditions().isFainted()) return false;
         return true;
     }
 
@@ -59,7 +68,7 @@ public class PokemonTrainer {
         int count = 0;
 
         for (Pokemon p : this.team)
-            if (!p.conditions().fainted()) count++;
+            if (!p.getConditions().isFainted()) count++;
 
         return count;
     }
@@ -67,7 +76,7 @@ public class PokemonTrainer {
     // Displays trainer's Pokemon to the console
     public String showPokemon() {
         return new StringBuilder()
-        .append(String.format("%s's Pokemon:%n", this))
+        .append(String.format("%s's Pokemon:\n", this))
         .append(this.listPokemon())
         .toString();
     }
@@ -75,18 +84,49 @@ public class PokemonTrainer {
     // Sends a Pokemon to the battle, the Pokemon cannot act until the next turn
     public void sendOut(Pokemon p) {
         this.pokemonInBattle = p;
-        this.pokemonInBattle.conditions().setSwitchedIn(true);
-
-        BattleLog.add("%n%s sends out %s!", this, p);
+        this.pokemonInBattle.getConditions().setSwitchedIn(true);
     }
 
     // Returns the Pokemon on the battle
     public void returns() {
         if (this.pokemonInBattle == null) return;
-        
-        BattleLog.add("%n%s returns %s!", this, this.pokemonInBattle);
+    
         this.pokemonInBattle.backToTrainer();
         this.pokemonInBattle = null;
+    }
+
+    /**
+     * Chooses a pokemon through user input
+     * @param c the client connection
+     */
+    public Pokemon choosePokemon(ClientHandler c) {
+        if (this.outOfPokemon()) {
+            return null;
+        }
+
+        Pokemon p = null;
+        while (true) {
+            try {
+                // Lists out trainer's pokemon
+                c.writeToBuffer(this.listPokemonSelect());
+                String input = c.readFromBuffer();
+                int i = Integer.parseInt(input);
+
+                p = this.team[i];
+                if (this.validPokemonChoice(p)) {
+                    break;
+                }
+
+                // Invalid Pokemon choice, the user will have to repick
+                c.writeToBuffer("This pokemon cannot be used, try again.");
+
+            } catch (IndexOutOfBoundsException | NumberFormatException e) {
+                c.writeToBuffer("Invalid input, try again.");
+            }
+            
+        }
+
+        return p;
     }
 
     @Override
@@ -95,15 +135,15 @@ public class PokemonTrainer {
     }
 
 // Getters
-    public String playerName() {
+    public String getPlayerName() {
         return this.playerName;
     }
 
-    public Pokemon[] team() {
+    public Pokemon[] getTeam() {
         return this.team;
     }
 
-    public Pokemon pokemonInBattle() {
+    public Pokemon getPokemonInBattle() {
         return this.pokemonInBattle;
     }
 }
