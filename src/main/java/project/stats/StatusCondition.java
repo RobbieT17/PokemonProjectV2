@@ -2,7 +2,7 @@ package project.stats;
 
 import project.battle.BattleLog;
 import project.event.EventData;
-import project.event.GameEvent;
+import project.event.GameEvents;
 import project.exceptions.MoveInterruptedException;
 import project.exceptions.PokemonCannotActException;
 import project.exceptions.PokemonFaintedException;
@@ -72,7 +72,7 @@ public class StatusCondition extends Effect {
      */
     public static StatusCondition burn(Pokemon p) {
         String name = StatusCondition.BURN_ID;
-        String[] flags = new String[] {GameEvent.END_OF_ROUND, GameEvent.DAMAGE_MULTIPLIER};
+        String[] flags = new String[] {GameEvents.END_OF_ROUND, GameEvents.DAMAGE_MULTIPLIER};
 
         p.getEvents().addEventListener(flags[0], name, e -> {
             p.takeDamagePercentMaxHP(1.0 / 16.0, " from the burn");
@@ -95,7 +95,7 @@ public class StatusCondition extends Effect {
      */
     public static StatusCondition freeze(Pokemon p) {
         String name = StatusCondition.FREEZE_ID;
-        String[] flags = new String[] {GameEvent.PRIMARY_STATUS_BEFORE};
+        String[] flags = new String[] {GameEvents.PRIMARY_STATUS_BEFORE};
 
         p.getEvents().addEventListener(flags[0], name, e -> {
             if (p.getMoveSelected().getMoveID() == 815) return;
@@ -124,8 +124,8 @@ public class StatusCondition extends Effect {
      public static StatusCondition infect(Pokemon p) {
         String name = StatusCondition.INFECT_ID;
         String[] flags = new String[] {
-            GameEvent.MOVE_MAKES_CONTACT, GameEvent.DAMAGE_MULTIPLIER, 
-            GameEvent.FIND_MOVE_ORDER, GameEvent.END_OF_ROUND
+            GameEvents.MOVE_MAKES_CONTACT, GameEvents.DAMAGE_MULTIPLIER, 
+            GameEvents.FIND_MOVE_ORDER, GameEvents.END_OF_ROUND
         };
 
         // For Non-Zombie Types
@@ -160,7 +160,7 @@ public class StatusCondition extends Effect {
      */
     public static StatusCondition paralysis(Pokemon p) {
         String name = StatusCondition.PARALYSIS_ID;
-        String[] flags = new String[] {GameEvent.PRIMARY_STATUS_BEFORE, GameEvent.FIND_MOVE_ORDER};
+        String[] flags = new String[] {GameEvents.PRIMARY_STATUS_BEFORE, GameEvents.FIND_MOVE_ORDER};
 
         p.getEvents().addEventListener(flags[0], name, e -> {
             if (!RandomValues.chance(50)) return;
@@ -177,7 +177,7 @@ public class StatusCondition extends Effect {
     // Poisoned Pokemon lose 1/8 of their max HP at the end of each round
     public static StatusCondition poisoned(Pokemon p) {
         String name = StatusCondition.POISON_ID;
-        String[] flags = new String[] {GameEvent.END_OF_ROUND};
+        String[] flags = new String[] {GameEvents.END_OF_ROUND};
 
         p.getEvents().addEventListener(flags[0], name, e -> {
             p.takeDamagePercentMaxHP(1.0 / 8.0, " from the poison");
@@ -194,7 +194,7 @@ public class StatusCondition extends Effect {
      */
     public static StatusCondition badlyPoisoned(Pokemon p) {
         String name = StatusCondition.BAD_POISON_ID;
-        String[] flags = new String[] {GameEvent.END_OF_ROUND};
+        String[] flags = new String[] {GameEvents.END_OF_ROUND};
 
         Counter counter = new Counter();
 
@@ -211,7 +211,7 @@ public class StatusCondition extends Effect {
     // Pokemon is asleep for 1 to 3 turns and cannot act
     public static StatusCondition sleep(Pokemon p) {
         String name = StatusCondition.SLEEP_ID;
-        String[] flags = new String[] {GameEvent.PRIMARY_STATUS_BEFORE};
+        String[] flags = new String[] {GameEvents.PRIMARY_STATUS_BEFORE};
 
         Counter counter = new Counter(RandomValues.generateInt(1, 3));
 
@@ -234,7 +234,7 @@ public class StatusCondition extends Effect {
 
     public static StatusCondition fly(Pokemon p, Move m) {
         String name = StatusCondition.FLY_ID;
-        String[] flags = new String[] {GameEvent.MOVE_SELECTION, GameEvent.MOVE_ACCURACY};
+        String[] flags = new String[] {GameEvents.MOVE_SELECTION, GameEvents.MOVE_ACCURACY};
 
         p.getEvents().addEventListener(flags[0], name, e -> p.setMove(m));
         p.getEvents().addEventListener(flags[1], name, e -> {
@@ -251,7 +251,7 @@ public class StatusCondition extends Effect {
 
     public static StatusCondition dig(Pokemon p, Move m) {
         String name = StatusCondition.FLY_ID;
-        String[] flags = new String[] {GameEvent.MOVE_SELECTION, GameEvent.MOVE_ACCURACY};
+        String[] flags = new String[] {GameEvents.MOVE_SELECTION, GameEvents.MOVE_ACCURACY};
 
         p.getEvents().addEventListener(flags[0], name, e -> p.setMove(m));
         p.getEvents().addEventListener(flags[1], name, e -> {
@@ -267,7 +267,7 @@ public class StatusCondition extends Effect {
 
     public static StatusCondition dive(Pokemon p, Move m) {
         String name = StatusCondition.DIVE_ID;
-        String[] flags = new String[] {GameEvent.MOVE_SELECTION, GameEvent.MOVE_ACCURACY};
+        String[] flags = new String[] {GameEvents.MOVE_SELECTION, GameEvents.MOVE_ACCURACY};
 
         p.getEvents().addEventListener(flags[0], name, e -> p.setMove(m));
         p.getEvents().addEventListener(flags[1], name, e -> {
@@ -285,7 +285,7 @@ public class StatusCondition extends Effect {
     // Pokemon flinches and can't act for the round
     public static StatusCondition flinch(Pokemon p) {
         String name = StatusCondition.FLINCH_ID;
-        String[] flags = new String[] {GameEvent.BEFORE_MOVE};
+        String[] flags = new String[] {GameEvents.BEFORE_MOVE};
 
         p.getEvents().addEventListener(flags[0], name, e -> {
             p.getConditions().removeCondition(name);
@@ -298,7 +298,7 @@ public class StatusCondition extends Effect {
     // Traps Pokemon from escaping battle and loses 1/8 of max HP
     public static StatusCondition bound(Pokemon p) {
         String name = StatusCondition.BOUND_ID;
-        String[] flags = new String[] {GameEvent.END_OF_ROUND, GameEvent.SWITCH_OUT};
+        String[] flags = new String[] {GameEvents.END_OF_ROUND, GameEvents.SWITCH_OUT};
 
         Counter counter = new Counter(RandomValues.generateInt(2, 5));
 
@@ -322,7 +322,7 @@ public class StatusCondition extends Effect {
      */
     public static StatusCondition confusion(Pokemon p) {
         String name = StatusCondition.CONFUSION_ID;
-        String[] flags = new String[] {GameEvent.STATUS_BEFORE};
+        String[] flags = new String[] {GameEvents.STATUS_BEFORE};
 
         Counter counter = new Counter(RandomValues.generateInt(2, 4));
 
@@ -345,7 +345,7 @@ public class StatusCondition extends Effect {
 
     public static StatusCondition seeded(Pokemon p, Pokemon r) {
         String name = StatusCondition.SEEDED_ID;
-        String[] flags = new String[] {GameEvent.END_OF_ROUND};
+        String[] flags = new String[] {GameEvents.END_OF_ROUND};
 
         p.getEvents().addEventListener(flags[0], name, e -> {
             int damage = (int) (p.getHp().getMaxHealthPoints() / 8.0);
@@ -363,7 +363,7 @@ public class StatusCondition extends Effect {
     // Forces Pokemon to use the move chosen for n rounds
     public static StatusCondition forcedMove(Pokemon p, Move m, int n) {
         String name = StatusCondition.FORCED_MOVE_ID;
-        String[] flags = new String[] {GameEvent.MOVE_SELECTION, GameEvent.END_OF_ROUND};
+        String[] flags = new String[] {GameEvents.MOVE_SELECTION, GameEvents.END_OF_ROUND};
 
         Counter counter = new Counter(n);
 
@@ -382,7 +382,7 @@ public class StatusCondition extends Effect {
      */
     public static StatusCondition focused(Pokemon p, Move m) {
         String name = StatusCondition.FOCUSED_ID;
-        String[] flags = new String[] {GameEvent.MOVE_SELECTION, GameEvent.USE_MOVE, GameEvent.MOVE_HITS};
+        String[] flags = new String[] {GameEvents.MOVE_SELECTION, GameEvents.USE_MOVE, GameEvents.MOVE_HITS};
 
         State state = new State(); // State True: Lost Focus
     
@@ -404,7 +404,7 @@ public class StatusCondition extends Effect {
     // Grounded Pokemon are vulnerable to Ground-Type moves (even Flying-Types) 
     public static StatusCondition grounded(Pokemon p) {
         String name = StatusCondition.GROUNDED_ID;
-        String[] flags = new String[] {GameEvent.MOVE_EFFECTIVENESS};
+        String[] flags = new String[] {GameEvents.MOVE_EFFECTIVENESS};
 
         p.getEvents().addEventListener(flags[0], name, e -> {
             if (!EventData.isTarget(p, e)) return;
@@ -423,7 +423,7 @@ public class StatusCondition extends Effect {
      */
     public static StatusCondition rampage(Pokemon p, Move m) {
         String name = StatusCondition.RAMPAGE_ID;
-        String[] flags = new String[] {GameEvent.MOVE_SELECTION, GameEvent.END_OF_TURN, GameEvent.MOVE_INTERRUPTED};
+        String[] flags = new String[] {GameEvents.MOVE_SELECTION, GameEvents.END_OF_TURN, GameEvents.MOVE_INTERRUPTED};
 
         Counter counter = new Counter(RandomValues.generateInt(2, 3));
 
@@ -448,7 +448,7 @@ public class StatusCondition extends Effect {
      */
     public static StatusCondition chargeMove(Pokemon p, Move m) {
         String name = StatusCondition.CHARGE_MOVE;
-        String[] flags = new String[] {GameEvent.MOVE_SELECTION, GameEvent.MOVE_INTERRUPTED};
+        String[] flags = new String[] {GameEvents.MOVE_SELECTION, GameEvents.MOVE_INTERRUPTED};
 
         p.getEvents().addEventListener(flags[0], name, e -> p.setMove(m));
         p.getEvents().addEventListener(flags[1], name, e -> p.getConditions().removeCondition(name));

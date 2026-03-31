@@ -1,7 +1,7 @@
 package project.stats;
 
 import project.event.EventData;
-import project.event.GameEvent;
+import project.event.GameEvents;
 import project.battle.*;
 import project.exceptions.MoveInterruptedException;
 import project.exceptions.PokemonFaintedException;
@@ -34,7 +34,7 @@ public class Ability extends Effect {
     // Increases Fire-Type attacks by 50% while under 1/3 Max HP
     public static Ability blaze(Pokemon p) {
         String name = Ability.BLAZE_ID;
-        String[] flags = new String[] {GameEvent.DAMAGE_MULTIPLIER};
+        String[] flags = new String[] {GameEvents.DAMAGE_MULTIPLIER};
 
         p.getEvents().addEventListener(flags[0], name , e -> {
             if (!EventData.isUser(p, e)) return;
@@ -52,7 +52,7 @@ public class Ability extends Effect {
     // Doubles speed in the sun
     public static Ability chlorophyll(Pokemon p) {
         String name = Ability.CHLOROPHYLL_ID;
-        String[] flags = new String[] {GameEvent.FIND_MOVE_ORDER};
+        String[] flags = new String[] {GameEvents.FIND_MOVE_ORDER};
 
         p.getEvents().addEventListener(flags[0], name, e -> {
             if (BattleField.currentWeather == Weather.SUNNY) {
@@ -66,7 +66,7 @@ public class Ability extends Effect {
     // Increases Grass-Type attacks by 50% while under 1/3 Max HP
     public static Ability overgrow(Pokemon p) {
         String name = Ability.OVERGROW_ID;
-        String[] flags = new String[] {GameEvent.DAMAGE_MULTIPLIER};
+        String[] flags = new String[] {GameEvents.DAMAGE_MULTIPLIER};
 
         p.getEvents().addEventListener(flags[0], name, e -> {
             if (!EventData.isUser(p, e)) return;
@@ -84,7 +84,7 @@ public class Ability extends Effect {
     // Recovers 1/16 of its maximum HP during rain, after each turn.
     public static Ability rainDish(Pokemon p) {
         String name = Ability.RAIN_DISH_ID;
-        String[] flags = new String[] {GameEvent.WEATHER_EFFECT};
+        String[] flags = new String[] {GameEvents.WEATHER_EFFECT};
 
         p.getEvents().addEventListener(flags[0], name, e -> {
             if (BattleField.currentWeather == Weather.RAIN) {
@@ -101,7 +101,7 @@ public class Ability extends Effect {
      */
     public static Ability solarPower(Pokemon p) {
         String name = Ability.SOLAR_POWER_ID;
-        String[] flags = new String[] {GameEvent.DAMAGE_MULTIPLIER, GameEvent.WEATHER_EFFECT};
+        String[] flags = new String[] {GameEvents.DAMAGE_MULTIPLIER, GameEvents.WEATHER_EFFECT};
 
         p.getEvents().addEventListener(flags[0], name, e -> {
             if (!EventData.isUser(p, e)) return;
@@ -125,7 +125,7 @@ public class Ability extends Effect {
     // Increases Water-Type attacks by 50% while under 1/3 Max HP
     public static Ability torrent(Pokemon p) {
         String name = Ability.TORRENT_ID;
-        String[] flags = new String[] {GameEvent.DAMAGE_MULTIPLIER};
+        String[] flags = new String[] {GameEvents.DAMAGE_MULTIPLIER};
 
         p.getEvents().addEventListener(flags[0], name, e -> {
             if (!EventData.isUser(p, e)) return;
@@ -143,7 +143,7 @@ public class Ability extends Effect {
     // Water moves deal no effect and instead heal the Pokemon
     public static Ability waterAbsorb(Pokemon p) {
         String name = Ability.WATER_ABSORB_ID;
-        String[] flags = new String[] {GameEvent.MOVE_EFFECTIVENESS};
+        String[] flags = new String[] {GameEvents.MOVE_EFFECTIVENESS};
 
         p.getEvents().addEventListener(flags[0], name, e -> {
             if (!EventData.isTarget(p, e)) return;

@@ -1,5 +1,7 @@
 package project.event;
 
+import project.pokemon.Pokemon;
+
 public class EventManager {
     
     public final EventData eventData;
@@ -24,6 +26,11 @@ public class EventManager {
     public void notifyPokemon(String eventName) {
         this.notifyAttackTargetPokemon(eventName);
         this.notifyUserPokemon(eventName);
+    }
+
+    public void updateEventMaps() {
+        eventData.user.getEvents().updateEventMaps();
+        eventData.attackTarget.getEvents().updateEventMaps();
     }
 
 }

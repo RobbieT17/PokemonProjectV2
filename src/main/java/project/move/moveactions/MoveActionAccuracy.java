@@ -4,7 +4,7 @@ import java.util.Random;
 
 import project.event.EventData;
 import project.event.EventManager;
-import project.event.GameEvent;
+import project.event.GameEvents;
 import project.exceptions.MoveInterruptedException;
 import project.move.Move;
 import project.pokemon.Pokemon;
@@ -28,14 +28,14 @@ private static void defenderProtects(Pokemon p) {
         Pokemon defender = data.attackTarget;
         Move move = data.moveUsed;
 
-        eventManager.notifyPokemon(GameEvent.MOVE_ACCURACY);
+        eventManager.notifyPokemon(GameEvents.MOVE_ACCURACY);
         defenderProtects(defender);
 
         int accuracy = move.getAccuracy();
 
         if (accuracy == Move.ALWAYS_HITS || defender.getConditions().isImmobilized()) {
             data.moveHits = true;
-            eventManager.notifyPokemon(GameEvent.MOVE_HITS);
+            eventManager.notifyPokemon(GameEvents.MOVE_HITS);
             return;
         }
 		
@@ -48,6 +48,6 @@ private static void defenderProtects(Pokemon p) {
         }
             
         data.moveHits = true;
-        eventManager.notifyPokemon(GameEvent.MOVE_HITS);
+        eventManager.notifyPokemon(GameEvents.MOVE_HITS);
     }
 }

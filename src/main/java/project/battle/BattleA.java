@@ -4,7 +4,7 @@ import java.util.InputMismatchException;
 import java.util.Random;
 import java.util.Scanner;
 
-import project.event.GameEvent;
+import project.event.GameEvents;
 import project.exceptions.BattleEndedException;
 import project.move.Move;
 import project.move.movelist.NormalMoveList;
@@ -67,7 +67,7 @@ public class BattleA {
     // Pokemon chooses a move
     public static Pokemon chooseMove(PokemonTrainer pt) {
         Pokemon p = pt.getPokemonInBattle();
-        p.getEvents().updateEvent(GameEvent.MOVE_SELECTION, null);
+        p.getEvents().updateEvent(GameEvents.MOVE_SELECTION, null);
 
         /*
          * Unable to choose a move if just switched in
@@ -162,63 +162,7 @@ public class BattleA {
         return p;
     }
 
-    // Finds the order which the Pokemon in battle will move
-    public static Pokemon[] turnOrder(Pokemon p1, Pokemon p2) {
-        p1.getEvents().updateEvent(GameEvent.FIND_MOVE_ORDER, null);
-        p2.getEvents().updateEvent(GameEvent.FIND_MOVE_ORDER, null);
-
-        Pokemon[] order = new Pokemon[2];
-
-        Move m1 = p1.getMoveSelected();
-        Move m2 = p2.getMoveSelected();
-
-        int speed1 = p1.getSpeed().getPower();
-        int speed2 = p2.getSpeed().getPower();
-
-        // Handles null moves (pokemon may not always have selected a move)
-        if (m2 == null) {
-            order[0] = p1;
-            order[1] = p2;
-            return order;
-        }
-        else if (m1 == null) {
-            order[0] = p2;
-            order[1] = p1;
-            return order;
-        }
-
-        // Higher Priority Moves act first
-        if (m1.getPriority() > m2.getPriority()) {
-            order[0] = p1; 
-            order[1] = p2;
-        }
-        else if (m1.getPriority() < m2.getPriority()) {
-            order[0] = p2; 
-            order[1] = p1;
-        }
-        // Pokemon with higher speed acts firsts
-        else if (speed1 > speed2) {
-            order[0] = p1;
-            order[1] = p2;
-        }
-        else if (speed1 < speed2) {
-            order[0] = p2;
-            order[1] = p1;
-        }
-        // Speed Tie, move order is random
-        else {
-            if (new Random().nextDouble() < 0.5){
-                order[0] = p1;
-                order[1] = p2;
-            }
-            else {
-                order[0] = p2;
-                order[1] = p1;
-            }
-        }
-
-        return order;
-    }
+    
     
     // Pokemon uses a turn, nothing happens if the Pokemon did not select a move or one fainted
     public static void pokemonTurn(Pokemon a, Pokemon b) {
@@ -255,7 +199,7 @@ public class BattleA {
         chooseMove(pt2);
 
         // Order of Pokemon
-        Pokemon[] order = turnOrder(pt1.getPokemonInBattle(), pt2.getPokemonInBattle());
+        Pokemon[] order = PokemonBattleActions.turnOrder(pt1.getPokemonInBattle(), pt2.getPokemonInBattle());
 
         Pokemon p1 = order[0];
         Pokemon p2 = order[1];

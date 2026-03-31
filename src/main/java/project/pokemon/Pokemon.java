@@ -3,7 +3,7 @@ package project.pokemon;
 import project.battle.BattleA;
 import project.battle.BattleLog;
 import project.battle.Weather;
-import project.event.GameEvent;
+import project.event.GameEvents;
 import project.exceptions.PokemonFaintedException;
 import project.move.Move;
 import project.player.PokemonTrainer;
@@ -47,7 +47,7 @@ public class Pokemon {
     private PokemonTrainer owner;
 
     // Event Listeners
-    private final GameEvent events;
+    private final GameEvents events;
 
     // Other Stats
     private Move moveSelected; // Move selected for the round
@@ -82,7 +82,7 @@ public class Pokemon {
         this.moves = moves;
         this.conditions = conditions;
 
-        this.events = new GameEvent();
+        this.events = new GameEvents();
     }
 
 // Methods
@@ -236,8 +236,8 @@ public class Pokemon {
         this.resetMove();
  
         try {
-            this.getEvents().updateEvent(GameEvent.END_OF_ROUND, null);
-            this.getEvents().updateEvent(GameEvent.WEATHER_EFFECT, null);
+            this.getEvents().updateEvent(GameEvents.END_OF_ROUND, null);
+            this.getEvents().updateEvent(GameEvents.WEATHER_EFFECT, null);
             Weather.weatherEffect(this);
         } catch (PokemonFaintedException e) {
         }  
@@ -257,7 +257,7 @@ public class Pokemon {
         this.damageReceived = 0;  
         this.roundCount = 0;
 
-        this.events.updateEvent(GameEvent.SWITCH_OUT, null);
+        this.events.updateEvent(GameEvents.SWITCH_OUT, null);
     }
 
     public void removeItem() {
@@ -296,6 +296,6 @@ public class Pokemon {
     public Ability getAbility() {return this.ability;}
     public HeldItem getItem() {return this.item;}
     public PokemonTrainer getOwner() {return this.owner;}
-    public GameEvent getEvents() {return this.events;}
+    public GameEvents getEvents() {return this.events;}
 
 }

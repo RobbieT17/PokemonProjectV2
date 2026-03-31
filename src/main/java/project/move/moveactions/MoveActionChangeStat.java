@@ -5,7 +5,7 @@ import java.util.Random;
 import project.battle.BattleLog;
 import project.event.EventData;
 import project.event.EventManager;
-import project.event.GameEvent;
+import project.event.GameEvents;
 import project.pokemon.Pokemon;
 import project.pokemon.PokemonStat;
 
@@ -22,7 +22,7 @@ public interface MoveActionChangeStat extends MoveAction {
         Pokemon p = data.effectTarget;
         data.statChanges = stats;
 
-        eventManager.notifyPokemon(GameEvent.STAT_CHANGE);
+        eventManager.notifyPokemon(GameEvents.STAT_CHANGE);
         
         for (int i = 0; i < stats.length; i++) {
             int change = stats[i];

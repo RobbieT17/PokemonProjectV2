@@ -46,14 +46,18 @@ public class Event implements Subscriber {
 
     @Override
     public void update() {
-        for (Observer listener : this.eventListeners.values()) listener.act(null);
+        for (Observer listener : this.eventListeners.values()) {
+            listener.act(null);
+        }
         updateMap();
 
     }
 
     @Override
     public void update(EventData e) {
-        for (Observer listener : this.eventListeners.values()) listener.act(e);
+        for (Observer listener : this.eventListeners.values()) {
+            listener.act(e);
+        }
         updateMap();
     }
 
