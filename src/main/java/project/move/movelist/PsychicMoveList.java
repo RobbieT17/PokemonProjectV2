@@ -14,7 +14,7 @@ public class PsychicMoveList {
 
     public static Move amnesia() {
         MoveAction action = e -> {
-            MoveListHelperFunctions.targetsUser(e);
+            MoveListHelperFunctions.targetsUser(e.eventData);
             MoveActionChangeStat.changeStats(e, MoveListHelperFunctions.stats(0, 0, 0, 1, 0, 0, 0));
         };
 

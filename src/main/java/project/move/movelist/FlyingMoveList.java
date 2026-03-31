@@ -83,10 +83,14 @@ public class FlyingMoveList {
 
     public static Move hurricane() {
         MoveAction action = e -> {
-            Move m = e.moveUsed;
+            Move m = e.eventData.moveUsed;
             // Perfect accuracy in the rain, 50% accuracy in harsh sunlight
-            if (BattleField.currentWeather == Weather.RAIN) m.perfectAccuracy();
-            else if (BattleField.currentWeather == Weather.SUNNY) m.setAccuracy(50);
+            if (BattleField.currentWeather == Weather.RAIN) {
+                m.perfectAccuracy();
+            }
+            else if (BattleField.currentWeather == Weather.SUNNY) {
+                m.setAccuracy(50);
+            }
 
            MoveActionAttackDamage.dealDamage(e);
            MoveActionChangeCondition.applyCondition(e, StatusCondition.CONFUSION_ID, 10);

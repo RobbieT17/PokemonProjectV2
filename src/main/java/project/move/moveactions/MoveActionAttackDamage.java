@@ -4,6 +4,7 @@ import java.util.Random;
 
 import project.battle.BattleLog;
 import project.event.EventData;
+import project.event.EventManager;
 import project.event.GameEvent;
 import project.move.calculations.AttackMoveCalculations;
 import project.move.calculations.MoveEffectiveCalculations;
@@ -32,11 +33,12 @@ public interface MoveActionAttackDamage extends MoveAction {
                 : 5;
     }
 
-    private static void damageTaken(EventData data, boolean multiHit) {
+    private static void damageTaken(EventManager eventManager, boolean multiHit) {
+        EventData data = eventManager.eventData;
         Pokemon attacker = data.user;
         Pokemon defender = data.attackTarget;
 
-        int damage = AttackMoveCalculations.calculateDamage(data);
+        int damage = AttackMoveCalculations.calculateDamage(eventManager);
         data.damageDealt += damage;
 
         BattleLog.add("%s took %d damage!", defender, damage);
@@ -47,13 +49,19 @@ public interface MoveActionAttackDamage extends MoveAction {
         defender.addDamageReceived(damage);
         defender.takeDamage(damage);    
 
-        if (data.moveUsed.getMakesContact()) data.notifyEvent(GameEvent.MOVE_MAKES_CONTACT);
+        if (data.moveUsed.getMakesContact()) {
+            eventManager.notifyPokemon(GameEvent.MOVE_MAKES_CONTACT);
+        }
     }
 
     // Pokemon takes damage based on some percent of the damage dealt
-    private static void recoilDamage(EventData data) {
+    private static void recoilDamage(EventManager eventManager) {
+        EventData data  = eventManager.eventData;
         Pokemon p = data.user;
-        if (p.getDamageDealt() == 0) return;
+
+        if (p.getDamageDealt() == 0) {
+            return;
+        }
 
         int damage = (int) (0.01 * data.recoilPercent * p.getDamageDealt()); 
         BattleLog.add("%s took %d damage from the recoil!", p, damage);
@@ -61,8 +69,10 @@ public interface MoveActionAttackDamage extends MoveAction {
         p.takeDamage(damage);
     }
 
-    private static void drainHP(EventData data) {
+    private static void drainHP(EventManager eventManager) {
+        EventData data  = eventManager.eventData;
         Pokemon p = data.user;
+
         if (p.getDamageDealt() == 0) return;
 
         int heal = (int) (0.01 * data.drainPercent * p.getDamageDealt()); 
@@ -71,22 +81,24 @@ public interface MoveActionAttackDamage extends MoveAction {
     }
 
     // Deals damage to the target
-    public static void dealDamage(EventData data) {       
-        MoveEffectiveCalculations.moveEffectiveness(data); 
-        MoveActionAccuracy.moveHits(data); 
-        damageTaken(data, false);
+    public static void dealDamage(EventManager eventManager) {   
+        MoveEffectiveCalculations.moveEffectiveness(eventManager); 
+        MoveActionAccuracy.moveHits(eventManager); 
+        damageTaken(eventManager, false);
     }
 
     // Deals multiple hits of damage
-    public static void multiHit(EventData data) {
-        MoveEffectiveCalculations.moveEffectiveness(data);
-        MoveActionAccuracy.moveHits(data);
+    public static void multiHit(EventManager eventManager) {
+        EventData data  = eventManager.eventData;
+
+        MoveEffectiveCalculations.moveEffectiveness(eventManager);
+        MoveActionAccuracy.moveHits(eventManager);
 
         Pokemon defender = data.attackTarget;
         data.hitCount = randomHits();
 
         for (int i = 0; i < data.hitCount; i++) {
-            damageTaken(data, true);
+            damageTaken(eventManager, true);
             if (defender.getConditions().isFainted()) {
                 data.hitCount = i;
                 break;
@@ -97,17 +109,21 @@ public interface MoveActionAttackDamage extends MoveAction {
     }
 
     // Deals damage, attacking Pokemon receives a percentage of the damage dealt
-    public static void dealDamageRecoil(EventData data, double percent) {
+    public static void dealDamageRecoil(EventManager eventManager, double percent) {
+        EventData data  = eventManager.eventData;
         data.recoilPercent = percent;
-        dealDamage(data);
-        recoilDamage(data);
+
+        dealDamage(eventManager);
+        recoilDamage(eventManager);
     }
 
     // Deals damage, attacking Pokemon heals from percentage of the damage dealt
-    public static void dealDamageDrain(EventData data, double percent) {
+    public static void dealDamageDrain(EventManager eventManager, double percent) {
+        EventData data  = eventManager.eventData;
         data.drainPercent = percent;
-        dealDamage(data);
-        drainHP(data);
+
+        dealDamage(eventManager);
+        drainHP(eventManager);
     }
 
     /**

@@ -120,7 +120,7 @@ public class FireMoveList {
 
     public static Move flameCharge() {
         MoveAction action = e -> {
-            MoveListHelperFunctions.affectsUser(e);
+            MoveListHelperFunctions.affectsUser(e.eventData);
             MoveActionAttackDamage.dealDamage(e);
             MoveActionChangeStat.changeStats(e, MoveListHelperFunctions.stats(0, 0, 0, 0, 1, 0, 0));
         };
@@ -176,9 +176,9 @@ public class FireMoveList {
              * Power varies based on the weight of both user and the target
              * The greater the difference, the greater the power
              */
-            double ratio = e.user.getWeight() / e.attackTarget.getWeight();
+            double ratio = e.eventData.user.getWeight() / e.eventData.attackTarget.getWeight();
 
-            e.moveUsed.setPower(
+            e.eventData.moveUsed.setPower(
             ratio < 2
                 ? 40
                 : ratio < 3
@@ -241,7 +241,7 @@ public class FireMoveList {
 
     public static Move overheat() {
         MoveAction action = e -> {
-            MoveListHelperFunctions.affectsUser(e);
+            MoveListHelperFunctions.affectsUser(e.eventData);
             MoveActionAttackDamage.dealDamage(e);
             MoveActionChangeStat.changeStats(e, MoveListHelperFunctions.stats(-2, 0, 0, 0, 0, 0, 0));
         };
@@ -271,7 +271,10 @@ public class FireMoveList {
 
     public static Move temperFlare() {
         MoveAction action = e -> {
-            if (e.user.getConditions().isInterrupted()) e.moveUsed.doublePower();
+            if (e.eventData.user.getConditions().isInterrupted()) {
+                e.eventData.moveUsed.doublePower();
+            }
+            
             MoveActionAttackDamage.dealDamage(e);
         };
 
@@ -290,7 +293,7 @@ public class FireMoveList {
         MoveAction action = e -> {
             MoveActionAccuracy.moveHits(e);
             MoveActionChangeCondition.applyCondition(e, StatusCondition.BURN_ID);
-            BattleLog.add(e.message);
+            BattleLog.add(e.eventData.message);
         };
 
         return new MoveBuilder()

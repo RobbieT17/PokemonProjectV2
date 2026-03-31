@@ -4,11 +4,12 @@ import java.util.Random;
 
 import project.battle.BattleLog;
 import project.event.EventData;
+import project.event.EventManager;
 import project.event.GameEvent;
 import project.pokemon.Pokemon;
 import project.pokemon.PokemonStat;
 
-public interface MoveActionChangeStat extends  MoveAction{
+public interface MoveActionChangeStat extends MoveAction {
      /**
      * Changes one of a Pokemon's stats.
      * @param p Pokemon whose stat will be changed
@@ -16,11 +17,12 @@ public interface MoveActionChangeStat extends  MoveAction{
      * @param id Stat ID
      * @param chance The stat change success rate
      */
-    private static void changeEachStat(EventData data, int[] stats) {
+    private static void changeEachStat(EventManager eventManager, int[] stats) {
+        EventData data  = eventManager.eventData;
         Pokemon p = data.effectTarget;
         data.statChanges = stats;
 
-        data.notifyEvent(GameEvent.STAT_CHANGE);
+        eventManager.notifyPokemon(GameEvent.STAT_CHANGE);
         
         for (int i = 0; i < stats.length; i++) {
             int change = stats[i];
@@ -39,21 +41,22 @@ public interface MoveActionChangeStat extends  MoveAction{
         }  
     }
 
-    public static void changeStats(EventData data, int[] stats, double chance) {
+    public static void changeStats(EventManager eventManager, int[] stats, double chance) {
+        EventData data  = eventManager.eventData;
         data.statProb = chance;
         if (data.user.getConditions().isFainted() || new Random().nextDouble() > chance * 0.01) {
             data.statFailed = true;
             return;
         }
-        changeEachStat(data, stats);
+        changeEachStat(eventManager, stats);
     }
 
-    public static void changeStats(EventData data, int[] stats) {
-        changeStats(data, stats, 100);
+    public static void changeStats(EventManager eventManager, int[] stats) {
+        changeStats(eventManager, stats, 100);
     }
 
     // Resets all stat changes back to neutral
-    public static void resetStats(EventData data, Pokemon p) {
+    public static void resetStats(EventManager eventManager, Pokemon p) {
         for (PokemonStat s : p.getStats()) s.setStage(0);
         BattleLog.add("%s stat changes were cleared...", p);
     }

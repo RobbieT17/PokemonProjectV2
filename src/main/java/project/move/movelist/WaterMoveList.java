@@ -218,7 +218,10 @@ public class WaterMoveList {
 
     public static Move whirlpool() {
         MoveAction action = e -> {
-            if (e.attackTarget.getConditions().hasKey(StatusCondition.DIVE_ID)) e.moveUsed.doublePower();
+            if (e.eventData.attackTarget.getConditions().hasKey(StatusCondition.DIVE_ID)) {
+                e.eventData.moveUsed.doublePower();
+            }
+
             MoveActionAttackDamage.dealDamage(e);
             MoveActionChangeCondition.applyCondition(e, StatusCondition.BOUND_ID);
         };
@@ -237,7 +240,7 @@ public class WaterMoveList {
 
     public static Move withdraw() {
         MoveAction action = e -> {
-            MoveListHelperFunctions.targetsUser(e);
+            MoveListHelperFunctions.targetsUser(e.eventData);
             MoveActionChangeStat.changeStats(e, MoveListHelperFunctions.stats(0, 1, 0, 0, 0, 0, 0));
         };
 

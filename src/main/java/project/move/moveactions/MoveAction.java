@@ -1,7 +1,7 @@
 package project.move.moveactions;
 
 import project.battle.BattleLog;
-import project.event.EventData;
+import project.event.EventManager;
 
 
 @FunctionalInterface
@@ -10,10 +10,10 @@ public interface MoveAction {
     public static final MoveAction DEFAULT_ACTION = e -> MoveActionAttackDamage.dealDamage(e);
 
 // Object Method
-    void act(EventData e);
+    void act(EventManager e);
     
-    public static void displayFailMessage(EventData data) {
-        BattleLog.add(data.message);
+    public static void displayFailMessage(EventManager e) {
+        BattleLog.add(e.eventData.message);
     }
 
 }

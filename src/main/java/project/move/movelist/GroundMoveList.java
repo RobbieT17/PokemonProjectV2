@@ -45,7 +45,10 @@ public class GroundMoveList {
     public static Move earthquake() {
         MoveAction action = e -> {
             // Deals double power to opponents digging
-            if (e.attackTarget.getConditions().hasKey(StatusCondition.DIG_ID)) e.moveUsed.doublePower(); 
+            if (e.eventData.attackTarget.getConditions().hasKey(StatusCondition.DIG_ID)) {
+                e.eventData.moveUsed.doublePower(); 
+            }
+
             MoveActionAttackDamage.dealDamage(e);
         };
 
@@ -98,7 +101,7 @@ public class GroundMoveList {
 
     public static Move scorchingSands() {
         MoveAction action = e -> {
-            e.user.getConditions().removeCondition(StatusCondition.FREEZE_ID);
+            e.eventData.user.getConditions().removeCondition(StatusCondition.FREEZE_ID);
             MoveActionAttackDamage.dealDamage(e);
             MoveActionChangeCondition.applyCondition(e, StatusCondition.BURN_ID, 30);
         };
@@ -116,7 +119,10 @@ public class GroundMoveList {
 
     public static Move stompingTantrum() {
         MoveAction action = e -> {
-            if (e.user.getConditions().isInterrupted()) e.moveUsed.doublePower();
+            if (e.eventData.user.getConditions().isInterrupted()) {
+                e.eventData.moveUsed.doublePower();
+            }
+            
             MoveActionAttackDamage.dealDamage(e);
         };
 

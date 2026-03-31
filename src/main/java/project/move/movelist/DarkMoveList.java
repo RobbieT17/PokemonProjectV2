@@ -65,7 +65,9 @@ public class DarkMoveList {
 
     public static Move fakeOut() {
         MoveAction action = e -> {
-            if (!e.user.firstRound()) throw new MoveInterruptedException(Move.FAILED);
+            if (!e.eventData.user.firstRound()) {
+                throw new MoveInterruptedException(Move.FAILED);
+            }
 
             MoveActionAttackDamage.dealDamage(e);
             MoveActionChangeCondition.applyCondition(e, StatusCondition.FLINCH_ID);

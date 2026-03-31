@@ -84,7 +84,10 @@ public class PoisonMoveList {
 
     public static Move venoshock() {
         MoveAction action = e -> {
-            if (e.attackTarget.getConditions().hasKey(StatusCondition.POISON_ID)) e.moveUsed.doublePower();
+            if (e.eventData.attackTarget.getConditions().hasKey(StatusCondition.POISON_ID)) {
+                e.eventData.moveUsed.doublePower();
+            }
+            
             MoveActionAttackDamage.dealDamage(e);
         };
 

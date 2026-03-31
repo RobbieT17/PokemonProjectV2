@@ -80,9 +80,9 @@ public class GrassMoveList {
 
     public static Move grassKnot() {
         MoveAction action = e -> {
-            Pokemon d = e.attackTarget;
+            Pokemon d = e.eventData.attackTarget;
             // Move power varies based on weight 
-            e.moveUsed.setPower(
+            e.eventData.moveUsed.setPower(
             d.getWeight() <= 21.8
                 ? 20
                 : d.getWeight() <= 54.9
@@ -282,7 +282,7 @@ public class GrassMoveList {
 
     public static Move synthesis() {
         MoveAction action = e -> {
-            MoveListHelperFunctions.targetsUser(e);
+            MoveListHelperFunctions.targetsUser(e.eventData);
             double percent = (BattleField.currentWeather == Weather.SUNNY) 
                 ? 67
                 : (BattleField.currentWeather == Weather.CLEAR) ? 50 : 25;

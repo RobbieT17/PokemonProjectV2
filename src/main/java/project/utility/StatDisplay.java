@@ -1,6 +1,7 @@
-package project.stats;
+package project.utility;
 
 import project.pokemon.Pokemon;
+import project.stats.StatusCondition;
 
 public interface StatDisplay {
     

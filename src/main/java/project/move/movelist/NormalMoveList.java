@@ -4,6 +4,7 @@ import project.battle.BattleField;
 import project.battle.BattleLog;
 import project.battle.Weather;
 import project.event.EventData;
+import project.event.EventManager;
 import project.move.Move;
 import project.move.MoveBuilder;
 import project.move.MoveListHelperFunctions;
@@ -60,18 +61,19 @@ public class NormalMoveList {
         .setCategory(Move.STATUS)
         .setPP(10)
         .setPriority(4)
-        .setAction(e -> MoveActionBracing.pokemonProtects(e, e.user.getConditions().getEndure(), e.user + " braced itself!"))
+        .setAction(e -> MoveActionBracing.pokemonProtects(e, e.eventData.user.getConditions().getEndure(), e.eventData.user + " braced itself!"))
         .build();
     }
 
     public static Move facade() {
         MoveAction action = e -> {
-            Pokemon a = e.user;
+            Pokemon a = e.eventData.user;
             // Double power (140) if user is burned, paralyzed, or poisoned
             if (a.getConditions().hasKey(StatusCondition.BURN_ID) |
             a.getConditions().hasKey(StatusCondition.PARALYSIS_ID) |
-            a.getConditions().hasKey(StatusCondition.POISON_ID))
-                e.moveUsed.doublePower();
+            a.getConditions().hasKey(StatusCondition.POISON_ID)) {
+                e.eventData.moveUsed.doublePower();
+            }
 
             MoveActionAttackDamage.dealDamage(e);
         };
@@ -90,7 +92,7 @@ public class NormalMoveList {
     public static Move falseSwipe() {
         MoveAction action = e -> {
             // Leaves opponent with at least 1 HP
-            e.attackTarget.getConditions().getEndure().setActive(true);
+            e.eventData.attackTarget.getConditions().getEndure().setActive(true);
             MoveActionAttackDamage.dealDamage(e);
         };
 
@@ -154,7 +156,7 @@ public class NormalMoveList {
 
     public static Move growth() {
         MoveAction action = e -> {   
-            MoveListHelperFunctions.targetsUser(e);
+            MoveListHelperFunctions.targetsUser(e.eventData);
             if (BattleField.currentWeather == Weather.SUNNY) {
                 MoveActionChangeStat.changeStats(e, MoveListHelperFunctions.stats(2, 0, 2, 0, 0, 0, 0));
                 return;
@@ -199,13 +201,13 @@ public class NormalMoveList {
         .setCategory(Move.STATUS)
         .setPP(10)
         .setPriority(4)
-        .setAction(e -> MoveActionBracing.pokemonProtects(e, e.user.getConditions().getProtect(), e.user + " protected itself!"))
+        .setAction(e -> MoveActionBracing.pokemonProtects(e, e.eventData.user.getConditions().getProtect(), e.eventData.user + " protected itself!"))
         .build();
     }
 
     public static Move rapidSpin() {
         MoveAction action = e -> {
-            MoveListHelperFunctions.affectsUser(e);
+            MoveListHelperFunctions.affectsUser(e.eventData);
             MoveActionAttackDamage.dealDamage(e);
             MoveActionChangeStat.changeStats(e, MoveListHelperFunctions.stats(0, 0, 0, 0, 1, 0, 0));
             // TODO: Removes Trap Effects
@@ -224,7 +226,7 @@ public class NormalMoveList {
 
     public static Move rest() {
         MoveAction action = e -> {
-            MoveListHelperFunctions.targetsUser(e);
+            MoveListHelperFunctions.targetsUser(e.eventData);
             MoveActionHealthRestore.restoreHp(e, 100);
             MoveActionChangeCondition.applyCondition(e, StatusCondition.SLEEP_ID);
         };
@@ -269,7 +271,7 @@ public class NormalMoveList {
 
     public static Move shellSmash() {
         MoveAction action = e -> {
-            MoveListHelperFunctions.targetsUser(e);
+            MoveListHelperFunctions.targetsUser(e.eventData);
             MoveActionChangeStat.changeStats(e, MoveListHelperFunctions.stats(1, -1, 1, -1, 1, 0, 0));
         };
 
@@ -298,8 +300,8 @@ public class NormalMoveList {
 
     public static Move sleepTalk() {
         MoveAction action = e -> {
-            Pokemon a = e.user;
-            Move m = e.moveUsed;
+            Pokemon a = e.eventData.user;
+            Move m = e.eventData.moveUsed;
             // Only works when Pokemon is asleep
             if (!a.getConditions().hasKey(StatusCondition.SLEEP_ID)){
                 BattleLog.add(Move.FAILED);
@@ -314,7 +316,9 @@ public class NormalMoveList {
             }
 
             BattleLog.add("%s used %s!", a, randomMove);
-            randomMove.getAction().act(new EventData(a, e.attackTarget, m));
+
+            EventData eventData = new EventData(a, e.eventData.attackTarget, randomMove);
+            randomMove.getAction().act(new EventManager(eventData));
         };
 
         return new MoveBuilder()
@@ -361,7 +365,7 @@ public class NormalMoveList {
 
     public static Move swordsDance() {
         MoveAction action = e -> {
-            MoveListHelperFunctions.targetsUser(e);
+            MoveListHelperFunctions.targetsUser(e.eventData);
             MoveActionChangeStat.changeStats(e, MoveListHelperFunctions.stats(2, 0, 0, 0, 0, 0, 0));
         };
 

@@ -113,7 +113,7 @@ public class GameEvent {
         };
     }
 
-    public void updateOnEvent(String eventName, EventData data) {
+    public void updateEvent(String eventName, EventData data) {
         getEvent(eventName).update(data);
     }
 

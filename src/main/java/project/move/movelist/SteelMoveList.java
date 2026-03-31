@@ -29,7 +29,8 @@ public class SteelMoveList {
 
     public static Move gyroBall() {
         MoveAction action = e -> {
-            e.moveUsed.setPower((int) (25.0 * e.attackTarget.getSpeed().getPower() / (double) e.user.getSpeed().getPower() + 1));
+            int power = (int) (25.0 * e.eventData.attackTarget.getSpeed().getPower() / (double) e.eventData.user.getSpeed().getPower() + 1);
+            e.eventData.moveUsed.setPower(power);
             MoveActionAttackDamage.dealDamage(e);
         };
 
@@ -46,7 +47,7 @@ public class SteelMoveList {
 
     public static Move ironDefense() {
         MoveAction action = e -> {
-            MoveListHelperFunctions.targetsUser(e);
+            MoveListHelperFunctions.targetsUser(e.eventData);
             MoveActionChangeStat.changeStats(e, MoveListHelperFunctions.stats(0, 2, 0, 0, 0, 0, 0));
         };
 

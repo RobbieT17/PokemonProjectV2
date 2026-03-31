@@ -28,8 +28,8 @@ public class Battle {
      */
     public void initiatationMessage() {
         BattleLog.add("Let the battle begin!");
-        BattleLog.add("%s sends out %s!", player1, player1.getPokemonInBattle());
-        BattleLog.add("%s sends out %s!", player2, player2.getPokemonInBattle());
+        BattleLog.add("%s sends out %s!", this.player1, this.player1.getPokemonInBattle());
+        BattleLog.add("%s sends out %s!", this.player2, this.player2.getPokemonInBattle());
         BattleLog.out();
     }
 
@@ -38,8 +38,8 @@ public class Battle {
      * For now, it just prints out which moves each pokemon used.
      */
     public void processRound() {
-        BattleLog.add("%s used %s!", player1.getPokemonInBattle(), player1.getPokemonInBattle().getMoveSelected());
-        BattleLog.add("%s used %s!", player2.getPokemonInBattle(), player2.getPokemonInBattle().getMoveSelected());
+        BattleLog.add("%s used %s!", this.player1.getPokemonInBattle(), this.player1.getPokemonInBattle().getMoveSelected());
+        BattleLog.add("%s used %s!", this.player2.getPokemonInBattle(), this.player2.getPokemonInBattle().getMoveSelected());
         BattleLog.out();
     }
 }

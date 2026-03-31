@@ -4,7 +4,6 @@ import java.util.InputMismatchException;
 import java.util.Random;
 import java.util.Scanner;
 
-import project.event.EventData;
 import project.event.GameEvent;
 import project.exceptions.BattleEndedException;
 import project.move.Move;
@@ -13,9 +12,10 @@ import project.player.PokemonTrainer;
 import project.player.PokemonTrainerBuilder;
 import project.pokemon.Pokedex.PokedexEntry;
 import project.pokemon.Pokemon;
+import project.pokemon.PokemonBattleActions;
 import project.stats.Ability;
 import project.stats.HeldItem;
-import project.stats.StatDisplay;
+import project.utility.StatDisplay;
 
 
 public class BattleA {
@@ -67,7 +67,7 @@ public class BattleA {
     // Pokemon chooses a move
     public static Pokemon chooseMove(PokemonTrainer pt) {
         Pokemon p = pt.getPokemonInBattle();
-        p.getEvents().updateOnEvent(GameEvent.MOVE_SELECTION, null);
+        p.getEvents().updateEvent(GameEvent.MOVE_SELECTION, null);
 
         /*
          * Unable to choose a move if just switched in
@@ -164,8 +164,8 @@ public class BattleA {
 
     // Finds the order which the Pokemon in battle will move
     public static Pokemon[] turnOrder(Pokemon p1, Pokemon p2) {
-        p1.getEvents().updateOnEvent(GameEvent.FIND_MOVE_ORDER, null);
-        p2.getEvents().updateOnEvent(GameEvent.FIND_MOVE_ORDER, null);
+        p1.getEvents().updateEvent(GameEvent.FIND_MOVE_ORDER, null);
+        p2.getEvents().updateEvent(GameEvent.FIND_MOVE_ORDER, null);
 
         Pokemon[] order = new Pokemon[2];
 
@@ -225,7 +225,10 @@ public class BattleA {
         if (a.getConditions().isFainted() || b.getConditions().isFainted() || a.getMoveSelected() == null) return;
 
         BattleLog.addLine();
-        a.useTurn(new EventData(a, b, a.getMoveSelected()));
+
+        PokemonBattleActions pba = new PokemonBattleActions(a, b, a.getMoveSelected());
+
+        pba.useTurn();
 
         // Updates an event listener for added status conditions
         a.getEvents().updateEventMaps();

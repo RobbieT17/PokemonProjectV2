@@ -16,7 +16,10 @@ public class IceMoveList {
 
     public static Move avalanche() {
         MoveAction action =  e -> {
-            if (e.user.getConditions().tookDamage()) e.moveUsed.doublePower();
+            if (e.eventData.user.getConditions().tookDamage()) {
+                e.eventData.moveUsed.doublePower();
+            }
+            
             MoveActionAttackDamage.dealDamage(e);
         };
 
@@ -63,8 +66,8 @@ public class IceMoveList {
 
     public static Move haze() {
         MoveAction action = e -> {
-            MoveActionChangeStat.resetStats(e, e.user);
-            MoveActionChangeStat.resetStats(e, e.attackTarget);
+            MoveActionChangeStat.resetStats(e, e.eventData.user);
+            MoveActionChangeStat.resetStats(e, e.eventData.attackTarget);
         };
 
         return new MoveBuilder()

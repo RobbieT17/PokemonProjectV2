@@ -61,7 +61,7 @@ public class DragonMoveList {
 
     public static Move dragonDance() {
         MoveAction action = e -> {
-            MoveListHelperFunctions.targetsUser(e);
+            MoveListHelperFunctions.targetsUser(e.eventData);
             MoveActionChangeStat.changeStats(e, MoveListHelperFunctions.stats(1, 0, 0, 0, 1, 0, 0));
         };
 

@@ -1,8 +1,7 @@
 package project.player;
 
-import project.network.ClientHandler;
 import project.pokemon.Pokemon;
-import project.stats.StatDisplay;
+import project.utility.StatDisplay;
 
 public class PokemonTrainer {
         
@@ -27,11 +26,7 @@ public class PokemonTrainer {
     }
 
 // Methods
-    // Checks if a the select pokemon is valid. (1. Cannot be fainted and cannot already be on the field)
-    private boolean validPokemonChoice(Pokemon p) {
-        return !p.getConditions().isFainted() && (this.getPokemonInBattle() != null) ? !this.getPokemonInBattle().equals(p) : true;
-    }
-
+   
     // Formats Pokemon team info
     private String listPokemon() {
         StringBuilder sb = new StringBuilder();
@@ -39,19 +34,6 @@ public class PokemonTrainer {
         for (Pokemon p : this.team) {
             sb.append(StatDisplay.showPartyStats(p));
         }
-
-        return sb.toString();
-    }
-
-    // Formats Pokemon team info with selection option
-    private String listPokemonSelect() {
-        StringBuilder sb = new StringBuilder();
-
-        for (int i = 0; i < this.team.length; i++) {
-            sb.append(String.format("[%d] %s", i, StatDisplay.showPartyStats(this.team[i])));
-        }
-
-        sb.append("\nPlease select a pokemon >>");
 
         return sb.toString();
     }
@@ -95,39 +77,7 @@ public class PokemonTrainer {
         this.pokemonInBattle = null;
     }
 
-    /**
-     * Chooses a pokemon through user input
-     * @param c the client connection
-     */
-    public Pokemon choosePokemon(ClientHandler c) {
-        if (this.outOfPokemon()) {
-            return null;
-        }
-
-        Pokemon p = null;
-        while (true) {
-            try {
-                // Lists out trainer's pokemon
-                c.writeToBuffer(this.listPokemonSelect());
-                String input = c.readFromBuffer();
-                int i = Integer.parseInt(input);
-
-                p = this.team[i];
-                if (this.validPokemonChoice(p)) {
-                    break;
-                }
-
-                // Invalid Pokemon choice, the user will have to repick
-                c.writeToBuffer("This pokemon cannot be used, try again.");
-
-            } catch (IndexOutOfBoundsException | NumberFormatException e) {
-                c.writeToBuffer("Invalid input, try again.");
-            }
-            
-        }
-
-        return p;
-    }
+    
 
     @Override
     public String toString() {

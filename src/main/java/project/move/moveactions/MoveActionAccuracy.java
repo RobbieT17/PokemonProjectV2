@@ -3,6 +3,7 @@ package project.move.moveactions;
 import java.util.Random;
 
 import project.event.EventData;
+import project.event.EventManager;
 import project.event.GameEvent;
 import project.exceptions.MoveInterruptedException;
 import project.move.Move;
@@ -20,19 +21,21 @@ private static void defenderProtects(Pokemon p) {
 }
 
 // Accuracy Function
-    public static void moveHits(EventData data) {
+    public static void moveHits(EventManager eventManager) {
+        EventData data = eventManager.eventData;
+
         Pokemon attacker = data.user;
         Pokemon defender = data.attackTarget;
         Move move = data.moveUsed;
 
-        data.notifyEvent(GameEvent.MOVE_ACCURACY);
+        eventManager.notifyPokemon(GameEvent.MOVE_ACCURACY);
         defenderProtects(defender);
 
         int accuracy = move.getAccuracy();
 
         if (accuracy == Move.ALWAYS_HITS || defender.getConditions().isImmobilized()) {
             data.moveHits = true;
-            data.notifyEvent(GameEvent.MOVE_HITS);
+            eventManager.notifyPokemon(GameEvent.MOVE_HITS);
             return;
         }
 		
@@ -45,6 +48,6 @@ private static void defenderProtects(Pokemon p) {
         }
             
         data.moveHits = true;
-        data.notifyEvent(GameEvent.MOVE_HITS);
+        eventManager.notifyPokemon(GameEvent.MOVE_HITS);
     }
 }

@@ -1,6 +1,7 @@
 package project.move.calculations;
 
 import project.event.EventData;
+import project.event.EventManager;
 import project.event.GameEvent;
 import project.exceptions.MoveInterruptedException;
 import project.move.Move;
@@ -33,13 +34,14 @@ public interface MoveEffectiveCalculations {
     * Calculates effectiveness of the move on the defender
     * No damage is dealt if defending is immune to the attack
     */
-    public static void moveEffectiveness(EventData data) {
+    public static void moveEffectiveness(EventManager eventManager) {
+        EventData data = eventManager.eventData;
         Pokemon p = data.attackTarget;
         double effectiveness = typeEffectiveness(data.moveUsed.getMoveType(), p);
 
         data.moveEffectiveness = effectiveness;
 
-        data.notifyEvent(GameEvent.MOVE_EFFECTIVENESS);
+        eventManager.notifyPokemon(GameEvent.MOVE_EFFECTIVENESS);
 
         if (effectiveness == 0) throw new MoveInterruptedException(Move.noEffectOn(p));     
     }

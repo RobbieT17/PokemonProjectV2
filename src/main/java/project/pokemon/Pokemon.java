@@ -3,13 +3,12 @@ package project.pokemon;
 import project.battle.BattleA;
 import project.battle.BattleLog;
 import project.battle.Weather;
-import project.event.EventData;
 import project.event.GameEvent;
-import project.exceptions.*;
+import project.exceptions.PokemonFaintedException;
 import project.move.Move;
-import project.network.ClientHandler;
 import project.player.PokemonTrainer;
-import project.stats.*;
+import project.stats.Ability;
+import project.stats.HeldItem;
 
 
 public class Pokemon {
@@ -89,53 +88,6 @@ public class Pokemon {
 // Methods
 
     /**
-     * Uses a move on a target
-     * Decrements that moves PP
-     * @param move the Move chosen
-     * @param defender the target Pokemon
-     */
-    public void useMove(EventData data) {
-        BattleLog.add("%s used %s!", this, this.moveSelected);
-        try {
-            this.events.updateOnEvent(GameEvent.USE_MOVE, data);
-            this.moveSelected.getPp().decrement(this.getConditions().hasKey(StatusCondition.FORCED_MOVE_ID));
-            this.moveSelected.getAction().act(data);
-        } catch (MoveEndedEarlyException e) {
-            BattleLog.add(e.getMessage());
-        }
-    }
-
-    /**
-     * Checks any condition, then
-     * Pokemon uses their move if actionable
-     * Pokemon is considered to have moved (even if they cannot act)
-     * 
-     * @param move the Move chosen
-     * @param defender the target Pokemon
-     */
-    public void useTurn(EventData data){
-        try {
-            this.getEvents().updateOnEvent(GameEvent.BEFORE_MOVE, data);
-            this.getEvents().updateOnEvent(GameEvent.PRIMARY_STATUS_BEFORE, data);
-            this.getEvents().updateOnEvent(GameEvent.STATUS_BEFORE, data);
-
-            this.useMove(data);
-            this.conditions.setInterrupted(false); // Successful Move
-        } catch (MoveInterruptedException | PokemonCannotActException e) {
-            BattleLog.add(e.getMessage());
-            this.events.updateOnEvent(GameEvent.MOVE_INTERRUPTED, data);
-
-            // Stops any ongoing moves
-            this.conditions.removeCondition(StatusCondition.FOCUSED_ID);
-            this.conditions.removeCondition(StatusCondition.FORCED_MOVE_ID);
-            this.conditions.removeCondition(StatusCondition.RAMPAGE_ID);
-            this.conditions.setInterrupted(true);
-        } 
-        this.conditions.setHasMoved(true); 
-        this.events.updateOnEvent(GameEvent.END_OF_TURN, data);
-    }
-
-    /**
      * Takes damage which lowers HP
      * If HP drops to 0, the pokemon faints
      * 
@@ -196,14 +148,6 @@ public class Pokemon {
         this.restoreHP(heal);
     }
 
-    public String listMoveSelect() {
-        StringBuilder sb = new StringBuilder();
-
-        sb.append(StatDisplay.showSomeStats(this));
-        sb.append("\nPlease select a move >>");
-
-        return sb.toString();
-    }
 
     public boolean hpLessThanPercent(double percent) {
         return this.hp.getCurrentHealthPoints() / (double) this.hp.getMaxHealthPoints() < 0.01 * percent; 
@@ -211,30 +155,6 @@ public class Pokemon {
 
     public boolean firstRound() {
         return this.roundCount == 0;
-    }
-
-
-    // User selects a move through input
-    public Move chooseMove(ClientHandler c) {
-        Move m = null;
-
-        while (true) {
-            try {
-                c.writeToBuffer(this.listMoveSelect());
-                String input = c.readFromBuffer();
-                int i = Integer.parseInt(input);
-
-                m = this.moves[i];
-                if (!(m.getPp().depleted() || m.getDisabled())) {
-                    break;
-                }
-
-            } catch (IndexOutOfBoundsException | NumberFormatException e) {
-                c.writeToBuffer("Invalid input, try again.");
-            }
-
-        }
-        return m;
     }
 
 
@@ -316,8 +236,8 @@ public class Pokemon {
         this.resetMove();
  
         try {
-            this.getEvents().updateOnEvent(GameEvent.END_OF_ROUND, null);
-            this.getEvents().updateOnEvent(GameEvent.WEATHER_EFFECT, null);
+            this.getEvents().updateEvent(GameEvent.END_OF_ROUND, null);
+            this.getEvents().updateEvent(GameEvent.WEATHER_EFFECT, null);
             Weather.weatherEffect(this);
         } catch (PokemonFaintedException e) {
         }  
@@ -337,7 +257,7 @@ public class Pokemon {
         this.damageReceived = 0;  
         this.roundCount = 0;
 
-        this.events.updateOnEvent(GameEvent.SWITCH_OUT, null);
+        this.events.updateEvent(GameEvent.SWITCH_OUT, null);
     }
 
     public void removeItem() {

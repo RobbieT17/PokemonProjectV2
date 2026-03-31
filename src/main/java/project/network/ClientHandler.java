@@ -7,10 +7,12 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 
-import project.battle.BattleLog;
 import project.move.Move;
-import project.player.*;
+import project.move.MoveSelector;
+import project.player.PokemonTrainer;
+import project.player.PokemonTrainerBuilder;
 import project.pokemon.Pokemon;
+import project.pokemon.PokemonSelector;
 
 // NOTE: This class is run server side
 public class ClientHandler implements Runnable {
@@ -121,7 +123,9 @@ public class ClientHandler implements Runnable {
     // Prompts user to select a pokemon to send into battle
     public Pokemon selectPokemon() {
         Server.logp(this.playerNum, "Selecting a pokemon...");
-        Pokemon p = this.player.choosePokemon(this);
+
+        PokemonSelector selector = new PokemonSelector(this);
+        Pokemon p = selector.choosePokemon();
 
         if (p == null) {
             Server.broadcast("Player %d is out of Pokemon!", this.playerNum);
@@ -136,7 +140,9 @@ public class ClientHandler implements Runnable {
     // Prompts user to select a pokemon move to use
     public Move selectMove(Pokemon p) {
         Server.logp(this.playerNum, "Selecting a move...");
-        Move m = p.chooseMove(this);
+
+        MoveSelector selector = new MoveSelector(this, p);
+        Move m = selector.chooseMove();
 
         if (m == null) {
             return null;
@@ -150,18 +156,7 @@ public class ClientHandler implements Runnable {
         return m;
     }
 
-    // Getters
-    public int clientId() {
-        return this.clientId;
-    }
-
-    public String clientName() {
-        return this.clientName;
-    }
-
-// Main Function: Clients inputs a commands to send back to the server (currenly echos what was read to terminal)
-    @Override
-    public void run() {
+    public void setup() {
         // Notifies client the server connection was successful
         this.writeToBuffer("You are now connected to the server.");
 
@@ -185,7 +180,9 @@ public class ClientHandler implements Runnable {
         this.writeToBuffer("You sent out %s.\nWaiting for opponent...", this.player.getPokemonInBattle(), 
         this.playerNum);
         Server.lock();
+    }
 
+    public void battleProcess() {
         // Battle Process
         while (this.socket.isConnected()) {
             Server.lock(); // Waits for server to finish processing
@@ -200,6 +197,26 @@ public class ClientHandler implements Runnable {
                 break;
             }    
         }
+    }
+
+    // Getters
+    public int clientId() {
+        return this.clientId;
+    }
+
+    public String clientName() {
+        return this.clientName;
+    }
+
+    public PokemonTrainer getPlayer() {
+        return this.player;
+    }
+
+// Main Function: Clients inputs a commands to send back to the server (currenly echos what was read to terminal)
+    @Override
+    public void run() {
+        this.setup();
+        this.battleProcess();
     }
     
 }

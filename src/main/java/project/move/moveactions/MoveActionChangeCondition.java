@@ -4,6 +4,7 @@ import java.util.Random;
 
 import project.battle.BattleLog;
 import project.event.EventData;
+import project.event.EventManager;
 import project.move.Move;
 import project.pokemon.Pokemon;
 import project.stats.StatusCondition;
@@ -48,17 +49,20 @@ public interface MoveActionChangeCondition extends MoveAction {
         p.getConditions().setPrimaryCondition(StatusCondition.sleep(p));
     }
 
-    private static void flyState(EventData data) {
+    private static void flyState(EventManager eventManager) {
+        EventData data  = eventManager.eventData;
         Pokemon p = data.user;
         p.getConditions().addCondition(StatusCondition.fly(p, data.moveUsed));
     }
 
-    private static void digState(EventData data) {
+    private static void digState(EventManager eventManager) {
+        EventData data  = eventManager.eventData;
         Pokemon p = data.user;
         p.getConditions().addCondition(StatusCondition.dig(p, data.moveUsed));
     }
 
-    private static void diveState(EventData data) {
+    private static void diveState(EventManager eventManager) {
+        EventData data  = eventManager.eventData;
         Pokemon p = data.user;
         p.getConditions().addCondition(StatusCondition.dive(p, data.moveUsed));
     }
@@ -95,7 +99,8 @@ public interface MoveActionChangeCondition extends MoveAction {
         };
     }
 
-    public static void applyCondition(EventData data, String id, double chance) {
+    public static void applyCondition(EventManager eventManager, String id, double chance) {
+        EventData data  = eventManager.eventData;
         Pokemon p = data.effectTarget;
         data.statusChange = id;
         data.statusProb = chance;
@@ -123,15 +128,15 @@ public interface MoveActionChangeCondition extends MoveAction {
             case StatusCondition.BOUND_ID -> applyBound(p);
             case StatusCondition.CONFUSION_ID -> applyConfusion(p);
             case StatusCondition.SEEDED_ID -> applySeeded(data.attackTarget, data.user);
-            case StatusCondition.FLY_ID -> flyState(data);
-            case StatusCondition.DIG_ID -> digState(data);
-            case StatusCondition.DIVE_ID -> diveState(data);
+            case StatusCondition.FLY_ID -> flyState(eventManager);
+            case StatusCondition.DIG_ID -> digState(eventManager);
+            case StatusCondition.DIVE_ID -> diveState(eventManager);
             default -> throw new IllegalArgumentException(StatusCondition.ID_ERR);
         }  
     }
 
-    public static void applyCondition(EventData data, String id) {
-        applyCondition(data, id, 100);
+    public static void applyCondition(EventManager eventManager, String id) {
+        applyCondition(eventManager, id, 100);
     }
 
     // Semi-Immune State Function
@@ -140,24 +145,26 @@ public interface MoveActionChangeCondition extends MoveAction {
      * Pokemon enters a semi-invulnerable state the first turn
      * Pokemon leaves the state and attacks on the second turn
      */
-    public static void enterImmuneState(EventData data, String state) {
+    public static void enterImmuneState(EventManager eventManager, String state) {
+        EventData data  = eventManager.eventData;
         Pokemon attacker = data.user;
         data.immuneStateChange = state;
 
         // Enters state
         if (!attacker.getConditions().inImmuneState()) {
-            applyCondition(data, state, 100);
+            applyCondition(eventManager, state, 100);
             return;
         }
 
         attacker.getConditions().removeCondition(data.immuneStateChange);
-        MoveActionAttackDamage.dealDamage(data);
+        MoveActionAttackDamage.dealDamage(eventManager);
     }
 
     /*
      * Pokemon is knocked out of their semi-invulnerable state, interrupted
      */
-    public static void leaveImmuneState(EventData data, String state, String message) {
+    public static void leaveImmuneState(EventManager eventManager, String state, String message) {
+        EventData data  = eventManager.eventData;
         Pokemon p = data.attackTarget;
         data.immuneStateChange = StatusCondition.NO_INVUL_ID;
     
