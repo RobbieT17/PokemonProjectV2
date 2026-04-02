@@ -41,7 +41,7 @@ public interface MoveEffectiveCalculations {
 
         data.moveEffectiveness = effectiveness;
 
-        eventManager.notifyPokemon(GameEvents.MOVE_EFFECTIVENESS);
+        eventManager.notifyAllPokemon(GameEvents.MOVE_EFFECTIVENESS);
 
         if (effectiveness == 0) throw new MoveInterruptedException(Move.noEffectOn(p));     
     }

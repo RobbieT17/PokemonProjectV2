@@ -12,13 +12,13 @@ import project.player.PokemonTrainer;
 import project.player.PokemonTrainerBuilder;
 import project.pokemon.Pokedex.PokedexEntry;
 import project.pokemon.Pokemon;
-import project.pokemon.PokemonBattleActions;
+import project.pokemon.PokemonActions;
 import project.stats.Ability;
 import project.stats.HeldItem;
 import project.utility.StatDisplay;
 
 
-public class BattleA {
+public class OLDBattle {
 
     public static boolean skipRound; // Switched in Pokemon after a faint don't get attacked for the round
 
@@ -170,9 +170,9 @@ public class BattleA {
 
         BattleLog.addLine();
 
-        PokemonBattleActions pba = new PokemonBattleActions(a, b, a.getMoveSelected());
+        PokemonActions pba = new PokemonActions(a, b, a.getMoveSelected());
 
-        pba.useTurn();
+        pba.useTurn(); 
 
         // Updates an event listener for added status conditions
         a.getEvents().updateEventMaps();
@@ -192,21 +192,21 @@ public class BattleA {
         PokemonTrainer pt1 = BattleField.player1;
         PokemonTrainer pt2 = BattleField.player2;
 
-        if (BattleA.skipRound) return;
+        if (OLDBattle.skipRound) return;
         
         // Player choose their moves
         chooseMove(pt1);
         chooseMove(pt2);
 
-        // Order of Pokemon
-        Pokemon[] order = PokemonBattleActions.turnOrder(pt1.getPokemonInBattle(), pt2.getPokemonInBattle());
+        // // Order of Pokemon
+        // Pokemon[] order = PokemonActions.turnOrder(pt1.getPokemonInBattle(), pt2.getPokemonInBattle());
 
-        Pokemon p1 = order[0];
-        Pokemon p2 = order[1];
+        // Pokemon p1 = order[0];
+        // Pokemon p2 = order[1];
 
-        // Pokemon use their moves, interrupted if one of them faints
-        pokemonTurn(p1, p2);
-        pokemonTurn(p2, p1);
+        // // Pokemon use their moves, interrupted if one of them faints
+        // pokemonTurn(p1, p2);
+        // pokemonTurn(p2, p1);
        
     }
 
@@ -257,7 +257,7 @@ public class BattleA {
         choosePokemon(pt2);
         
         BattleLog.out();
-        BattleA.skipRound = true;
+        OLDBattle.skipRound = true;
 
         // Game ends when one trainer is out of Pokemon
         try {
@@ -268,7 +268,7 @@ public class BattleA {
                     BattleLog.out();  // Plays out the round messages
                 }
                 
-                BattleA.skipRound = true;
+                OLDBattle.skipRound = true;
                 if (pt1.getPokemonInBattle().getConditions().isFainted()) choosePokemon(pt1);
                 else if (pt2.getPokemonInBattle().getConditions().isFainted()) choosePokemon(pt2);
                 else throw new IllegalStateException("Pokemon must've fainted, what happened???");

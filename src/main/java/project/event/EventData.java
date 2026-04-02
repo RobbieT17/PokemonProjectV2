@@ -1,5 +1,6 @@
 package project.event;
 
+import java.util.ArrayList;
 import project.move.Move;
 import project.pokemon.Pokemon;
 import project.utility.Protection;
@@ -7,6 +8,7 @@ import project.utility.Protection;
 
 public class EventData {
     // Turn Info: Relevant to a singular Pokemon turn, this data is reset after each turn
+    public final ArrayList<Pokemon> pokemonList; // List of Pokemon included in the event
     public final Pokemon user; // User of the move
     public final Move moveUsed; // Move Used
 
@@ -46,10 +48,21 @@ public class EventData {
 
     public EventData(Pokemon a, Pokemon b, Move m) {
         this.user = a;
-        this.attackTarget = b;
-        this.effectTarget = b;
         this.moveUsed = m;
+        this.pokemonList = buildPokemonList(a, b);
+
+        this.attackTarget = b;
+        this.effectTarget = b; 
         this.otherMoveMods = 1.0;
+    }
+
+    private ArrayList<Pokemon> buildPokemonList(Pokemon a, Pokemon b) {
+        ArrayList<Pokemon> list = new ArrayList<>();
+
+        list.add(a);
+        list.add(b);
+
+        return list;
     }
 
     // Methods

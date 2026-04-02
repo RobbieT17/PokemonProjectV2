@@ -317,8 +317,7 @@ public class NormalMoveList {
 
             BattleLog.add("%s used %s!", a, randomMove);
 
-            EventData eventData = new EventData(a, e.eventData.attackTarget, randomMove);
-            randomMove.getAction().act(new EventManager(eventData));
+            randomMove.getAction().act(new EventManager(e.eventData.user, e.eventData.attackTarget));
         };
 
         return new MoveBuilder()

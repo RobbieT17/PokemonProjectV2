@@ -1,10 +1,7 @@
 package project.pokemon;
 
-import project.battle.BattleA;
 import project.battle.BattleLog;
-import project.battle.Weather;
 import project.event.GameEvents;
-import project.exceptions.PokemonFaintedException;
 import project.move.Move;
 import project.player.PokemonTrainer;
 import project.stats.Ability;
@@ -212,11 +209,7 @@ public class Pokemon {
         for (PokemonStat s : this.stats) s.resetMod();
     }
 
-    public void afterEffects() {
-        if (BattleA.skipRound) {
-            this.conditions.setSwitchedIn(false);
-            return;
-        }
+    public void endOfRoundReset() {
         if (this.conditions.isFainted()) {
             this.conditions.clearPrimary();
             this.conditions.clearVolatileConditions();
@@ -234,14 +227,6 @@ public class Pokemon {
         }
 
         this.resetMove();
- 
-        try {
-            this.getEvents().updateEvent(GameEvents.END_OF_ROUND, null);
-            this.getEvents().updateEvent(GameEvents.WEATHER_EFFECT, null);
-            Weather.weatherEffect(this);
-        } catch (PokemonFaintedException e) {
-        }  
-        
         this.damageDealt = 0;
         this.damageReceived = 0;
         this.roundCount++;

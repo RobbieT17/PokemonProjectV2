@@ -50,7 +50,7 @@ public interface MoveActionAttackDamage extends MoveAction {
         defender.takeDamage(damage);    
 
         if (data.moveUsed.getMakesContact()) {
-            eventManager.notifyPokemon(GameEvents.MOVE_MAKES_CONTACT);
+            eventManager.notifyAllPokemon(GameEvents.MOVE_MAKES_CONTACT);
         }
     }
 

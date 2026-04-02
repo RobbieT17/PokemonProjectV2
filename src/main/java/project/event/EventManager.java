@@ -1,13 +1,18 @@
 package project.event;
 
+import project.move.Move;
 import project.pokemon.Pokemon;
 
 public class EventManager {
     
     public final EventData eventData;
+  
+    public EventManager(Pokemon p1, Pokemon p2) {
+        this.eventData = new EventData(p1, p2, null);
+    }
 
-    public EventManager(EventData e) {
-        this.eventData = e;
+    public EventManager(Pokemon p1, Pokemon p2, Move m) {
+        this.eventData = new EventData(p1, p2, m);
     }
 
     public void notifyUserPokemon(String eventName) {
@@ -22,15 +27,16 @@ public class EventManager {
         this.eventData.effectTarget.getEvents().updateEvent(eventName, this.eventData);
     }
 
-    // Notifies user and attack target of an event
-    public void notifyPokemon(String eventName) {
-        this.notifyAttackTargetPokemon(eventName);
-        this.notifyUserPokemon(eventName);
+    public void notifyAllPokemon(String eventName) {
+        for (Pokemon p : this.eventData.pokemonList) {
+            p.getEvents().updateEvent(eventName, this.eventData);
+        }
     }
 
     public void updateEventMaps() {
-        eventData.user.getEvents().updateEventMaps();
-        eventData.attackTarget.getEvents().updateEventMaps();
+        for (Pokemon p : this.eventData.pokemonList) {
+            p.getEvents().updateEventMaps();
+        }
     }
 
 }

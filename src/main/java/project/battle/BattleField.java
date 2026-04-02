@@ -38,9 +38,9 @@ public class BattleField {
         BattleLog.addLine();
         isBattleOver();
         weatherUpdate();
-        player1.getPokemonInBattle().afterEffects();
-        player2.getPokemonInBattle().afterEffects();
+        // player1.getPokemonInBattle().afterEffects();
+        // player2.getPokemonInBattle().afterEffects();
         isBattleOver();
-        BattleA.skipRound = false;
+        OLDBattle.skipRound = false;
     }
 }

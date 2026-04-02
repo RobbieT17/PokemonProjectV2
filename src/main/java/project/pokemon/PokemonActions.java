@@ -1,7 +1,5 @@
 package project.pokemon;
 
-import java.util.Random;
-
 import project.battle.BattleLog;
 import project.event.EventData;
 import project.event.EventManager;
@@ -12,14 +10,14 @@ import project.exceptions.PokemonCannotActException;
 import project.move.Move;
 import project.stats.StatusCondition;
 
-public class PokemonBattleActions {
+public class PokemonActions {
 
     private final EventData eventData;
     private final EventManager eventManager;
 
-    public PokemonBattleActions(Pokemon attacker, Pokemon defender, Move move) {
-        this.eventData = new EventData(attacker, defender, move);
-        this.eventManager = new EventManager(this.eventData);
+    public PokemonActions(Pokemon attacker, Pokemon defender, Move move) {
+        this.eventManager = new EventManager(attacker, defender, move);
+        this.eventData = this.eventManager.eventData;
     }
 
     private void updateBeforeMoveEvents() {
@@ -92,61 +90,9 @@ public class PokemonBattleActions {
         eventManager.updateEventMaps();
     }
 
-    // Finds the order which the Pokemon in battle will move
-    public static Pokemon[] turnOrder(Pokemon p1, Pokemon p2) {
-        p1.getEvents().updateEvent(GameEvents.FIND_MOVE_ORDER, null);
-        p2.getEvents().updateEvent(GameEvents.FIND_MOVE_ORDER, null);
-
-        Pokemon[] order = new Pokemon[2];
-
-        Move m1 = p1.getMoveSelected();
-        Move m2 = p2.getMoveSelected();
-
-        int speed1 = p1.getSpeed().getPower();
-        int speed2 = p2.getSpeed().getPower();
-
-        // Handles null moves (pokemon may not always have selected a move)
-        if (m2 == null) {
-            order[0] = p1;
-            order[1] = p2;
-            return order;
-        }
-        else if (m1 == null) {
-            order[0] = p2;
-            order[1] = p1;
-            return order;
-        }
-
-        // Higher Priority Moves act first
-        if (m1.getPriority() > m2.getPriority()) {
-            order[0] = p1; 
-            order[1] = p2;
-        }
-        else if (m1.getPriority() < m2.getPriority()) {
-            order[0] = p2; 
-            order[1] = p1;
-        }
-        // Pokemon with higher speed acts firsts
-        else if (speed1 > speed2) {
-            order[0] = p1;
-            order[1] = p2;
-        }
-        else if (speed1 < speed2) {
-            order[0] = p2;
-            order[1] = p1;
-        }
-        // Speed Tie, move order is random
-        else {
-            if (new Random().nextDouble() < 0.5){
-                order[0] = p1;
-                order[1] = p2;
-            }
-            else {
-                order[0] = p2;
-                order[1] = p1;
-            }
-        }
-
-        return order;
+    public void processEndOfRound() {
+        
     }
+
+   
 }

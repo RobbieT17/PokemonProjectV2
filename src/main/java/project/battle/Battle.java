@@ -3,7 +3,7 @@ package project.battle;
 import project.event.EventManager;
 import project.player.PokemonTrainer;
 import project.pokemon.Pokemon;
-import project.pokemon.PokemonBattleActions;
+import project.pokemon.PokemonActions;
 
 /**
  * This class acts as an instance of a pokemon battle. It is responsible for tracking
@@ -36,31 +36,18 @@ public class Battle {
         BattleLog.out();
     }
 
-   
     /**
      * Processes the round based on what each player chose.
      * For now, it just prints out which moves each pokemon used.
      */
     public void processRound() {
         // Determine move order
-        Pokemon[] order = PokemonBattleActions.turnOrder(this.player1.getPokemonInBattle(), this.player2.getPokemonInBattle());
-
-        Pokemon pokemon1 = order[0];
-        Pokemon pokemon2 = order[1];
-
-        // Faster pokemon acts first, followed by the second
-        PokemonBattleActions firstPokemonAction = new PokemonBattleActions(pokemon1, pokemon2, pokemon1.getMoveSelected());
-        firstPokemonAction.useTurn();
-
-
-        PokemonBattleActions secondPokemonAction = new PokemonBattleActions(pokemon2, pokemon1, pokemon2.getMoveSelected());
-        secondPokemonAction.useTurn();
-
-        // Check for win conditions
+        BattleActions battleActions = new BattleActions(this.player1.getPokemonInBattle(), this.player2.getPokemonInBattle());
         
-        // Update after move processes
-        pokemon1.afterEffects();
-        pokemon2.afterEffects();
+        battleActions.constructTurnOrder();
+        battleActions.processPokemonActions();
+        battleActions.checkWinConditions();
+        battleActions.processRoundEnd();
 
         BattleLog.out();
     }
