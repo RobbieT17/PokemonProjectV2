@@ -6,9 +6,9 @@ import java.net.Socket;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
-import project.battle.Battle;
-import project.player.PokemonTrainer;
-import project.utility.Time;
+import project.game.battle.Battle;
+import project.game.player.PokemonTrainer;
+import project.game.utility.Time;
 
 
 public class Server {

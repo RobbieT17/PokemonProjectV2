@@ -2,9 +2,9 @@ module PokemonProject{
     requires javafx.controls;
     requires javafx.fxml;
 
-    opens project.applications to javafx.fxml;
-    opens project.controllers to javafx.fxml;
+    opens project.ui.applications to javafx.fxml;
+    opens project.ui.controllers to javafx.fxml;
 
-    exports project.applications;
-    exports project.controllers;
+    exports project.ui.applications;
+    exports project.ui.controllers;
 }

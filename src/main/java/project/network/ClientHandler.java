@@ -7,12 +7,12 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 
-import project.move.Move;
-import project.move.MoveSelector;
-import project.player.PokemonTrainer;
-import project.player.PokemonTrainerBuilder;
-import project.pokemon.Pokemon;
-import project.pokemon.PokemonSelector;
+import project.game.move.Move;
+import project.game.move.MoveSelector;
+import project.game.player.PokemonTrainer;
+import project.game.player.PokemonTrainerBuilder;
+import project.game.pokemon.Pokemon;
+import project.game.pokemon.PokemonSelector;
 
 // NOTE: This class is run server side
 public class ClientHandler implements Runnable {
