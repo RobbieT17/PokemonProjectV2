@@ -8,7 +8,7 @@ import project.game.move.moveactions.MoveActionAttackDamage;
 import project.game.move.moveactions.MoveActionChangeCondition;
 import project.game.move.moveactions.MoveActionChangeStat;
 import project.game.move.moveactions.MoveActionCharge;
-import project.game.pokemon.effects.StatusConditionManager.StatusConditionIDs;
+import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;
 import project.game.pokemon.stats.Type;
 
 public class DragonMoveList {
@@ -33,7 +33,7 @@ public class DragonMoveList {
     public static Move dragonBreath() {
         MoveAction action = e -> {
             MoveActionAttackDamage.dealDamage(e);
-            MoveActionChangeCondition.applyCondition(e, StatusConditionIDs.PARALYSIS_ID, 30);
+            MoveActionChangeCondition.applyCondition(e, StatusConditionID.PARALYSIS_ID, 30);
         };
 
         return new MoveBuilder()

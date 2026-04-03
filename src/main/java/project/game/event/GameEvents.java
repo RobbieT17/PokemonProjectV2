@@ -4,71 +4,75 @@ import java.util.HashMap;
 
 public class GameEvents {
 
-    public static final String MOVE_HITS = "Move-Hits";
-    public static final String STAT_CHANGE = "Stat-Change";
-    public static final String STATUS_CONDITION_CHANGE = "Status-Condition-Change";
-    public static final String SWITCH_IN = "Switch-In";
-    public static final String MOVE_MAKES_CONTACT = "Move-Makes-Contact";
-    public static final String END_OF_TURN = "End-Of-Turn";
-    public static final String END_OF_ROUND = "End-Of-Round";
-    public static final String DAMAGE_MULTIPLIER = "Damage-Multiplier";
-    public static final String MOVE_EFFECTIVENESS = "Move-Effectiveness";
-    public static final String FIND_MOVE_ORDER = "Find-Move-Order";
-    public static final String WEATHER_EFFECT = "Weather-Effect";
-    public static final String MOVE_ACCURACY = "Move-Accuracy";
-    public static final String PRIMARY_STATUS_BEFORE = "Primary-Status-Effect-Before";
-    public static final String STATUS_BEFORE = "Status-Effect-Before";
-    public static final String BEFORE_MOVE = "Before-Move";
-    public static final String SWITCH_OUT = "Switch-Out";
-    public static final String MOVE_SELECTION = "Move-Selection";
-    public static final String USE_MOVE = "Use-Move";
-    public static final String MOVE_INTERRUPTED = "Move-Interrupted";
+    public enum EventID {
+        MOVE_HITS,
+        STAT_CHANGE,
+        STATUS_CONDITION_CHANGE,
+        SWITCH_IN,
+        MOVE_MAKES_CONTACT,
+        END_OF_TURN,
+        END_OF_ROUND,
+        DAMAGE_MULTIPLIER,
+        MOVE_EFFECTIVENESS,
+        FIND_MOVE_ORDER,
+        WEATHER_EFFECT,
+        MOVE_ACCURACY,
+        PRIMARY_STATUS_BEFORE,
+        STATUS_BEFORE,
+        BEFORE_MOVE,
+        SWITCH_OUT,
+        MOVE_SELECTION,
+        USE_MOVE,
+        MOVE_INTERRUPTED;
+    }
+
 
     private final HashMap<String, Event> eventMap;
    
     public GameEvents() {
         this.eventMap = new HashMap<>();
 
-        this.addEventMapEntry(GameEvents.MOVE_HITS);
-        this.addEventMapEntry(GameEvents.STATUS_CONDITION_CHANGE);
-        this.addEventMapEntry(GameEvents.SWITCH_IN);
-        this.addEventMapEntry(GameEvents.MOVE_MAKES_CONTACT);
-        this.addEventMapEntry(GameEvents.END_OF_TURN);
-        this.addEventMapEntry(GameEvents.END_OF_ROUND);
-        this.addEventMapEntry(GameEvents.DAMAGE_MULTIPLIER);
-        this.addEventMapEntry(GameEvents.MOVE_EFFECTIVENESS);
-        this.addEventMapEntry(GameEvents.FIND_MOVE_ORDER);
-        this.addEventMapEntry(GameEvents.WEATHER_EFFECT);
-        this.addEventMapEntry(GameEvents.MOVE_ACCURACY);
-        this.addEventMapEntry(GameEvents.PRIMARY_STATUS_BEFORE);
-        this.addEventMapEntry(GameEvents.STATUS_BEFORE);
-        this.addEventMapEntry(GameEvents.BEFORE_MOVE);
-        this.addEventMapEntry(GameEvents.SWITCH_OUT);
-        this.addEventMapEntry(GameEvents.MOVE_SELECTION);
-        this.addEventMapEntry(GameEvents.USE_MOVE);
-        this.addEventMapEntry(GameEvents.MOVE_INTERRUPTED);
+        this.addEventMapEntry(EventID.MOVE_HITS);
+        this.addEventMapEntry(EventID.STATUS_CONDITION_CHANGE);
+        this.addEventMapEntry(EventID.SWITCH_IN);
+        this.addEventMapEntry(EventID.MOVE_MAKES_CONTACT);
+        this.addEventMapEntry(EventID.END_OF_TURN);
+        this.addEventMapEntry(EventID.END_OF_ROUND);
+        this.addEventMapEntry(EventID.DAMAGE_MULTIPLIER);
+        this.addEventMapEntry(EventID.MOVE_EFFECTIVENESS);
+        this.addEventMapEntry(EventID.FIND_MOVE_ORDER);
+        this.addEventMapEntry(EventID.WEATHER_EFFECT);
+        this.addEventMapEntry(EventID.MOVE_ACCURACY);
+        this.addEventMapEntry(EventID.PRIMARY_STATUS_BEFORE);
+        this.addEventMapEntry(EventID.STATUS_BEFORE);
+        this.addEventMapEntry(EventID.BEFORE_MOVE);
+        this.addEventMapEntry(EventID.SWITCH_OUT);
+        this.addEventMapEntry(EventID.MOVE_SELECTION);
+        this.addEventMapEntry(EventID.USE_MOVE);
+        this.addEventMapEntry(EventID.MOVE_INTERRUPTED);
     }
 
     // Methods
-    private void addEventMapEntry(String eventName) {
-        this.eventMap.put(eventName, new Event(eventName));
+    private void addEventMapEntry(EventID eventId) {
+        String name = eventId.name();
+        this.eventMap.put(name, new Event(name));
     }
 
-    public void updateEvent(String eventName, EventData data) {
-        this.eventMap.get(eventName).update(data);
+    public void updateEvent(EventID eventId, EventData data) {
+        this.eventMap.get(eventId.name()).update(data);
     }
 
-    public void addEventListener(String eventName, String id, Observer e) {
-        this.eventMap.get(eventName).addListener(id, e);
+    public void addEventListener(EventID eventId, String effectId, Observer e) {
+        this.eventMap.get(eventId.name()).addListener(effectId, e);
     }
 
-    public void removeEventListener(String eventName, String id) {
-        this.eventMap.get(eventName).removeListener(id);
+    public void removeEventListener(EventID eventId, String effectId) {
+        this.eventMap.get(eventId.name()).removeListener(effectId);
     }
 
-    public void removeEventListener(String[] eventNames, String id) {
-        for (String name : eventNames) {
-            this.removeEventListener(name, id);
+    public void removeEventListener(EventID[] eventIds, String effectId) {
+        for (EventID eventId : eventIds) {
+            this.removeEventListener(eventId, effectId);
         }
     }
 

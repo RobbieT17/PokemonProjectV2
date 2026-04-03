@@ -1,14 +1,14 @@
 package project.game.pokemon.effects;
 
+import project.game.event.GameEvents.EventID;
 import project.game.pokemon.Pokemon;
-import project.game.pokemon.stats.Effect;
 
 public class StatusCondition extends Effect {
 // Error Messages
     public static final String ID_ERR = "Invalid status condition ID";
 
 
-    public StatusCondition(Pokemon p, String name, String[] flags) {
+    public StatusCondition(Pokemon p, String name, EventID[] flags) {
         super(p, name, flags);
     }
 

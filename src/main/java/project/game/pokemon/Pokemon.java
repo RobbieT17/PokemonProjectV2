@@ -2,6 +2,7 @@ package project.game.pokemon;
 
 import project.game.battle.BattleLog;
 import project.game.event.GameEvents;
+import project.game.event.GameEvents.EventID;
 import project.game.move.Move;
 import project.game.player.PokemonTrainer;
 import project.game.pokemon.effects.Ability;
@@ -244,7 +245,7 @@ public class Pokemon {
         this.damageReceived = 0;  
         this.roundCount = 0;
 
-        this.events.updateEvent(GameEvents.SWITCH_OUT, null);
+        this.events.updateEvent(EventID.SWITCH_OUT, null);
     }
 
     public void removeItem() {

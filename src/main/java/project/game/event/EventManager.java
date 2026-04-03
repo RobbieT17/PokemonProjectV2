@@ -1,5 +1,6 @@
 package project.game.event;
 
+import project.game.event.GameEvents.EventID;
 import project.game.move.Move;
 import project.game.pokemon.Pokemon;
 
@@ -15,19 +16,19 @@ public class EventManager {
         this.eventData = new EventData(p1, p2, m);
     }
 
-    public void notifyUserPokemon(String eventName) {
-        this.eventData.user.getEvents().updateEvent(eventName, this.eventData);
+    public void notifyUserPokemon(EventID id) {
+        this.eventData.user.getEvents().updateEvent(id, this.eventData);
     }
 
-    public void notifyAttackTargetPokemon(String eventName) {
-        this.eventData.attackTarget.getEvents().updateEvent(eventName, this.eventData);
+    public void notifyAttackTargetPokemon(EventID id) {
+        this.eventData.attackTarget.getEvents().updateEvent(id, this.eventData);
     }
 
-    public void notifyEffectTargetPokemon(String eventName) {
-        this.eventData.effectTarget.getEvents().updateEvent(eventName, this.eventData);
+    public void notifyEffectTargetPokemon(EventID id) {
+        this.eventData.effectTarget.getEvents().updateEvent(id, this.eventData);
     }
 
-    public void notifyAllPokemon(String eventName) {
+    public void notifyAllPokemon(EventID eventName) {
         for (Pokemon p : this.eventData.pokemonList) {
             p.getEvents().updateEvent(eventName, this.eventData);
         }

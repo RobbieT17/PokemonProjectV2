@@ -3,7 +3,7 @@ package project.game.pokemon;
 import java.util.HashMap;
 
 import project.game.pokemon.effects.StatusCondition;
-import project.game.pokemon.effects.StatusConditionManager.StatusConditionIDs;
+import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;
 import project.game.utility.Protection;
 
 public class PokemonConditions {
@@ -40,12 +40,12 @@ public class PokemonConditions {
 
     public boolean inImmuneState() {
         return 
-        this.hasKey(StatusConditionIDs.FLY_ID) ||
-        this.hasKey(StatusConditionIDs.DIG_ID) ||
-        this.hasKey(StatusConditionIDs.DIVE_ID);
+        this.hasKey(StatusConditionID.FLY_ID) ||
+        this.hasKey(StatusConditionID.DIG_ID) ||
+        this.hasKey(StatusConditionID.DIVE_ID);
     }
 
-    public boolean hasKey(StatusConditionIDs key) {
+    public boolean hasKey(StatusConditionID key) {
         return this.conditions.containsKey(key.name());
     }
 
@@ -60,7 +60,7 @@ public class PokemonConditions {
         this.conditions.put(condition.getEffectName(), condition);
     }
 
-    public void removeCondition(StatusConditionIDs key) {
+    public void removeCondition(StatusConditionID key) {
         if (!this.conditions.containsKey(key.name())) return;
         this.conditions.get(key.name()).removeEffect();
         this.conditions.remove(key.name());

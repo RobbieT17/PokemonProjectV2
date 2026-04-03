@@ -9,7 +9,7 @@ import project.game.move.moveactions.MoveActionAttackDamage;
 import project.game.move.moveactions.MoveActionChangeCondition;
 import project.game.move.moveactions.MoveActionChangeStat;
 import project.game.move.moveactions.MoveActionChangeWeather;
-import project.game.pokemon.effects.StatusConditionManager.StatusConditionIDs;
+import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;
 import project.game.pokemon.stats.Type;
 
 public class IceMoveList {
@@ -38,7 +38,7 @@ public class IceMoveList {
     public static Move blizzard() {
         MoveAction action = e -> {
             MoveActionAttackDamage.dealDamage(e);
-            MoveActionChangeCondition.applyCondition(e, StatusConditionIDs.FREEZE_ID, 10);
+            MoveActionChangeCondition.applyCondition(e, StatusConditionID.FREEZE_ID, 10);
         };
 
         return new MoveBuilder()
@@ -83,7 +83,7 @@ public class IceMoveList {
     public static Move iceBeam() {
         MoveAction action = e -> {
             MoveActionAttackDamage.dealDamage(e);
-            MoveActionChangeCondition.applyCondition(e, StatusConditionIDs.FREEZE_ID, 10);
+            MoveActionChangeCondition.applyCondition(e, StatusConditionID.FREEZE_ID, 10);
         };
 
         return new MoveBuilder()
@@ -100,7 +100,7 @@ public class IceMoveList {
     public static Move icePunch() {
         MoveAction action = e -> {
             MoveActionAttackDamage.dealDamage(e);
-            MoveActionChangeCondition.applyCondition(e, StatusConditionIDs.FREEZE_ID, 10);
+            MoveActionChangeCondition.applyCondition(e, StatusConditionID.FREEZE_ID, 10);
         };
 
         return new MoveBuilder()

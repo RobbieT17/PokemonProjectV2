@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import project.game.move.Move;
 import project.game.pokemon.Pokemon;
-import project.game.pokemon.effects.StatusConditionManager.StatusConditionIDs;
+import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;
 import project.game.utility.Protection;
 
 
@@ -24,8 +24,8 @@ public class EventData {
     public double statusProb; // Probability of status change
     public boolean statusFailed; // Status failed to change (immunity/low prob roll/etc.)
 
-    public StatusConditionIDs statusChange; // Status Condition a Pokemon received
-    public StatusConditionIDs immuneStateChange; // The immunity state a Pokemon changed to
+    public StatusConditionID statusChange; // Status Condition a Pokemon received
+    public StatusConditionID immuneStateChange; // The immunity state a Pokemon changed to
 
     public int weatherChange; // Change in weather
     

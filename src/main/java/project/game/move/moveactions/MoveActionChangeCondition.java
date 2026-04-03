@@ -10,7 +10,7 @@ import project.game.pokemon.Pokemon;
 import project.game.pokemon.effects.StatusCondition;
 import project.game.pokemon.effects.StatusConditionManager;
 import project.game.pokemon.effects.StatusContext;
-import project.game.pokemon.effects.StatusConditionManager.StatusConditionIDs;
+import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;
 import project.game.pokemon.stats.Type;
 
 public interface MoveActionChangeCondition extends MoveAction {
@@ -81,22 +81,22 @@ public interface MoveActionChangeCondition extends MoveAction {
         c.target.getConditions().addCondition(StatusConditionManager.seeded(c));
     }
 
-    private static boolean cannotApplyCondition(Pokemon p, StatusConditionIDs id) {
+    private static boolean cannotApplyCondition(Pokemon p, StatusConditionID id) {
         return switch (id) {
-            case StatusConditionIDs.BURN_ID -> p.isType(Type.FIRE) || p.getConditions().hasPrimary();
-            case StatusConditionIDs.FREEZE_ID -> p.isType(Type.ICE) || p.getConditions().hasPrimary();
-            case StatusConditionIDs.INFECT_ID -> p.getConditions().hasPrimary();
-            case StatusConditionIDs.PARALYSIS_ID -> p.isType(Type.ELECTRIC) || p.getConditions().hasPrimary();
-            case StatusConditionIDs.POISON_ID, StatusConditionIDs.BAD_POISON_ID -> p.isType(Type.POISON) || p.isType(Type.STEEL) || p.getConditions().hasPrimary();
-            case StatusConditionIDs.SLEEP_ID -> p.isType(Type.DIGITAL) || p.getConditions().hasPrimary();
-            case StatusConditionIDs.FLINCH_ID -> p.getConditions().hasMoved();
-            case StatusConditionIDs.BOUND_ID, StatusConditionIDs.CONFUSION_ID -> p.getConditions().hasKey(id);
-            case StatusConditionIDs.SEEDED_ID -> p.isType(Type.GRASS) || p.getConditions().hasKey(id);
+            case StatusConditionID.BURN_ID -> p.isType(Type.FIRE) || p.getConditions().hasPrimary();
+            case StatusConditionID.FREEZE_ID -> p.isType(Type.ICE) || p.getConditions().hasPrimary();
+            case StatusConditionID.INFECT_ID -> p.getConditions().hasPrimary();
+            case StatusConditionID.PARALYSIS_ID -> p.isType(Type.ELECTRIC) || p.getConditions().hasPrimary();
+            case StatusConditionID.POISON_ID, StatusConditionID.BAD_POISON_ID -> p.isType(Type.POISON) || p.isType(Type.STEEL) || p.getConditions().hasPrimary();
+            case StatusConditionID.SLEEP_ID -> p.isType(Type.DIGITAL) || p.getConditions().hasPrimary();
+            case StatusConditionID.FLINCH_ID -> p.getConditions().hasMoved();
+            case StatusConditionID.BOUND_ID, StatusConditionID.CONFUSION_ID -> p.getConditions().hasKey(id);
+            case StatusConditionID.SEEDED_ID -> p.isType(Type.GRASS) || p.getConditions().hasKey(id);
             default -> false;
         };
     }
 
-    public static void applyCondition(EventManager eventManager, StatusConditionIDs id, double chance) {
+    public static void applyCondition(EventManager eventManager, StatusConditionID id, double chance) {
         EventData data  = eventManager.eventData;
         Pokemon p = data.effectTarget;
         data.statusChange = id;
@@ -117,25 +117,25 @@ public interface MoveActionChangeCondition extends MoveAction {
         c.source = data.user;
             
         switch (id) {
-            case StatusConditionIDs.BURN_ID -> applyBurn(c);
-            case StatusConditionIDs.FREEZE_ID -> applyFreeze(c);
-            case StatusConditionIDs.INFECT_ID -> applyInfect(c);
-            case StatusConditionIDs.PARALYSIS_ID -> applyParalysis(c);
-            case StatusConditionIDs.POISON_ID -> applyPoison(c);
-            case StatusConditionIDs.BAD_POISON_ID -> applyBadlyPoison(c);
-            case StatusConditionIDs.SLEEP_ID -> applySleep(c);
-            case StatusConditionIDs.FLINCH_ID -> applyFlinch(c);
-            case StatusConditionIDs.BOUND_ID -> applyBound(c);
-            case StatusConditionIDs.CONFUSION_ID -> applyConfusion(c);
-            case StatusConditionIDs.SEEDED_ID -> applySeeded(c);
-            case StatusConditionIDs.FLY_ID -> flyState(c);
-            case StatusConditionIDs.DIG_ID -> digState(c);
-            case StatusConditionIDs.DIVE_ID -> diveState(c);
+            case StatusConditionID.BURN_ID -> applyBurn(c);
+            case StatusConditionID.FREEZE_ID -> applyFreeze(c);
+            case StatusConditionID.INFECT_ID -> applyInfect(c);
+            case StatusConditionID.PARALYSIS_ID -> applyParalysis(c);
+            case StatusConditionID.POISON_ID -> applyPoison(c);
+            case StatusConditionID.BAD_POISON_ID -> applyBadlyPoison(c);
+            case StatusConditionID.SLEEP_ID -> applySleep(c);
+            case StatusConditionID.FLINCH_ID -> applyFlinch(c);
+            case StatusConditionID.BOUND_ID -> applyBound(c);
+            case StatusConditionID.CONFUSION_ID -> applyConfusion(c);
+            case StatusConditionID.SEEDED_ID -> applySeeded(c);
+            case StatusConditionID.FLY_ID -> flyState(c);
+            case StatusConditionID.DIG_ID -> digState(c);
+            case StatusConditionID.DIVE_ID -> diveState(c);
             default -> throw new IllegalArgumentException(StatusCondition.ID_ERR);
         }  
     }
 
-    public static void applyCondition(EventManager eventManager, StatusConditionIDs id) {
+    public static void applyCondition(EventManager eventManager, StatusConditionID id) {
         applyCondition(eventManager, id, 100);
     }
 
@@ -145,7 +145,7 @@ public interface MoveActionChangeCondition extends MoveAction {
      * Pokemon enters a semi-invulnerable state the first turn
      * Pokemon leaves the state and attacks on the second turn
      */
-    public static void enterImmuneState(EventManager eventManager, StatusConditionIDs state) {
+    public static void enterImmuneState(EventManager eventManager, StatusConditionID state) {
         EventData data  = eventManager.eventData;
         Pokemon attacker = data.user;
         data.immuneStateChange = state;
@@ -163,10 +163,10 @@ public interface MoveActionChangeCondition extends MoveAction {
     /*
      * Pokemon is knocked out of their semi-invulnerable state, interrupted
      */
-    public static void leaveImmuneState(EventManager eventManager, StatusConditionIDs state, String message) {
+    public static void leaveImmuneState(EventManager eventManager, StatusConditionID state, String message) {
         EventData data  = eventManager.eventData;
         Pokemon p = data.attackTarget;
-        data.immuneStateChange = StatusConditionIDs.NO_INVUL_ID;
+        data.immuneStateChange = StatusConditionID.NO_INVUL_ID;
     
         if (p.getConditions().isFainted() || !p.getConditions().hasKey(state)) {
             return;

@@ -3,7 +3,7 @@ package project.game.actions;
 import java.util.Random;
 
 import project.game.event.EventManager;
-import project.game.event.GameEvents;
+import project.game.event.GameEvents.EventID;
 import project.game.move.Move;
 import project.game.pokemon.Pokemon;
 
@@ -22,7 +22,7 @@ public class BattleActions {
     // Finds the order which the Pokemon in battle will move
     public void constructTurnOrder() {
         EventManager eventManager = new EventManager(this.pokemon1, this.pokemon2);
-        eventManager.notifyAllPokemon(GameEvents.FIND_MOVE_ORDER);
+        eventManager.notifyAllPokemon(EventID.FIND_MOVE_ORDER);
 
         Pokemon[] order = new Pokemon[2];
 
@@ -106,7 +106,7 @@ public class BattleActions {
         this.pokemon2.endOfRoundReset();
 
         EventManager eventManager = new EventManager(this.pokemon1, this.pokemon2);
-        eventManager.notifyAllPokemon(GameEvents.WEATHER_EFFECT);
-        eventManager.notifyAllPokemon(GameEvents.END_OF_ROUND);
+        eventManager.notifyAllPokemon(EventID.WEATHER_EFFECT);
+        eventManager.notifyAllPokemon(EventID.END_OF_ROUND);
     }
 }

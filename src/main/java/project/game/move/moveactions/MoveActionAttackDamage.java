@@ -5,7 +5,7 @@ import java.util.Random;
 import project.game.battle.BattleLog;
 import project.game.event.EventData;
 import project.game.event.EventManager;
-import project.game.event.GameEvents;
+import project.game.event.GameEvents.EventID;
 import project.game.move.calculations.AttackMoveCalculations;
 import project.game.move.calculations.MoveEffectiveCalculations;
 import project.game.pokemon.Pokemon;
@@ -50,7 +50,7 @@ public interface MoveActionAttackDamage extends MoveAction {
         defender.takeDamage(damage);    
 
         if (data.moveUsed.getMakesContact()) {
-            eventManager.notifyAllPokemon(GameEvents.MOVE_MAKES_CONTACT);
+            eventManager.notifyAllPokemon(EventID.MOVE_MAKES_CONTACT);
         }
     }
 

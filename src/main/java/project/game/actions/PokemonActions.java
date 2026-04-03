@@ -3,13 +3,13 @@ package project.game.actions;
 import project.game.battle.BattleLog;
 import project.game.event.EventData;
 import project.game.event.EventManager;
-import project.game.event.GameEvents;
+import project.game.event.GameEvents.EventID;
 import project.game.exceptions.MoveEndedEarlyException;
 import project.game.exceptions.MoveInterruptedException;
 import project.game.exceptions.PokemonCannotActException;
 import project.game.move.Move;
 import project.game.pokemon.Pokemon;
-import project.game.pokemon.effects.StatusConditionManager.StatusConditionIDs;;
+import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;;
 
 public class PokemonActions {
 
@@ -22,23 +22,23 @@ public class PokemonActions {
     }
 
     private void updateBeforeMoveEvents() {
-        this.eventManager.notifyUserPokemon(GameEvents.BEFORE_MOVE);
-        this.eventManager.notifyUserPokemon(GameEvents.PRIMARY_STATUS_BEFORE);
-        this.eventManager.notifyUserPokemon(GameEvents.STATUS_BEFORE);
+        this.eventManager.notifyUserPokemon(EventID.BEFORE_MOVE);
+        this.eventManager.notifyUserPokemon(EventID.PRIMARY_STATUS_BEFORE);
+        this.eventManager.notifyUserPokemon(EventID.STATUS_BEFORE);
     }
 
     private void updateInterruptedMoveEvents() {
-        this.eventManager.notifyUserPokemon(GameEvents.MOVE_INTERRUPTED);
+        this.eventManager.notifyUserPokemon(EventID.MOVE_INTERRUPTED);
     }
 
     private void updateAfterMoveEvents() {
-        this.eventManager.notifyUserPokemon(GameEvents.END_OF_TURN);
+        this.eventManager.notifyUserPokemon(EventID.END_OF_TURN);
     }
 
     private void stopOnGoingMoves(Pokemon p) {
-        p.getConditions().removeCondition(StatusConditionIDs.FOCUSED_ID);
-        p.getConditions().removeCondition(StatusConditionIDs.FORCED_MOVE_ID);
-        p.getConditions().removeCondition(StatusConditionIDs.RAMPAGE_ID);
+        p.getConditions().removeCondition(StatusConditionID.FOCUSED_ID);
+        p.getConditions().removeCondition(StatusConditionID.FORCED_MOVE_ID);
+        p.getConditions().removeCondition(StatusConditionID.RAMPAGE_ID);
         p.getConditions().setInterrupted(true);
     }
 
@@ -54,8 +54,8 @@ public class PokemonActions {
 
         BattleLog.add("%s used %s!", user, move);
         try {
-            this.eventManager.notifyUserPokemon(GameEvents.USE_MOVE);
-            move.getPp().decrement(user.getConditions().hasKey(StatusConditionIDs.FORCED_MOVE_ID));
+            this.eventManager.notifyUserPokemon(EventID.USE_MOVE);
+            move.getPp().decrement(user.getConditions().hasKey(StatusConditionID.FORCED_MOVE_ID));
             move.getAction().act(this.eventManager);
         } catch (MoveEndedEarlyException e) {
             BattleLog.add(e.getMessage());

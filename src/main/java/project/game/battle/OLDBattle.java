@@ -1,21 +1,18 @@
 package project.game.battle;
 
 import java.util.InputMismatchException;
-import java.util.Random;
 import java.util.Scanner;
 
 import project.game.actions.PokemonActions;
 import project.game.builders.PokemonTrainerBuilder;
-import project.game.event.GameEvents;
+import project.game.event.GameEvents.EventID;
 import project.game.exceptions.BattleEndedException;
 import project.game.move.Move;
 import project.game.move.movelist.NormalMoveList;
 import project.game.player.PokemonTrainer;
 import project.game.pokemon.Pokemon;
 import project.game.pokemon.Pokedex.PokedexEntry;
-import project.game.pokemon.effects.Ability;
 import project.game.pokemon.effects.AbilityManager;
-import project.game.pokemon.effects.HeldItem;
 import project.game.pokemon.effects.HeldItemManager;
 import project.game.utility.StatDisplay;
 
@@ -69,7 +66,7 @@ public class OLDBattle {
     // Pokemon chooses a move
     public static Pokemon chooseMove(PokemonTrainer pt) {
         Pokemon p = pt.getPokemonInBattle();
-        p.getEvents().updateEvent(GameEvents.MOVE_SELECTION, null);
+        p.getEvents().updateEvent(EventID.MOVE_SELECTION, null);
 
         /*
          * Unable to choose a move if just switched in

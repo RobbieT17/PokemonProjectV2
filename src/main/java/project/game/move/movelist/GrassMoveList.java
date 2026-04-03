@@ -13,7 +13,7 @@ import project.game.move.moveactions.MoveActionChangeStat;
 import project.game.move.moveactions.MoveActionCharge;
 import project.game.move.moveactions.MoveActionHealthRestore;
 import project.game.pokemon.Pokemon;
-import project.game.pokemon.effects.StatusConditionManager.StatusConditionIDs;
+import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;
 import project.game.pokemon.stats.Type;
 
 public class GrassMoveList {
@@ -130,7 +130,7 @@ public class GrassMoveList {
     public static Move leechSeed() {
         MoveAction action = e -> {
             MoveActionAccuracy.moveHits(e);
-            MoveActionChangeCondition.applyCondition(e, StatusConditionIDs.SEEDED_ID);
+            MoveActionChangeCondition.applyCondition(e, StatusConditionID.SEEDED_ID);
         };
 
         return new MoveBuilder()
@@ -227,7 +227,7 @@ public class GrassMoveList {
     public static Move sleepPowder() {
         MoveAction action = e -> {
             MoveActionAccuracy.moveHits(e);
-            MoveActionChangeCondition.applyCondition(e, StatusConditionIDs.SLEEP_ID);
+            MoveActionChangeCondition.applyCondition(e, StatusConditionID.SLEEP_ID);
             MoveAction.displayFailMessage(e);
         };
 
@@ -266,7 +266,7 @@ public class GrassMoveList {
     public static Move stunSpore() {
         MoveAction action = e -> {
             MoveActionAccuracy.moveHits(e);
-            MoveActionChangeCondition.applyCondition(e, StatusConditionIDs.PARALYSIS_ID);
+            MoveActionChangeCondition.applyCondition(e, StatusConditionID.PARALYSIS_ID);
         };
 
         return new MoveBuilder()

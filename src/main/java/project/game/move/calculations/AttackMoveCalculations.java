@@ -7,6 +7,7 @@ import project.game.battle.Weather;
 import project.game.event.EventData;
 import project.game.event.EventManager;
 import project.game.event.GameEvents;
+import project.game.event.GameEvents.EventID;
 import project.game.move.Move;
 import project.game.pokemon.Pokemon;
 import project.game.pokemon.stats.StatPoint;
@@ -93,7 +94,7 @@ public interface AttackMoveCalculations {
         EventData data = eventManager.eventData; 
         criticalHit(data.moveUsed.getCritRate()); // Rolls for a critical hit
 
-        eventManager.notifyAllPokemon(GameEvents.DAMAGE_MULTIPLIER);
+        eventManager.notifyAllPokemon(EventID.DAMAGE_MULTIPLIER);
         
         Pokemon attacker = data.user;
         Pokemon defender = data.attackTarget;

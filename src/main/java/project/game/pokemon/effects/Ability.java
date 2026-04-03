@@ -1,11 +1,11 @@
 package project.game.pokemon.effects;
 
+import project.game.event.GameEvents.EventID;
 import project.game.pokemon.Pokemon;
-import project.game.pokemon.stats.Effect;
 
 public class Ability extends Effect {
  
-    public Ability(Pokemon p, String name, String[] flags) {
+    public Ability(Pokemon p, String name, EventID[] flags) {
         super(p, name, flags);
     }
 

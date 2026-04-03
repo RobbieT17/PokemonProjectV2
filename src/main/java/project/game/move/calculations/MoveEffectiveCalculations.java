@@ -3,6 +3,7 @@ package project.game.move.calculations;
 import project.game.event.EventData;
 import project.game.event.EventManager;
 import project.game.event.GameEvents;
+import project.game.event.GameEvents.EventID;
 import project.game.exceptions.MoveInterruptedException;
 import project.game.move.Move;
 import project.game.pokemon.Pokemon;
@@ -41,7 +42,7 @@ public interface MoveEffectiveCalculations {
 
         data.moveEffectiveness = effectiveness;
 
-        eventManager.notifyAllPokemon(GameEvents.MOVE_EFFECTIVENESS);
+        eventManager.notifyAllPokemon(EventID.MOVE_EFFECTIVENESS);
 
         if (effectiveness == 0) throw new MoveInterruptedException(Move.noEffectOn(p));     
     }
