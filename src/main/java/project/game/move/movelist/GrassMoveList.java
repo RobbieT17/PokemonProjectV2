@@ -13,7 +13,7 @@ import project.game.move.moveactions.MoveActionChangeStat;
 import project.game.move.moveactions.MoveActionCharge;
 import project.game.move.moveactions.MoveActionHealthRestore;
 import project.game.pokemon.Pokemon;
-import project.game.pokemon.stats.StatusCondition;
+import project.game.pokemon.effects.StatusCondition;
 import project.game.pokemon.stats.Type;
 
 public class GrassMoveList {

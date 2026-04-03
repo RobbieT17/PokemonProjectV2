@@ -13,8 +13,10 @@ import project.game.player.PokemonTrainer;
 import project.game.pokemon.Pokemon;
 import project.game.pokemon.PokemonActions;
 import project.game.pokemon.Pokedex.PokedexEntry;
-import project.game.pokemon.stats.Ability;
-import project.game.pokemon.stats.HeldItem;
+import project.game.pokemon.effects.Ability;
+import project.game.pokemon.effects.AbilityManager;
+import project.game.pokemon.effects.HeldItem;
+import project.game.pokemon.effects.HeldItemManager;
 import project.game.utility.StatDisplay;
 
 
@@ -213,28 +215,28 @@ public class OLDBattle {
     public static void main(String[] args) {
         
         Pokemon p1 = PokedexEntry.VENUSAUR.newInstance("Bobby");
-        p1.setAbility(Ability.chlorophyll(p1));
+        p1.setAbility(AbilityManager.chlorophyll(p1));
         // p1.setItem(HeldItem.choiceScarf(p1));
 
         Pokemon p2 = PokedexEntry.CHARIZARD.newInstance("Charlie");
-        p2.setAbility(Ability.blaze(p2));
-        p2.setItem(HeldItem.rockyHelmet(p2));
+        p2.setAbility(AbilityManager.blaze(p2));
+        p2.setItem(HeldItemManager.rockyHelmet(p2));
 
         Pokemon p3 = PokedexEntry.BLASTOISE.newInstance("Squirt");
-        p3.setAbility(Ability.torrent(p3));
+        p3.setAbility(AbilityManager.torrent(p3));
         // p3.setItem(HeldItem.choiceSpecs(p3));
 
         Pokemon p4 = PokedexEntry.VENUSAUR.newInstance("Bub");
-        p4.setAbility(Ability.waterAbsorb(p4));
-        p4.setItem(HeldItem.blackSludge(p4));
+        p4.setAbility(AbilityManager.waterAbsorb(p4));
+        p4.setItem(HeldItemManager.blackSludge(p4));
  
         Pokemon p5 = PokedexEntry.CHARIZARD.newInstance("Chandler");
-        p5.setAbility(Ability.solarPower(p5));
-        p5.setItem(HeldItem.muscleBand(p5));
+        p5.setAbility(AbilityManager.solarPower(p5));
+        p5.setItem(HeldItemManager.muscleBand(p5));
 
         Pokemon p6 = PokedexEntry.BLASTOISE.newInstance("Tim");
-        p6.setAbility(Ability.rainDish(p6));
-        p6.setItem(HeldItem.leftovers(p6));
+        p6.setAbility(AbilityManager.rainDish(p6));
+        p6.setItem(HeldItemManager.leftovers(p6));
 
         BattleField.player1 = new PokemonTrainerBuilder()
         .setName("Robbie")

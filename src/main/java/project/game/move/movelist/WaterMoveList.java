@@ -10,7 +10,7 @@ import project.game.move.moveactions.MoveActionChangeCondition;
 import project.game.move.moveactions.MoveActionChangeStat;
 import project.game.move.moveactions.MoveActionChangeWeather;
 import project.game.move.moveactions.MoveActionCharge;
-import project.game.pokemon.stats.StatusCondition;
+import project.game.pokemon.effects.StatusCondition;
 import project.game.pokemon.stats.Type;
 
 public class WaterMoveList {

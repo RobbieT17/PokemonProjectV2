@@ -4,9 +4,9 @@ import project.game.battle.BattleLog;
 import project.game.event.GameEvents;
 import project.game.move.Move;
 import project.game.player.PokemonTrainer;
-import project.game.pokemon.stats.Ability;
+import project.game.pokemon.effects.Ability;
+import project.game.pokemon.effects.HeldItem;
 import project.game.pokemon.stats.HealthPoints;
-import project.game.pokemon.stats.HeldItem;
 import project.game.pokemon.stats.StatPoint;
 
 

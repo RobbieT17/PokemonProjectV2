@@ -1,17 +1,7 @@
-package project.game.pokemon.stats;
+package project.game.pokemon.effects;
 
-import project.game.battle.BattleLog;
-import project.game.event.EventData;
-import project.game.event.GameEvents;
-import project.game.exceptions.MoveInterruptedException;
-import project.game.exceptions.PokemonCannotActException;
-import project.game.exceptions.PokemonFaintedException;
-import project.game.move.Move;
-import project.game.move.moveactions.MoveActionAttackDamage;
 import project.game.pokemon.Pokemon;
-import project.game.utility.Counter;
-import project.game.utility.RandomValues;
-import project.game.utility.State;
+import project.game.pokemon.stats.Effect;
 
 public class StatusCondition extends Effect {
 // Error Messages
@@ -54,14 +44,9 @@ public class StatusCondition extends Effect {
         super(p, name, flags);
     }
 
-
     @Override
     public void removeEffect() {
         this.getBearer().getEvents().removeEventListener(this.getFlags(), this.getEffectName());
     }
-    
-
-// Static Methods
-    
-
+        
 }

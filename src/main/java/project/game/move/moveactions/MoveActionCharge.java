@@ -4,8 +4,8 @@ import project.game.battle.BattleLog;
 import project.game.event.EventData;
 import project.game.event.EventManager;
 import project.game.pokemon.Pokemon;
-import project.game.pokemon.StatusConditionManager;
-import project.game.pokemon.stats.StatusCondition;
+import project.game.pokemon.effects.StatusCondition;
+import project.game.pokemon.effects.StatusConditionManager;
 
 public interface MoveActionCharge extends MoveAction{
      /*

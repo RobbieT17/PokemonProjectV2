@@ -2,7 +2,7 @@ package project.game.pokemon;
 
 import java.util.HashMap;
 
-import project.game.pokemon.stats.StatusCondition;
+import project.game.pokemon.effects.StatusCondition;
 import project.game.utility.Protection;
 
 public class PokemonConditions {

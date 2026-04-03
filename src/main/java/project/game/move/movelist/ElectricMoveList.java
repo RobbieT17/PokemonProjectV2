@@ -5,7 +5,7 @@ import project.game.move.Move;
 import project.game.move.moveactions.MoveAction;
 import project.game.move.moveactions.MoveActionAttackDamage;
 import project.game.move.moveactions.MoveActionChangeCondition;
-import project.game.pokemon.stats.StatusCondition;
+import project.game.pokemon.effects.StatusCondition;
 import project.game.pokemon.stats.Type;
 
 public class ElectricMoveList {

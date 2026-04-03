@@ -1,4 +1,4 @@
-package project.game.pokemon;
+package project.game.pokemon.effects;
 
 import project.game.battle.BattleLog;
 import project.game.event.EventData;
@@ -8,7 +8,7 @@ import project.game.exceptions.PokemonCannotActException;
 import project.game.exceptions.PokemonFaintedException;
 import project.game.move.Move;
 import project.game.move.moveactions.MoveActionAttackDamage;
-import project.game.pokemon.stats.StatusCondition;
+import project.game.pokemon.Pokemon;
 import project.game.pokemon.stats.Type;
 import project.game.utility.Counter;
 import project.game.utility.RandomValues;
