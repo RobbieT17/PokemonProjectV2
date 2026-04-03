@@ -58,7 +58,8 @@ public class DarkMoveList {
         .setName("Dark Pulse")
         .setType(Type.DARK)
         .setCategory(Move.SPECIAL)
-        .setPP(80)
+        .setPP(15)
+        .setPower(80)
         .setAction(action)
         .build();
     }
