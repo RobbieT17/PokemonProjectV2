@@ -14,7 +14,7 @@ import project.game.battle.Weather;
 
 public class WaterMoveList {
 
-    public enum WaterMoveName {
+    public enum MoveName {
         Aqua_Tail(WaterMoveList::aquaTail),
         Chilling_Water(WaterMoveList::chillingWater),
         Dive(WaterMoveList::dive),
@@ -34,7 +34,7 @@ public class WaterMoveList {
 
         private final Function<EventManager, Integer> func;
 
-        WaterMoveName(Function<EventManager, Integer> func) {
+        MoveName(Function<EventManager, Integer> func) {
             this.func = func;
         }
 

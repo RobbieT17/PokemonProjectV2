@@ -12,7 +12,7 @@ import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;
 
 public class ZombieMoveList {
 
-    public enum ZombieMoveName {
+    public enum MoveName {
         Infect(ZombieMoveList::infect),
         Rotten_Bite(ZombieMoveList::rottenBite),
         Necrotic_Claw(ZombieMoveList::necroticClaw),
@@ -21,7 +21,7 @@ public class ZombieMoveList {
 
         private final Function<EventManager, Integer> func;
 
-        ZombieMoveName(Function<EventManager, Integer> func) {
+        MoveName(Function<EventManager, Integer> func) {
             this.func = func;
         }
 

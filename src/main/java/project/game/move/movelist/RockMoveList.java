@@ -13,7 +13,7 @@ import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;
 
 public class RockMoveList {
 
-    public enum RockMoveName {
+    public enum MoveName {
         Rock_Slide(RockMoveList::rockSlide),
         Rock_Tomb(RockMoveList::rockTomb),
         Sandstorm(RockMoveList::sandstorm),
@@ -21,7 +21,7 @@ public class RockMoveList {
 
         private final Function<EventManager, Integer> func;
 
-        RockMoveName(Function<EventManager, Integer> func) {
+        MoveName(Function<EventManager, Integer> func) {
             this.func = func;
         }
 

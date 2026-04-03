@@ -13,7 +13,7 @@ import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;
 
 public class IceMoveList {
 
-    public enum IceMoveName {
+    public enum MoveName {
 
         Avalanche(IceMoveList::avalanche),
         Blizzard(IceMoveList::blizzard),
@@ -26,7 +26,7 @@ public class IceMoveList {
 
         private final Function<EventManager, Integer> func;
 
-        IceMoveName(Function<EventManager, Integer> func) {
+        MoveName(Function<EventManager, Integer> func) {
             this.func = func;
         }
 

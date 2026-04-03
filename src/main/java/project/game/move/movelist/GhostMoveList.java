@@ -13,7 +13,7 @@ import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;
 
 public class GhostMoveList {
 
-    public enum GhostMoveName {
+    public enum MoveName {
 
         Confuse_Ray(GhostMoveList::confuseRay),
         Curse(GhostMoveList::curse),
@@ -21,7 +21,7 @@ public class GhostMoveList {
 
         private final Function<EventManager, Integer> func;
 
-        GhostMoveName(Function<EventManager, Integer> func) {
+        MoveName(Function<EventManager, Integer> func) {
             this.func = func;
         }
 

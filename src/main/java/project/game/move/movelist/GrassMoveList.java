@@ -18,7 +18,7 @@ import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;
 
 public class GrassMoveList {
 
-    public enum GrassMoveName {
+    public enum MoveName {
 
         Bullet_Seed(GrassMoveList::bulletSeed),
         Energy_Ball(GrassMoveList::energyBall),
@@ -42,7 +42,7 @@ public class GrassMoveList {
 
         private final Function<EventManager, Integer> func;
 
-        GrassMoveName(Function<EventManager, Integer> func) {
+        MoveName(Function<EventManager, Integer> func) {
             this.func = func;
         }
 

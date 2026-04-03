@@ -9,10 +9,7 @@ import project.game.move.moveactions.MoveActionChangeStat;
 
 public class SpaceMoveList {
 
-    // ----------------------
-    // Enum for Space Moves
-    // ----------------------
-    public enum SpaceMoveName {
+    public enum MoveName {
         Swift(SpaceMoveList::swift),
         Cosmic_Punch(SpaceMoveList::cosmicPunch),
         Gravity_Well(SpaceMoveList::gravityWell),
@@ -21,7 +18,7 @@ public class SpaceMoveList {
 
         private final Function<EventManager, Integer> func;
 
-        SpaceMoveName(Function<EventManager, Integer> func) {
+        MoveName(Function<EventManager, Integer> func) {
             this.func = func;
         }
 

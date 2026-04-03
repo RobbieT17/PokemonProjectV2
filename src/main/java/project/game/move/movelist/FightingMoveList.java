@@ -10,7 +10,7 @@ import project.game.move.moveactions.MoveActionCharge;
 
 public class FightingMoveList {
 
-    public enum FightingMoveName {
+    public enum MoveName {
 
         Aura_Sphere(FightingMoveList::auraSphere),
         Brick_Break(FightingMoveList::brickBreak),
@@ -19,7 +19,7 @@ public class FightingMoveList {
 
         private final Function<EventManager, Integer> func;
 
-        FightingMoveName(Function<EventManager, Integer> func) {
+        MoveName(Function<EventManager, Integer> func) {
             this.func = func;
         }
 

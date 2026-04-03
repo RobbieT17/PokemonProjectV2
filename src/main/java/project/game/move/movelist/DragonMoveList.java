@@ -12,7 +12,7 @@ import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;
 
 public class DragonMoveList {
 
-    public enum DragonMoveName {
+    public enum MoveName {
 
         Breaking_Swipe(DragonMoveList::breakingSwipe),
         Dragon_Breath(DragonMoveList::dragonBreath),
@@ -24,7 +24,7 @@ public class DragonMoveList {
         
         private final Function<EventManager, Integer> func;
 
-        DragonMoveName(Function<EventManager, Integer> func) {
+        MoveName(Function<EventManager, Integer> func) {
             this.func = func;
         }
 

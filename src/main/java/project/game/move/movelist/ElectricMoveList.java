@@ -9,13 +9,13 @@ import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;
 
 public class ElectricMoveList {
 
-    public enum ElectricMoveName {
+    public enum MoveName {
 
         Thunder_Punch(ElectricMoveList::thunderPunch);
 
         private final Function<EventManager, Integer> func;
 
-        ElectricMoveName(Function<EventManager, Integer> func) {
+        MoveName(Function<EventManager, Integer> func) {
             this.func = func;
         }
 

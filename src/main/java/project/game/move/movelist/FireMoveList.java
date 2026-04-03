@@ -16,7 +16,7 @@ import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;
 
 public class FireMoveList {
 
-    public enum FireMoveName {
+    public enum MoveName {
 
         Blast_Burn(FireMoveList::blastBurn),
         Ember(FireMoveList::ember),
@@ -37,7 +37,7 @@ public class FireMoveList {
 
         private final Function<EventManager, Integer> func;
 
-        FireMoveName(Function<EventManager, Integer> func) {
+        MoveName(Function<EventManager, Integer> func) {
             this.func = func;
         }
 

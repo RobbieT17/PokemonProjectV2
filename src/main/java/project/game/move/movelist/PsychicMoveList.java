@@ -12,14 +12,14 @@ import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;
 
 public class PsychicMoveList {
 
-    public enum PsychicMoveName {
+    public enum MoveName {
         Amnesia(PsychicMoveList::amnesia),
         Rest(PsychicMoveList::rest),
         Zen_Headbutt(PsychicMoveList::zenHeadbutt);
 
         private final Function<EventManager, Integer> func;
 
-        PsychicMoveName(Function<EventManager, Integer> func) {
+        MoveName(Function<EventManager, Integer> func) {
             this.func = func;
         }
 

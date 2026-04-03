@@ -3,7 +3,6 @@ package project.game.move.movelist;
 import java.util.function.Function;
 
 import project.game.event.EventManager;
-import project.game.battle.BattleField;
 import project.game.move.MoveListHelperFunctions;
 import project.game.move.moveactions.MoveActionAttackDamage;
 import project.game.move.moveactions.MoveActionChangeCondition;
@@ -12,7 +11,7 @@ import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;
 
 public class GroundMoveList {
 
-    public enum GroundMoveName {
+    public enum MoveName {
 
         Bulldoze(GroundMoveList::bulldoze),
         Dig(GroundMoveList::dig),
@@ -24,7 +23,7 @@ public class GroundMoveList {
 
         private final Function<EventManager, Integer> func;
 
-        GroundMoveName(Function<EventManager, Integer> func) {
+        MoveName(Function<EventManager, Integer> func) {
             this.func = func;
         }
 

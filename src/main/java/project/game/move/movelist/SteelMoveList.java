@@ -9,14 +9,14 @@ import project.game.move.moveactions.MoveActionChangeStat;
 
 public class SteelMoveList {
 
-    public enum SteelMoveName {
+    public enum MoveName {
         Flash_Cannon(SteelMoveList::flashCannon),
         Gyro_Ball(SteelMoveList::gyroBall),
         Iron_Defense(SteelMoveList::ironDefense);
 
         private final Function<EventManager, Integer> func;
 
-        SteelMoveName(Function<EventManager, Integer> func) {
+        MoveName(Function<EventManager, Integer> func) {
             this.func = func;
         }
 

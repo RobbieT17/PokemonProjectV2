@@ -9,13 +9,13 @@ import project.game.move.moveactions.MoveActionChangeStat;
 
 public class FairyMoveList {
 
-    public enum FairyMoveName {
+    public enum MoveName {
 
         Charm(FairyMoveList::charm);
 
         private final Function<EventManager, Integer> func;
 
-        FairyMoveName(Function<EventManager, Integer> func) {
+        MoveName(Function<EventManager, Integer> func) {
             this.func = func;
         }
 

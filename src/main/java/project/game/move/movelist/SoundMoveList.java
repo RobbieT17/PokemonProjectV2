@@ -6,12 +6,12 @@ import project.game.event.EventManager;
 
 public class SoundMoveList {
 
-    public enum SoundMoveName {
+    public enum MoveName {
         Roar(SoundMoveList::roar);
 
         private final Function<EventManager, Integer> func;
 
-        SoundMoveName(Function<EventManager, Integer> func) {
+        MoveName(Function<EventManager, Integer> func) {
             this.func = func;
         }
 

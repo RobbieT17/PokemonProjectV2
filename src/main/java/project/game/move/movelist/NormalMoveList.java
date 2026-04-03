@@ -19,7 +19,7 @@ import project.game.utility.RandomValues;
 
 public class NormalMoveList {
 
-    public enum NormalMoveName {
+    public enum MoveName {
 
         Body_Slam(NormalMoveList::bodySlam),
         Double_Edge(NormalMoveList::doubleEdge),
@@ -48,7 +48,7 @@ public class NormalMoveList {
 
         private final Function<EventManager, Integer> func;
 
-        NormalMoveName(Function<EventManager, Integer> func) {
+        MoveName(Function<EventManager, Integer> func) {
             this.func = func;
         }
 

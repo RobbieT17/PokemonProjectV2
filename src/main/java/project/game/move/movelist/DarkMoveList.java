@@ -13,7 +13,7 @@ import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;
 
 public class DarkMoveList {
 
-    public enum DarkMoveName {
+    public enum MoveName {
         Bite(DarkMoveList::bite),
         Crunch(DarkMoveList::crunch),
         Dark_Pulse(DarkMoveList::darkPulse),
@@ -21,7 +21,7 @@ public class DarkMoveList {
 
         private final Function<EventManager, Integer> func;
 
-        DarkMoveName(Function<EventManager, Integer> func) {
+        MoveName(Function<EventManager, Integer> func) {
             this.func = func;
         }
 

@@ -12,7 +12,7 @@ import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;
 
 public class PoisonMoveList {
 
-    public enum PoisonMoveName {
+    public enum MoveName {
 
         Acid_Spray(PoisonMoveList::acidSpray),
         Poison_Jab(PoisonMoveList::poisonJab),
@@ -22,7 +22,7 @@ public class PoisonMoveList {
 
         private final Function<EventManager, Integer> func;
 
-        PoisonMoveName(Function<EventManager, Integer> func) {
+        MoveName(Function<EventManager, Integer> func) {
             this.func = func;
         }
 

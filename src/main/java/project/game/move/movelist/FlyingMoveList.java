@@ -11,7 +11,7 @@ import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;
 
 public class FlyingMoveList {
 
-    public enum FlyingMoveName {
+    public enum MoveName {
 
         Acrobatics(FlyingMoveList::acrobatics),
         Aerial_Ace(FlyingMoveList::aerialAce),
@@ -22,7 +22,7 @@ public class FlyingMoveList {
 
         private final Function<EventManager, Integer> func;
 
-        FlyingMoveName(Function<EventManager, Integer> func) {
+        MoveName(Function<EventManager, Integer> func) {
             this.func = func;
         }
 
