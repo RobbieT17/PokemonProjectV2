@@ -1,29 +1,33 @@
 package project.game.move.movelist;
 
-import project.game.builders.MoveBuilder;
-import project.game.move.Move;
+import java.util.function.Function;
+
+import project.game.event.EventManager;
 import project.game.move.MoveListHelperFunctions;
-import project.game.move.moveactions.MoveAction;
 import project.game.move.moveactions.MoveActionAccuracy;
 import project.game.move.moveactions.MoveActionChangeStat;
-import project.game.pokemon.stats.Type;
 
 public class FairyMoveList {
 
-    public static Move charm() {
-        MoveAction action = e -> {
-            MoveActionAccuracy.moveHits(e);
-            MoveActionChangeStat.changeStats(e, MoveListHelperFunctions.stats(-2, 0, 0, 0, 0, 0, 0));
-        };
+    public enum FairyMoveName {
 
-        return new MoveBuilder()
-        .setId(204)
-        .setName("Charm")
-        .setType(Type.FAIRY)
-        .setCategory(Move.STATUS)
-        .setPP(20)
-        .setAction(action)
-        .build();
+        Charm(FairyMoveList::charm);
+
+        private final Function<EventManager, Integer> func;
+
+        FairyMoveName(Function<EventManager, Integer> func) {
+            this.func = func;
+        }
+
+        public void act(EventManager e) {
+            this.func.apply(e);
+        }
+    }
+
+    public static int charm(EventManager e) {
+        MoveActionAccuracy.moveHits(e);
+        MoveActionChangeStat.changeStats(e, MoveListHelperFunctions.stats(-2, 0, 0, 0, 0, 0, 0));
+        return 0;
     }
 
 }

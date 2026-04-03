@@ -1,50 +1,51 @@
-- id: 3
-  name: Venusaur
-  type1: Grass
-  type2: Poison
-  weight: 100
-  hp: 80
-  atk: 82
-  def: 83
-  spAtk: 100
-  spDef: 100
-  spd: 80
-  movePool:
-    - Solar Beam
-    - Petal Dance
-    - Confuse Ray
-    - Sleep Powder
+pokemon:
+  - id: 3
+    name: Venusaur
+    type1: Grass
+    type2: Poison
+    weight: 100
+    hp: 80
+    atk: 82
+    def: 83
+    spAtk: 100
+    spDef: 100
+    spd: 80
+    movePool:
+      - Solar Beam
+      - Petal Dance
+      - Confuse Ray
+      - Sleep Powder
 
-- id: 6
-  name: Charizard
-  type1: Fire
-  type2: Flying
-  weight: 199.5
-  hp: 78
-  atk: 84
-  def: 78
-  spAtk: 109
-  spDef: 85
-  spd: 100
-  movePool:
-    - Flare Blitz
-    - Fake Out
-    - Will-O-Wisp
-    - Sunny Day
+  - id: 6
+    name: Charizard
+    type1: Fire
+    type2: Flying
+    weight: 199.5
+    hp: 78
+    atk: 84
+    def: 78
+    spAtk: 109
+    spDef: 85
+    spd: 100
+    movePool:
+      - Flare Blitz
+      - Fake Out
+      - Will-O-Wisp
+      - Sunny Day
 
-- id: 9
-  name: Blastoise
-  type1: Water
-  weight: 188.5
-  hp: 79
-  atk: 83
-  def: 100
-  spAtk: 85
-  spDef: 105
-  spd: 78
-  movePool:
-    - Water Pulse
-    - Fury Attack
-    - Swift
-    - Rain Dance
+  - id: 9
+    name: Blastoise
+    type1: Water
+    weight: 188.5
+    hp: 79
+    atk: 83
+    def: 100
+    spAtk: 85
+    spDef: 105
+    spd: 78
+    movePool:
+      - Water Pulse
+      - Fury Attack
+      - Swift
+      - Rain Dance
 

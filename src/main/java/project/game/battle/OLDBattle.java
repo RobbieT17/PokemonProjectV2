@@ -79,7 +79,6 @@ public class OLDBattle {
         // Default to struggle if all the Pokemon's move has no more PP
         if (p.hasNoMoves()) {
             BattleLog.add("%s has no moves!", p);
-            p.setMove(NormalMoveList.struggle());
         }
 
         Move move = p.getMoveSelected();

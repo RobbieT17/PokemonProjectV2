@@ -1,74 +1,52 @@
 package project.game.move.movelist;
 
-import project.game.builders.MoveBuilder;
-import project.game.move.Move;
+import java.util.function.Function;
+
+import project.game.event.EventManager;
 import project.game.move.MoveListHelperFunctions;
-import project.game.move.moveactions.MoveAction;
 import project.game.move.moveactions.MoveActionAttackDamage;
 import project.game.move.moveactions.MoveActionChangeStat;
 import project.game.move.moveactions.MoveActionCharge;
-import project.game.pokemon.stats.Type;
 
 public class FightingMoveList {
 
-    public static Move auraSphere() {
-        return new MoveBuilder()
-        .setId(396)
-        .setName("Aura Sphere")
-        .setType(Type.FIGHTING)
-        .setCategory(Move.SPECIAL)
-        .setPP(20)
-        .setPower(80)
-        .setAccuracy(Move.ALWAYS_HITS)
-        .setAction(MoveAction.DEFAULT_ACTION)
-        .build();
+    public enum FightingMoveName {
+
+        Aura_Sphere(FightingMoveList::auraSphere),
+        Brick_Break(FightingMoveList::brickBreak),
+        Focus_Blast(FightingMoveList::focusBlast),
+        Focus_Punch(FightingMoveList::focusPunch);
+
+        private final Function<EventManager, Integer> func;
+
+        FightingMoveName(Function<EventManager, Integer> func) {
+            this.func = func;
+        }
+
+        public void act(EventManager e) {
+            this.func.apply(e);
+        }
     }
 
-    public static Move brickBreak() {
-        MoveAction action = e -> {
-            MoveActionAttackDamage.dealDamage(e);
-            // TODO: Disables Light Screen / Reflect
-        };
-
-        return new MoveBuilder()
-        .setId(280)
-        .setName("Brick Break")
-        .setType(Type.FIGHTING)
-        .setCategory(Move.PHYSICAL)
-        .setPP(15)
-        .setPower(75)
-        .setAction(action)
-        .build();
+    public static int auraSphere(EventManager e) {
+        MoveActionAttackDamage.dealDamage(e); // was DEFAULT_ACTION
+        return 0;
     }
 
-    public static Move focusBlast() {
-        MoveAction action = e -> {
-            MoveActionAttackDamage.dealDamage(e);
-            MoveActionChangeStat.changeStats(e, MoveListHelperFunctions.stats(0, 0, 0, -1, 0, 0, 0), 10);
-        };
-
-        return new MoveBuilder()
-        .setId(411)
-        .setName("Focus Blast")
-        .setType(Type.FIGHTING)
-        .setCategory(Move.SPECIAL)
-        .setPP(5)
-        .setPower(120)
-        .setAccuracy(70)
-        .setAction(action)
-        .build();
+    public static int brickBreak(EventManager e) {
+        MoveActionAttackDamage.dealDamage(e);
+        // TODO: Disables Light Screen / Reflect
+        return 0;
     }
 
-    public static Move focusPunch() {
-        return new MoveBuilder()
-        .setId(264)
-        .setName("Focus Punch")
-        .setType(Type.FIGHTING)
-        .setCategory(Move.PHYSICAL)
-        .setPP(20)
-        .setPower(150)
-        .setPriority(-3)
-        .setAction(e -> MoveActionCharge.focusMove(e))
-        .build();
+    public static int focusBlast(EventManager e) {
+        MoveActionAttackDamage.dealDamage(e);
+        MoveActionChangeStat.changeStats(e, MoveListHelperFunctions.stats(0, 0, 0, -1, 0, 0, 0), 10);
+        return 0;
+    }
+
+    public static int focusPunch(EventManager e) {
+        MoveActionCharge.focusMove(e);
+        return 0;
     }
 }

@@ -94,6 +94,7 @@ project/game/move/movelist/ElectricMoveList.class
 project/game/move/moveactions/MoveActionChangeWeather.class
 project/game/pokemon/Pokedex$PokedexEntry.class
 project/game/pokemon/stats/Type$RockType.class
+project/data/MoveDataList.class
 project/game/battle/OLDBattle.class
 project/game/pokemon/stats/Type$GrassType.class
 project/game/utility/RandomValues.class

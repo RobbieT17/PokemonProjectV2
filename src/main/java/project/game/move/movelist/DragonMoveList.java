@@ -1,121 +1,74 @@
 package project.game.move.movelist;
 
-import project.game.builders.MoveBuilder;
-import project.game.move.Move;
+import java.util.function.Function;
+
+import project.game.event.EventManager;
 import project.game.move.MoveListHelperFunctions;
-import project.game.move.moveactions.MoveAction;
 import project.game.move.moveactions.MoveActionAttackDamage;
 import project.game.move.moveactions.MoveActionChangeCondition;
 import project.game.move.moveactions.MoveActionChangeStat;
 import project.game.move.moveactions.MoveActionCharge;
 import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;
-import project.game.pokemon.stats.Type;
 
 public class DragonMoveList {
 
-    public static Move breakingSwipe() {
-        MoveAction action = e -> {
-            MoveActionAttackDamage.dealDamage(e);
-            MoveActionChangeStat.changeStats(e, MoveListHelperFunctions.stats(-1, 0, 0, 0, 0, 0, 0));
-        };
+    public enum DragonMoveName {
 
-        return new MoveBuilder()
-        .setId(784)
-        .setName("Breaking Swipe")
-        .setType(Type.DRAGON)
-        .setCategory(Move.PHYSICAL)
-        .setPP(15)
-        .setPower(60)
-        .setAction(action)
-        .build();
+        Breaking_Swipe(DragonMoveList::breakingSwipe),
+        Dragon_Breath(DragonMoveList::dragonBreath),
+        Dragon_Claw(DragonMoveList::dragonClaw),
+        Dragon_Dance(DragonMoveList::dragonDance),
+        Dragon_Pulse(DragonMoveList::dragonPulse),
+        Dragon_Tail(DragonMoveList::dragonTail),
+        Outrage(DragonMoveList::outrage);
+        
+        private final Function<EventManager, Integer> func;
+
+        DragonMoveName(Function<EventManager, Integer> func) {
+            this.func = func;
+        }
+
+        public void act(EventManager e) {
+            this.func.apply(e);
+        }
     }
 
-    public static Move dragonBreath() {
-        MoveAction action = e -> {
-            MoveActionAttackDamage.dealDamage(e);
-            MoveActionChangeCondition.applyCondition(e, StatusConditionID.PARALYSIS_ID, 30);
-        };
-
-        return new MoveBuilder()
-        .setId(225)
-        .setName("Dragon Breath")
-        .setType(Type.DRAGON)
-        .setCategory(Move.SPECIAL)
-        .setPP(20)
-        .setPower(60)
-        .setAction(action)
-        .build();
+    public static int breakingSwipe(EventManager e) {
+        MoveActionAttackDamage.dealDamage(e);
+        MoveActionChangeStat.changeStats(e, MoveListHelperFunctions.stats(-1, 0, 0, 0, 0, 0, 0));
+        return 0;
     }
 
-    public static Move dragonClaw() {
-        return new MoveBuilder()
-        .setId(337)
-        .setName("Dragon Claw")
-        .setType(Type.DRAGON)
-        .setCategory(Move.PHYSICAL)
-        .setPP(15)
-        .setPower(80)
-        .setAction(MoveAction.DEFAULT_ACTION)
-        .build();
+    public static int dragonBreath(EventManager e) {
+        MoveActionAttackDamage.dealDamage(e);
+        MoveActionChangeCondition.applyCondition(e, StatusConditionID.PARALYSIS_ID, 30);
+        return 0;
     }
 
-    public static Move dragonDance() {
-        MoveAction action = e -> {
-            MoveListHelperFunctions.targetsUser(e.eventData);
-            MoveActionChangeStat.changeStats(e, MoveListHelperFunctions.stats(1, 0, 0, 0, 1, 0, 0));
-        };
-
-        return new MoveBuilder()
-        .setId(349)
-        .setName("Dragon Dance")
-        .setType(Type.DRAGON)
-        .setCategory(Move.STATUS)
-        .setPP(20)
-        .setAction(action)
-        .build();
+    public static int dragonClaw(EventManager e) {
+        MoveActionAttackDamage.dealDamage(e);
+        return 0;
     }
 
-    public static Move dragonPulse() {
-        return new MoveBuilder()
-        .setId(406)
-        .setName("Dragon Pulse")
-        .setType(Type.DRAGON)
-        .setCategory(Move.SPECIAL)
-        .setPP(10)
-        .setPower(85)
-        .setAction(MoveAction.DEFAULT_ACTION)
-        .build();
+    public static int dragonDance(EventManager e) {
+        MoveListHelperFunctions.targetsUser(e.eventData);
+        MoveActionChangeStat.changeStats(e, MoveListHelperFunctions.stats(1, 0, 0, 0, 1, 0, 0));
+        return 0;
     }
 
-    public static Move dragonTail() {
-        MoveAction action = e -> {
-            MoveActionAttackDamage.dealDamage(e);
-            // TODO: Force Switch
-        };
-
-        return new MoveBuilder()
-        .setId(525)
-        .setName("Dragon Tail")
-        .setType(Type.DRAGON)
-        .setCategory(Move.PHYSICAL)
-        .setPP(10)
-        .setPower(60)
-        .setAccuracy(90)
-        .setPriority(-6)
-        .setAction(action)
-        .build();
+    public static int dragonPulse(EventManager e) {
+        MoveActionAttackDamage.dealDamage(e);
+        return 0;
     }
 
-    public static Move outrage() {
-        return new MoveBuilder()
-        .setId(200)
-        .setName("Outrage")
-        .setType(Type.DRAGON)
-        .setCategory(Move.PHYSICAL)
-        .setPP(10)
-        .setPower(120)
-        .setAction(e -> MoveActionCharge.rampageMove(e))
-        .build();
+    public static int dragonTail(EventManager e) {
+        MoveActionAttackDamage.dealDamage(e);
+        return 0;
+    }
+
+    public static int outrage(EventManager e) {
+        MoveActionCharge.rampageMove(e);
+        return 0;
     }
 
 }

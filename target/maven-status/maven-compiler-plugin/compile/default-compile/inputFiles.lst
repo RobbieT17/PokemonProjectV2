@@ -40,6 +40,7 @@
 /Users/robbie/Documents/Personal/Projects/Coding/Java Projects/PokemonProjectV2/src/main/java/project/game/utility/StatDisplay.java
 /Users/robbie/Documents/Personal/Projects/Coding/Java Projects/PokemonProjectV2/src/main/java/project/game/pokemon/PokemonType.java
 /Users/robbie/Documents/Personal/Projects/Coding/Java Projects/PokemonProjectV2/src/main/java/project/game/event/Subscriber.java
+/Users/robbie/Documents/Personal/Projects/Coding/Java Projects/PokemonProjectV2/src/main/java/project/data/MoveDataList.java
 /Users/robbie/Documents/Personal/Projects/Coding/Java Projects/PokemonProjectV2/src/main/java/project/game/move/moveactions/MoveAction.java
 /Users/robbie/Documents/Personal/Projects/Coding/Java Projects/PokemonProjectV2/src/main/java/project/game/move/movelist/IceMoveList.java
 /Users/robbie/Documents/Personal/Projects/Coding/Java Projects/PokemonProjectV2/src/main/java/project/game/move/movelist/FlyingMoveList.java

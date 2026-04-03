@@ -1,105 +1,65 @@
 package project.game.move.movelist;
 
-import project.game.builders.MoveBuilder;
-import project.game.move.Move;
+import java.util.function.Function;
+
+import project.game.event.EventManager;
 import project.game.move.MoveListHelperFunctions;
-import project.game.move.moveactions.MoveAction;
-import project.game.move.moveactions.MoveActionAccuracy;
 import project.game.move.moveactions.MoveActionAttackDamage;
+import project.game.move.moveactions.MoveActionAccuracy;
 import project.game.move.moveactions.MoveActionChangeCondition;
 import project.game.move.moveactions.MoveActionChangeStat;
 import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;
-import project.game.pokemon.stats.Type;
 
 public class PoisonMoveList {
 
-    public static Move acidSpray() {
-        MoveAction action = e -> {
-            MoveActionAttackDamage.dealDamage(e);
-            MoveActionChangeStat.changeStats(e, MoveListHelperFunctions.stats(0, 0, 0, -2, 0, 0, 0));
-        };
+    public enum PoisonMoveName {
 
-        return new MoveBuilder()
-        .setId(491)
-        .setName("Acid Spray")
-        .setType(Type.POISON)
-        .setCategory(Move.SPECIAL)
-        .setPP(20)
-        .setPower(40)
-        .setAction(action)
-        .build();
+        Acid_Spray(PoisonMoveList::acidSpray),
+        Poison_Jab(PoisonMoveList::poisonJab),
+        Poison_Powder(PoisonMoveList::poisonPowder),
+        Toxic(PoisonMoveList::toxic),
+        Venoshock(PoisonMoveList::venoshock);
+
+        private final Function<EventManager, Integer> func;
+
+        PoisonMoveName(Function<EventManager, Integer> func) {
+            this.func = func;
+        }
+
+        public void act(EventManager e) {
+            this.func.apply(e);
+        }
     }
 
-    public static Move poisonJab() {
-        MoveAction action = (e) -> {
-            MoveActionAttackDamage.dealDamage(e);
-            MoveActionChangeCondition.applyCondition(e, StatusConditionID.POISON_ID, 30);
-        };
-
-        return new MoveBuilder()
-        .setId(398)
-        .setName("Poison Jab")
-        .setType(Type.POISON)
-        .setCategory(Move.PHYSICAL)
-        .setPP(20)
-        .setPower(80)
-        .setAction(action)
-        .build();
+    public static int acidSpray(EventManager e) {
+        MoveActionAttackDamage.dealDamage(e);
+        MoveActionChangeStat.changeStats(e, MoveListHelperFunctions.stats(0, 0, 0, -2, 0, 0, 0));
+        return 0;
     }
 
-    public static Move poisonPowder() {
-        MoveAction action = e -> {
-            MoveActionAccuracy.moveHits(e);
-            MoveActionChangeCondition.applyCondition(e, StatusConditionID.POISON_ID);
-            MoveAction.displayFailMessage(e);
-        };
-
-        return new MoveBuilder()
-        .setId(77)
-        .setName("Poison Powder")
-        .setType(Type.POISON)
-        .setCategory(Move.STATUS)
-        .setPP(35)
-        .setAccuracy(100)
-        .setAction(action)
-        .build();
+    public static int poisonJab(EventManager e) {
+        MoveActionAttackDamage.dealDamage(e);
+        MoveActionChangeCondition.applyCondition(e, StatusConditionID.POISON_ID, 30);
+        return 0;
     }
 
-    public static Move toxic() {
-        MoveAction action = e -> {
-            MoveActionAccuracy.moveHits(e);
-            MoveActionChangeCondition.applyCondition(e, StatusConditionID.BAD_POISON_ID);
-        };
-
-        return new MoveBuilder()
-        .setId(92)
-        .setName("Toxic")
-        .setType(Type.POISON)
-        .setCategory(Move.STATUS)
-        .setPP(10)
-        .setAccuracy(90)
-        .setAction(action)
-        .build();
+    public static int poisonPowder(EventManager e) {
+        MoveActionAccuracy.moveHits(e);
+        MoveActionChangeCondition.applyCondition(e, StatusConditionID.POISON_ID);
+        return 0;
     }
 
-    public static Move venoshock() {
-        MoveAction action = e -> {
-            if (e.eventData.attackTarget.getConditions().hasKey(StatusConditionID.POISON_ID)) {
-                e.eventData.moveUsed.doublePower();
-            }
-            
-            MoveActionAttackDamage.dealDamage(e);
-        };
-
-        return new MoveBuilder()
-        .setId(474)
-        .setName("Venoshock")
-        .setType(Type.POISON)
-        .setCategory(Move.SPECIAL)
-        .setPP(10)
-        .setPower(65)
-        .setAction(action)
-        .build();
+    public static int toxic(EventManager e) {
+        MoveActionAccuracy.moveHits(e);
+        MoveActionChangeCondition.applyCondition(e, StatusConditionID.BAD_POISON_ID);
+        return 0;
     }
 
+    public static int venoshock(EventManager e) {
+        if (e.eventData.attackTarget.getConditions().hasKey(StatusConditionID.POISON_ID)) {
+            e.eventData.moveUsed.doublePower();
+        }
+        MoveActionAttackDamage.dealDamage(e);
+        return 0;
+    }
 }

@@ -1,981 +1,982 @@
-- id: 44
-  name: Bite
-  type: Dark
-  category: Physical
-  pp: 25
-  pow: 60
-
-- id: 242
-  name: Crunch
-  type: Dark
-  category: Physical
-  pp: 15
-  pow: 80
-
-- id: 399
-  name: Dark Pulse
-  type: Dark
-  category: Special
-  pp: 15
-  pow: 80
-
-- id: 252
-  name: Fake Out
-  type: Dark
-  category: Physical
-  pp: 10
-  pow: 40
-
-- id: 784
-  name: Breaking Swipe
-  type: Dragon
-  category: Physical
-  pp: 15
-  pow: 60
-
-- id: 225
-  name: Dragon Breath
-  type: Dragon
-  category: Special
-  pp: 20
-  pow: 60
-
-- id: 337
-  name: Dragon Claw
-  type: Dragon
-  category: Physical
-  pp: 15
-  pow: 80
-
-- id: 349
-  name: Dragon Dance
-  type: Dragon
-  category: Status
-  pp: 20
-
-- id: 406
-  name: Dragon Pulse
-  type: Dragon
-  category: Special
-  pp: 10
-  pow: 85
-
-- id: 525
-  name: Dragon Tail
-  type: Dragon
-  category: Physical
-  pp: 10
-  pow: 60
-  acc: 90
-  priority: -6
-
-- id: 200
-  name: Outrage
-  type: Dragon
-  category: Physical
-  pp: 10
-  pow: 120
-
-- id: 9
-  name: Thunder Punch
-  type: Electric
-  category: Physical
-  pp: 15
-  pow: 75
-
-- id: 204
-  name: Charm
-  type: Fairy
-  category: Status
-  pp: 20
-
-- id: 396
-  name: Aura Sphere
-  type: Fighting
-  category: Special
-  pp: 20
-  pow: 80
-  acc: 101
-
-- id: 280
-  name: Brick Break
-  type: Fighting
-  category: Physical
-  pp: 15
-  pow: 75
-
-- id: 411
-  name: Focus Blast
-  type: Fighting
-  category: Special
-  pp: 5
-  pow: 120
-  acc: 70
-
-- id: 264
-  name: Focus Punch
-  type: Fighting
-  category: Physical
-  pp: 20
-  pow: 150
-  priority: -3
-
-- id: 307
-  name: Blast Burn
-  type: Fire
-  category: Special
-  pp: 5
-  pow: 150
-  acc: 90
-
-- id: 52
-  name: Ember
-  type: Fire
-  category: Special
-  pp: 25
-  pow: 40
-
-- id: 126
-  name: Fire Blast
-  type: Fire
-  category: Special
-  pp: 5
-  pow: 110
-  acc: 85
-
-- id: 424
-  name: Fire Fang
-  type: Fire
-  category: Physical
-  pp: 15
-  pow: 65
-  acc: 95
-
-- id: 519
-  name: Fire Pledge
-  type: Fire
-  category: Special
-  pp: 10
-  pow: 80
-
-- id: 7
-  name: Fire Punch
-  type: Fire
-  category: Physical
-  pp: 15
-  pow: 75
-
-- id: 488
-  name: Flame Charge
-  type: Fire
-  category: Physical
-  pp: 20
-  pow: 50
-
-- id: 53
-  name: Flamethrower
-  type: Fire
-  category: Special
-  pp: 15
-  pow: 90
-
-- id: 394
-  name: Flare Blitz
-  type: Fire
-  category: Physical
-  pp: 15
-  pow: 120
-
-- id: 535
-  name: Heat Crash
-  type: Fire
-  category: Physical
-  pp: 10
-  pow: 120
-
-- id: 257
-  name: Heat Wave
-  type: Fire
-  category: Special
-  pp: 10
-  pow: 95
-  acc: 90
-
-- id: 517
-  name: Inferno
-  type: Fire
-  category: Special
-  pp: 5
-  pow: 100
-  acc: 50
-
-- id: 315
-  name: Overheat
-  type: Fire
-  category: Special
-  pp: 5
-  pow: 130
-  acc: 90
-
-- id: 241
-  name: Sunny Day
-  type: Fire
-  category: Status
-  pp: 5
-
-- id: 915
-  name: Temper Flare
-  type: Fire
-  category: Physical
-  pp: 10
-  pow: 75
-
-- id: 261
-  name: Will-O-Wisp
-  type: Fire
-  category: Status
-  pp: 15
-  acc: 85
-
-- id: 512
-  name: Acrobatics
-  type: Flying
-  category: Physical
-  pp: 15
-  pow: 55
-
-- id: 332
-  name: Aerial Ace
-  type: Flying
-  category: Physical
-  pp: 20
-  pow: 60
-  acc: 101
-
-- id: 314
-  name: Air Cutter
-  type: Flying
-  category: Special
-  pp: 25
-  pow: 60
-  acc: 95
-  crit: 0.125
-
-- id: 403
-  name: Air Slash
-  type: Flying
-  category: Special
-  pp: 15
-  pow: 75
-  acc: 95
-
-- id: 19
-  name: Fly
-  type: Flying
-  category: Physical
-  pp: 15
-  pow: 90
-  acc: 95
-
-- id: 542
-  name: Hurricane
-  type: Flying
-  category: Special
-  pp: 10
-  pow: 110
-  acc: 70
-
-- id: 109
-  name: Confuse Ray
-  type: Ghost
-  category: Status
-  pp: 20
-
-- id: 174
-  name: Cure
-  type: Ghost
-  category: Status
-  pp: 10
-
-- id: 421
-  name: Shadow Claw
-  type: Ghost
-  category: Physical
-  pp: 15
-  pow: 70
-  crit: 0.125
-
-- id: 174
-  name: Cure
-  type: Ghost
-  category: Status
-  pp: 10
-  pow: 70
-
-- id: 331
-  name: Bullet Seed
-  type: Grass
-  category: Physical
-  pp: 30
-  pow: 25
-  contact: false
-
-- id: 412
-  name: Energy Ball
-  type: Grass
-  category: Special
-  pp: 10
-  pow: 90
-
-- id: 338
-  name: Frenzy Plant
-  type: Grass
-  category: Special
-  pp: 5
-  pow: 150
-  acc: 90
-
-- id: 202
-  name: Giga Drain
-  type: Grass
-  category: Special
-  pp: 10
-  pow: 75
-
-- id: 447
-  name: Grass Knot
-  type: Grass
-  category: Special
-  pp: 20
-  pow: 120
-  contact: true
-
-- id: 437
-  name: Leaf Storm
-  type: Grass
-  category: Physical
-  pp: 5
-  pow: 130
-  acc: 90
-
-- id: 73
-  name: Leech Seed
-  type: Grass
-  category: Status
-  pp: 10
-  acc: 90
-
-- id: 345
-  name: Magical Leaf
-  type: Grass
-  category: Special
-  pp: 20
-  pow: 60
-  acc: 101
-
-- id: 572
-  name: Petal Blizzard
-  type: Grass
-  category: Physical
-  pp: 15
-  pow: 90
-  contact: false
-
-- id: 80
-  name: Petal Dance
-  type: Grass
-  category: Special
-  pp: 10
-  pow: 120
-  contact: true
-
-- id: 438
-  name: Power Whip
-  type: Grass
-  category: Physical
-  pp: 10
-  pow: 120
-  acc: 85
-
-- id: 75
-  name: Razor Leaf
-  type: Grass
-  category: Physical
-  pp: 25
-  pow: 55
-  acc: 95
-  crit: 0.125
-  contact: false
-
-- id: 402
-  name: Seed Bomb
-  type: Grass
-  category: Physical
-  pp: 15
-  pow: 80
-  contact: false
-
-- id: 79
-  name: Sleep Powder
-  type: Grass
-  category: Status
-  pp: 15
-  acc: 75
-
-- id: 76
-  name: Solar Beam
-  type: Grass
-  category: Special
-  pp: 10
-  pow: 120
-
-- id: 78
-  name: Stun Spore
-  type: Grass
-  category: Status
-  pp: 30
-  acc: 75
-
-- id: 235
-  name: Synthesis
-  type: Grass
-  category: Status
-  pp: 5
-
-- id: 885
-  name: Trailblaze
-  type: Grass
-  category: Physical
-  pp: 20
-  pow: 50
-
-- id: 22
-  name: Vine Whip
-  type: Grass
-  category: Physical
-  pp: 25
-  pow: 40
-
-- id: 523
-  name: Bulldoze
-  type: Ground
-  category: Physical
-  pp: 20
-  pow: 60
-  contact: false
-
-- id: 91
-  name: Dig
-  type: Ground
-  category: Physical
-  pp: 10
-  pow: 80
-
-- id: 89
-  name: Earthquake
-  type: Ground
-  category: Physical
-  pp: 10
-  pow: 100
-  contact: false
-
-- id: 414
-  name: Earth Power
-  type: Ground
-  category: Special
-  pp: 10
-  pow: 90
-
-- id: 341
-  name: Mud Shot
-  type: Ground
-  category: Special
-  pp: 15
-  pow: 55
-  acc: 95
-
-- id: 815
-  name: Scorching Sands
-  type: Ground
-  category: Special
-  pp: 10
-  pow: 70
-
-- id: 707
-  name: Stomping Tantrum
-  type: Ground
-  category: Physical
-  pp: 10
-  pow: 75
-
-- id: 419
-  name: Avalanche
-  type: Ice
-  category: Physical
-  pp: 10
-  pow: 60
-  priority: -4
-
-- id: 59
-  name: Blizzard
-  type: Ice
-  category: Special
-  pp: 5
-  pow: 110
-
-- id: 258
-  name: Hail
-  type: Ice
-  category: Status
-  pp: 10
-
-- id: 114
-  name: Haze
-  type: Ice
-  category: Status
-  pp: 30
-
-- id: 58
-  name: Ice Beam
-  type: Ice
-  category: Special
-  pp: 10
-  pow: 90
-
-- id: 8
-  name: Ice Beam
-  type: Ice
-  category: Physical
-  pp: 15
-  pow: 75
-
-- id: 861
-  name: Ice Spinner
-  type: Ice
-  category: Physical
-  pp: 15
-  pow: 80
-
-- id: 8
-  name: Icy Wind
-  type: Ice
-  category: Special
-  pp: 15
-  pow: 55
-  acc: 95
-
-- id: 34
-  name: Body Slam
-  type: Normal
-  category: Physical
-  pp: 15
-  pow: 85
-
-- id: 38
-  name: Double-Edge
-  type: Normal
-  category: Physical
-  pp: 15
-  pow: 120
-
-- id: 203
-  name: Endure
-  type: Normal
-  category: Status
-  pp: 10
-  priority: 4
-
-- id: 263
-  name: Facade
-  type: Normal
-  category: Physical
-  pp: 20
-  pow: 70
-
-- id: 206
-  name: False Swipes
-  type: Normal
-  category: Physical
-  pp: 40
-  pow: 40
-
-- id: 31
-  name: Fury Attack
-  type: Normal
-  category: Physical
-  pp: 15
-  pow: 85
-  acc: 85
-
-- id: 416
-  name: Giga Impact
-  type: Normal
-  category: Physical
-  pp: 5
-  pow: 150
-  acc: 90
-
-- id: 45
-  name: Growl
-  type: Normal
-  category: Status
-  pp: 40
-
-- id: 74
-  name: Growth
-  type: Normal
-  category: Status
-  pp: 20
-
-- id: 63
-  name: Hyper Beam
-  type: Normal
-  category: Special
-  pp: 5
-  pow: 150
-  acc: 90
-
-- id: 182
-  name: Protect
-  type: Normal
-  category: Status
-  pp: 10
-  priority: 4
-
-- id: 229
-  name: Rapid Spin
-  type: Normal
-  category: Physical
-  pp: 40
-  pow: 50
-
-- id: 184
-  name: Scary Face
-  type: Normal
-  category: Status
-  pp: 10
-
-- id: 10
-  name: Scratch
-  type: Normal
-  category: Physical
-  pp: 35
-  pow: 40
-
-- id: 504
-  name: Shell Smash
-  type: Normal
-  category: Status
-  pp: 15
-
-- id: 163
-  name: Slash
-  type: Normal
-  category: Physical
-  pp: 20
-  pow: 70
-  crit: 0.125
-
-- id: 214
-  name: Sleep Talk
-  type: Normal
-  category: Status
-  pp: 10
-
-- id: 108
-  name: Smokescreen
-  type: Normal
-  category: Status
-  pp: 20
-
-- id: 230
-  name: Sweet Scent
-  type: Normal
-  category: Status
-  pp: 20
-
-- id: 229
-  name: Swords Dance
-  type: Normal
-  category: Status
-  pp: 20
-
-- id: 33
-  name: Tackle
-  type: Normal
-  category: Physical
-  pp: 35
-  pow: 40
-
-- id: 39
-  name: Tail Whip
-  type: Normal
-  category: Status
-  pp: 30
-
-- id: 36
-  name: Take Down
-  type: Normal
-  category: Physical
-  pp: 20
-  pow: 90
-  acc: 85
-
-- id: 165
-  name: Struggle
-  type: Typeless
-  category: Physical
-  pow: 40
-
-- id: 491
-  name: Acid Spray
-  type: Poison
-  category: Special
-  pp: 20
-  pow: 40
-
-- id: 398
-  name: Poison Jab
-  type: Poison
-  category: Physical
-  pp: 20
-  pow: 80
-
-- id: 77
-  name: Poison Powder
-  type: Poison
-  category: Status
-  pp: 35
-
-- id: 92
-  name: Toxic
-  type: Poison
-  category: Status
-  pp: 10
-  acc: 90
-
-- id: 474
-  name: Venoshock
-  type: Poison
-  category: Special
-  pp: 10
-  pow: 65
-
-- id: 133
-  name: Amnesia
-  type: Psychic
-  category: Status
-  pp: 20
-
-- id: 156
-  name: Rest
-  type: Psychic
-  category: Status
-  pp: 5
-
-- id: 428
-  name: Zen Headbutt
-  type: Psychic
-  category: Physical
-  pp: 15
-  pow: 80
-  acc: 90
-
-- id: 157
-  name: Rock Slide
-  type: Rock
-  category: Physical
-  pp: 10
-  pow: 75
-  acc: 90
-  contact: false
-
-- id: 317
-  name: Rock Tomb
-  type: Rock
-  category: Physical
-  pp: 15
-  pow: 60
-  acc: 95
-  contact: false
-
-- id: 201
-  name: Sandstorm
-  type: Rock
-  category: Status
-  pp: 10
-
-- id: 479
-  name: Smack Down
-  type: Rock
-  category: Physical
-  pp: 15
-  pow: 50
-  contact: false
-
-- id: 46
-  name: Roar
-  type: Sound
-  category: Status
-  pp: 20
-  priority: -6
-
-- id: 129
-  name: Swift
-  type: Space
-  category: Special
-  pp: 20
-  pow: 60
-  acc: 101
-
-- id: 430
-  name: Flash Cannon
-  type: Steel
-  category: Special
-  pp: 10
-  pow: 80
-
-- id: 360
-  name: Gyro Ball
-  type: Steel
-  category: Physical
-  pp: 5
-  pow: 150
-
-- id: 334
-  name: Iron Defense
-  type: Steel
-  category: Status
-  pp: 15
-
-- id: 401
-  name: Aqua Tail
-  type: Water
-  category: Physical
-  pp: 10
-  pow: 90
-  acc: 90
-
-- id: 886
-  name: Chilling Water
-  type: Water
-  category: Special
-  pp: 20
-  pow: 50
-
-- id: 886
-  name: Chilling Water
-  type: Water
-  category: Special
-  pp: 20
-  pow: 50
-
-- id: 291
-  name: Dive
-  type: Water
-  category: Physical
-  pp: 10
-  pow: 80
-
-- id: 812
-  name: Flip Turn
-  type: Water
-  category: Special
-  pp: 20
-  pow: 60
-
-- id: 308
-  name: Hydro Cannon
-  type: Water
-  category: Special
-  pp: 5
-  pow: 150
-  acc: 90
-
-- id: 56
-  name: Hydro Pump
-  type: Water
-  category: Special
-  pp: 5
-  pow: 110
-  acc: 80
-
-- id: 710
-  name: Liquidation
-  type: Water
-  category: Physical
-  pp: 10
-  pow: 85
-
-- id: 330
-  name: Muddy Water
-  type: Water
-  category: Special
-  pp: 10
-  pow: 90
-  acc: 85
-
-- id: 240
-  name: Rain Dance
-  type: Water
-  category: Status
-  pp: 5
-
-- id: 57
-  name: Surf
-  type: Water
-  category: Special
-  pp: 15
-  pow: 90
-
-- id: 55
-  name: Water Gun
-  type: Water
-  category: Special
-  pp: 25
-  pow: 40
-
-- id: 518
-  name: Water Pldge
-  type: Water
-  category: Special
-  pp: 10
-  pow: 80
-
-- id: 352
-  name: Water Pulse
-  type: Water
-  category: Special
-  pp: 20
-  pow: 60
-
-- id: 834
-  name: Water Crash
-  type: Water
-  category: Physical
-  pp: 10
-  pow: 120
-
-- id: 250
-  name: Whirlpool
-  type: Water
-  category: Special
-  pp: 15
-  pow: 35
-  acc: 85
-
-- id: 110
-  name: Withdraw
-  type: Water
-  category: Status
-  pp: 40
-
-- id: 964
-  name: Infect
-  type: Zombie
-  category: Physical
-  pp: 10
-  pow: 30
+moves:
+  - id: 44
+    name: Bite
+    type: Dark
+    category: Physical
+    pp: 25
+    pow: 60
+
+  - id: 242
+    name: Crunch
+    type: Dark
+    category: Physical
+    pp: 15
+    pow: 80
+
+  - id: 399
+    name: Dark Pulse
+    type: Dark
+    category: Special
+    pp: 15
+    pow: 80
+
+  - id: 252
+    name: Fake Out
+    type: Dark
+    category: Physical
+    pp: 10
+    pow: 40
+
+  - id: 784
+    name: Breaking Swipe
+    type: Dragon
+    category: Physical
+    pp: 15
+    pow: 60
+
+  - id: 225
+    name: Dragon Breath
+    type: Dragon
+    category: Special
+    pp: 20
+    pow: 60
+
+  - id: 337
+    name: Dragon Claw
+    type: Dragon
+    category: Physical
+    pp: 15
+    pow: 80
+
+  - id: 349
+    name: Dragon Dance
+    type: Dragon
+    category: Status
+    pp: 20
+
+  - id: 406
+    name: Dragon Pulse
+    type: Dragon
+    category: Special
+    pp: 10
+    pow: 85
+
+  - id: 525
+    name: Dragon Tail
+    type: Dragon
+    category: Physical
+    pp: 10
+    pow: 60
+    acc: 90
+    priority: -6
+
+  - id: 200
+    name: Outrage
+    type: Dragon
+    category: Physical
+    pp: 10
+    pow: 120
+
+  - id: 9
+    name: Thunder Punch
+    type: Electric
+    category: Physical
+    pp: 15
+    pow: 75
+
+  - id: 204
+    name: Charm
+    type: Fairy
+    category: Status
+    pp: 20
+
+  - id: 396
+    name: Aura Sphere
+    type: Fighting
+    category: Special
+    pp: 20
+    pow: 80
+    acc: 101
+
+  - id: 280
+    name: Brick Break
+    type: Fighting
+    category: Physical
+    pp: 15
+    pow: 75
+
+  - id: 411
+    name: Focus Blast
+    type: Fighting
+    category: Special
+    pp: 5
+    pow: 120
+    acc: 70
+
+  - id: 264
+    name: Focus Punch
+    type: Fighting
+    category: Physical
+    pp: 20
+    pow: 150
+    priority: -3
+
+  - id: 307
+    name: Blast Burn
+    type: Fire
+    category: Special
+    pp: 5
+    pow: 150
+    acc: 90
+
+  - id: 52
+    name: Ember
+    type: Fire
+    category: Special
+    pp: 25
+    pow: 40
+
+  - id: 126
+    name: Fire Blast
+    type: Fire
+    category: Special
+    pp: 5
+    pow: 110
+    acc: 85
+
+  - id: 424
+    name: Fire Fang
+    type: Fire
+    category: Physical
+    pp: 15
+    pow: 65
+    acc: 95
+
+  - id: 519
+    name: Fire Pledge
+    type: Fire
+    category: Special
+    pp: 10
+    pow: 80
+
+  - id: 7
+    name: Fire Punch
+    type: Fire
+    category: Physical
+    pp: 15
+    pow: 75
+
+  - id: 488
+    name: Flame Charge
+    type: Fire
+    category: Physical
+    pp: 20
+    pow: 50
+
+  - id: 53
+    name: Flamethrower
+    type: Fire
+    category: Special
+    pp: 15
+    pow: 90
+
+  - id: 394
+    name: Flare Blitz
+    type: Fire
+    category: Physical
+    pp: 15
+    pow: 120
+
+  - id: 535
+    name: Heat Crash
+    type: Fire
+    category: Physical
+    pp: 10
+    pow: 120
+
+  - id: 257
+    name: Heat Wave
+    type: Fire
+    category: Special
+    pp: 10
+    pow: 95
+    acc: 90
+
+  - id: 517
+    name: Inferno
+    type: Fire
+    category: Special
+    pp: 5
+    pow: 100
+    acc: 50
+
+  - id: 315
+    name: Overheat
+    type: Fire
+    category: Special
+    pp: 5
+    pow: 130
+    acc: 90
+
+  - id: 241
+    name: Sunny Day
+    type: Fire
+    category: Status
+    pp: 5
+
+  - id: 915
+    name: Temper Flare
+    type: Fire
+    category: Physical
+    pp: 10
+    pow: 75
+
+  - id: 261
+    name: Will-O-Wisp
+    type: Fire
+    category: Status
+    pp: 15
+    acc: 85
+
+  - id: 512
+    name: Acrobatics
+    type: Flying
+    category: Physical
+    pp: 15
+    pow: 55
+
+  - id: 332
+    name: Aerial Ace
+    type: Flying
+    category: Physical
+    pp: 20
+    pow: 60
+    acc: 101
+
+  - id: 314
+    name: Air Cutter
+    type: Flying
+    category: Special
+    pp: 25
+    pow: 60
+    acc: 95
+    crit: 0.125
+
+  - id: 403
+    name: Air Slash
+    type: Flying
+    category: Special
+    pp: 15
+    pow: 75
+    acc: 95
+
+  - id: 19
+    name: Fly
+    type: Flying
+    category: Physical
+    pp: 15
+    pow: 90
+    acc: 95
+
+  - id: 542
+    name: Hurricane
+    type: Flying
+    category: Special
+    pp: 10
+    pow: 110
+    acc: 70
+
+  - id: 109
+    name: Confuse Ray
+    type: Ghost
+    category: Status
+    pp: 20
+
+  - id: 174
+    name: Cure
+    type: Ghost
+    category: Status
+    pp: 10
+
+  - id: 421
+    name: Shadow Claw
+    type: Ghost
+    category: Physical
+    pp: 15
+    pow: 70
+    crit: 0.125
+
+  - id: 174
+    name: Cure
+    type: Ghost
+    category: Status
+    pp: 10
+    pow: 70
+
+  - id: 331
+    name: Bullet Seed
+    type: Grass
+    category: Physical
+    pp: 30
+    pow: 25
+    contact: false
+
+  - id: 412
+    name: Energy Ball
+    type: Grass
+    category: Special
+    pp: 10
+    pow: 90
+
+  - id: 338
+    name: Frenzy Plant
+    type: Grass
+    category: Special
+    pp: 5
+    pow: 150
+    acc: 90
+
+  - id: 202
+    name: Giga Drain
+    type: Grass
+    category: Special
+    pp: 10
+    pow: 75
+
+  - id: 447
+    name: Grass Knot
+    type: Grass
+    category: Special
+    pp: 20
+    pow: 120
+    contact: true
+
+  - id: 437
+    name: Leaf Storm
+    type: Grass
+    category: Physical
+    pp: 5
+    pow: 130
+    acc: 90
+
+  - id: 73
+    name: Leech Seed
+    type: Grass
+    category: Status
+    pp: 10
+    acc: 90
+
+  - id: 345
+    name: Magical Leaf
+    type: Grass
+    category: Special
+    pp: 20
+    pow: 60
+    acc: 101
+
+  - id: 572
+    name: Petal Blizzard
+    type: Grass
+    category: Physical
+    pp: 15
+    pow: 90
+    contact: false
+
+  - id: 80
+    name: Petal Dance
+    type: Grass
+    category: Special
+    pp: 10
+    pow: 120
+    contact: true
+
+  - id: 438
+    name: Power Whip
+    type: Grass
+    category: Physical
+    pp: 10
+    pow: 120
+    acc: 85
+
+  - id: 75
+    name: Razor Leaf
+    type: Grass
+    category: Physical
+    pp: 25
+    pow: 55
+    acc: 95
+    crit: 0.125
+    contact: false
+
+  - id: 402
+    name: Seed Bomb
+    type: Grass
+    category: Physical
+    pp: 15
+    pow: 80
+    contact: false
+
+  - id: 79
+    name: Sleep Powder
+    type: Grass
+    category: Status
+    pp: 15
+    acc: 75
+
+  - id: 76
+    name: Solar Beam
+    type: Grass
+    category: Special
+    pp: 10
+    pow: 120
+
+  - id: 78
+    name: Stun Spore
+    type: Grass
+    category: Status
+    pp: 30
+    acc: 75
+
+  - id: 235
+    name: Synthesis
+    type: Grass
+    category: Status
+    pp: 5
+
+  - id: 885
+    name: Trailblaze
+    type: Grass
+    category: Physical
+    pp: 20
+    pow: 50
+
+  - id: 22
+    name: Vine Whip
+    type: Grass
+    category: Physical
+    pp: 25
+    pow: 40
+
+  - id: 523
+    name: Bulldoze
+    type: Ground
+    category: Physical
+    pp: 20
+    pow: 60
+    contact: false
+
+  - id: 91
+    name: Dig
+    type: Ground
+    category: Physical
+    pp: 10
+    pow: 80
+
+  - id: 89
+    name: Earthquake
+    type: Ground
+    category: Physical
+    pp: 10
+    pow: 100
+    contact: false
+
+  - id: 414
+    name: Earth Power
+    type: Ground
+    category: Special
+    pp: 10
+    pow: 90
+
+  - id: 341
+    name: Mud Shot
+    type: Ground
+    category: Special
+    pp: 15
+    pow: 55
+    acc: 95
+
+  - id: 815
+    name: Scorching Sands
+    type: Ground
+    category: Special
+    pp: 10
+    pow: 70
+
+  - id: 707
+    name: Stomping Tantrum
+    type: Ground
+    category: Physical
+    pp: 10
+    pow: 75
+
+  - id: 419
+    name: Avalanche
+    type: Ice
+    category: Physical
+    pp: 10
+    pow: 60
+    priority: -4
+
+  - id: 59
+    name: Blizzard
+    type: Ice
+    category: Special
+    pp: 5
+    pow: 110
+
+  - id: 258
+    name: Hail
+    type: Ice
+    category: Status
+    pp: 10
+
+  - id: 114
+    name: Haze
+    type: Ice
+    category: Status
+    pp: 30
+
+  - id: 58
+    name: Ice Beam
+    type: Ice
+    category: Special
+    pp: 10
+    pow: 90
+
+  - id: 8
+    name: Ice Beam
+    type: Ice
+    category: Physical
+    pp: 15
+    pow: 75
+
+  - id: 861
+    name: Ice Spinner
+    type: Ice
+    category: Physical
+    pp: 15
+    pow: 80
+
+  - id: 8
+    name: Icy Wind
+    type: Ice
+    category: Special
+    pp: 15
+    pow: 55
+    acc: 95
+
+  - id: 34
+    name: Body Slam
+    type: Normal
+    category: Physical
+    pp: 15
+    pow: 85
+
+  - id: 38
+    name: Double-Edge
+    type: Normal
+    category: Physical
+    pp: 15
+    pow: 120
+
+  - id: 203
+    name: Endure
+    type: Normal
+    category: Status
+    pp: 10
+    priority: 4
+
+  - id: 263
+    name: Facade
+    type: Normal
+    category: Physical
+    pp: 20
+    pow: 70
+
+  - id: 206
+    name: False Swipes
+    type: Normal
+    category: Physical
+    pp: 40
+    pow: 40
+
+  - id: 31
+    name: Fury Attack
+    type: Normal
+    category: Physical
+    pp: 15
+    pow: 85
+    acc: 85
+
+  - id: 416
+    name: Giga Impact
+    type: Normal
+    category: Physical
+    pp: 5
+    pow: 150
+    acc: 90
+
+  - id: 45
+    name: Growl
+    type: Normal
+    category: Status
+    pp: 40
+
+  - id: 74
+    name: Growth
+    type: Normal
+    category: Status
+    pp: 20
+
+  - id: 63
+    name: Hyper Beam
+    type: Normal
+    category: Special
+    pp: 5
+    pow: 150
+    acc: 90
+
+  - id: 182
+    name: Protect
+    type: Normal
+    category: Status
+    pp: 10
+    priority: 4
+
+  - id: 229
+    name: Rapid Spin
+    type: Normal
+    category: Physical
+    pp: 40
+    pow: 50
+
+  - id: 184
+    name: Scary Face
+    type: Normal
+    category: Status
+    pp: 10
+
+  - id: 10
+    name: Scratch
+    type: Normal
+    category: Physical
+    pp: 35
+    pow: 40
+
+  - id: 504
+    name: Shell Smash
+    type: Normal
+    category: Status
+    pp: 15
+
+  - id: 163
+    name: Slash
+    type: Normal
+    category: Physical
+    pp: 20
+    pow: 70
+    crit: 0.125
+
+  - id: 214
+    name: Sleep Talk
+    type: Normal
+    category: Status
+    pp: 10
+
+  - id: 108
+    name: Smokescreen
+    type: Normal
+    category: Status
+    pp: 20
+
+  - id: 230
+    name: Sweet Scent
+    type: Normal
+    category: Status
+    pp: 20
+
+  - id: 229
+    name: Swords Dance
+    type: Normal
+    category: Status
+    pp: 20
+
+  - id: 33
+    name: Tackle
+    type: Normal
+    category: Physical
+    pp: 35
+    pow: 40
+
+  - id: 39
+    name: Tail Whip
+    type: Normal
+    category: Status
+    pp: 30
+
+  - id: 36
+    name: Take Down
+    type: Normal
+    category: Physical
+    pp: 20
+    pow: 90
+    acc: 85
+
+  - id: 165
+    name: Struggle
+    type: Typeless
+    category: Physical
+    pow: 40
+
+  - id: 491
+    name: Acid Spray
+    type: Poison
+    category: Special
+    pp: 20
+    pow: 40
+
+  - id: 398
+    name: Poison Jab
+    type: Poison
+    category: Physical
+    pp: 20
+    pow: 80
+
+  - id: 77
+    name: Poison Powder
+    type: Poison
+    category: Status
+    pp: 35
+
+  - id: 92
+    name: Toxic
+    type: Poison
+    category: Status
+    pp: 10
+    acc: 90
+
+  - id: 474
+    name: Venoshock
+    type: Poison
+    category: Special
+    pp: 10
+    pow: 65
+
+  - id: 133
+    name: Amnesia
+    type: Psychic
+    category: Status
+    pp: 20
+
+  - id: 156
+    name: Rest
+    type: Psychic
+    category: Status
+    pp: 5
+
+  - id: 428
+    name: Zen Headbutt
+    type: Psychic
+    category: Physical
+    pp: 15
+    pow: 80
+    acc: 90
+
+  - id: 157
+    name: Rock Slide
+    type: Rock
+    category: Physical
+    pp: 10
+    pow: 75
+    acc: 90
+    contact: false
+
+  - id: 317
+    name: Rock Tomb
+    type: Rock
+    category: Physical
+    pp: 15
+    pow: 60
+    acc: 95
+    contact: false
+
+  - id: 201
+    name: Sandstorm
+    type: Rock
+    category: Status
+    pp: 10
+
+  - id: 479
+    name: Smack Down
+    type: Rock
+    category: Physical
+    pp: 15
+    pow: 50
+    contact: false
+
+  - id: 46
+    name: Roar
+    type: Sound
+    category: Status
+    pp: 20
+    priority: -6
+
+  - id: 129
+    name: Swift
+    type: Space
+    category: Special
+    pp: 20
+    pow: 60
+    acc: 101
+
+  - id: 430
+    name: Flash Cannon
+    type: Steel
+    category: Special
+    pp: 10
+    pow: 80
+
+  - id: 360
+    name: Gyro Ball
+    type: Steel
+    category: Physical
+    pp: 5
+    pow: 150
+
+  - id: 334
+    name: Iron Defense
+    type: Steel
+    category: Status
+    pp: 15
+
+  - id: 401
+    name: Aqua Tail
+    type: Water
+    category: Physical
+    pp: 10
+    pow: 90
+    acc: 90
+
+  - id: 886
+    name: Chilling Water
+    type: Water
+    category: Special
+    pp: 20
+    pow: 50
+
+  - id: 886
+    name: Chilling Water
+    type: Water
+    category: Special
+    pp: 20
+    pow: 50
+
+  - id: 291
+    name: Dive
+    type: Water
+    category: Physical
+    pp: 10
+    pow: 80
+
+  - id: 812
+    name: Flip Turn
+    type: Water
+    category: Special
+    pp: 20
+    pow: 60
+
+  - id: 308
+    name: Hydro Cannon
+    type: Water
+    category: Special
+    pp: 5
+    pow: 150
+    acc: 90
+
+  - id: 56
+    name: Hydro Pump
+    type: Water
+    category: Special
+    pp: 5
+    pow: 110
+    acc: 80
+
+  - id: 710
+    name: Liquidation
+    type: Water
+    category: Physical
+    pp: 10
+    pow: 85
+
+  - id: 330
+    name: Muddy Water
+    type: Water
+    category: Special
+    pp: 10
+    pow: 90
+    acc: 85
+
+  - id: 240
+    name: Rain Dance
+    type: Water
+    category: Status
+    pp: 5
+
+  - id: 57
+    name: Surf
+    type: Water
+    category: Special
+    pp: 15
+    pow: 90
+
+  - id: 55
+    name: Water Gun
+    type: Water
+    category: Special
+    pp: 25
+    pow: 40
+
+  - id: 518
+    name: Water Pldge
+    type: Water
+    category: Special
+    pp: 10
+    pow: 80
+
+  - id: 352
+    name: Water Pulse
+    type: Water
+    category: Special
+    pp: 20
+    pow: 60
+
+  - id: 834
+    name: Water Crash
+    type: Water
+    category: Physical
+    pp: 10
+    pow: 120
+
+  - id: 250
+    name: Whirlpool
+    type: Water
+    category: Special
+    pp: 15
+    pow: 35
+    acc: 85
+
+  - id: 110
+    name: Withdraw
+    type: Water
+    category: Status
+    pp: 40
+
+  - id: 964
+    name: Infect
+    type: Zombie
+    category: Physical
+    pp: 10
+    pow: 30
 
 
 
