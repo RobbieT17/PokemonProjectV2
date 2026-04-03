@@ -8,7 +8,7 @@ import project.game.move.moveactions.MoveAction;
 import project.game.move.moveactions.MoveActionAttackDamage;
 import project.game.move.moveactions.MoveActionChangeCondition;
 import project.game.move.moveactions.MoveActionChangeStat;
-import project.game.pokemon.effects.StatusCondition;
+import project.game.pokemon.effects.StatusConditionManager.StatusConditionIDs;
 import project.game.pokemon.stats.Type;
 
 public class DarkMoveList {
@@ -16,7 +16,7 @@ public class DarkMoveList {
     public static Move bite() {
         MoveAction action = e -> {
             MoveActionAttackDamage.dealDamage(e);
-            MoveActionChangeCondition.applyCondition(e ,StatusCondition.FLINCH_ID,30);
+            MoveActionChangeCondition.applyCondition(e ,StatusConditionIDs.FLINCH_ID,30);
         };
 
         return new MoveBuilder()
@@ -50,7 +50,7 @@ public class DarkMoveList {
     public static Move darkPulse() {
         MoveAction action = e -> {
             MoveActionAttackDamage.dealDamage(e);
-            MoveActionChangeCondition.applyCondition(e, StatusCondition.FLINCH_ID, 20);
+            MoveActionChangeCondition.applyCondition(e, StatusConditionIDs.FLINCH_ID, 20);
         };
 
         return new MoveBuilder()
@@ -70,7 +70,7 @@ public class DarkMoveList {
             }
 
             MoveActionAttackDamage.dealDamage(e);
-            MoveActionChangeCondition.applyCondition(e, StatusCondition.FLINCH_ID);
+            MoveActionChangeCondition.applyCondition(e, StatusConditionIDs.FLINCH_ID);
         };
 
         return new MoveBuilder()

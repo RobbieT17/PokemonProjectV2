@@ -7,7 +7,7 @@ import project.game.move.moveactions.MoveAction;
 import project.game.move.moveactions.MoveActionAccuracy;
 import project.game.move.moveactions.MoveActionChangeCondition;
 import project.game.move.moveactions.MoveActionChangeStat;
-import project.game.pokemon.effects.StatusCondition;
+import project.game.pokemon.effects.StatusConditionManager.StatusConditionIDs;
 import project.game.pokemon.stats.Type;
 
 public class GhostMoveList {
@@ -15,7 +15,7 @@ public class GhostMoveList {
     public static Move confuseRay() {
         MoveAction action = e -> {
             MoveActionAccuracy.moveHits(e);
-            MoveActionChangeCondition.applyCondition(e, StatusCondition.CONFUSION_ID);
+            MoveActionChangeCondition.applyCondition(e, StatusConditionIDs.CONFUSION_ID);
             MoveAction.displayFailMessage(e);
         };
 

@@ -3,6 +3,7 @@ package project.game.pokemon;
 import java.util.HashMap;
 
 import project.game.pokemon.effects.StatusCondition;
+import project.game.pokemon.effects.StatusConditionManager.StatusConditionIDs;
 import project.game.utility.Protection;
 
 public class PokemonConditions {
@@ -39,15 +40,14 @@ public class PokemonConditions {
 
     public boolean inImmuneState() {
         return 
-        this.conditions.containsKey(StatusCondition.FLY_ID) ||
-        this.conditions.containsKey(StatusCondition.DIG_ID) ||
-        this.conditions.containsKey(StatusCondition.DIVE_ID);
+        this.hasKey(StatusConditionIDs.FLY_ID) ||
+        this.hasKey(StatusConditionIDs.DIG_ID) ||
+        this.hasKey(StatusConditionIDs.DIVE_ID);
     }
 
-    public boolean hasKey(String key) {
-        return this.conditions.containsKey(key);
+    public boolean hasKey(StatusConditionIDs key) {
+        return this.conditions.containsKey(key.name());
     }
-
 
 // Methods
     public void clearPrimary() {
@@ -60,10 +60,10 @@ public class PokemonConditions {
         this.conditions.put(condition.getEffectName(), condition);
     }
 
-    public void removeCondition(String key) {
-        if (!this.conditions.containsKey(key)) return;
-        this.conditions.get(key).removeEffect();
-        this.conditions.remove(key);
+    public void removeCondition(StatusConditionIDs key) {
+        if (!this.conditions.containsKey(key.name())) return;
+        this.conditions.get(key.name()).removeEffect();
+        this.conditions.remove(key.name());
     }
 
     public void clearVolatileConditions() {

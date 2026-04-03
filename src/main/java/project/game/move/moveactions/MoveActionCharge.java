@@ -6,6 +6,8 @@ import project.game.event.EventManager;
 import project.game.pokemon.Pokemon;
 import project.game.pokemon.effects.StatusCondition;
 import project.game.pokemon.effects.StatusConditionManager;
+import project.game.pokemon.effects.StatusContext;
+import project.game.pokemon.effects.StatusConditionManager.StatusConditionIDs;
 
 public interface MoveActionCharge extends MoveAction{
      /*
@@ -16,13 +18,16 @@ public interface MoveActionCharge extends MoveAction{
         EventData data  = eventManager.eventData;
         Pokemon attacker = data.user;
 
-        if (!attacker.getConditions().hasKey(StatusCondition.CHARGE_MOVE)) {
-            attacker.getConditions().addCondition(StatusConditionManager.chargeMove(attacker, data.moveUsed));    
+        if (!attacker.getConditions().hasKey(StatusConditionIDs.CHARGE_MOVE_ID)) {
+            StatusContext c = new StatusContext(attacker);
+            c.move = data.moveUsed;
+
+            attacker.getConditions().addCondition(StatusConditionManager.chargeMove(c));    
             BattleLog.add("%s begins charging!", attacker);
             return;
         }
         
-        attacker.getConditions().removeCondition(StatusCondition.CHARGE_MOVE);
+        attacker.getConditions().removeCondition(StatusConditionIDs.CHARGE_MOVE_ID);
         MoveActionAttackDamage.dealDamage(eventManager); 
     }
 
@@ -46,8 +51,11 @@ public interface MoveActionCharge extends MoveAction{
         Pokemon attacker = data.user;
 
         // Starts rampage
-        if (!attacker.getConditions().hasKey(StatusCondition.RAMPAGE_ID)) {
-            attacker.getConditions().addCondition(StatusConditionManager.rampage(attacker, data.moveUsed));
+        if (!attacker.getConditions().hasKey(StatusConditionIDs.RAMPAGE_ID)) {
+            StatusContext c = new StatusContext(attacker);
+            c.move = data.moveUsed;
+
+            attacker.getConditions().addCondition(StatusConditionManager.rampage(c));
         }
        
         MoveActionAttackDamage.dealDamage(eventManager);       

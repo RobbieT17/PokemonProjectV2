@@ -1,5 +1,7 @@
 package project.game.pokemon.effects;
 
+import java.util.function.Function;
+
 import project.game.battle.BattleField;
 import project.game.battle.BattleLog;
 import project.game.battle.Weather;
@@ -12,9 +14,31 @@ import project.game.pokemon.Pokemon;
 import project.game.pokemon.stats.Type;
 
 public interface AbilityManager {
+
+    public enum AbilityIDs {
+        BLAZE_ID(AbilityManager::blaze),
+        CHLOROPHYLL_ID(AbilityManager::chlorophyll),
+        OVERGROW_ID(AbilityManager::overgrow),
+        RAIN_DISH_ID(AbilityManager::rainDish),
+        SOLAR_POWER_ID(AbilityManager::solarPower),
+        TORRENT_ID(AbilityManager::torrent),
+        WATER_ABSORB_ID(AbilityManager::waterAbsorb);
+
+        private final Function<Pokemon, Ability> func;
+
+        AbilityIDs(Function<Pokemon, Ability> func) {
+            this.func = func;
+        }    
+
+        public Ability apply(Pokemon p) {
+            return this.func.apply(p);
+        }
+
+    }
+
     // Increases Fire-Type attacks by 50% while under 1/3 Max HP
     public static Ability blaze(Pokemon p) {
-        String name = Ability.BLAZE_ID;
+        String name = AbilityIDs.BLAZE_ID.name();
         String[] flags = new String[] {GameEvents.DAMAGE_MULTIPLIER};
 
         p.getEvents().addEventListener(flags[0], name , e -> {
@@ -32,7 +56,7 @@ public interface AbilityManager {
 
     // Doubles speed in the sun
     public static Ability chlorophyll(Pokemon p) {
-        String name = Ability.CHLOROPHYLL_ID;
+        String name = AbilityIDs.CHLOROPHYLL_ID.name();
         String[] flags = new String[] {GameEvents.FIND_MOVE_ORDER};
 
         p.getEvents().addEventListener(flags[0], name, e -> {
@@ -46,7 +70,7 @@ public interface AbilityManager {
 
     // Increases Grass-Type attacks by 50% while under 1/3 Max HP
     public static Ability overgrow(Pokemon p) {
-        String name = Ability.OVERGROW_ID;
+        String name = AbilityIDs.OVERGROW_ID.name();
         String[] flags = new String[] {GameEvents.DAMAGE_MULTIPLIER};
 
         p.getEvents().addEventListener(flags[0], name, e -> {
@@ -64,7 +88,7 @@ public interface AbilityManager {
 
     // Recovers 1/16 of its maximum HP during rain, after each turn.
     public static Ability rainDish(Pokemon p) {
-        String name = Ability.RAIN_DISH_ID;
+        String name = AbilityIDs.RAIN_DISH_ID.name();
         String[] flags = new String[] {GameEvents.WEATHER_EFFECT};
 
         p.getEvents().addEventListener(flags[0], name, e -> {
@@ -81,7 +105,7 @@ public interface AbilityManager {
      * but it also loses 1/8 of its maximum HP after each turn.
      */
     public static Ability solarPower(Pokemon p) {
-        String name = Ability.SOLAR_POWER_ID;
+        String name = AbilityIDs.SOLAR_POWER_ID.name();
         String[] flags = new String[] {GameEvents.DAMAGE_MULTIPLIER, GameEvents.WEATHER_EFFECT};
 
         p.getEvents().addEventListener(flags[0], name, e -> {
@@ -105,7 +129,7 @@ public interface AbilityManager {
 
     // Increases Water-Type attacks by 50% while under 1/3 Max HP
     public static Ability torrent(Pokemon p) {
-        String name = Ability.TORRENT_ID;
+        String name = AbilityIDs.TORRENT_ID.name();
         String[] flags = new String[] {GameEvents.DAMAGE_MULTIPLIER};
 
         p.getEvents().addEventListener(flags[0], name, e -> {
@@ -123,7 +147,7 @@ public interface AbilityManager {
 
     // Water moves deal no effect and instead heal the Pokemon
     public static Ability waterAbsorb(Pokemon p) {
-        String name = Ability.WATER_ABSORB_ID;
+        String name = AbilityIDs.WATER_ABSORB_ID.name();
         String[] flags = new String[] {GameEvents.MOVE_EFFECTIVENESS};
 
         p.getEvents().addEventListener(flags[0], name, e -> {

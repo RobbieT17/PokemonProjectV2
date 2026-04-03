@@ -7,7 +7,7 @@ import project.game.move.moveactions.MoveAction;
 import project.game.move.moveactions.MoveActionAttackDamage;
 import project.game.move.moveactions.MoveActionChangeCondition;
 import project.game.move.moveactions.MoveActionChangeStat;
-import project.game.pokemon.effects.StatusCondition;
+import project.game.pokemon.effects.StatusConditionManager.StatusConditionIDs;
 import project.game.pokemon.stats.Type;
 
 public class GroundMoveList {
@@ -38,14 +38,14 @@ public class GroundMoveList {
         .setCategory(Move.PHYSICAL)
         .setPP(10)
         .setPower(80)
-        .setAction(e -> MoveActionChangeCondition.enterImmuneState(e, StatusCondition.DIG_ID))
+        .setAction(e -> MoveActionChangeCondition.enterImmuneState(e, StatusConditionIDs.DIG_ID))
         .build();
     }
 
     public static Move earthquake() {
         MoveAction action = e -> {
             // Deals double power to opponents digging
-            if (e.eventData.attackTarget.getConditions().hasKey(StatusCondition.DIG_ID)) {
+            if (e.eventData.attackTarget.getConditions().hasKey(StatusConditionIDs.DIG_ID)) {
                 e.eventData.moveUsed.doublePower(); 
             }
 
@@ -101,9 +101,9 @@ public class GroundMoveList {
 
     public static Move scorchingSands() {
         MoveAction action = e -> {
-            e.eventData.user.getConditions().removeCondition(StatusCondition.FREEZE_ID);
+            e.eventData.user.getConditions().removeCondition(StatusConditionIDs.FREEZE_ID);
             MoveActionAttackDamage.dealDamage(e);
-            MoveActionChangeCondition.applyCondition(e, StatusCondition.BURN_ID, 30);
+            MoveActionChangeCondition.applyCondition(e, StatusConditionIDs.BURN_ID, 30);
         };
 
         return new MoveBuilder()

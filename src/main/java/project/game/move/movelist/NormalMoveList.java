@@ -4,7 +4,6 @@ import project.game.battle.BattleField;
 import project.game.battle.BattleLog;
 import project.game.battle.Weather;
 import project.game.builders.MoveBuilder;
-import project.game.event.EventData;
 import project.game.event.EventManager;
 import project.game.move.Move;
 import project.game.move.MoveListHelperFunctions;
@@ -17,7 +16,7 @@ import project.game.move.moveactions.MoveActionChangeStat;
 import project.game.move.moveactions.MoveActionCharge;
 import project.game.move.moveactions.MoveActionHealthRestore;
 import project.game.pokemon.Pokemon;
-import project.game.pokemon.effects.StatusCondition;
+import project.game.pokemon.effects.StatusConditionManager.StatusConditionIDs;
 import project.game.pokemon.stats.Type;
 import project.game.utility.RandomValues;
 
@@ -27,7 +26,7 @@ public class NormalMoveList {
         MoveAction action = e -> {
             // TODO: Double Damage when Pokemon has minimized condition
             MoveActionAttackDamage.dealDamage(e);
-            MoveActionChangeCondition.applyCondition(e, StatusCondition.PARALYSIS_ID, 30);
+            MoveActionChangeCondition.applyCondition(e, StatusConditionIDs.PARALYSIS_ID, 30);
         };
 
         return new MoveBuilder()
@@ -69,9 +68,9 @@ public class NormalMoveList {
         MoveAction action = e -> {
             Pokemon a = e.eventData.user;
             // Double power (140) if user is burned, paralyzed, or poisoned
-            if (a.getConditions().hasKey(StatusCondition.BURN_ID) |
-            a.getConditions().hasKey(StatusCondition.PARALYSIS_ID) |
-            a.getConditions().hasKey(StatusCondition.POISON_ID)) {
+            if (a.getConditions().hasKey(StatusConditionIDs.BURN_ID) |
+            a.getConditions().hasKey(StatusConditionIDs.PARALYSIS_ID) |
+            a.getConditions().hasKey(StatusConditionIDs.POISON_ID)) {
                 e.eventData.moveUsed.doublePower();
             }
 
@@ -228,7 +227,7 @@ public class NormalMoveList {
         MoveAction action = e -> {
             MoveListHelperFunctions.targetsUser(e.eventData);
             MoveActionHealthRestore.restoreHp(e, 100);
-            MoveActionChangeCondition.applyCondition(e, StatusCondition.SLEEP_ID);
+            MoveActionChangeCondition.applyCondition(e, StatusConditionIDs.SLEEP_ID);
         };
 
         return new MoveBuilder()
@@ -303,7 +302,7 @@ public class NormalMoveList {
             Pokemon a = e.eventData.user;
             Move m = e.eventData.moveUsed;
             // Only works when Pokemon is asleep
-            if (!a.getConditions().hasKey(StatusCondition.SLEEP_ID)){
+            if (!a.getConditions().hasKey(StatusConditionIDs.SLEEP_ID)){
                 BattleLog.add(Move.FAILED);
                 return;
             }

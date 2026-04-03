@@ -8,7 +8,7 @@ import project.game.move.moveactions.MoveActionAccuracy;
 import project.game.move.moveactions.MoveActionAttackDamage;
 import project.game.move.moveactions.MoveActionChangeCondition;
 import project.game.move.moveactions.MoveActionChangeStat;
-import project.game.pokemon.effects.StatusCondition;
+import project.game.pokemon.effects.StatusConditionManager.StatusConditionIDs;
 import project.game.pokemon.stats.Type;
 
 public class PoisonMoveList {
@@ -33,7 +33,7 @@ public class PoisonMoveList {
     public static Move poisonJab() {
         MoveAction action = (e) -> {
             MoveActionAttackDamage.dealDamage(e);
-            MoveActionChangeCondition.applyCondition(e, StatusCondition.POISON_ID, 30);
+            MoveActionChangeCondition.applyCondition(e, StatusConditionIDs.POISON_ID, 30);
         };
 
         return new MoveBuilder()
@@ -50,7 +50,7 @@ public class PoisonMoveList {
     public static Move poisonPowder() {
         MoveAction action = e -> {
             MoveActionAccuracy.moveHits(e);
-            MoveActionChangeCondition.applyCondition(e, StatusCondition.POISON_ID);
+            MoveActionChangeCondition.applyCondition(e, StatusConditionIDs.POISON_ID);
             MoveAction.displayFailMessage(e);
         };
 
@@ -68,7 +68,7 @@ public class PoisonMoveList {
     public static Move toxic() {
         MoveAction action = e -> {
             MoveActionAccuracy.moveHits(e);
-            MoveActionChangeCondition.applyCondition(e, StatusCondition.BAD_POISON_ID);
+            MoveActionChangeCondition.applyCondition(e, StatusConditionIDs.BAD_POISON_ID);
         };
 
         return new MoveBuilder()
@@ -84,7 +84,7 @@ public class PoisonMoveList {
 
     public static Move venoshock() {
         MoveAction action = e -> {
-            if (e.eventData.attackTarget.getConditions().hasKey(StatusCondition.POISON_ID)) {
+            if (e.eventData.attackTarget.getConditions().hasKey(StatusConditionIDs.POISON_ID)) {
                 e.eventData.moveUsed.doublePower();
             }
             

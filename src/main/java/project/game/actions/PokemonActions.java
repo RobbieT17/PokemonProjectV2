@@ -9,7 +9,7 @@ import project.game.exceptions.MoveInterruptedException;
 import project.game.exceptions.PokemonCannotActException;
 import project.game.move.Move;
 import project.game.pokemon.Pokemon;
-import project.game.pokemon.effects.StatusCondition;
+import project.game.pokemon.effects.StatusConditionManager.StatusConditionIDs;;
 
 public class PokemonActions {
 
@@ -36,9 +36,9 @@ public class PokemonActions {
     }
 
     private void stopOnGoingMoves(Pokemon p) {
-        p.getConditions().removeCondition(StatusCondition.FOCUSED_ID);
-        p.getConditions().removeCondition(StatusCondition.FORCED_MOVE_ID);
-        p.getConditions().removeCondition(StatusCondition.RAMPAGE_ID);
+        p.getConditions().removeCondition(StatusConditionIDs.FOCUSED_ID);
+        p.getConditions().removeCondition(StatusConditionIDs.FORCED_MOVE_ID);
+        p.getConditions().removeCondition(StatusConditionIDs.RAMPAGE_ID);
         p.getConditions().setInterrupted(true);
     }
 
@@ -55,7 +55,7 @@ public class PokemonActions {
         BattleLog.add("%s used %s!", user, move);
         try {
             this.eventManager.notifyUserPokemon(GameEvents.USE_MOVE);
-            move.getPp().decrement(user.getConditions().hasKey(StatusCondition.FORCED_MOVE_ID));
+            move.getPp().decrement(user.getConditions().hasKey(StatusConditionIDs.FORCED_MOVE_ID));
             move.getAction().act(this.eventManager);
         } catch (MoveEndedEarlyException e) {
             BattleLog.add(e.getMessage());

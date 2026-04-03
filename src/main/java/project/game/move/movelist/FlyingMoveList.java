@@ -7,7 +7,7 @@ import project.game.move.Move;
 import project.game.move.moveactions.MoveAction;
 import project.game.move.moveactions.MoveActionAttackDamage;
 import project.game.move.moveactions.MoveActionChangeCondition;
-import project.game.pokemon.effects.StatusCondition;
+import project.game.pokemon.effects.StatusConditionManager.StatusConditionIDs;
 import project.game.pokemon.stats.Type;
 
 public class FlyingMoveList {
@@ -53,7 +53,7 @@ public class FlyingMoveList {
     public static Move airSlash() {
         MoveAction action = e -> {
             MoveActionAttackDamage.dealDamage(e);
-            MoveActionChangeCondition.applyCondition(e, StatusCondition.FLINCH_ID, 30);
+            MoveActionChangeCondition.applyCondition(e, StatusConditionIDs.FLINCH_ID, 30);
         };
 
         return new MoveBuilder()
@@ -77,7 +77,7 @@ public class FlyingMoveList {
         .setPP(15)
         .setPower(90)
         .setAccuracy(95)
-        .setAction(e -> MoveActionChangeCondition.enterImmuneState(e, StatusCondition.FLY_ID))
+        .setAction(e -> MoveActionChangeCondition.enterImmuneState(e, StatusConditionIDs.FLY_ID))
         .build();
     }
 
@@ -93,7 +93,7 @@ public class FlyingMoveList {
             }
 
            MoveActionAttackDamage.dealDamage(e);
-           MoveActionChangeCondition.applyCondition(e, StatusCondition.CONFUSION_ID, 10);
+           MoveActionChangeCondition.applyCondition(e, StatusConditionIDs.CONFUSION_ID, 10);
         };
 
         return new MoveBuilder()

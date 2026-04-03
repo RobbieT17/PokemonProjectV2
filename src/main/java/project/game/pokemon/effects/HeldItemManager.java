@@ -1,5 +1,7 @@
 package project.game.pokemon.effects;
 
+import java.util.function.Function;
+
 import project.game.battle.BattleField;
 import project.game.battle.BattleLog;
 import project.game.event.EventData;
@@ -11,10 +13,33 @@ import project.game.pokemon.stats.Type;
 import project.game.utility.Counter;
 
 public interface HeldItemManager {
+
+    public enum HeldItemIDs {
+        ASSAULT_VEST_ID(HeldItemManager::assaultVest),
+        BLACK_SLUDGE_ID(HeldItemManager::blackSludge),
+        BOMB_SURPRISE_ID(HeldItemManager::bombSurprise),
+        CHOICE_BAND_ID(HeldItemManager::choiceBand),
+        CHOICE_SCARF_ID(HeldItemManager::choiceScarf),
+        CHOICE_SPECS_ID(HeldItemManager::choiceSpecs),
+        LEFTOVERS_ID(HeldItemManager::leftovers),
+        MUSCLE_BAND_ID(HeldItemManager::muscleBand),
+        ROCKY_HELMET_ID(HeldItemManager::rockyHelmet),
+        WISE_GLASSES_ID(HeldItemManager::wiseGlasses);
+
+        private final Function<Pokemon, HeldItem> func;
+
+        HeldItemIDs(Function<Pokemon, HeldItem> func) {
+            this.func = func;
+        }    
+
+        public HeldItem apply(Pokemon p) {
+            return this.func.apply(p);
+        }
+    }
     
     // Increases Pokemon's Sp.Def by 50% but disables Status Move (except Me First)
     public static HeldItem assaultVest(Pokemon p) {
-        String name = HeldItem.ASSAULT_VEST_ID;
+        String name = HeldItemIDs.ASSAULT_VEST_ID.name();
         String[] flags = new String[] {GameEvents.MOVE_SELECTION, GameEvents.DAMAGE_MULTIPLIER};
 
         p.getEvents().addEventListener(flags[0], name, e -> {
@@ -33,7 +58,7 @@ public interface HeldItemManager {
 
     // Poison Type restore 1/16 of their Max HP, all other types lose that amount
     public static HeldItem blackSludge(Pokemon p) {
-        String name = HeldItem.BLACK_SLUDGE_ID;
+        String name = HeldItemIDs.BLACK_SLUDGE_ID.name();
         String[] flags = new String[] {GameEvents.END_OF_ROUND};
 
         p.getEvents().addEventListener(flags[0], name, e -> {
@@ -48,9 +73,9 @@ public interface HeldItemManager {
         return new HeldItem(p, name, flags);
 	}
 
-    // Blows up all Pokemon on field after 5 rounds, timer resets if user switches out
+    // Blows up all Pokemon on field after 3 rounds. Timer resets if the holder switches out or is attacked.
     public static HeldItem bombSurprise(Pokemon p) {
-        String name = HeldItem.BOMB_SURPRISE_ID;
+        String name = HeldItemIDs.BOMB_SURPRISE_ID.name();
         String[] flags = new String[] {GameEvents.BEFORE_MOVE, GameEvents.SWITCH_OUT};
 
         Counter c = new Counter(5);
@@ -72,7 +97,7 @@ public interface HeldItemManager {
 
     // Boosts Attack stat by 50% but forces Pokemon to use first move selected (rests after switch out)
     public static HeldItem choiceBand(Pokemon p) {
-        String name = HeldItem.CHOICE_BAND_ID;
+        String name = HeldItemIDs.CHOICE_BAND_ID.name();
         String[] flags = new String[] {GameEvents.MOVE_SELECTION, GameEvents.DAMAGE_MULTIPLIER};
 
         p.getEvents().addEventListener(flags[0], name, e -> {
@@ -87,7 +112,7 @@ public interface HeldItemManager {
 
     // Boosts Speed stat by 50% but forces Pokemon to use first move selected (rests after switch out)
     public static HeldItem choiceScarf(Pokemon p) {
-        String name = HeldItem.CHOICE_SCARF_ID;
+        String name = HeldItemIDs.CHOICE_SCARF_ID.name();
         String[] flags = new String[] {GameEvents.MOVE_SELECTION, GameEvents.FIND_MOVE_ORDER};
 
         p.getEvents().addEventListener(flags[0], name, e -> {
@@ -102,7 +127,7 @@ public interface HeldItemManager {
 
     // Boosts Sp-Attack stat by 50% but forces Pokemon to use first move selected (rests after switch out)
     public static HeldItem choiceSpecs(Pokemon p) {
-        String name = HeldItem.CHOICE_SPECS_ID;
+        String name = HeldItemIDs.CHOICE_SPECS_ID.name();
         String[] flags = new String[] {GameEvents.MOVE_SELECTION, GameEvents.DAMAGE_MULTIPLIER};
 
         p.getEvents().addEventListener(flags[0], name, e -> {
@@ -117,7 +142,7 @@ public interface HeldItemManager {
 
     // Restore 1/16 of Max HP at the end of each round
     public static HeldItem leftovers(Pokemon p) {
-        String name = HeldItem.LEFTOVERS_ID;
+        String name = HeldItemIDs.LEFTOVERS_ID.name();
         String[] flags = new String[] {GameEvents.END_OF_ROUND};
 
         p.getEvents().addEventListener(flags[0], name, e -> p.restoreHpPercentMaxHP(1.0 / 16.0, " from its Leftovers"));
@@ -127,7 +152,7 @@ public interface HeldItemManager {
 
     // Boosts physical-move power by 10%
     public static HeldItem muscleBand(Pokemon p) {
-        String name = HeldItem.MUSCLE_BAND_ID;
+        String name = HeldItemIDs.MUSCLE_BAND_ID.name();
         String[] flags = new String[] {GameEvents.DAMAGE_MULTIPLIER};
 
         p.getEvents().addEventListener(flags[0], name, e -> {
@@ -140,7 +165,7 @@ public interface HeldItemManager {
 
     // Contact with this Pokemon causes the attack to lose 1/6 of its max HP
     public static HeldItem rockyHelmet(Pokemon p) {
-        String name = HeldItem.ROCKY_HELMET_ID;
+        String name = HeldItemIDs.ROCKY_HELMET_ID.name();
         String[] flags = new String[] {GameEvents.MOVE_MAKES_CONTACT};
 
         p.getEvents().addEventListener(flags[0], name, e -> {
@@ -154,7 +179,7 @@ public interface HeldItemManager {
 
     // Boosts special-move power by 10%
     public static HeldItem wiseGlasses(Pokemon p) {
-        String name = HeldItem.WISE_GLASSES_ID;
+        String name = HeldItemIDs.WISE_GLASSES_ID.name();
         String[] flags = new String[] {GameEvents.DAMAGE_MULTIPLIER};
 
         p.getEvents().addEventListener(flags[0], name, e -> {

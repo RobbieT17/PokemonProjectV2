@@ -12,7 +12,7 @@ import project.game.move.moveactions.MoveActionChangeCondition;
 import project.game.move.moveactions.MoveActionChangeStat;
 import project.game.move.moveactions.MoveActionChangeWeather;
 import project.game.move.moveactions.MoveActionCharge;
-import project.game.pokemon.effects.StatusCondition;
+import project.game.pokemon.effects.StatusConditionManager.StatusConditionIDs;
 import project.game.pokemon.stats.Type;
 
 public class FireMoveList {
@@ -38,7 +38,7 @@ public class FireMoveList {
     public static Move ember() {
         MoveAction action = e -> {
             MoveActionAttackDamage.dealDamage(e);
-            MoveActionChangeCondition.applyCondition(e, StatusCondition.BURN_ID, 10); 
+            MoveActionChangeCondition.applyCondition(e, StatusConditionIDs.BURN_ID, 10); 
         };
 
         return new MoveBuilder()
@@ -55,7 +55,7 @@ public class FireMoveList {
     public static Move fireBlast() {
         MoveAction action = e -> {
             MoveActionAttackDamage.dealDamage(e);
-            MoveActionChangeCondition.applyCondition(e, StatusCondition.BURN_ID, 30);
+            MoveActionChangeCondition.applyCondition(e, StatusConditionIDs.BURN_ID, 30);
         };
 
         return new MoveBuilder()
@@ -73,8 +73,8 @@ public class FireMoveList {
     public static Move fireFang() {
         MoveAction action = e -> {
             MoveActionAttackDamage.dealDamage(e);
-            MoveActionChangeCondition.applyCondition(e, StatusCondition.BURN_ID, 10);
-            MoveActionChangeCondition.applyCondition(e, StatusCondition.FLINCH_ID, 30);
+            MoveActionChangeCondition.applyCondition(e, StatusConditionIDs.BURN_ID, 10);
+            MoveActionChangeCondition.applyCondition(e, StatusConditionIDs.FLINCH_ID, 30);
         };
 
         return new MoveBuilder()
@@ -104,7 +104,7 @@ public class FireMoveList {
     public static Move firePunch() {
         MoveAction action = e -> {
             MoveActionAttackDamage.dealDamage(e);
-            MoveActionChangeCondition.applyCondition(e, StatusCondition.BURN_ID, 10);
+            MoveActionChangeCondition.applyCondition(e, StatusConditionIDs.BURN_ID, 10);
         };
 
         return new MoveBuilder()
@@ -139,7 +139,7 @@ public class FireMoveList {
     public static Move flamethrower() {
         MoveAction action = e -> {
             MoveActionAttackDamage.dealDamage(e);
-            MoveActionChangeCondition.applyCondition(e, StatusCondition.BURN_ID, 10);
+            MoveActionChangeCondition.applyCondition(e, StatusConditionIDs.BURN_ID, 10);
         };
 
         return new MoveBuilder()
@@ -156,7 +156,7 @@ public class FireMoveList {
     public static Move flareBlitz() {
         MoveAction action = e -> {
             MoveActionAttackDamage.dealDamageRecoil(e, 33);
-            MoveActionChangeCondition.applyCondition(e, StatusCondition.BURN_ID, 10);
+            MoveActionChangeCondition.applyCondition(e, StatusConditionIDs.BURN_ID, 10);
         };
 
         return new MoveBuilder()
@@ -206,7 +206,7 @@ public class FireMoveList {
     public static Move heatWave() {
         MoveAction action = e -> {
             MoveActionAttackDamage.dealDamage(e);
-            MoveActionChangeCondition.applyCondition(e, StatusCondition.BURN_ID, 10);
+            MoveActionChangeCondition.applyCondition(e, StatusConditionIDs.BURN_ID, 10);
         };
 
         return new MoveBuilder()
@@ -224,7 +224,7 @@ public class FireMoveList {
     public static Move inferno() {
         MoveAction action = e -> {
             MoveActionAttackDamage.dealDamage(e);
-            MoveActionChangeCondition.applyCondition(e, StatusCondition.BURN_ID);
+            MoveActionChangeCondition.applyCondition(e, StatusConditionIDs.BURN_ID);
         };
 
         return new MoveBuilder()
@@ -292,7 +292,7 @@ public class FireMoveList {
     public static Move willOWisp() {
         MoveAction action = e -> {
             MoveActionAccuracy.moveHits(e);
-            MoveActionChangeCondition.applyCondition(e, StatusCondition.BURN_ID);
+            MoveActionChangeCondition.applyCondition(e, StatusConditionIDs.BURN_ID);
             BattleLog.add(e.eventData.message);
         };
 
