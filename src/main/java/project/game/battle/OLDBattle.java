@@ -4,6 +4,7 @@ import java.util.InputMismatchException;
 import java.util.Random;
 import java.util.Scanner;
 
+import project.game.actions.PokemonActions;
 import project.game.builders.PokemonTrainerBuilder;
 import project.game.event.GameEvents;
 import project.game.exceptions.BattleEndedException;
@@ -11,7 +12,6 @@ import project.game.move.Move;
 import project.game.move.movelist.NormalMoveList;
 import project.game.player.PokemonTrainer;
 import project.game.pokemon.Pokemon;
-import project.game.pokemon.PokemonActions;
 import project.game.pokemon.Pokedex.PokedexEntry;
 import project.game.pokemon.effects.Ability;
 import project.game.pokemon.effects.AbilityManager;

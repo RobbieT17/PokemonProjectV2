@@ -1,5 +1,6 @@
 package project.game.battle;
 
+import project.game.actions.BattleActions;
 import project.game.player.PokemonTrainer;
 
 /**

@@ -1,4 +1,4 @@
-package project.game.battle;
+package project.game.actions;
 
 import java.util.Random;
 
@@ -6,7 +6,6 @@ import project.game.event.EventManager;
 import project.game.event.GameEvents;
 import project.game.move.Move;
 import project.game.pokemon.Pokemon;
-import project.game.pokemon.PokemonActions;
 
 public class BattleActions {
 

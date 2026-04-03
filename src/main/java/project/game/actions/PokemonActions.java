@@ -1,4 +1,4 @@
-package project.game.pokemon;
+package project.game.actions;
 
 import project.game.battle.BattleLog;
 import project.game.event.EventData;
@@ -8,6 +8,7 @@ import project.game.exceptions.MoveEndedEarlyException;
 import project.game.exceptions.MoveInterruptedException;
 import project.game.exceptions.PokemonCannotActException;
 import project.game.move.Move;
+import project.game.pokemon.Pokemon;
 import project.game.pokemon.effects.StatusCondition;
 
 public class PokemonActions {

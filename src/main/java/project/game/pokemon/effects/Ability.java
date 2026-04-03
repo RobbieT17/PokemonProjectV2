@@ -1,11 +1,5 @@
 package project.game.pokemon.effects;
 
-import project.game.battle.*;
-import project.game.event.EventData;
-import project.game.event.GameEvents;
-import project.game.exceptions.MoveInterruptedException;
-import project.game.exceptions.PokemonFaintedException;
-import project.game.move.Move;
 import project.game.pokemon.Pokemon;
 import project.game.pokemon.stats.Effect;
 
