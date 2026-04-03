@@ -2,7 +2,7 @@ package project.game.battle;
 
 import project.game.exceptions.PokemonFaintedException;
 import project.game.pokemon.Pokemon;
-import project.game.stats.Type;
+import project.game.pokemon.stats.Type;
 import project.game.utility.Counter;
 
 public interface Weather {

@@ -8,7 +8,7 @@ import project.game.exceptions.MoveEndedEarlyException;
 import project.game.exceptions.MoveInterruptedException;
 import project.game.exceptions.PokemonCannotActException;
 import project.game.move.Move;
-import project.game.stats.StatusCondition;
+import project.game.pokemon.stats.StatusCondition;
 
 public class PokemonActions {
 

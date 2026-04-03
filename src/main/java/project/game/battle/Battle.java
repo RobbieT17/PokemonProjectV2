@@ -1,9 +1,6 @@
 package project.game.battle;
 
-import project.game.event.EventManager;
 import project.game.player.PokemonTrainer;
-import project.game.pokemon.Pokemon;
-import project.game.pokemon.PokemonActions;
 
 /**
  * This class acts as an instance of a pokemon battle. It is responsible for tracking

@@ -2,8 +2,8 @@ package project.game.move.movelist;
 
 import project.game.battle.BattleField;
 import project.game.battle.Weather;
+import project.game.builders.MoveBuilder;
 import project.game.move.Move;
-import project.game.move.MoveBuilder;
 import project.game.move.MoveListHelperFunctions;
 import project.game.move.moveactions.MoveAction;
 import project.game.move.moveactions.MoveActionAccuracy;
@@ -13,8 +13,8 @@ import project.game.move.moveactions.MoveActionChangeStat;
 import project.game.move.moveactions.MoveActionCharge;
 import project.game.move.moveactions.MoveActionHealthRestore;
 import project.game.pokemon.Pokemon;
-import project.game.stats.StatusCondition;
-import project.game.stats.Type;
+import project.game.pokemon.stats.StatusCondition;
+import project.game.pokemon.stats.Type;
 
 public class GrassMoveList {
 

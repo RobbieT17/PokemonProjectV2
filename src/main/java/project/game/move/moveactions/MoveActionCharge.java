@@ -4,7 +4,8 @@ import project.game.battle.BattleLog;
 import project.game.event.EventData;
 import project.game.event.EventManager;
 import project.game.pokemon.Pokemon;
-import project.game.stats.StatusCondition;
+import project.game.pokemon.StatusConditionManager;
+import project.game.pokemon.stats.StatusCondition;
 
 public interface MoveActionCharge extends MoveAction{
      /*
@@ -16,7 +17,7 @@ public interface MoveActionCharge extends MoveAction{
         Pokemon attacker = data.user;
 
         if (!attacker.getConditions().hasKey(StatusCondition.CHARGE_MOVE)) {
-            attacker.getConditions().addCondition(StatusCondition.chargeMove(attacker, data.moveUsed));    
+            attacker.getConditions().addCondition(StatusConditionManager.chargeMove(attacker, data.moveUsed));    
             BattleLog.add("%s begins charging!", attacker);
             return;
         }
@@ -46,7 +47,7 @@ public interface MoveActionCharge extends MoveAction{
 
         // Starts rampage
         if (!attacker.getConditions().hasKey(StatusCondition.RAMPAGE_ID)) {
-            attacker.getConditions().addCondition(StatusCondition.rampage(attacker, data.moveUsed));
+            attacker.getConditions().addCondition(StatusConditionManager.rampage(attacker, data.moveUsed));
         }
        
         MoveActionAttackDamage.dealDamage(eventManager);       

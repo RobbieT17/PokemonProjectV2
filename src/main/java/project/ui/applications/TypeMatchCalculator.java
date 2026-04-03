@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
-import project.game.stats.Type;
+import project.game.pokemon.stats.Type;
 
 public class TypeMatchCalculator {
 

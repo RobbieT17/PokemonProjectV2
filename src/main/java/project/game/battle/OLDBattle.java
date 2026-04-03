@@ -4,17 +4,17 @@ import java.util.InputMismatchException;
 import java.util.Random;
 import java.util.Scanner;
 
+import project.game.builders.PokemonTrainerBuilder;
 import project.game.event.GameEvents;
 import project.game.exceptions.BattleEndedException;
 import project.game.move.Move;
 import project.game.move.movelist.NormalMoveList;
 import project.game.player.PokemonTrainer;
-import project.game.player.PokemonTrainerBuilder;
 import project.game.pokemon.Pokemon;
 import project.game.pokemon.PokemonActions;
 import project.game.pokemon.Pokedex.PokedexEntry;
-import project.game.stats.Ability;
-import project.game.stats.HeldItem;
+import project.game.pokemon.stats.Ability;
+import project.game.pokemon.stats.HeldItem;
 import project.game.utility.StatDisplay;
 
 

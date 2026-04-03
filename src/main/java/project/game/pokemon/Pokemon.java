@@ -4,8 +4,10 @@ import project.game.battle.BattleLog;
 import project.game.event.GameEvents;
 import project.game.move.Move;
 import project.game.player.PokemonTrainer;
-import project.game.stats.Ability;
-import project.game.stats.HeldItem;
+import project.game.pokemon.stats.Ability;
+import project.game.pokemon.stats.HealthPoints;
+import project.game.pokemon.stats.HeldItem;
+import project.game.pokemon.stats.StatPoint;
 
 
 public class Pokemon {
@@ -25,7 +27,7 @@ public class Pokemon {
 
     // Pokemon Stats
     private final HealthPoints hp; // Amount of HP the Pokemon has
-    private final PokemonStat[] stats; // [atk, def, spAtk, spDef, spd, acc, eva]
+    private final StatPoint[] stats; // [atk, def, spAtk, spDef, spd, acc, eva]
     private final double weight; // Weight of the Pokemon
 
     // Moves
@@ -63,7 +65,7 @@ public class Pokemon {
         int id,
         double weight,
         HealthPoints hp,
-        PokemonStat[] stats, 
+        StatPoint[] stats, 
         Move[] moves,
         PokemonConditions conditions
     ) {
@@ -206,7 +208,7 @@ public class Pokemon {
     }
 
     public void clearStatMods() {
-        for (PokemonStat s : this.stats) s.resetMod();
+        for (StatPoint s : this.stats) s.resetMod();
     }
 
     public void endOfRoundReset() {
@@ -261,14 +263,14 @@ public class Pokemon {
     public PokemonType getPokemonType() {return this.pokemonType;}
     public int getPokedexID() {return this.pokedexID;}
     public HealthPoints getHp() {return this.hp;}
-    public PokemonStat[] getStats() {return this.stats;}
-    public PokemonStat getAttack() {return this.stats[PokemonStat.ATTACK];}
-	public PokemonStat getDefense() {return this.stats[PokemonStat.DEFENSE];}
-	public PokemonStat getSpecialAttack() {return this.stats[PokemonStat.SPECIAL_ATTACK];}
-	public PokemonStat getSpecialDefense() {return this.stats[PokemonStat.SPECIAL_DEFENSE];}
-	public PokemonStat getSpeed() {return this.stats[PokemonStat.SPEED];}
-	public PokemonStat getAccuracy() {return this.stats[PokemonStat.ACCURACY];}
-	public PokemonStat getEvasion() {return this.stats[PokemonStat.EVASION];}
+    public StatPoint[] getStats() {return this.stats;}
+    public StatPoint getAttack() {return this.stats[StatPoint.ATTACK];}
+	public StatPoint getDefense() {return this.stats[StatPoint.DEFENSE];}
+	public StatPoint getSpecialAttack() {return this.stats[StatPoint.SPECIAL_ATTACK];}
+	public StatPoint getSpecialDefense() {return this.stats[StatPoint.SPECIAL_DEFENSE];}
+	public StatPoint getSpeed() {return this.stats[StatPoint.SPEED];}
+	public StatPoint getAccuracy() {return this.stats[StatPoint.ACCURACY];}
+	public StatPoint getEvasion() {return this.stats[StatPoint.EVASION];}
 	public double getWeight() {return this.weight;}
     public Move[] getMoves() {return this.moves;}
     public PokemonConditions getConditions() {return this.conditions;}

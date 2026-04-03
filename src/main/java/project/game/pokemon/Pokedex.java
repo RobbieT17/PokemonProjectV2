@@ -1,5 +1,6 @@
 package project.game.pokemon;
 
+import project.game.builders.PokemonBuilder;
 import project.game.move.movelist.DarkMoveList;
 import project.game.move.movelist.FireMoveList;
 import project.game.move.movelist.GhostMoveList;
@@ -7,7 +8,7 @@ import project.game.move.movelist.GrassMoveList;
 import project.game.move.movelist.NormalMoveList;
 import project.game.move.movelist.SpaceMoveList;
 import project.game.move.movelist.WaterMoveList;
-import project.game.stats.Type;
+import project.game.pokemon.stats.Type;
 
 // List of Pokemon (Listed in pokedex order)
 public interface Pokedex {

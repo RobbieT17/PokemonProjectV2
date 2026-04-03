@@ -1,6 +1,6 @@
 package project.game.pokemon;
 
-import project.game.stats.Type;
+import project.game.pokemon.stats.Type;
 
 public class PokemonType {
 

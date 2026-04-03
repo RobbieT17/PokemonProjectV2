@@ -1,14 +1,14 @@
 package project.game.move.movelist;
 
+import project.game.builders.MoveBuilder;
 import project.game.move.Move;
-import project.game.move.MoveBuilder;
 import project.game.move.MoveListHelperFunctions;
 import project.game.move.moveactions.MoveAction;
 import project.game.move.moveactions.MoveActionAttackDamage;
 import project.game.move.moveactions.MoveActionChangeCondition;
 import project.game.move.moveactions.MoveActionChangeStat;
-import project.game.stats.StatusCondition;
-import project.game.stats.Type;
+import project.game.pokemon.stats.StatusCondition;
+import project.game.pokemon.stats.Type;
 
 public class PsychicMoveList {
 

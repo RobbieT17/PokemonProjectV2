@@ -7,8 +7,9 @@ import project.game.event.EventData;
 import project.game.event.EventManager;
 import project.game.move.Move;
 import project.game.pokemon.Pokemon;
-import project.game.stats.StatusCondition;
-import project.game.stats.Type;
+import project.game.pokemon.StatusConditionManager;
+import project.game.pokemon.stats.StatusCondition;
+import project.game.pokemon.stats.Type;
 
 public interface MoveActionChangeCondition extends MoveAction {
     
@@ -16,72 +17,72 @@ public interface MoveActionChangeCondition extends MoveAction {
 
     // Applies Burn Condition
     private static void applyBurn(Pokemon p) { 
-        p.getConditions().setPrimaryCondition(StatusCondition.burn(p));
+        p.getConditions().setPrimaryCondition(StatusConditionManager.burn(p));
     }
 
     // Applies Freeze Condition
     private static void applyFreeze(Pokemon p) {
-        p.getConditions().setPrimaryCondition(StatusCondition.freeze(p));
+        p.getConditions().setPrimaryCondition(StatusConditionManager.freeze(p));
     }
 
     // Applies Infect Condition
     private static void applyInfect(Pokemon p) {
-        p.getConditions().setPrimaryCondition(StatusCondition.infect(p));
+        p.getConditions().setPrimaryCondition(StatusConditionManager.infect(p));
     }
 
     // Applies Paralysis Condition
     private static void applyParalysis(Pokemon p) {
-        p.getConditions().setPrimaryCondition(StatusCondition.paralysis(p));
+        p.getConditions().setPrimaryCondition(StatusConditionManager.paralysis(p));
     }
 
     // Applies Poison Condition
     private static void applyPoison(Pokemon p) {
-        p.getConditions().setPrimaryCondition(StatusCondition.poisoned(p));
+        p.getConditions().setPrimaryCondition(StatusConditionManager.poisoned(p));
     }
 
     // Applies Badly Poison Condition
     private static void applyBadlyPoison(Pokemon p) {
-        p.getConditions().setPrimaryCondition(StatusCondition.badlyPoisoned(p));
+        p.getConditions().setPrimaryCondition(StatusConditionManager.badlyPoisoned(p));
     }
 
     // Applies Sleep Condition
     private static void applySleep(Pokemon p) {
-        p.getConditions().setPrimaryCondition(StatusCondition.sleep(p));
+        p.getConditions().setPrimaryCondition(StatusConditionManager.sleep(p));
     }
 
     private static void flyState(EventManager eventManager) {
         EventData data  = eventManager.eventData;
         Pokemon p = data.user;
-        p.getConditions().addCondition(StatusCondition.fly(p, data.moveUsed));
+        p.getConditions().addCondition(StatusConditionManager.fly(p, data.moveUsed));
     }
 
     private static void digState(EventManager eventManager) {
         EventData data  = eventManager.eventData;
         Pokemon p = data.user;
-        p.getConditions().addCondition(StatusCondition.dig(p, data.moveUsed));
+        p.getConditions().addCondition(StatusConditionManager.dig(p, data.moveUsed));
     }
 
     private static void diveState(EventManager eventManager) {
         EventData data  = eventManager.eventData;
         Pokemon p = data.user;
-        p.getConditions().addCondition(StatusCondition.dive(p, data.moveUsed));
+        p.getConditions().addCondition(StatusConditionManager.dive(p, data.moveUsed));
     }
 
     private static void applyFlinch(Pokemon p) {
-        p.getConditions().addCondition(StatusCondition.flinch(p));
+        p.getConditions().addCondition(StatusConditionManager.flinch(p));
     }
 
     // Applies Confusion Condition
     private static void applyBound(Pokemon p) {
-        p.getConditions().addCondition(StatusCondition.bound(p));
+        p.getConditions().addCondition(StatusConditionManager.bound(p));
     }
 
     private static void applyConfusion(Pokemon p) {
-        p.getConditions().addCondition(StatusCondition.confusion(p));
+        p.getConditions().addCondition(StatusConditionManager.confusion(p));
     }
 
     private static void applySeeded(Pokemon p, Pokemon r) {
-        p.getConditions().addCondition(StatusCondition.seeded(p, r));
+        p.getConditions().addCondition(StatusConditionManager.seeded(p, r));
     }
 
     private static boolean cannotApplyCondition(Pokemon p, String id) {

@@ -9,8 +9,8 @@ import project.game.event.EventManager;
 import project.game.event.GameEvents;
 import project.game.move.Move;
 import project.game.pokemon.Pokemon;
-import project.game.pokemon.PokemonStat;
-import project.game.stats.Type;
+import project.game.pokemon.stats.StatPoint;
+import project.game.pokemon.stats.Type;
 
 public interface AttackMoveCalculations {
      /*
@@ -52,7 +52,7 @@ public interface AttackMoveCalculations {
      * @param atkStat attack stat 
      * @param crit if the move was a critical hit
      */
-    private static double calculateAttack(PokemonStat atkStat, boolean crit) {
+    private static double calculateAttack(StatPoint atkStat, boolean crit) {
         return crit && atkStat.getStage() < 0 ? atkStat.getBase() : atkStat.getPower();
     }
 
@@ -63,7 +63,7 @@ public interface AttackMoveCalculations {
      * @param defStat defense stat 
      * @param crit if the move was a critical hit
      */
-    private static double calculateDefense(PokemonStat defStat, boolean crit) {
+    private static double calculateDefense(StatPoint defStat, boolean crit) {
         return crit && defStat.getStage() > 0 ? defStat.getBase() : defStat.getPower();
     }
 

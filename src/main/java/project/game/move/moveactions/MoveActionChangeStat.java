@@ -7,7 +7,7 @@ import project.game.event.EventData;
 import project.game.event.EventManager;
 import project.game.event.GameEvents;
 import project.game.pokemon.Pokemon;
-import project.game.pokemon.PokemonStat;
+import project.game.pokemon.stats.StatPoint;
 
 public interface MoveActionChangeStat extends MoveAction {
      /**
@@ -30,14 +30,14 @@ public interface MoveActionChangeStat extends MoveAction {
                 continue;
             }
         
-            PokemonStat s = p.getStats()[i];
+            StatPoint s = p.getStats()[i];
             if (s.isAtHighestOrLowestStage(change)) {
                 BattleLog.add("But %s's %s won't go any %s!", p, s, (change > 0) ? "higher" : "lower");
                 data.statFailed = true;
                 continue;
             }
             p.getStats()[i].changeStage(change);
-            BattleLog.add("%s's %s %s%s!", p, s, (change > 0) ? "rose" : "fell", PokemonStat.sizeOfChange(change));
+            BattleLog.add("%s's %s %s%s!", p, s, (change > 0) ? "rose" : "fell", StatPoint.sizeOfChange(change));
         }  
     }
 
@@ -57,7 +57,7 @@ public interface MoveActionChangeStat extends MoveAction {
 
     // Resets all stat changes back to neutral
     public static void resetStats(EventManager eventManager, Pokemon p) {
-        for (PokemonStat s : p.getStats()) s.setStage(0);
+        for (StatPoint s : p.getStats()) s.setStage(0);
         BattleLog.add("%s stat changes were cleared...", p);
     }
 
