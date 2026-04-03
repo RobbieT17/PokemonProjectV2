@@ -223,23 +223,6 @@ public class NormalMoveList {
         .build();
     }
 
-    public static Move rest() {
-        MoveAction action = e -> {
-            MoveListHelperFunctions.targetsUser(e.eventData);
-            MoveActionHealthRestore.restoreHp(e, 100);
-            MoveActionChangeCondition.applyCondition(e, StatusConditionID.SLEEP_ID);
-        };
-
-        return new MoveBuilder()
-        .setId(156)
-        .setName("Rest")
-        .setType(Type.PSYCHIC)
-        .setCategory(Move.STATUS)
-        .setPP(5)
-        .setAction(action)
-        .build();
-    }
-
     public static Move scaryFace() {
         MoveAction action = e -> {
             MoveActionAccuracy.moveHits(e);

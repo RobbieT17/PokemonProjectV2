@@ -126,6 +126,7 @@ public class IceMoveList {
         .setType(Type.ICE)
         .setCategory(Move.PHYSICAL)
         .setPP(15)
+        .setPower(80)
         .setAction(action)
         .build();
     }

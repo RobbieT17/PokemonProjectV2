@@ -30,7 +30,8 @@ public class FlyingMoveList {
         .setName("Aerial Ace")
         .setType(Type.FLYING)
         .setCategory(Move.PHYSICAL)
-        .setPP(60)
+        .setPP(20)
+        .setPower(60)
         .setAccuracy(Move.ALWAYS_HITS)
         .setAction(MoveAction.DEFAULT_ACTION)
         .build();
