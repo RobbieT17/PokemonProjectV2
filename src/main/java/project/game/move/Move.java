@@ -1,8 +1,5 @@
 package project.game.move;
 
-import java.util.function.Function;
-
-import project.game.event.EventManager;
 import project.game.move.moveactions.MoveAction;
 import project.game.pokemon.Pokemon;
 import project.game.pokemon.PokemonType;
@@ -52,8 +49,7 @@ public class Move {
         PowerPoints pp,
         MoveStat pow, MoveStat acc, 
         int prot,
-        boolean contact,
-        MoveAction action
+        boolean contact
         ) {
         this.moveID = id;
         this.moveName = name;

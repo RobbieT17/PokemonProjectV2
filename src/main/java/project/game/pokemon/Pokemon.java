@@ -221,7 +221,7 @@ public class Pokemon {
 
         // Checks for duplicate moves
         for (Move move : this.moves) {
-            if (move.getMoveID() == move.getMoveID()){
+            if (move.getMoveID() == m.getMoveID()){
                 throw new IllegalStateException("Duplicate move ids found, not allowed");
             }
 

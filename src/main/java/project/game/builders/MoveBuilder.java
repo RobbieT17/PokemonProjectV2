@@ -13,7 +13,6 @@ public class MoveBuilder implements Builder {
     private String type = null;
     private String category = null;   
     private PowerPoints pp = null;
-    private MoveAction action = null;
 
     // Optional (pow if an only if status moves)
     private MoveStat pow = null;
@@ -29,7 +28,6 @@ public class MoveBuilder implements Builder {
         if (this.type == null) throw new IllegalStateException("Type not initialized");
         if (this.category == null) throw new IllegalStateException("Category not initialized");
         if (this.pp == null) throw new IllegalStateException("PP not initialized");
-        if (this.action == null) throw new IllegalStateException("Action not initialized");
         if (!this.category.equals(Move.STATUS) && this.pow == null) throw new IllegalStateException("Power not initialized for physical/special move");
     }
 
@@ -52,8 +50,7 @@ public class MoveBuilder implements Builder {
             this.pow, 
             this.acc, 
             this.prot, 
-            this.contact, 
-            this.action
+            this.contact
             );
     }
 
@@ -112,8 +109,4 @@ public class MoveBuilder implements Builder {
         return this;
     }
 
-    public MoveBuilder setAction(MoveAction a) {
-        this.action = a;
-        return this;
-    }
 }

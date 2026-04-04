@@ -54,6 +54,10 @@ public class PokemonTrainerSelector {
     }
 
     private Pokemon getPokemonPokedexData(int input) {
+        if (input < 0) {
+            return null;
+        }
+
          // Maps input to enum
         Pokedex dex = Pokedex.values()[input];
         String pokemonName = dex.name();
@@ -70,7 +74,7 @@ public class PokemonTrainerSelector {
     private void assignNickname(Pokemon pokemon) {
         this.client.writeToBuffer("Give your %s a nickname >> ", pokemon);
         String nickname = this.client.readFromBuffer();
-        pokemon.setNickName(nickname);
+        pokemon.setNickName(nickname.strip());
     }
 
     /**
@@ -106,6 +110,10 @@ public class PokemonTrainerSelector {
         int input = this.getPokemonInput();
 
         Pokemon pokemon = this.getPokemonPokedexData(input);
+
+        if (pokemon == null) {
+            return null;
+        }
     
         // Gives a name to the pokemon 
         this.assignNickname(pokemon);

@@ -78,6 +78,10 @@ public class PokemonTrainerMoveSelector {
     }
 
     private Move getMoveListData() {
+        if (this.inputSelected < 0) {
+            return null;
+        }
+
         String moveName = this.pokemonMovePool[this.inputSelected];
         return Server.SERVER_DATA.newMoveInstance(moveName);
     }
@@ -92,9 +96,15 @@ public class PokemonTrainerMoveSelector {
             Move move = this.constructMove();
 
             // Adds Move to the list
-            if (pokemon != null) {
-                this.pokemon.addMove(move);
-                this.client.writeToBuffer("Added %s to your party!\n\n", pokemon);  
+            if (move != null) {
+                try {
+                    this.pokemon.addMove(move);
+                    this.client.writeToBuffer("%s learned %s!\n", pokemon, move);  
+                }
+                catch (IllegalStateException e) {
+                    this.client.writeToBuffer("%s already knows %s. Try again!\n", pokemon, move);  
+                }
+                
             }
             // Null return, player terminated selection process early
             else {
