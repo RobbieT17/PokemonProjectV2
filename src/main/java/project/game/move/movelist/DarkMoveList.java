@@ -3,7 +3,7 @@ package project.game.move.movelist;
 import project.game.event.EventManager;
 import project.game.exceptions.MoveInterruptedException;
 import project.game.move.Move;
-import project.game.move.MoveListHelperFunctions;
+import project.game.move.MoveAction;
 import project.game.move.moveactions.MoveActionAttackDamage;
 import project.game.move.moveactions.MoveActionChangeCondition;
 import project.game.move.moveactions.MoveActionChangeStat;
@@ -19,7 +19,7 @@ public class DarkMoveList {
 
     public static int crunch(EventManager e) {
         MoveActionAttackDamage.dealDamage(e);
-        MoveActionChangeStat.changeStats(e, MoveListHelperFunctions.stats(0, -1, 0, 0, 0, 0, 0), 20);
+        MoveActionChangeStat.changeStats(e, MoveAction.stats(0, -1, 0, 0, 0, 0, 0), 20);
         return 0;
     }
 

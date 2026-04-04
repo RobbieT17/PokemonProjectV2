@@ -1,9 +1,9 @@
 package project.game.builders;
 
 import project.game.move.Move;
+import project.game.move.MoveAction;
 import project.game.move.MoveStat;
 import project.game.move.PowerPoints;
-import project.game.move.moveactions.MoveAction;
 
 public class MoveBuilder implements Builder {
     

@@ -2,7 +2,7 @@ package project.game.move.movelist;
 
 import project.game.event.EventManager;
 import project.game.move.Move;
-import project.game.move.MoveListHelperFunctions;
+import project.game.move.MoveAction;
 import project.game.move.Movedex;
 import project.game.move.moveactions.MoveActionAttackDamage;
 import project.game.move.moveactions.MoveActionBracing;
@@ -63,16 +63,16 @@ public class NormalMoveList {
     }
 
     public static int growl(EventManager e) {
-        MoveActionChangeStat.changeStats(e, MoveListHelperFunctions.stats(0, -1, 0, 0, 0, 0, 0));
+        MoveActionChangeStat.changeStats(e, MoveAction.stats(0, -1, 0, 0, 0, 0, 0));
         return 0;
     }
 
     public static int growth(EventManager e) {
-        MoveListHelperFunctions.targetsUser(e.eventData);
+        MoveAction.targetsUser(e.eventData);
         if (BattleField.currentWeather == Weather.SUNNY) {
-            MoveActionChangeStat.changeStats(e, MoveListHelperFunctions.stats(2, 0, 2, 0, 0, 0, 0));
+            MoveActionChangeStat.changeStats(e, MoveAction.stats(2, 0, 2, 0, 0, 0, 0));
         } else {
-            MoveActionChangeStat.changeStats(e, MoveListHelperFunctions.stats(1, 0, 1, 0, 0, 0, 0));
+            MoveActionChangeStat.changeStats(e, MoveAction.stats(1, 0, 1, 0, 0, 0, 0));
         }
         return 0;
     }
@@ -89,14 +89,14 @@ public class NormalMoveList {
     }
 
     public static int rapidSpin(EventManager e) {
-        MoveListHelperFunctions.affectsUser(e.eventData);
+        MoveAction.affectsUser(e.eventData);
         MoveActionAttackDamage.dealDamage(e);
-        MoveActionChangeStat.changeStats(e, MoveListHelperFunctions.stats(0, 0, 0, 0, 1, 0, 0));
+        MoveActionChangeStat.changeStats(e, MoveAction.stats(0, 0, 0, 0, 1, 0, 0));
         return 0;
     }
 
     public static int scaryFace(EventManager e) {
-        MoveActionChangeStat.changeStats(e, MoveListHelperFunctions.stats(0, 0, 0, 0, -2, 0, 0));
+        MoveActionChangeStat.changeStats(e, MoveAction.stats(0, 0, 0, 0, -2, 0, 0));
         return 0;
     }
 
@@ -106,8 +106,8 @@ public class NormalMoveList {
     }
 
     public static int shellSmash(EventManager e) {
-        MoveListHelperFunctions.targetsUser(e.eventData);
-        MoveActionChangeStat.changeStats(e, MoveListHelperFunctions.stats(1, -1, 1, -1, 1, 0, 0));
+        MoveAction.targetsUser(e.eventData);
+        MoveActionChangeStat.changeStats(e, MoveAction.stats(1, -1, 1, -1, 1, 0, 0));
         return 0;
     }
 
@@ -137,18 +137,18 @@ public class NormalMoveList {
     }
 
     public static int smokescreen(EventManager e) {
-        MoveActionChangeStat.changeStats(e, MoveListHelperFunctions.stats(0, 0, 0, 0, 0, -1, 0));
+        MoveActionChangeStat.changeStats(e, MoveAction.stats(0, 0, 0, 0, 0, -1, 0));
         return 0;
     }
 
     public static int sweetScent(EventManager e) {
-        MoveActionChangeStat.changeStats(e, MoveListHelperFunctions.stats(0, 0, 0, 0, 0, 0, -1));
+        MoveActionChangeStat.changeStats(e, MoveAction.stats(0, 0, 0, 0, 0, 0, -1));
         return 0;
     }
 
     public static int swordsDance(EventManager e) {
-        MoveListHelperFunctions.targetsUser(e.eventData);
-        MoveActionChangeStat.changeStats(e, MoveListHelperFunctions.stats(2, 0, 0, 0, 0, 0, 0));
+        MoveAction.targetsUser(e.eventData);
+        MoveActionChangeStat.changeStats(e, MoveAction.stats(2, 0, 0, 0, 0, 0, 0));
         return 0;
     }
 
@@ -158,7 +158,7 @@ public class NormalMoveList {
     }
 
     public static int tailWhip(EventManager e) {
-        MoveActionChangeStat.changeStats(e, MoveListHelperFunctions.stats(0, -1, 0, 0, 0, 0, 0));
+        MoveActionChangeStat.changeStats(e, MoveAction.stats(0, -1, 0, 0, 0, 0, 0));
         return 0;
     }
 

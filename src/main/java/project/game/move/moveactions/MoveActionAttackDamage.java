@@ -6,6 +6,7 @@ import project.game.battle.BattleLog;
 import project.game.event.EventData;
 import project.game.event.EventManager;
 import project.game.event.GameEvents.EventID;
+import project.game.move.MoveAction;
 import project.game.move.calculations.AttackMoveCalculations;
 import project.game.move.calculations.MoveEffectiveCalculations;
 import project.game.pokemon.Pokemon;

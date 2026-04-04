@@ -1,9 +1,7 @@
 package project.game.move.movelist;
 
-import java.util.function.Function;
-
 import project.game.event.EventManager;
-import project.game.move.MoveListHelperFunctions;
+import project.game.move.MoveAction;
 import project.game.move.moveactions.MoveActionAttackDamage;
 import project.game.move.moveactions.MoveActionChangeCondition;
 import project.game.move.moveactions.MoveActionChangeStat;
@@ -13,7 +11,7 @@ public class GroundMoveList {
 
     public static int bulldoze(EventManager e) {
         MoveActionAttackDamage.dealDamage(e);
-        MoveActionChangeStat.changeStats(e, MoveListHelperFunctions.stats(0, 0, 0, 0, -1, 0, 0));
+        MoveActionChangeStat.changeStats(e, MoveAction.stats(0, 0, 0, 0, -1, 0, 0));
         return 0;
     }
 
@@ -32,13 +30,13 @@ public class GroundMoveList {
 
     public static int earthPower(EventManager e) {
         MoveActionAttackDamage.dealDamage(e);
-        MoveActionChangeStat.changeStats(e, MoveListHelperFunctions.stats(0, 0, 0, -1, 0, 0, 0), 10);
+        MoveActionChangeStat.changeStats(e, MoveAction.stats(0, 0, 0, -1, 0, 0, 0), 10);
         return 0;
     }
 
     public static int mudShot(EventManager e) {
         MoveActionAttackDamage.dealDamage(e);
-        MoveActionChangeStat.changeStats(e, MoveListHelperFunctions.stats(0, 0, 0, 0, -1, 0, 0));
+        MoveActionChangeStat.changeStats(e, MoveAction.stats(0, 0, 0, 0, -1, 0, 0));
         return 0;
     }
 

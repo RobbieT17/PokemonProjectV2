@@ -3,8 +3,7 @@ package project.game.move.movelist;
 import project.game.event.EventManager;
 import project.game.battle.BattleField;
 import project.game.battle.Weather;
-import project.game.move.MoveListHelperFunctions;
-import project.game.move.moveactions.MoveAction;
+import project.game.move.MoveAction;
 import project.game.move.moveactions.MoveActionAccuracy;
 import project.game.move.moveactions.MoveActionAttackDamage;
 import project.game.move.moveactions.MoveActionChangeCondition;
@@ -23,7 +22,7 @@ public class GrassMoveList {
 
     public static int energyBall(EventManager e) {
         MoveActionAttackDamage.dealDamage(e);
-        MoveActionChangeStat.changeStats(e, MoveListHelperFunctions.stats(0, 0, 0, -1, 0, 0, 0), 10);
+        MoveActionChangeStat.changeStats(e, MoveAction.stats(0, 0, 0, -1, 0, 0, 0), 10);
         return 0;
     }
 
@@ -53,7 +52,7 @@ public class GrassMoveList {
 
     public static int leafStorm(EventManager e) {
         MoveActionAttackDamage.dealDamage(e);
-        MoveActionChangeStat.changeStats(e, MoveListHelperFunctions.stats(0, 0, -2, 0, 0, 0, 0));
+        MoveActionChangeStat.changeStats(e, MoveAction.stats(0, 0, -2, 0, 0, 0, 0));
         return 0;
     }
 
@@ -116,7 +115,7 @@ public class GrassMoveList {
     }
 
     public static int synthesis(EventManager e) {
-        MoveListHelperFunctions.targetsUser(e.eventData);
+        MoveAction.targetsUser(e.eventData);
         double percent = (BattleField.currentWeather == Weather.SUNNY) ? 67 :
                          (BattleField.currentWeather == Weather.CLEAR) ? 50 : 25;
         MoveActionHealthRestore.restoreHp(e, percent);
@@ -125,7 +124,7 @@ public class GrassMoveList {
 
     public static int trailblaze(EventManager e) {
         MoveActionAttackDamage.dealDamage(e);
-        MoveActionChangeStat.changeStats(e, MoveListHelperFunctions.stats(0, 0, 0, 0, 1, 0, 0));
+        MoveActionChangeStat.changeStats(e, MoveAction.stats(0, 0, 0, 0, 1, 0, 0));
         return 0;
     }
 

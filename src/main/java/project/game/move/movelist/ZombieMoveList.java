@@ -3,7 +3,7 @@ package project.game.move.movelist;
 import java.util.function.Function;
 
 import project.game.event.EventManager;
-import project.game.move.MoveListHelperFunctions;
+import project.game.move.MoveAction;
 import project.game.move.moveactions.MoveActionAttackDamage;
 import project.game.move.moveactions.MoveActionChangeCondition;
 import project.game.move.moveactions.MoveActionChangeStat;
@@ -38,7 +38,7 @@ public class ZombieMoveList {
     // Type: Zombie, Category: Physical, Power: 70, PP: 15, Accuracy: 95
     public static int rottenBite(EventManager e) {
         MoveActionAttackDamage.dealDamage(e);
-        MoveActionChangeStat.changeStats(e, MoveListHelperFunctions.stats(-1, 0, 0, 0, 0, 0, 0), 30);
+        MoveActionChangeStat.changeStats(e, MoveAction.stats(-1, 0, 0, 0, 0, 0, 0), 30);
         return 0;
     }
 
@@ -54,7 +54,7 @@ public class ZombieMoveList {
     // Type: Zombie, Category: Special, Power: 50, PP: 5, Accuracy: 100
     public static int viralSpread(EventManager e) {
         MoveActionAttackDamage.dealDamage(e);
-        MoveActionChangeStat.changeStats(e, MoveListHelperFunctions.stats(-1, 0, -1, 0, 0, 0, 0), 100);
+        MoveActionChangeStat.changeStats(e, MoveAction.stats(-1, 0, -1, 0, 0, 0, 0), 100);
         MoveActionChangeCondition.applyCondition(e, StatusConditionID.INFECT_ID, 10); // 10% chance to infect others
         return 0;
     }

@@ -1,9 +1,10 @@
 package project.game.move;
 
+import project.game.battle.BattleLog;
 import project.game.event.EventData;
+import project.game.event.EventManager;
 
-// Interface storing all available Pokemon moves (Moves listed alphabetically)
-public interface MoveListHelperFunctions {
+public interface MoveAction {
 
     public static int[] stats(int atk, int def, int spAtk, int spDef, int spd, int acc, int eva) {
         return new int[] {atk, def, spAtk, spDef, spd, acc, eva};
@@ -17,5 +18,10 @@ public interface MoveListHelperFunctions {
     public static void affectsUser(EventData data) {
         data.effectTarget = data.user;
     }
+
+    public static void displayFailMessage(EventManager e) {
+        BattleLog.add(e.eventData.message);
+    }
+
 
 }

@@ -3,7 +3,7 @@ package project.game.move.movelist;
 import project.game.battle.BattleLog;
 import project.game.battle.Weather;
 import project.game.event.EventManager;
-import project.game.move.MoveListHelperFunctions;
+import project.game.move.MoveAction;
 import project.game.move.moveactions.MoveActionAccuracy;
 import project.game.move.moveactions.MoveActionAttackDamage;
 import project.game.move.moveactions.MoveActionChangeCondition;
@@ -51,9 +51,9 @@ public class FireMoveList {
     }
 
     public static int flameCharge(EventManager e) {
-        MoveListHelperFunctions.affectsUser(e.eventData);
+        MoveAction.affectsUser(e.eventData);
         MoveActionAttackDamage.dealDamage(e);
-        MoveActionChangeStat.changeStats(e, MoveListHelperFunctions.stats(0, 0, 0, 0, 1, 0, 0));
+        MoveActionChangeStat.changeStats(e, MoveAction.stats(0, 0, 0, 0, 1, 0, 0));
         return 0;
     }
 
@@ -97,9 +97,9 @@ public class FireMoveList {
     }
 
     public static int overheat(EventManager e) {
-        MoveListHelperFunctions.affectsUser(e.eventData);
+        MoveAction.affectsUser(e.eventData);
         MoveActionAttackDamage.dealDamage(e);
-        MoveActionChangeStat.changeStats(e, MoveListHelperFunctions.stats(-2, 0, 0, 0, 0, 0, 0));
+        MoveActionChangeStat.changeStats(e, MoveAction.stats(-2, 0, 0, 0, 0, 0, 0));
         return 0;
     }
 
