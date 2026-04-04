@@ -7,7 +7,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 
-import project.game.builders.PokemonTrainerBuilder;
 import project.game.move.Move;
 import project.game.move.MoveSelector;
 import project.game.player.PokemonTrainer;
