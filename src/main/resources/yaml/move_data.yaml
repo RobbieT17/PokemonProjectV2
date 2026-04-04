@@ -293,7 +293,7 @@ moves:
     pp: 20
 
   - id: 174
-    name: Cure
+    name: Curse
     type: Ghost
     category: Status
     pp: 10
@@ -305,13 +305,6 @@ moves:
     pp: 15
     pow: 70
     crit: 0.125
-
-  - id: 174
-    name: Cure
-    type: Ghost
-    category: Status
-    pp: 10
-    pow: 70
 
   - id: 331
     name: Bullet Seed
@@ -544,7 +537,7 @@ moves:
     pow: 90
 
   - id: 8
-    name: Ice Beam
+    name: Ice Punch
     type: Ice
     category: Physical
     pp: 15
@@ -557,7 +550,7 @@ moves:
     pp: 15
     pow: 80
 
-  - id: 8
+  - id: 196
     name: Icy Wind
     type: Ice
     category: Special
@@ -695,7 +688,7 @@ moves:
     category: Status
     pp: 20
 
-  - id: 229
+  - id: 14
     name: Swords Dance
     type: Normal
     category: Status
@@ -856,13 +849,6 @@ moves:
     pp: 10
     pow: 90
     acc: 90
-
-  - id: 886
-    name: Chilling Water
-    type: Water
-    category: Special
-    pp: 20
-    pow: 50
 
   - id: 886
     name: Chilling Water
