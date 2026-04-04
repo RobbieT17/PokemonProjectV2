@@ -15,22 +15,7 @@ import project.game.battle.Weather;
 public class WaterMoveList {
 
     public enum MoveName {
-        Aqua_Tail(WaterMoveList::aquaTail),
-        Chilling_Water(WaterMoveList::chillingWater),
-        Dive(WaterMoveList::dive),
-        Flip_Turn(WaterMoveList::flipTurn),
-        Hydro_Cannon(WaterMoveList::hydroCannon),
-        Hydro_Pump(WaterMoveList::hydroPump),
-        Liquidation(WaterMoveList::liquidation),
-        Muddy_Water(WaterMoveList::muddyWater),
-        Rain_Dance(WaterMoveList::rainDance),
-        Surf(WaterMoveList::surf),
-        Water_Gun(WaterMoveList::waterGun),
-        Water_Pledge(WaterMoveList::waterPledge),
-        Water_Pulse(WaterMoveList::waterPulse),
-        Wave_Crash(WaterMoveList::waveCrash),
-        Whirlpool(WaterMoveList::whirlpool),
-        Withdraw(WaterMoveList::withdraw);
+        ;
 
         private final Function<EventManager, Integer> func;
 

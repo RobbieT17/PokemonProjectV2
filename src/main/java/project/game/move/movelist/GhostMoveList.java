@@ -1,7 +1,5 @@
 package project.game.move.movelist;
 
-import java.util.function.Function;
-
 import project.game.event.EventManager;
 import project.game.move.MoveListHelperFunctions;
 import project.game.move.moveactions.MoveAction;
@@ -12,23 +10,6 @@ import project.game.move.moveactions.MoveActionChangeStat;
 import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;
 
 public class GhostMoveList {
-
-    public enum MoveName {
-
-        Confuse_Ray(GhostMoveList::confuseRay),
-        Curse(GhostMoveList::curse),
-        Shadow_Claw(GhostMoveList::shadowClaw);
-
-        private final Function<EventManager, Integer> func;
-
-        MoveName(Function<EventManager, Integer> func) {
-            this.func = func;
-        }
-
-        public void act(EventManager e) {
-            this.func.apply(e);
-        }
-    }
 
     public static int confuseRay(EventManager e) {
         MoveActionAccuracy.moveHits(e);

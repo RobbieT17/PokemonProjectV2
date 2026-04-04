@@ -35,6 +35,6 @@ public class MoveData {
     public int getAcc() {return acc;}
     public int getPriority() {return priority;}
     public double getCrit() {return crit;}
-    public boolean isContact() {return contact;}
+    public boolean getContact() {return contact;}
         
 }

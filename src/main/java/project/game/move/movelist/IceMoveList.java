@@ -13,28 +13,6 @@ import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;
 
 public class IceMoveList {
 
-    public enum MoveName {
-
-        Avalanche(IceMoveList::avalanche),
-        Blizzard(IceMoveList::blizzard),
-        Hail(IceMoveList::hail),
-        Haze(IceMoveList::haze),
-        Ice_Beam(IceMoveList::iceBeam),
-        Ice_Punch(IceMoveList::icePunch),
-        Ice_Spinner(IceMoveList::iceSpinner),
-        Icy_Wind(IceMoveList::icyWind);
-
-        private final Function<EventManager, Integer> func;
-
-        MoveName(Function<EventManager, Integer> func) {
-            this.func = func;
-        }
-
-        public void act(EventManager e) {
-            this.func.apply(e);
-        }
-    }
-
     public static int avalanche(EventManager e) {
         if (e.eventData.user.getConditions().tookDamage()) {
             e.eventData.moveUsed.doublePower();

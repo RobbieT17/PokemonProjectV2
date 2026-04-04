@@ -6,6 +6,7 @@ import java.net.Socket;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
+import project.data.ServerData;
 import project.game.battle.Battle;
 import project.game.player.PokemonTrainer;
 import project.game.utility.Time;
@@ -23,9 +24,13 @@ public class Server {
     // Stores player data (name and pokemon team)
     public static final PokemonTrainer[] PLAYERS = new PokemonTrainer[Server.NUM_CLIENTS];
 
+    // Store application data such as pokemon and moves lists
+    public static final ServerData SERVER_DATA = new ServerData();
+
     // Syncronizines client threads and server for processing
     public static final CyclicBarrier BARRIER = new CyclicBarrier(Server.NUM_CLIENTS + 1); 
     public static int round = 0; // The current round number of the battle
+
 
 // Class Methods
     /**

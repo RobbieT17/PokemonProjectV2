@@ -1,10 +1,9 @@
 package project.game.move.movelist;
 
-import java.util.function.Function;
-
 import project.game.event.EventManager;
 import project.game.move.Move;
 import project.game.move.MoveListHelperFunctions;
+import project.game.move.Movedex;
 import project.game.move.moveactions.MoveActionAttackDamage;
 import project.game.move.moveactions.MoveActionBracing;
 import project.game.move.moveactions.MoveActionChangeCondition;
@@ -18,44 +17,6 @@ import project.game.battle.BattleLog;
 import project.game.utility.RandomValues;
 
 public class NormalMoveList {
-
-    public enum MoveName {
-
-        Body_Slam(NormalMoveList::bodySlam),
-        Double_Edge(NormalMoveList::doubleEdge),
-        Endure(NormalMoveList::endure),
-        Facade(NormalMoveList::facade),
-        False_Swipe(NormalMoveList::falseSwipe),
-        Fury_Attack(NormalMoveList::furyAttack),
-        Giga_Impact(NormalMoveList::gigaImpact),
-        Growl(NormalMoveList::growl),
-        Growth(NormalMoveList::growth),
-        Hyper_Beam(NormalMoveList::hyperBeam),
-        Protect(NormalMoveList::protect),
-        Rapid_Spin(NormalMoveList::rapidSpin),
-        Scary_Face(NormalMoveList::scaryFace),
-        Scratch(NormalMoveList::scratch),
-        Shell_Smash(NormalMoveList::shellSmash),
-        Slash(NormalMoveList::slash),
-        Sleep_Talk(NormalMoveList::sleepTalk),
-        Smokescreen(NormalMoveList::smokescreen),
-        Sweet_Scent(NormalMoveList::sweetScent),
-        Swords_Dance(NormalMoveList::swordsDance),
-        Tackle(NormalMoveList::tackle),
-        Tail_Whip(NormalMoveList::tailWhip),
-        Take_Down(NormalMoveList::takeDown),
-        Struggle(NormalMoveList::struggle);
-
-        private final Function<EventManager, Integer> func;
-
-        MoveName(Function<EventManager, Integer> func) {
-            this.func = func;
-        }
-
-        public void act(EventManager e) {
-            this.func.apply(e);
-        }
-    }
 
     public static int bodySlam(EventManager e) {
         MoveActionAttackDamage.dealDamage(e);
@@ -155,6 +116,7 @@ public class NormalMoveList {
         return 0;
     }
 
+    // TODO: Needs fixing
     public static int sleepTalk(EventManager e) {
         Pokemon a = e.eventData.user;
         Move m = e.eventData.moveUsed;
@@ -165,12 +127,12 @@ public class NormalMoveList {
 
         Move randomMove = m;
         while (randomMove.equals(m)) {
-            int i = RandomValues.generateInt(0, a.getMoves().length - 1);
-            randomMove = a.getMoves()[i];
+            int i = RandomValues.generateInt(0, a.getMoves().size() - 1);
+            randomMove = a.getMoves().get(i);
         }
 
         BattleLog.add("%s used %s!", a, randomMove);
-        randomMove.getAction().act(new EventManager(e.eventData.user, e.eventData.attackTarget));
+        Movedex.processMove(randomMove.getMoveName(), e);
         return 0;
     }
 

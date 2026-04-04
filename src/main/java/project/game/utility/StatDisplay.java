@@ -19,8 +19,8 @@ public interface StatDisplay {
 
     public static String listMoves(Pokemon p) {
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < p.getMoves().length; i++) 
-            sb.append(String.format("[%d] %s", i, p.getMoves()[i].moveStats())); 
+        for (int i = 0; i < p.getMoves().size(); i++) 
+            sb.append(String.format("[%d] %s", i, p.getMoves().get(i).moveStats())); 
             
         return sb.toString();
     }

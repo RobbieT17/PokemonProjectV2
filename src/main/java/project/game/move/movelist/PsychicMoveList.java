@@ -1,7 +1,5 @@
 package project.game.move.movelist;
 
-import java.util.function.Function;
-
 import project.game.event.EventManager;
 import project.game.move.MoveListHelperFunctions;
 import project.game.move.moveactions.MoveActionAttackDamage;
@@ -11,22 +9,6 @@ import project.game.move.moveactions.MoveActionHealthRestore;
 import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;
 
 public class PsychicMoveList {
-
-    public enum MoveName {
-        Amnesia(PsychicMoveList::amnesia),
-        Rest(PsychicMoveList::rest),
-        Zen_Headbutt(PsychicMoveList::zenHeadbutt);
-
-        private final Function<EventManager, Integer> func;
-
-        MoveName(Function<EventManager, Integer> func) {
-            this.func = func;
-        }
-
-        public void act(EventManager e) {
-            this.func.apply(e);
-        }
-    }
 
     public static int amnesia(EventManager e) {
         MoveListHelperFunctions.targetsUser(e.eventData);

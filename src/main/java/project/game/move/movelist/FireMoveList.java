@@ -1,7 +1,5 @@
 package project.game.move.movelist;
 
-import java.util.function.Function;
-
 import project.game.battle.BattleLog;
 import project.game.battle.Weather;
 import project.game.event.EventManager;
@@ -15,36 +13,6 @@ import project.game.move.moveactions.MoveActionChangeWeather;
 import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;
 
 public class FireMoveList {
-
-    public enum MoveName {
-
-        Blast_Burn(FireMoveList::blastBurn),
-        Ember(FireMoveList::ember),
-        Fire_Blast(FireMoveList::fireBlast),
-        Fire_Fang(FireMoveList::fireFang),
-        Fire_Pledge(FireMoveList::firePledge),
-        Fire_Punch(FireMoveList::firePunch),
-        Flame_Charge(FireMoveList::flameCharge),
-        Flamethrower(FireMoveList::flamethrower),
-        Flare_Blitz(FireMoveList::flareBlitz),
-        Heat_Crash(FireMoveList::heatCrash),
-        Heat_Wave(FireMoveList::heatWave),
-        Inferno(FireMoveList::inferno),
-        Overheat(FireMoveList::overheat),
-        Sunny_Day(FireMoveList::sunnyDay),
-        Temper_Flare(FireMoveList::temperFlare),
-        Will_O_Wisp(FireMoveList::willOWisp);
-
-        private final Function<EventManager, Integer> func;
-
-        MoveName(Function<EventManager, Integer> func) {
-            this.func = func;
-        }
-
-        public void act(EventManager e) {
-            this.func.apply(e);
-        }
-    }
 
     public static int blastBurn(EventManager e) {
         MoveActionAccuracy.moveHits(e);

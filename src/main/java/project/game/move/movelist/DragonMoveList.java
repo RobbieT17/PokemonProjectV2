@@ -1,7 +1,5 @@
 package project.game.move.movelist;
 
-import java.util.function.Function;
-
 import project.game.event.EventManager;
 import project.game.move.MoveListHelperFunctions;
 import project.game.move.moveactions.MoveActionAttackDamage;
@@ -11,27 +9,6 @@ import project.game.move.moveactions.MoveActionCharge;
 import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;
 
 public class DragonMoveList {
-
-    public enum MoveName {
-
-        Breaking_Swipe(DragonMoveList::breakingSwipe),
-        Dragon_Breath(DragonMoveList::dragonBreath),
-        Dragon_Claw(DragonMoveList::dragonClaw),
-        Dragon_Dance(DragonMoveList::dragonDance),
-        Dragon_Pulse(DragonMoveList::dragonPulse),
-        Dragon_Tail(DragonMoveList::dragonTail),
-        Outrage(DragonMoveList::outrage);
-        
-        private final Function<EventManager, Integer> func;
-
-        MoveName(Function<EventManager, Integer> func) {
-            this.func = func;
-        }
-
-        public void act(EventManager e) {
-            this.func.apply(e);
-        }
-    }
 
     public static int breakingSwipe(EventManager e) {
         MoveActionAttackDamage.dealDamage(e);

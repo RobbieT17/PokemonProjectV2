@@ -33,7 +33,7 @@ public class MoveSelector {
                 String input = this.client.readFromBuffer();
                 int i = Integer.parseInt(input);
 
-                m = this.pokemon.getMoves()[i];
+                m = this.pokemon.getMoves().get(i);
                 if (!(m.getPp().depleted() || m.getDisabled())) {
                     break;
                 }

@@ -1,7 +1,5 @@
 package project.game.move.movelist;
 
-import java.util.function.Function;
-
 import project.game.event.EventManager;
 import project.game.exceptions.MoveInterruptedException;
 import project.game.move.Move;
@@ -12,23 +10,6 @@ import project.game.move.moveactions.MoveActionChangeStat;
 import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;
 
 public class DarkMoveList {
-
-    public enum MoveName {
-        Bite(DarkMoveList::bite),
-        Crunch(DarkMoveList::crunch),
-        Dark_Pulse(DarkMoveList::darkPulse),
-        Fake_Out(DarkMoveList::fakeOut);
-
-        private final Function<EventManager, Integer> func;
-
-        MoveName(Function<EventManager, Integer> func) {
-            this.func = func;
-        }
-
-        public void act(EventManager e) {
-            this.func.apply(e);
-        }
-    }
 
     public static int bite(EventManager e) {
         MoveActionAttackDamage.dealDamage(e);

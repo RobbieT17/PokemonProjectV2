@@ -3,29 +3,13 @@ package project.data;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 
 import org.yaml.snakeyaml.Yaml;
 
 public class YamlLoader {
-    public static void main(String[] args) {
-        try (InputStream input = YamlLoader.class.getResourceAsStream("/yaml/move_data.yaml")) {
 
-            if (input == null) {
-                throw new RuntimeException("YAML file not found!");
-            }
-
-            Yaml yaml = new Yaml();
-            MoveDataList moveList = yaml.loadAs(
-                    new InputStreamReader(input, StandardCharsets.UTF_8),
-                    MoveDataList.class
-            );
-
-            System.out.println(moveList.getMoves().get(0).getName());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+    public static HashMap<String, PokemonData> initializePokemonData() {
         try (InputStream input = YamlLoader.class.getResourceAsStream("/yaml/pokemon_data.yaml")) {
 
             if (input == null) {
@@ -38,10 +22,42 @@ public class YamlLoader {
                     PokemonDataList.class
             );
 
-            System.out.println(pokemonDataList.getPokemon().get(0).getName());
+            HashMap<String, PokemonData> map = new HashMap<>();
+            for (PokemonData data : pokemonDataList.getPokemon()) {
+                map.put(data.getName(), data);
+            }
+
+            return map;
 
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return null;
+    }
+
+    public static HashMap<String, MoveData> initalizeMoveData() {
+        try (InputStream input = YamlLoader.class.getResourceAsStream("/yaml/move_data.yaml")) {
+
+            if (input == null) {
+                throw new RuntimeException("YAML file not found!");
+            }
+
+            Yaml yaml = new Yaml();
+            MoveDataList moveDataList = yaml.loadAs(
+                    new InputStreamReader(input, StandardCharsets.UTF_8),
+                    MoveDataList.class
+            );
+
+            HashMap<String, MoveData> map = new HashMap<>();
+            for (MoveData data : moveDataList.getMoves()) {
+                map.put(data.getName(), data);
+            }
+
+            return map;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

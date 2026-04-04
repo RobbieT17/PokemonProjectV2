@@ -1,5 +1,7 @@
 package project.game.pokemon;
 
+import java.util.ArrayList;
+
 import project.game.battle.BattleLog;
 import project.game.event.GameEvents;
 import project.game.event.GameEvents.EventID;
@@ -22,7 +24,7 @@ public class Pokemon {
 
 // Object Variables
     private final int level; // Pokemon Level, higher level means a stronger pokemon 
-    private final String pokemonName; // Pokemon's Name (Given by the player)
+    private final String pokemonName; // Pokemon's Name (Pokedex Entry)
     private final PokemonType pokemonType; // Pokemon have one or two types
     private final int pokedexID; // National Pokedex Number
 
@@ -32,7 +34,7 @@ public class Pokemon {
     private final double weight; // Weight of the Pokemon
 
     // Moves
-    private final Move[] moves; // Available moves, can have up to four
+    private final ArrayList<Move> moves; // Available moves, can have up to four
 
     //Conditions
     private final PokemonConditions conditions; 
@@ -45,6 +47,10 @@ public class Pokemon {
 
     // Owner of the Pokemon
     private PokemonTrainer owner;
+
+    // Pokemon's Name (Given by the player)
+    private String nickname; 
+
 
     // Event Listeners
     private final GameEvents events;
@@ -66,9 +72,7 @@ public class Pokemon {
         int id,
         double weight,
         HealthPoints hp,
-        StatPoint[] stats, 
-        Move[] moves,
-        PokemonConditions conditions
+        StatPoint[] stats
     ) {
         this.level = level;
         this.pokemonName = name;
@@ -79,9 +83,8 @@ public class Pokemon {
         this.hp = hp;
         this.stats = stats;
 
-        this.moves = moves;
-        this.conditions = conditions;
-
+        this.moves = new ArrayList<Move>();
+        this.conditions = new PokemonConditions();
         this.events = new GameEvents();
     }
 
@@ -159,8 +162,11 @@ public class Pokemon {
 
 
     @Override
+    /**
+     * Returns the Pokemon's name (uses nickname if initialized)
+     */
     public String toString() {
-        return this.pokemonName;
+        return this.nickname != null ? this.nickname : this.pokemonName;
     }
 
 
@@ -207,6 +213,23 @@ public class Pokemon {
         this.lastMove = this.moveSelected;
         this.moveSelected = null;
     }
+
+    public void addMove(Move m) {
+        if (this.moves.size() > 4) { // 4 moves max
+            throw new IllegalStateException("Pokemon cannot have more than 4 moves");
+        }
+
+        // Checks for duplicate moves
+        for (Move move : this.moves) {
+            if (move.getMoveID() == move.getMoveID()){
+                throw new IllegalStateException("Duplicate move ids found, not allowed");
+            }
+
+        }
+
+        // Adds moves 
+        this.moves.add(m);
+    } 
 
     public void clearStatMods() {
         for (StatPoint s : this.stats) s.resetMod();
@@ -257,6 +280,7 @@ public class Pokemon {
     public void setAbility(Ability a) {this.ability = a;}
     public void setOwner(PokemonTrainer pt) {this.owner = pt;}
     public void setItem(HeldItem i) {this.item = i;}
+    public void setNickName(String n) {this.nickname = n != "" ? n : null;}
 
 // Getters
     public int getLevel() {return this.level;}
@@ -273,7 +297,7 @@ public class Pokemon {
 	public StatPoint getAccuracy() {return this.stats[StatPoint.ACCURACY];}
 	public StatPoint getEvasion() {return this.stats[StatPoint.EVASION];}
 	public double getWeight() {return this.weight;}
-    public Move[] getMoves() {return this.moves;}
+    public ArrayList<Move> getMoves() {return this.moves;}
     public PokemonConditions getConditions() {return this.conditions;}
     public Move getMoveSelected() {return this.moveSelected;}
     public Move getFirstMove() {return this.firstMove;}
@@ -283,6 +307,7 @@ public class Pokemon {
     public int getRoundCount() {return this.roundCount;}
     public Ability getAbility() {return this.ability;}
     public HeldItem getItem() {return this.item;}
+    public String getNickname() {return this.nickname;}
     public PokemonTrainer getOwner() {return this.owner;}
     public GameEvents getEvents() {return this.events;}
 

@@ -41,6 +41,5 @@ public class BattleField {
         // player1.getPokemonInBattle().afterEffects();
         // player2.getPokemonInBattle().afterEffects();
         isBattleOver();
-        OLDBattle.skipRound = false;
     }
 }

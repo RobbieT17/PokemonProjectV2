@@ -8,6 +8,7 @@ import project.game.exceptions.MoveEndedEarlyException;
 import project.game.exceptions.MoveInterruptedException;
 import project.game.exceptions.PokemonCannotActException;
 import project.game.move.Move;
+import project.game.move.Movedex;
 import project.game.pokemon.Pokemon;
 import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;;
 
@@ -56,7 +57,9 @@ public class PokemonActions {
         try {
             this.eventManager.notifyUserPokemon(EventID.USE_MOVE);
             move.getPp().decrement(user.getConditions().hasKey(StatusConditionID.FORCED_MOVE_ID));
-            move.getAction().act(this.eventManager);
+        
+            Movedex.processMove(move.getMoveName(), this.eventManager);
+
         } catch (MoveEndedEarlyException e) {
             BattleLog.add(e.getMessage());
         }

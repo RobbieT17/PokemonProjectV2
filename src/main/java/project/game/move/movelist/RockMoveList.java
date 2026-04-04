@@ -1,7 +1,5 @@
 package project.game.move.movelist;
 
-import java.util.function.Function;
-
 import project.game.event.EventManager;
 import project.game.move.MoveListHelperFunctions;
 import project.game.move.moveactions.MoveActionAttackDamage;
@@ -12,23 +10,6 @@ import project.game.battle.Weather;
 import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;
 
 public class RockMoveList {
-
-    public enum MoveName {
-        Rock_Slide(RockMoveList::rockSlide),
-        Rock_Tomb(RockMoveList::rockTomb),
-        Sandstorm(RockMoveList::sandstorm),
-        Smack_Down(RockMoveList::smackDown);
-
-        private final Function<EventManager, Integer> func;
-
-        MoveName(Function<EventManager, Integer> func) {
-            this.func = func;
-        }
-
-        public void act(EventManager e) {
-            this.func.apply(e);
-        }
-    }
 
     public static int rockSlide(EventManager e) {
         MoveActionAttackDamage.dealDamage(e);

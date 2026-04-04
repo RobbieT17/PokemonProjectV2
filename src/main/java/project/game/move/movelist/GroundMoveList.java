@@ -11,27 +11,6 @@ import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;
 
 public class GroundMoveList {
 
-    public enum MoveName {
-
-        Bulldoze(GroundMoveList::bulldoze),
-        Dig(GroundMoveList::dig),
-        Earthquake(GroundMoveList::earthquake),
-        Earth_Power(GroundMoveList::earthPower),
-        Mud_Shot(GroundMoveList::mudShot),
-        Scorching_Sands(GroundMoveList::scorchingSands),
-        Stomping_Tantrum(GroundMoveList::stompingTantrum);
-
-        private final Function<EventManager, Integer> func;
-
-        MoveName(Function<EventManager, Integer> func) {
-            this.func = func;
-        }
-
-        public void act(EventManager e) {
-            this.func.apply(e);
-        }
-    }
-
     public static int bulldoze(EventManager e) {
         MoveActionAttackDamage.dealDamage(e);
         MoveActionChangeStat.changeStats(e, MoveListHelperFunctions.stats(0, 0, 0, 0, -1, 0, 0));

@@ -1,5 +1,8 @@
 package project.game.move;
 
+import java.util.function.Function;
+
+import project.game.event.EventManager;
 import project.game.move.moveactions.MoveAction;
 import project.game.pokemon.Pokemon;
 import project.game.pokemon.PokemonType;
@@ -35,9 +38,7 @@ public class Move {
 	private final MoveStat accuracy; // Hit rate of the move
 	private final int priority; // Moves with higher priority always move first
     private final boolean makesContact;
-    
-    private final MoveAction action; // What the move does (ex. Deal damage, apply status effect, etc.)
-    
+        
     private boolean disabled; // Move is currently unusable
 
 // Constructor
@@ -64,7 +65,6 @@ public class Move {
         this.accuracy = acc;
         this.priority = prot;
         this.makesContact = contact;
-        this.action = action;
     }
 
 // Methods
@@ -138,6 +138,5 @@ public class Move {
     public int getAccuracy() {return this.accuracy.power();}
     public int getPriority() {return this.priority;}
     public boolean getMakesContact() {return this.makesContact;}
-    public MoveAction getAction() {return this.action;}
     public boolean getDisabled() {return this.disabled;}
 }

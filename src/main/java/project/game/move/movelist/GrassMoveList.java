@@ -1,7 +1,5 @@
 package project.game.move.movelist;
 
-import java.util.function.Function;
-
 import project.game.event.EventManager;
 import project.game.battle.BattleField;
 import project.game.battle.Weather;
@@ -17,39 +15,6 @@ import project.game.pokemon.Pokemon;
 import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;
 
 public class GrassMoveList {
-
-    public enum MoveName {
-
-        Bullet_Seed(GrassMoveList::bulletSeed),
-        Energy_Ball(GrassMoveList::energyBall),
-        Frenzy_Plant(GrassMoveList::frenzyPlant),
-        Giga_Drain(GrassMoveList::gigaDrain),
-        Grass_Knot(GrassMoveList::grassKnot),
-        Leaf_Storm(GrassMoveList::leafStorm),
-        Leech_Seed(GrassMoveList::leechSeed),
-        Magical_Leaf(GrassMoveList::magicalLeaf),
-        Petal_Blizzard(GrassMoveList::petalBlizzard),
-        Petal_Dance(GrassMoveList::petalDance),
-        Power_Whip(GrassMoveList::powerWhip),
-        Razor_Leaf(GrassMoveList::razorLeaf),
-        Seed_Bomb(GrassMoveList::seedBomb),
-        Sleep_Powder(GrassMoveList::sleepPowder),
-        Solar_Beam(GrassMoveList::solarBeam),
-        Stun_Spore(GrassMoveList::stunSpore),
-        Synthesis(GrassMoveList::synthesis),
-        Trailblaze(GrassMoveList::trailblaze),
-        Vine_Whip(GrassMoveList::vineWhip);
-
-        private final Function<EventManager, Integer> func;
-
-        MoveName(Function<EventManager, Integer> func) {
-            this.func = func;
-        }
-
-        public void act(EventManager e) {
-            this.func.apply(e);
-        }
-    }
 
     public static int bulletSeed(EventManager e) {
         MoveActionAttackDamage.multiHit(e);

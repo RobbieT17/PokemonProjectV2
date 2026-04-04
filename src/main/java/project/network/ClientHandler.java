@@ -11,6 +11,7 @@ import project.game.builders.PokemonTrainerBuilder;
 import project.game.move.Move;
 import project.game.move.MoveSelector;
 import project.game.player.PokemonTrainer;
+import project.game.player.PokemonTrainerSelector;
 import project.game.pokemon.Pokemon;
 import project.game.pokemon.PokemonSelector;
 
@@ -115,8 +116,11 @@ public class ClientHandler implements Runnable {
     // the team on the server "database"
     public void buildTeam() {
         Server.logp(this.playerNum, "Building team...");
-        Server.PLAYERS[this.clientId] = PokemonTrainerBuilder.createPokemonTrainer(this);
+
+        PokemonTrainerSelector pokemonTrainerSelector = new PokemonTrainerSelector(this);
+        Server.PLAYERS[this.clientId] = pokemonTrainerSelector.initializPokemonTrainer();
         this.player = Server.PLAYERS[this.clientId]; // Adds a reference to the trainer object for easier access
+        
         Server.logp(this.playerNum, "Ready for battle.");
     }
 
