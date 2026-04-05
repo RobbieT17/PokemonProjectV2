@@ -26,18 +26,18 @@ public class MoveData {
     public void setPriority(int priority) {this.priority = priority;}
     public void setCrit(double crit) {this.crit = crit;}
     public void setContact(boolean contact) {this.contact = contact;}
-    public void setAdditionEffects(AdditonalEffects effects) {this.effects = effects;}
+    public void setEffects(AdditonalEffects effects) {this.effects = effects;}
     
-    public int getId() {return id;}
-    public String getName() {return name;}
-    public String getType() {return type;}
-    public String getCategory() {return category;}
-    public int getPp() {return pp;}
-    public int getPow() {return pow;}
-    public int getAcc() {return acc;}
-    public int getPriority() {return priority;}
-    public double getCrit() {return crit;}
-    public boolean getContact() {return contact;}
-    public AdditonalEffects getEffects(){return effects;}
+    public int getId() {return this.id;}
+    public String getName() {return this.name;}
+    public String getType() {return this.type;}
+    public String getCategory() {return this.category;}
+    public int getPp() {return this.pp;}
+    public int getPow() {return this.pow;}
+    public int getAcc() {return this.acc;}
+    public int getPriority() {return this.priority;}
+    public double getCrit() {return this.crit;}
+    public boolean getContact() {return this.contact;}
+    public AdditonalEffects getEffects(){return this.effects;}
         
 }

@@ -5,7 +5,7 @@ public class MoveEffect {
     private boolean self;
     private int chance = 100;
     private String effect;
-    private int atk, def, spAtk, spDef, spd, acc, eva;
+    private StatData stats;
 
     public void setSelf(boolean self) {
         this.self = self;
@@ -15,69 +15,28 @@ public class MoveEffect {
         this.chance = chance;
     }
 
-    public void setAtk(int atk) {
-        this.atk = atk;
+    public void setEffect(String effect) {
+        this.effect = effect;
     }
 
-    public void setDef(int def) {
-        this.def = def;
-    }
-
-    public void setSpAtk(int spAtk) {
-        this.spAtk = spAtk;
-    }
-
-    public void setSpDef(int spDef) {
-        this.spDef = spDef;
-    }
-
-    public void setSpd(int spd) {
-        this.spd = spd;
-    }
-
-    public void setAcc(int acc) {
-        this.acc = acc;
-    }
-    
-    public void setEva(int eva) {
-        this.eva = eva;
+    public void setStats(StatData stats) {
+        this.stats = stats;
     }
 
     public boolean isSelf() {
-        return self;
+        return this.self;
     }
 
     public int getChance() {
-        return chance;
+        return this.chance;
     }
 
-    public int getAtk() {
-        return atk;
+    public String getEffect() {
+        return this.effect;
     }
 
-    public int getDef() {
-        return def;
+    public StatData getStats() {
+        return this.stats;
     }
-
-    public int getSpAtk() {
-        return spAtk;
-    }
-
-    public int getSpDef() {
-        return spDef;
-    }
-
-    public int getSpd() {
-        return spd;
-    }
-
-    public int getAcc() {
-        return acc;
-    }
-    
-    public int getEva() {
-        return eva;
-    }
-
     
 }
