@@ -110,13 +110,21 @@ moves:
   category: Status
   pp: 20
   priority: -6
-
+  effects:
+    switchOut:
+      self: false
+    
 - id: 52
   name: Ember
   type: Fire
   category: Special
   pp: 25
   pow: 40
+  effects:
+    conditionChange:
+      self: false
+      chance: 10
+      condition: Burn
 
 - id: 53
   name: Flamethrower
@@ -783,6 +791,14 @@ moves:
   pow: 120
   contact: true
 
+- id: 453
+  name: Aqua Jet
+  type: Water
+  category: Physical
+  pp: 20
+  pow: 40
+  priority: 1
+
 - id: 474
   name: Venoshock
   type: Poison
@@ -949,6 +965,10 @@ moves:
   category: Special
   pp: 20
   pow: 50
+  effects:
+    statChange: 
+      self: false
+      atk: -1
 
 - id: 915
   name: Temper Flare
@@ -963,3 +983,6 @@ moves:
   category: Physical
   pp: 10
   pow: 30
+
+
+

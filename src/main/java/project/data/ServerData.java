@@ -79,6 +79,7 @@ public class ServerData {
         .setCritRatio(data.getCrit())
         .setPriority(data.getPriority())
         .setContact(data.getContact())
+        // .setAdditionEffects(data.getAdditionalEffects())
         .build();
     }
 

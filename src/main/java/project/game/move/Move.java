@@ -1,5 +1,6 @@
 package project.game.move;
 
+import project.data.AdditonalEffects;
 import project.game.pokemon.Pokemon;
 import project.game.pokemon.PokemonType;
 
@@ -34,6 +35,8 @@ public class Move {
 	private final MoveStat accuracy; // Hit rate of the move
 	private final int priority; // Moves with higher priority always move first
     private final boolean makesContact;
+
+    private final AdditonalEffects additonEffects;
         
     private boolean disabled; // Move is currently unusable
 
@@ -48,7 +51,8 @@ public class Move {
         PowerPoints pp,
         MoveStat pow, MoveStat acc, 
         int prot,
-        boolean contact
+        boolean contact,
+        AdditonalEffects additionalEffects
         ) {
         this.moveID = id;
         this.moveName = name;
@@ -60,6 +64,7 @@ public class Move {
         this.accuracy = acc;
         this.priority = prot;
         this.makesContact = contact;
+        this.additonEffects = additionalEffects;
     }
 
 // Methods
@@ -133,5 +138,6 @@ public class Move {
     public int getAccuracy() {return this.accuracy.power();}
     public int getPriority() {return this.priority;}
     public boolean getMakesContact() {return this.makesContact;}
+    public AdditonalEffects getAdditionalEffects() {return this.additonEffects;}
     public boolean getDisabled() {return this.disabled;}
 }

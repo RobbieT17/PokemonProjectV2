@@ -14,6 +14,7 @@ public class MoveData {
     private int priority;
     private double crit = Move.UNIVERSAL_CRIT_RATE;
     private boolean contact = false;
+    private AdditonalEffects effects = null;
 
     public void setId(int id) {this.id = id;}
     public void setName(String name) {this.name = name;}
@@ -25,6 +26,7 @@ public class MoveData {
     public void setPriority(int priority) {this.priority = priority;}
     public void setCrit(double crit) {this.crit = crit;}
     public void setContact(boolean contact) {this.contact = contact;}
+    public void setAdditionEffects(AdditonalEffects effects) {this.effects = effects;}
     
     public int getId() {return id;}
     public String getName() {return name;}
@@ -36,5 +38,6 @@ public class MoveData {
     public int getPriority() {return priority;}
     public double getCrit() {return crit;}
     public boolean getContact() {return contact;}
+    public AdditonalEffects getEffects(){return effects;}
         
 }

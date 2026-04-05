@@ -1,9 +1,6 @@
 package project.game.player;
 
-import java.util.ArrayList;
-
 import project.game.builders.PokemonTrainerBuilder;
-import project.game.move.Move;
 import project.game.pokemon.Pokedex;
 import project.game.pokemon.Pokemon;
 import project.network.ClientHandler;

@@ -1,7 +1,5 @@
 package project.game.move.movelist;
 
-import java.util.function.Function;
-
 import project.game.event.EventManager;
 import project.game.move.MoveAction;
 import project.game.move.moveactions.MoveActionAttackDamage;
@@ -14,18 +12,9 @@ import project.game.battle.Weather;
 
 public class WaterMoveList {
 
-    public enum MoveName {
-        ;
-
-        private final Function<EventManager, Integer> func;
-
-        MoveName(Function<EventManager, Integer> func) {
-            this.func = func;
-        }
-
-        public void act(EventManager e) {
-            this.func.apply(e);
-        }
+    public static int aquaJet(EventManager e) {
+        MoveActionAttackDamage.dealDamage(e);
+        return 0;
     }
 
     public static int aquaTail(EventManager e) {

@@ -7,6 +7,7 @@ import java.util.HashMap;
 
 import org.yaml.snakeyaml.Yaml;
 
+
 public class YamlLoader {
 
     public static HashMap<String, PokemonData> initializePokemonData() {

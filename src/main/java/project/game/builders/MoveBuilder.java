@@ -1,7 +1,7 @@
 package project.game.builders;
 
+import project.data.AdditonalEffects;
 import project.game.move.Move;
-import project.game.move.MoveAction;
 import project.game.move.MoveStat;
 import project.game.move.PowerPoints;
 
@@ -13,13 +13,14 @@ public class MoveBuilder implements Builder {
     private String type = null;
     private String category = null;   
     private PowerPoints pp = null;
-
+    
     // Optional (pow if an only if status moves)
     private MoveStat pow = null;
     private MoveStat acc = new MoveStat(100);
     private int prot = 0;
     private double crit = Move.UNIVERSAL_CRIT_RATE;
     private boolean contact = false;
+    private AdditonalEffects effects = null;
 
     @Override
     public void validBuild() {
@@ -50,7 +51,8 @@ public class MoveBuilder implements Builder {
             this.pow, 
             this.acc, 
             this.prot, 
-            this.contact
+            this.contact,
+            this.effects
             );
     }
 
@@ -106,6 +108,11 @@ public class MoveBuilder implements Builder {
 
     public MoveBuilder setContact(boolean c) {
         this.contact = c;
+        return this;
+    }
+
+    public MoveBuilder setAdditionEffects(AdditonalEffects e) {
+        this.effects = e;
         return this;
     }
 

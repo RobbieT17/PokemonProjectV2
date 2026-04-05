@@ -31,6 +31,7 @@ public enum Movedex {
     Air_Cutter(FlyingMoveList::airCutter),
     Air_Slash(FlyingMoveList::airSlash),
     Amnesia(PsychicMoveList::amnesia),
+    Aqua_Jet(WaterMoveList::aquaJet),
     Aqua_Tail(WaterMoveList::aquaTail),
     Aura_Sphere(FightingMoveList::auraSphere),
     Avalanche(IceMoveList::avalanche),

@@ -15,6 +15,18 @@ pokemon:
       - Petal Dance
       - Confuse Ray
       - Sleep Powder
+      - Growl
+      - Growth
+      - Tackle
+      - Leech Seed
+      - Razor Leaf
+      - Poison Powder
+      - Take Down
+      - Magic Leaf
+      - Synthesis
+      - Amnesia
+      - Sludge Wave
+      - Double-Edge
 
   - id: 6
     name: Charizard
@@ -32,6 +44,20 @@ pokemon:
       - Fake Out
       - Will-O-Wisp
       - Sunny Day
+      - Dragon Claw
+      - Ember
+      - Growl
+      - Heat Wave
+      - Scratch
+      - Smokescreen
+      - Dragon Breath
+      - Fire Fang
+      - Slash
+      - Flamethrower
+      - Scary Face
+      - Fire Spin
+      - Inferno
+      - Air Slash
 
   - id: 9
     name: Blastoise
@@ -48,4 +74,14 @@ pokemon:
       - Fury Attack
       - Swift
       - Rain Dance
+      - Tackle
+      - Tail Whip
+      - Water Gun
+      - Bite
+      - Bubble Beam
+      - Icy Wind
+      - Aqua Jet
+      - Iron Defense
+      - Liquidation
+
 

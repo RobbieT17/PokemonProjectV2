@@ -12,20 +12,6 @@ import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;
 
 public class ZombieMoveList {
 
-    public enum MoveName {
-        ;
-
-        private final Function<EventManager, Integer> func;
-
-        MoveName(Function<EventManager, Integer> func) {
-            this.func = func;
-        }
-
-        public void act(EventManager e) {
-            this.func.apply(e);
-        }
-    }
-
     // Infect: deals minor damage and applies "Infect" status to the target
     // Type: Zombie, Category: Physical, Power: 30, PP: 10, Accuracy: 100
     public static int infect(EventManager e) {
