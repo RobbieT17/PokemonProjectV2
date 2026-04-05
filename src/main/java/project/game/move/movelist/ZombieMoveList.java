@@ -14,7 +14,7 @@ public class ZombieMoveList {
     // Type: Zombie, Category: Physical, Power: 30, PP: 10, Accuracy: 100
     public static int infect(EventManager e) {
         MoveActionAttackDamage.dealDamage(e);
-        MoveActionChangeCondition.applyCondition(e, StatusConditionID.INFECT);
+        MoveActionChangeCondition.applyCondition(e, StatusConditionID.Infect);
         return 0;
     }
 
@@ -30,7 +30,7 @@ public class ZombieMoveList {
     // Type: Zombie, Category: Physical, Power: 90, PP: 10, Accuracy: 90
     public static int necroticClaw(EventManager e) {
         MoveActionAttackDamage.dealDamage(e);
-        MoveActionChangeCondition.applyCondition(e, StatusConditionID.CONFUSION, 20);
+        MoveActionChangeCondition.applyCondition(e, StatusConditionID.Confusion, 20);
         return 0;
     }
 
@@ -39,7 +39,7 @@ public class ZombieMoveList {
     public static int viralSpread(EventManager e) {
         MoveActionAttackDamage.dealDamage(e);
         MoveActionChangeStat.changeStats(e, MoveAction.stats(-1, 0, -1, 0, 0, 0, 0), 100);
-        MoveActionChangeCondition.applyCondition(e, StatusConditionID.INFECT, 10); // 10% chance to infect others
+        MoveActionChangeCondition.applyCondition(e, StatusConditionID.Infect, 10); // 10% chance to infect others
         return 0;
     }
 

@@ -40,9 +40,9 @@ public class PokemonConditions {
 
     public boolean inImmuneState() {
         return 
-        this.hasKey(StatusConditionID.FLY) ||
-        this.hasKey(StatusConditionID.DIG) ||
-        this.hasKey(StatusConditionID.DIVE);
+        this.hasKey(StatusConditionID.Fly_State) ||
+        this.hasKey(StatusConditionID.Dig_State) ||
+        this.hasKey(StatusConditionID.Dive_State);
     }
 
     public boolean hasKey(StatusConditionID key) {

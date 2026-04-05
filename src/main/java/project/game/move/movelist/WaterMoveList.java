@@ -29,7 +29,7 @@ public class WaterMoveList {
     }
 
     public static int dive(EventManager e) {
-        MoveActionChangeCondition.enterImmuneState(e, StatusConditionID.DIVE);
+        MoveActionChangeCondition.enterImmuneState(e, StatusConditionID.Dive_State);
         return 0;
     }
 
@@ -83,7 +83,7 @@ public class WaterMoveList {
 
     public static int waterPulse(EventManager e) {
         MoveActionAttackDamage.dealDamage(e);
-        MoveActionChangeCondition.applyCondition(e, StatusConditionID.CONFUSION, 20);
+        MoveActionChangeCondition.applyCondition(e, StatusConditionID.Confusion, 20);
         return 0;
     }
 
@@ -93,11 +93,11 @@ public class WaterMoveList {
     }
 
     public static int whirlpool(EventManager e) {
-        if (e.eventData.attackTarget.getConditions().hasKey(StatusConditionID.DIVE)) {
+        if (e.eventData.attackTarget.getConditions().hasKey(StatusConditionID.Dive_State)) {
             e.eventData.moveUsed.doublePower();
         }
         MoveActionAttackDamage.dealDamage(e);
-        MoveActionChangeCondition.applyCondition(e, StatusConditionID.BOUND);
+        MoveActionChangeCondition.applyCondition(e, StatusConditionID.Bound);
         return 0;
     }
 

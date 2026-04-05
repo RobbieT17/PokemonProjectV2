@@ -20,29 +20,29 @@ public interface StatusConditionManager {
 
     public enum StatusConditionID {
 
-        BURN(StatusConditionManager::burn),
-        FREEZE(StatusConditionManager::freeze),
-        INFECT(StatusConditionManager::infect),
-        PARALYSIS(StatusConditionManager::paralysis),
-        POISON(StatusConditionManager::poisoned),
-        BAD_POISON(StatusConditionManager::badlyPoisoned),
-        SLEEP(StatusConditionManager::sleep),
-        FLINCH(StatusConditionManager::flinch),
-        BOUND(StatusConditionManager::bound),
-        CONFUSION(StatusConditionManager::confusion),
-        SEEDED(StatusConditionManager::seeded),
-        FORCED_MOVE(StatusConditionManager::forcedMove),
-        FOCUSED(StatusConditionManager::focused),
-        RAMPAGE(StatusConditionManager::rampage),
-        RECHARGE(StatusConditionManager::rampage),
-        GROUNDED(StatusConditionManager::grounded),
-        CHARGE_MOVE(StatusConditionManager::chargeMove),
-        FLY(StatusConditionManager::fly),
-        DIG(StatusConditionManager::dig),
-        DIVE(StatusConditionManager::dive),
+        Burn(StatusConditionManager::burn),
+        Freeze(StatusConditionManager::freeze),
+        Infect(StatusConditionManager::infect),
+        Paralysis(StatusConditionManager::paralysis),
+        Poison(StatusConditionManager::poisoned),
+        Bad_Poison(StatusConditionManager::badlyPoisoned),
+        Sleep(StatusConditionManager::sleep),
+        Flinch(StatusConditionManager::flinch),
+        Bound(StatusConditionManager::bound),
+        Confusion(StatusConditionManager::confusion),
+        Seeded(StatusConditionManager::seeded),
+        Forced_Move(StatusConditionManager::forcedMove),
+        Focused(StatusConditionManager::focused),
+        Rampage(StatusConditionManager::rampage),
+        Recharge(StatusConditionManager::rampage),
+        Grounded(StatusConditionManager::grounded),
+        Charge_Move(StatusConditionManager::chargeMove),
+        Fly_State(StatusConditionManager::fly),
+        Dig_State(StatusConditionManager::dig),
+        Dive_State(StatusConditionManager::dive),
         // No Function Provided
-        NO_INVUL(null),
-        PROTECT(null);
+        No_Invul(null),
+        Protect(null);
 
         private final Function<StatusContext, StatusCondition> func;
   
@@ -66,7 +66,7 @@ public interface StatusConditionManager {
      */
     public static StatusCondition burn(StatusContext c) {
         Pokemon p = c.target;
-        StatusConditionID id = StatusConditionID.BURN;
+        StatusConditionID id = StatusConditionID.Burn;
         String name = id.name();
         EventID[] flags = new EventID[] {EventID.END_OF_ROUND, EventID.DAMAGE_MULTIPLIER};
 
@@ -91,7 +91,7 @@ public interface StatusConditionManager {
      */
     public static StatusCondition freeze(StatusContext c) {
         Pokemon p = c.target;
-        StatusConditionID id = StatusConditionID.FREEZE;
+        StatusConditionID id = StatusConditionID.Freeze;
         String name = id.name();
         EventID[] flags = new EventID[] {EventID.PRIMARY_STATUS_BEFORE};
 
@@ -122,7 +122,7 @@ public interface StatusConditionManager {
      */
      public static StatusCondition infect(StatusContext c) {
         Pokemon p = c.target;
-        StatusConditionID id = StatusConditionID.INFECT;
+        StatusConditionID id = StatusConditionID.Infect;
         String name = id.name();
         EventID[] flags = new EventID[] {
             EventID.MOVE_MAKES_CONTACT, EventID.DAMAGE_MULTIPLIER, 
@@ -173,7 +173,7 @@ public interface StatusConditionManager {
      */
     public static StatusCondition paralysis(StatusContext c) {
         Pokemon p = c.target;
-        StatusConditionID id = StatusConditionID.PARALYSIS;
+        StatusConditionID id = StatusConditionID.Paralysis;
         String name = id.name();
         EventID[] flags = new EventID[] {EventID.PRIMARY_STATUS_BEFORE, EventID.FIND_MOVE_ORDER};
 
@@ -191,7 +191,7 @@ public interface StatusConditionManager {
     // Poisoned Pokemon lose 1/8 of their max HP at the end of each round
     public static StatusCondition poisoned(StatusContext c) {
         Pokemon p = c.target;
-        StatusConditionID id = StatusConditionID.POISON;
+        StatusConditionID id = StatusConditionID.Poison;
         String name = id.name();
         EventID[] flags = new EventID[] {EventID.END_OF_ROUND};
 
@@ -210,7 +210,7 @@ public interface StatusConditionManager {
      */
     public static StatusCondition badlyPoisoned(StatusContext c) {
         Pokemon p = c.target;
-        StatusConditionID id = StatusConditionID.BAD_POISON;
+        StatusConditionID id = StatusConditionID.Bad_Poison;
         String name = id.name();
         EventID[] flags = new EventID[] {EventID.END_OF_ROUND};
 
@@ -229,7 +229,7 @@ public interface StatusConditionManager {
     // Pokemon is asleep for 1 to 3 turns and cannot act
     public static StatusCondition sleep(StatusContext c) {
         Pokemon p = c.target;
-        StatusConditionID id = StatusConditionID.SLEEP;
+        StatusConditionID id = StatusConditionID.Sleep;
         String name = id.name();
         EventID[] flags = new EventID[] {EventID.PRIMARY_STATUS_BEFORE};
 
@@ -255,7 +255,7 @@ public interface StatusConditionManager {
     public static StatusCondition fly(StatusContext c) {
         Pokemon p = c.target;
         Move m = c.move;
-        StatusConditionID id = StatusConditionID.FLY;
+        StatusConditionID id = StatusConditionID.Fly_State;
         String name = id.name();
         EventID[] flags = new EventID[] {EventID.MOVE_SELECTION, EventID.MOVE_ACCURACY};
 
@@ -275,7 +275,7 @@ public interface StatusConditionManager {
     public static StatusCondition dig(StatusContext c) {
         Pokemon p = c.target;
         Move m = c.move;
-        StatusConditionID id = StatusConditionID.DIG;
+        StatusConditionID id = StatusConditionID.Dig_State;
         String name = id.name();
         EventID[] flags = new EventID[] {EventID.MOVE_SELECTION, EventID.MOVE_ACCURACY};
 
@@ -294,7 +294,7 @@ public interface StatusConditionManager {
     public static StatusCondition dive(StatusContext c) {
         Pokemon p = c.target;
         Move m = c.move;
-        StatusConditionID id = StatusConditionID.DIVE;
+        StatusConditionID id = StatusConditionID.Dive_State;
         String name = id.name();
         EventID[] flags = new EventID[] {EventID.MOVE_SELECTION, EventID.MOVE_ACCURACY};
 
@@ -314,7 +314,7 @@ public interface StatusConditionManager {
     // Pokemon flinches and can't act for the round
     public static StatusCondition flinch(StatusContext c) {
         Pokemon p = c.target;
-        StatusConditionID id = StatusConditionID.CHARGE_MOVE;
+        StatusConditionID id = StatusConditionID.Charge_Move;
         String name = id.name();
         EventID[] flags = new EventID[] {EventID.BEFORE_MOVE};
 
@@ -329,7 +329,7 @@ public interface StatusConditionManager {
     // Traps Pokemon from escaping battle and loses 1/8 of max HP
     public static StatusCondition bound(StatusContext c) {
         Pokemon p = c.target;
-        StatusConditionID id = StatusConditionID.CHARGE_MOVE;
+        StatusConditionID id = StatusConditionID.Charge_Move;
         String name = id.name();
         EventID[] flags = new EventID[] {EventID.END_OF_ROUND, EventID.SWITCH_OUT};
 
@@ -355,7 +355,7 @@ public interface StatusConditionManager {
      */
     public static StatusCondition confusion(StatusContext c) {
         Pokemon p = c.target;
-        StatusConditionID id = StatusConditionID.CHARGE_MOVE;
+        StatusConditionID id = StatusConditionID.Charge_Move;
         String name = id.name();
         EventID[] flags = new EventID[] {EventID.STATUS_BEFORE};
 
@@ -381,7 +381,7 @@ public interface StatusConditionManager {
     public static StatusCondition seeded(StatusContext c) {
         Pokemon p = c.target;
         Pokemon r = c.source;
-        StatusConditionID id = StatusConditionID.CHARGE_MOVE;
+        StatusConditionID id = StatusConditionID.Charge_Move;
         String name = id.name();
         EventID[] flags = new EventID[] {EventID.END_OF_ROUND};
 
@@ -403,7 +403,7 @@ public interface StatusConditionManager {
         Pokemon p = c.target;
         Move m = c.move;
         int n = c.count;
-        StatusConditionID id = StatusConditionID.CHARGE_MOVE;
+        StatusConditionID id = StatusConditionID.Charge_Move;
         String name = id.name();
         EventID[] flags = new EventID[] {EventID.MOVE_SELECTION, EventID.END_OF_ROUND};
 
@@ -425,7 +425,7 @@ public interface StatusConditionManager {
     public static StatusCondition focused(StatusContext c) {
         Pokemon p = c.target;
         Move m = c.move;
-        StatusConditionID id = StatusConditionID.CHARGE_MOVE;
+        StatusConditionID id = StatusConditionID.Charge_Move;
         String name = id.name();
         EventID[] flags = new EventID[] {EventID.MOVE_SELECTION, EventID.USE_MOVE, EventID.MOVE_HITS};
 
@@ -449,7 +449,7 @@ public interface StatusConditionManager {
     // Grounded Pokemon are vulnerable to Ground-Type moves (even Flying-Types) 
     public static StatusCondition grounded(StatusContext c) {
         Pokemon p = c.target;
-        StatusConditionID id = StatusConditionID.CHARGE_MOVE;
+        StatusConditionID id = StatusConditionID.Charge_Move;
         String name = id.name();
         EventID[] flags = new EventID[] {EventID.MOVE_EFFECTIVENESS};
 
@@ -471,7 +471,7 @@ public interface StatusConditionManager {
     public static StatusCondition rampage(StatusContext c) {
         Pokemon p = c.target;
         Move m = c.move;
-        StatusConditionID id = StatusConditionID.CHARGE_MOVE;
+        StatusConditionID id = StatusConditionID.Charge_Move;
         String name = id.name();
         EventID[] flags = new EventID[] {EventID.MOVE_SELECTION, EventID.END_OF_TURN, EventID.MOVE_INTERRUPTED};
 
@@ -499,7 +499,7 @@ public interface StatusConditionManager {
     public static StatusCondition chargeMove(StatusContext c) {
         Pokemon p = c.target;
         Move m = c.move;
-        StatusConditionID id = StatusConditionID.CHARGE_MOVE;
+        StatusConditionID id = StatusConditionID.Charge_Move;
         String name = id.name();
         EventID[] flags = new EventID[] {EventID.MOVE_SELECTION, EventID.MOVE_INTERRUPTED};
 
@@ -512,11 +512,11 @@ public interface StatusConditionManager {
 // Public Class Methods
     public static String failMessage(StatusConditionID id) {
         return switch (id) {
-            case StatusConditionID.BURN -> "is already burned!";
-            case StatusConditionID.FREEZE -> "is already frozen!";
-            case StatusConditionID.PARALYSIS -> "is already paralyzed!";
-            case StatusConditionID.POISON, StatusConditionID.BAD_POISON -> "is already poisoned!";
-            case StatusConditionID.SLEEP -> "is already asleep!";
+            case StatusConditionID.Burn -> "is already burned!";
+            case StatusConditionID.Freeze -> "is already frozen!";
+            case StatusConditionID.Paralysis -> "is already paralyzed!";
+            case StatusConditionID.Poison, StatusConditionID.Bad_Poison -> "is already poisoned!";
+            case StatusConditionID.Sleep -> "is already asleep!";
             
             default -> throw new IllegalArgumentException(StatusCondition.ID_ERR);
         };
@@ -525,10 +525,10 @@ public interface StatusConditionManager {
     // Message displayed when the condition expires
     public static String expireMessage(StatusConditionID id) {
         return switch (id) {
-            case StatusConditionID.FREEZE -> " thawed!";
-            case StatusConditionID.SLEEP -> " woke up!";
-            case StatusConditionID.BOUND -> " was freed!";
-            case StatusConditionID.CONFUSION -> " snapped out of confusion!";
+            case StatusConditionID.Freeze -> " thawed!";
+            case StatusConditionID.Sleep -> " woke up!";
+            case StatusConditionID.Bound -> " was freed!";
+            case StatusConditionID.Confusion -> " snapped out of confusion!";
             default -> throw new IllegalArgumentException(StatusCondition.ID_ERR);
         };
     }

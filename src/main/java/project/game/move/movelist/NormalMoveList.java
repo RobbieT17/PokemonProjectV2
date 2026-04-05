@@ -20,7 +20,7 @@ public class NormalMoveList {
 
     public static int bodySlam(EventManager e) {
         MoveActionAttackDamage.dealDamage(e);
-        MoveActionChangeCondition.applyCondition(e, StatusConditionID.PARALYSIS, 30);
+        MoveActionChangeCondition.applyCondition(e, StatusConditionID.Paralysis, 30);
         return 0;
     }
 
@@ -36,9 +36,9 @@ public class NormalMoveList {
 
     public static int facade(EventManager e) {
         Pokemon a = e.eventData.user;
-        if (a.getConditions().hasKey(StatusConditionID.BURN) ||
-            a.getConditions().hasKey(StatusConditionID.PARALYSIS) ||
-            a.getConditions().hasKey(StatusConditionID.POISON)) {
+        if (a.getConditions().hasKey(StatusConditionID.Burn) ||
+            a.getConditions().hasKey(StatusConditionID.Paralysis) ||
+            a.getConditions().hasKey(StatusConditionID.Poison)) {
             e.eventData.moveUsed.doublePower();
         }
         MoveActionAttackDamage.dealDamage(e);
@@ -120,7 +120,7 @@ public class NormalMoveList {
     public static int sleepTalk(EventManager e) {
         Pokemon a = e.eventData.user;
         Move m = e.eventData.moveUsed;
-        if (!a.getConditions().hasKey(StatusConditionID.SLEEP)) {
+        if (!a.getConditions().hasKey(StatusConditionID.Sleep)) {
             BattleLog.add(Move.FAILED);
             return 0;
         }

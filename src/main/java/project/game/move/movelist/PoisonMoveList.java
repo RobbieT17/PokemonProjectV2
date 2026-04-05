@@ -18,24 +18,24 @@ public class PoisonMoveList {
 
     public static int poisonJab(EventManager e) {
         MoveActionAttackDamage.dealDamage(e);
-        MoveActionChangeCondition.applyCondition(e, StatusConditionID.POISON, 30);
+        MoveActionChangeCondition.applyCondition(e, StatusConditionID.Poison, 30);
         return 0;
     }
 
     public static int poisonPowder(EventManager e) {
         MoveActionAccuracy.moveHits(e);
-        MoveActionChangeCondition.applyCondition(e, StatusConditionID.POISON);
+        MoveActionChangeCondition.applyCondition(e, StatusConditionID.Poison);
         return 0;
     }
 
     public static int toxic(EventManager e) {
         MoveActionAccuracy.moveHits(e);
-        MoveActionChangeCondition.applyCondition(e, StatusConditionID.BAD_POISON);
+        MoveActionChangeCondition.applyCondition(e, StatusConditionID.Bad_Poison);
         return 0;
     }
 
     public static int venoshock(EventManager e) {
-        if (e.eventData.attackTarget.getConditions().hasKey(StatusConditionID.POISON)) {
+        if (e.eventData.attackTarget.getConditions().hasKey(StatusConditionID.Poison)) {
             e.eventData.moveUsed.doublePower();
         }
         MoveActionAttackDamage.dealDamage(e);

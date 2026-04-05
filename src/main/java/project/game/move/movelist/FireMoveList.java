@@ -22,20 +22,20 @@ public class FireMoveList {
 
     public static int ember(EventManager e) {
         MoveActionAttackDamage.dealDamage(e);
-        MoveActionChangeCondition.applyCondition(e, StatusConditionID.BURN, 10); 
+        MoveActionChangeCondition.applyCondition(e, StatusConditionID.Burn, 10); 
         return 0;
     }
 
     public static int fireBlast(EventManager e) {
         MoveActionAttackDamage.dealDamage(e);
-        MoveActionChangeCondition.applyCondition(e, StatusConditionID.BURN, 30);
+        MoveActionChangeCondition.applyCondition(e, StatusConditionID.Burn, 30);
         return 0;
     }
 
     public static int fireFang(EventManager e) {
         MoveActionAttackDamage.dealDamage(e);
-        MoveActionChangeCondition.applyCondition(e, StatusConditionID.BURN, 10);
-        MoveActionChangeCondition.applyCondition(e, StatusConditionID.FLINCH, 30);
+        MoveActionChangeCondition.applyCondition(e, StatusConditionID.Burn, 10);
+        MoveActionChangeCondition.applyCondition(e, StatusConditionID.Flinch, 30);
         return 0;
     }
 
@@ -46,7 +46,7 @@ public class FireMoveList {
 
     public static int firePunch(EventManager e) {
         MoveActionAttackDamage.dealDamage(e);
-        MoveActionChangeCondition.applyCondition(e, StatusConditionID.BURN, 10);
+        MoveActionChangeCondition.applyCondition(e, StatusConditionID.Burn, 10);
         return 0;
     }
 
@@ -59,13 +59,13 @@ public class FireMoveList {
 
     public static int flamethrower(EventManager e) {
         MoveActionAttackDamage.dealDamage(e);
-        MoveActionChangeCondition.applyCondition(e, StatusConditionID.BURN, 10);
+        MoveActionChangeCondition.applyCondition(e, StatusConditionID.Burn, 10);
         return 0;
     }
 
     public static int flareBlitz(EventManager e) {
         MoveActionAttackDamage.dealDamageRecoil(e, 33);
-        MoveActionChangeCondition.applyCondition(e, StatusConditionID.BURN, 10);
+        MoveActionChangeCondition.applyCondition(e, StatusConditionID.Burn, 10);
         return 0;
     }
 
@@ -86,13 +86,13 @@ public class FireMoveList {
 
     public static int heatWave(EventManager e) {
         MoveActionAttackDamage.dealDamage(e);
-        MoveActionChangeCondition.applyCondition(e, StatusConditionID.BURN, 10);
+        MoveActionChangeCondition.applyCondition(e, StatusConditionID.Burn, 10);
         return 0;
     }
 
     public static int inferno(EventManager e) {
         MoveActionAttackDamage.dealDamage(e);
-        MoveActionChangeCondition.applyCondition(e, StatusConditionID.BURN);
+        MoveActionChangeCondition.applyCondition(e, StatusConditionID.Burn);
         return 0;
     }
 
@@ -119,7 +119,7 @@ public class FireMoveList {
 
     public static int willOWisp(EventManager e) {
         MoveActionAccuracy.moveHits(e);
-        MoveActionChangeCondition.applyCondition(e, StatusConditionID.BURN);
+        MoveActionChangeCondition.applyCondition(e, StatusConditionID.Burn);
         BattleLog.add(e.eventData.message);
         return 0;
     }

@@ -16,12 +16,12 @@ public class GroundMoveList {
     }
 
     public static int dig(EventManager e) {
-        MoveActionChangeCondition.enterImmuneState(e, StatusConditionID.DIG);
+        MoveActionChangeCondition.enterImmuneState(e, StatusConditionID.Dig_State);
         return 0;
     }
 
     public static int earthquake(EventManager e) {
-        if (e.eventData.attackTarget.getConditions().hasKey(StatusConditionID.DIG)) {
+        if (e.eventData.attackTarget.getConditions().hasKey(StatusConditionID.Dig_State)) {
             e.eventData.moveUsed.doublePower();
         }
         MoveActionAttackDamage.dealDamage(e);
@@ -41,9 +41,9 @@ public class GroundMoveList {
     }
 
     public static int scorchingSands(EventManager e) {
-        e.eventData.user.getConditions().removeCondition(StatusConditionID.FREEZE);
+        e.eventData.user.getConditions().removeCondition(StatusConditionID.Freeze);
         MoveActionAttackDamage.dealDamage(e);
-        MoveActionChangeCondition.applyCondition(e, StatusConditionID.BURN, 30);
+        MoveActionChangeCondition.applyCondition(e, StatusConditionID.Burn, 30);
         return 0;
     }
 

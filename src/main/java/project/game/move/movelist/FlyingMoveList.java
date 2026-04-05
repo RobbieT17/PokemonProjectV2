@@ -26,12 +26,12 @@ public class FlyingMoveList {
 
     public static int airSlash(EventManager e) {
         MoveActionAttackDamage.dealDamage(e);
-        MoveActionChangeCondition.applyCondition(e, StatusConditionID.FLINCH, 30);
+        MoveActionChangeCondition.applyCondition(e, StatusConditionID.Flinch, 30);
         return 0;
     }
 
     public static int fly(EventManager e) {
-        MoveActionChangeCondition.enterImmuneState(e, StatusConditionID.FLY);
+        MoveActionChangeCondition.enterImmuneState(e, StatusConditionID.Fly_State);
         return 0;
     }
 
@@ -44,7 +44,7 @@ public class FlyingMoveList {
         }
 
         MoveActionAttackDamage.dealDamage(e);
-        MoveActionChangeCondition.applyCondition(e, StatusConditionID.CONFUSION, 10);
+        MoveActionChangeCondition.applyCondition(e, StatusConditionID.Confusion, 10);
         return 0;
     }
 

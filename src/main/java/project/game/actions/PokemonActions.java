@@ -37,9 +37,9 @@ public class PokemonActions {
     }
 
     private void stopOnGoingMoves(Pokemon p) {
-        p.getConditions().removeCondition(StatusConditionID.FOCUSED);
-        p.getConditions().removeCondition(StatusConditionID.FORCED_MOVE);
-        p.getConditions().removeCondition(StatusConditionID.RAMPAGE);
+        p.getConditions().removeCondition(StatusConditionID.Focused);
+        p.getConditions().removeCondition(StatusConditionID.Forced_Move);
+        p.getConditions().removeCondition(StatusConditionID.Rampage);
         p.getConditions().setInterrupted(true);
     }
 
@@ -56,7 +56,7 @@ public class PokemonActions {
         BattleLog.add("%s used %s!", user, move);
         try {
             this.eventManager.notifyUserPokemon(EventID.USE_MOVE);
-            move.getPp().decrement(user.getConditions().hasKey(StatusConditionID.FORCED_MOVE));
+            move.getPp().decrement(user.getConditions().hasKey(StatusConditionID.Forced_Move));
         
             Movedex.processMove(this.eventManager);
 

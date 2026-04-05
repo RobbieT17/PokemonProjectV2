@@ -13,7 +13,7 @@ public class DarkMoveList {
 
     public static int bite(EventManager e) {
         MoveActionAttackDamage.dealDamage(e);
-        MoveActionChangeCondition.applyCondition(e ,StatusConditionID.FLINCH,30);
+        MoveActionChangeCondition.applyCondition(e ,StatusConditionID.Flinch,30);
         return 0;
     }
 
@@ -25,7 +25,7 @@ public class DarkMoveList {
 
     public static int darkPulse(EventManager e) {
         MoveActionAttackDamage.dealDamage(e);
-        MoveActionChangeCondition.applyCondition(e, StatusConditionID.FLINCH, 20);
+        MoveActionChangeCondition.applyCondition(e, StatusConditionID.Flinch, 20);
         return 0;
     }
 
@@ -35,7 +35,7 @@ public class DarkMoveList {
         }
 
         MoveActionAttackDamage.dealDamage(e);
-        MoveActionChangeCondition.applyCondition(e, StatusConditionID.FLINCH);
+        MoveActionChangeCondition.applyCondition(e, StatusConditionID.Flinch);
 
         return 0;
     }

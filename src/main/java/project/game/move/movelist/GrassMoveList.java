@@ -58,7 +58,7 @@ public class GrassMoveList {
 
     public static int leechSeed(EventManager e) {
         MoveActionAccuracy.moveHits(e);
-        MoveActionChangeCondition.applyCondition(e, StatusConditionID.SEEDED);
+        MoveActionChangeCondition.applyCondition(e, StatusConditionID.Seeded);
         return 0;
     }
 
@@ -94,7 +94,7 @@ public class GrassMoveList {
 
     public static int sleepPowder(EventManager e) {
         MoveActionAccuracy.moveHits(e);
-        MoveActionChangeCondition.applyCondition(e, StatusConditionID.SLEEP);
+        MoveActionChangeCondition.applyCondition(e, StatusConditionID.Sleep);
         MoveAction.displayFailMessage(e);
         return 0;
     }
@@ -110,7 +110,7 @@ public class GrassMoveList {
 
     public static int stunSpore(EventManager e) {
         MoveActionAccuracy.moveHits(e);
-        MoveActionChangeCondition.applyCondition(e, StatusConditionID.PARALYSIS);
+        MoveActionChangeCondition.applyCondition(e, StatusConditionID.Paralysis);
         return 0;
     }
 

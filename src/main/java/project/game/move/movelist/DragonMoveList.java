@@ -18,7 +18,7 @@ public class DragonMoveList {
 
     public static int dragonBreath(EventManager e) {
         MoveActionAttackDamage.dealDamage(e);
-        MoveActionChangeCondition.applyCondition(e, StatusConditionID.PARALYSIS, 30);
+        MoveActionChangeCondition.applyCondition(e, StatusConditionID.Paralysis, 30);
         return 0;
     }
 

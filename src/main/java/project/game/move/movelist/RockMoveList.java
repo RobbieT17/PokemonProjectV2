@@ -13,7 +13,7 @@ public class RockMoveList {
 
     public static int rockSlide(EventManager e) {
         MoveActionAttackDamage.dealDamage(e);
-        MoveActionChangeCondition.applyCondition(e, StatusConditionID.FLINCH, 30);
+        MoveActionChangeCondition.applyCondition(e, StatusConditionID.Flinch, 30);
         return 0;
     }
 
@@ -30,8 +30,8 @@ public class RockMoveList {
 
     public static int smackDown(EventManager e) {
         MoveActionAttackDamage.dealDamage(e);
-        MoveActionChangeCondition.leaveImmuneState(e, StatusConditionID.FLY, "Fell from the sky!");
-        MoveActionChangeCondition.applyCondition(e, StatusConditionID.GROUNDED);
+        MoveActionChangeCondition.leaveImmuneState(e, StatusConditionID.Fly_State, "Fell from the sky!");
+        MoveActionChangeCondition.applyCondition(e, StatusConditionID.Grounded);
         return 0;
     }
 }

@@ -21,7 +21,7 @@ public class IceMoveList {
 
     public static int blizzard(EventManager e) {
         MoveActionAttackDamage.dealDamage(e);
-        MoveActionChangeCondition.applyCondition(e, StatusConditionID.FREEZE, 10);
+        MoveActionChangeCondition.applyCondition(e, StatusConditionID.Freeze, 10);
         return 0;
     }
 
@@ -38,13 +38,13 @@ public class IceMoveList {
 
     public static int iceBeam(EventManager e) {
         MoveActionAttackDamage.dealDamage(e);
-        MoveActionChangeCondition.applyCondition(e, StatusConditionID.FREEZE, 10);
+        MoveActionChangeCondition.applyCondition(e, StatusConditionID.Freeze, 10);
         return 0;
     }
 
     public static int icePunch(EventManager e) {
         MoveActionAttackDamage.dealDamage(e);
-        MoveActionChangeCondition.applyCondition(e, StatusConditionID.FREEZE, 10);
+        MoveActionChangeCondition.applyCondition(e, StatusConditionID.Freeze, 10);
         return 0;
     }
 

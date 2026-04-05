@@ -9,7 +9,7 @@ public class ElectricMoveList {
 
     public static int thunderPunch(EventManager e) {
         MoveActionAttackDamage.dealDamage(e);
-        MoveActionChangeCondition.applyCondition(e, StatusConditionID.PARALYSIS, 10);
+        MoveActionChangeCondition.applyCondition(e, StatusConditionID.Paralysis, 10);
         return 0;
     }
 

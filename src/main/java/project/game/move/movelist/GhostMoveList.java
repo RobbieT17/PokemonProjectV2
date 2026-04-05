@@ -12,7 +12,7 @@ public class GhostMoveList {
 
     public static int confuseRay(EventManager e) {
         MoveActionAccuracy.moveHits(e);
-        MoveActionChangeCondition.applyCondition(e, StatusConditionID.CONFUSION);
+        MoveActionChangeCondition.applyCondition(e, StatusConditionID.Confusion);
         MoveAction.displayFailMessage(e);
         return 0;
     }

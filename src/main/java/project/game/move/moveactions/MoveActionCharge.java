@@ -17,7 +17,7 @@ public interface MoveActionCharge extends MoveAction{
         EventData data  = eventManager.eventData;
         Pokemon attacker = data.user;
 
-        if (!attacker.getConditions().hasKey(StatusConditionID.CHARGE_MOVE)) {
+        if (!attacker.getConditions().hasKey(StatusConditionID.Charge_Move)) {
             StatusContext c = new StatusContext(attacker);
             c.move = data.moveUsed;
 
@@ -26,7 +26,7 @@ public interface MoveActionCharge extends MoveAction{
             return;
         }
         
-        attacker.getConditions().removeCondition(StatusConditionID.CHARGE_MOVE);
+        attacker.getConditions().removeCondition(StatusConditionID.Charge_Move);
         MoveActionAttackDamage.dealDamage(eventManager); 
     }
 
@@ -50,7 +50,7 @@ public interface MoveActionCharge extends MoveAction{
         Pokemon attacker = data.user;
 
         // Starts rampage
-        if (!attacker.getConditions().hasKey(StatusConditionID.RAMPAGE)) {
+        if (!attacker.getConditions().hasKey(StatusConditionID.Rampage)) {
             StatusContext c = new StatusContext(attacker);
             c.move = data.moveUsed;
 
