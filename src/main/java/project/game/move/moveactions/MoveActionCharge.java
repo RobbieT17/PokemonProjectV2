@@ -3,7 +3,6 @@ package project.game.move.moveactions;
 import project.game.battle.BattleLog;
 import project.game.event.EventData;
 import project.game.event.EventManager;
-import project.game.move.MoveAction;
 import project.game.pokemon.Pokemon;
 import project.game.pokemon.effects.StatusConditionManager;
 import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;

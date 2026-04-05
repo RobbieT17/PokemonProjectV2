@@ -1,4 +1,4 @@
-package project.game.move;
+package project.game.move.moveactions;
 
 import project.game.battle.BattleLog;
 import project.game.event.EventData;

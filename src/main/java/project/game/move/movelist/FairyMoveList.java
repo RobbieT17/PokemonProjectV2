@@ -1,7 +1,7 @@
 package project.game.move.movelist;
 
 import project.game.event.EventManager;
-import project.game.move.MoveAction;
+import project.game.move.moveactions.MoveAction;
 import project.game.move.moveactions.MoveActionAccuracy;
 import project.game.move.moveactions.MoveActionChangeStat;
 

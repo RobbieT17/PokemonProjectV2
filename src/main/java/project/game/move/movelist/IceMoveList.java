@@ -2,7 +2,7 @@ package project.game.move.movelist;
 
 import project.game.battle.Weather;
 import project.game.event.EventManager;
-import project.game.move.MoveAction;
+import project.game.move.moveactions.MoveAction;
 import project.game.move.moveactions.MoveActionAttackDamage;
 import project.game.move.moveactions.MoveActionChangeCondition;
 import project.game.move.moveactions.MoveActionChangeStat;

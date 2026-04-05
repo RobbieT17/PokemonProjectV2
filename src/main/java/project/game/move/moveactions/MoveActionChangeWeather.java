@@ -6,7 +6,6 @@ import project.game.event.EventData;
 import project.game.event.EventManager;
 import project.game.exceptions.MoveInterruptedException;
 import project.game.move.Move;
-import project.game.move.MoveAction;
 
 public interface MoveActionChangeWeather extends MoveAction {
     
