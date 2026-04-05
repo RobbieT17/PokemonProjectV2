@@ -115,9 +115,9 @@ public interface StatusConditionManager {
     /*
      * Infected Pokemon lose 1/12 of their max HP at the end of each round
      * and reduces special-move damage by 50%. If the infected Pokemon uses a contact move,
-     * the target is also infected.
+     * the targeted Pokemon is also infected.
      *  
-     * If the infected Pokemon is a Zombie-Type, their speed is doubled instead.
+     * If the infected Pokemon is a Zombie-Type, their speed is doubled instead of the debuffs.
      * Only Non-Zombie Pokemon can infect Zombie-Type Pokemon.
      */
      public static StatusCondition infect(StatusContext c) {
@@ -129,25 +129,37 @@ public interface StatusConditionManager {
             EventID.FIND_MOVE_ORDER, EventID.END_OF_ROUND
         };
 
-        // For Non-Zombie Types
+        // Move makes contact: Infected Pokemon infects their targert
         p.getEvents().addEventListener(flags[0], name, e -> {
             Pokemon t = e.effectTarget;
-            if (!EventData.isUser(p, e) || t.getConditions().hasPrimary()) return;
-            t.getConditions().setPrimaryCondition(infect(c));
-        });  
+
+            if (EventData.isUser(p, e) && !t.getConditions().hasPrimary()) {
+                t.getConditions().setPrimaryCondition(infect(c));
+                BattleLog.add("%s was infected!", t);
+            }
+            
+        }); 
+        
+        // Damage Multiplier: Special Moves deal 50% less damage
         p.getEvents().addEventListener(flags[1], name, e -> {
-            if (!(EventData.isUser(p, e) && e.moveUsed.isCategory(Move.SPECIAL))) return;
-            e.otherMoveMods *= 0.5; 
+            if (EventData.isUser(p, e) && e.moveUsed.isCategory(Move.SPECIAL)) {
+                e.otherMoveMods *= 0.5;
+            }
         });
 
-        // For Zombie-Types
+        // Turn Order: Infected Zombie-Type Pokemon have double speed
         p.getEvents().addEventListener(flags[2], name, e -> {
-            if (!p.isType(Type.ZOMBIE)) return;
-            p.getSpeed().setMod(200);
+            if (p.isType(Type.ZOMBIE)) {
+                p.getSpeed().setMod(200);
+            }
         });
+
+        // End of Round: Infected Non-Zombie-Type Pokemon lose 1/12 of their max HP
         p.getEvents().addEventListener(flags[3], name, e -> {
-            if (!p.isType(Type.ZOMBIE)) return;
-            p.restoreHpPercentMaxHP(1.0 / 8.0, " from the infection");
+            if (!p.isType(Type.ZOMBIE)) {
+                p.takeDamagePercentMaxHP(1.0 / 12.0, " from the infection");
+            }
+            
         });      
 
         BattleLog.add("%s was infected!", p);

@@ -68,6 +68,13 @@ public class EventData {
     }
 
     // Methods
+
+    /**
+     * Checks if the Pokemon is the user of the move this turn
+     * @param p Pokemon
+     * @param e event data
+     * @return True if the Pokeon is the users
+     */
     public static boolean isUser(Pokemon p, EventData e) {
         return p == e.user;
     }
