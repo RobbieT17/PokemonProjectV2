@@ -1,14 +1,14 @@
 package project.game.move.movelist;
 
+import project.game.battle.Weather;
 import project.game.event.EventManager;
 import project.game.move.MoveAction;
 import project.game.move.moveactions.MoveActionAttackDamage;
-import project.game.move.moveactions.MoveActionChangeStat;
 import project.game.move.moveactions.MoveActionChangeCondition;
+import project.game.move.moveactions.MoveActionChangeStat;
 import project.game.move.moveactions.MoveActionChangeWeather;
 import project.game.move.moveactions.MoveActionCharge;
 import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;
-import project.game.battle.Weather;
 
 public class WaterMoveList {
 
@@ -29,7 +29,7 @@ public class WaterMoveList {
     }
 
     public static int dive(EventManager e) {
-        MoveActionChangeCondition.enterImmuneState(e, StatusConditionID.DIVE_ID);
+        MoveActionChangeCondition.enterImmuneState(e, StatusConditionID.DIVE);
         return 0;
     }
 
@@ -83,7 +83,7 @@ public class WaterMoveList {
 
     public static int waterPulse(EventManager e) {
         MoveActionAttackDamage.dealDamage(e);
-        MoveActionChangeCondition.applyCondition(e, StatusConditionID.CONFUSION_ID, 20);
+        MoveActionChangeCondition.applyCondition(e, StatusConditionID.CONFUSION, 20);
         return 0;
     }
 
@@ -93,11 +93,11 @@ public class WaterMoveList {
     }
 
     public static int whirlpool(EventManager e) {
-        if (e.eventData.attackTarget.getConditions().hasKey(StatusConditionID.DIVE_ID)) {
+        if (e.eventData.attackTarget.getConditions().hasKey(StatusConditionID.DIVE)) {
             e.eventData.moveUsed.doublePower();
         }
         MoveActionAttackDamage.dealDamage(e);
-        MoveActionChangeCondition.applyCondition(e, StatusConditionID.BOUND_ID);
+        MoveActionChangeCondition.applyCondition(e, StatusConditionID.BOUND);
         return 0;
     }
 

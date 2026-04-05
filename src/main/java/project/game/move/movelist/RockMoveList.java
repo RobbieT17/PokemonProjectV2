@@ -1,19 +1,19 @@
 package project.game.move.movelist;
 
+import project.game.battle.Weather;
 import project.game.event.EventManager;
 import project.game.move.MoveAction;
 import project.game.move.moveactions.MoveActionAttackDamage;
 import project.game.move.moveactions.MoveActionChangeCondition;
 import project.game.move.moveactions.MoveActionChangeStat;
 import project.game.move.moveactions.MoveActionChangeWeather;
-import project.game.battle.Weather;
 import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;
 
 public class RockMoveList {
 
     public static int rockSlide(EventManager e) {
         MoveActionAttackDamage.dealDamage(e);
-        MoveActionChangeCondition.applyCondition(e, StatusConditionID.FLINCH_ID, 30);
+        MoveActionChangeCondition.applyCondition(e, StatusConditionID.FLINCH, 30);
         return 0;
     }
 
@@ -30,8 +30,8 @@ public class RockMoveList {
 
     public static int smackDown(EventManager e) {
         MoveActionAttackDamage.dealDamage(e);
-        MoveActionChangeCondition.leaveImmuneState(e, StatusConditionID.FLY_ID, "Fell from the sky!");
-        MoveActionChangeCondition.applyCondition(e, StatusConditionID.GROUNDED_ID);
+        MoveActionChangeCondition.leaveImmuneState(e, StatusConditionID.FLY, "Fell from the sky!");
+        MoveActionChangeCondition.applyCondition(e, StatusConditionID.GROUNDED);
         return 0;
     }
 }

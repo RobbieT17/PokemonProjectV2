@@ -1,5 +1,8 @@
 package project.game.move.movelist;
 
+import project.game.battle.BattleField;
+import project.game.battle.BattleLog;
+import project.game.battle.Weather;
 import project.game.event.EventManager;
 import project.game.move.Move;
 import project.game.move.MoveAction;
@@ -11,16 +14,13 @@ import project.game.move.moveactions.MoveActionChangeStat;
 import project.game.move.moveactions.MoveActionCharge;
 import project.game.pokemon.Pokemon;
 import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;
-import project.game.battle.BattleField;
-import project.game.battle.Weather;
-import project.game.battle.BattleLog;
 import project.game.utility.RandomValues;
 
 public class NormalMoveList {
 
     public static int bodySlam(EventManager e) {
         MoveActionAttackDamage.dealDamage(e);
-        MoveActionChangeCondition.applyCondition(e, StatusConditionID.PARALYSIS_ID, 30);
+        MoveActionChangeCondition.applyCondition(e, StatusConditionID.PARALYSIS, 30);
         return 0;
     }
 
@@ -36,9 +36,9 @@ public class NormalMoveList {
 
     public static int facade(EventManager e) {
         Pokemon a = e.eventData.user;
-        if (a.getConditions().hasKey(StatusConditionID.BURN_ID) ||
-            a.getConditions().hasKey(StatusConditionID.PARALYSIS_ID) ||
-            a.getConditions().hasKey(StatusConditionID.POISON_ID)) {
+        if (a.getConditions().hasKey(StatusConditionID.BURN) ||
+            a.getConditions().hasKey(StatusConditionID.PARALYSIS) ||
+            a.getConditions().hasKey(StatusConditionID.POISON)) {
             e.eventData.moveUsed.doublePower();
         }
         MoveActionAttackDamage.dealDamage(e);
@@ -120,7 +120,7 @@ public class NormalMoveList {
     public static int sleepTalk(EventManager e) {
         Pokemon a = e.eventData.user;
         Move m = e.eventData.moveUsed;
-        if (!a.getConditions().hasKey(StatusConditionID.SLEEP_ID)) {
+        if (!a.getConditions().hasKey(StatusConditionID.SLEEP)) {
             BattleLog.add(Move.FAILED);
             return 0;
         }
@@ -132,7 +132,9 @@ public class NormalMoveList {
         }
 
         BattleLog.add("%s used %s!", a, randomMove);
-        Movedex.processMove(randomMove.getMoveName(), e);
+        
+        EventManager newE = new EventManager(a, e.eventData.attackTarget, randomMove);
+        Movedex.processMove(newE);
         return 0;
     }
 

@@ -1,8 +1,8 @@
 package project.game.move.movelist;
 
-import project.game.event.EventManager;
 import project.game.battle.BattleField;
 import project.game.battle.Weather;
+import project.game.event.EventManager;
 import project.game.move.MoveAction;
 import project.game.move.moveactions.MoveActionAccuracy;
 import project.game.move.moveactions.MoveActionAttackDamage;
@@ -58,7 +58,7 @@ public class GrassMoveList {
 
     public static int leechSeed(EventManager e) {
         MoveActionAccuracy.moveHits(e);
-        MoveActionChangeCondition.applyCondition(e, StatusConditionID.SEEDED_ID);
+        MoveActionChangeCondition.applyCondition(e, StatusConditionID.SEEDED);
         return 0;
     }
 
@@ -94,7 +94,7 @@ public class GrassMoveList {
 
     public static int sleepPowder(EventManager e) {
         MoveActionAccuracy.moveHits(e);
-        MoveActionChangeCondition.applyCondition(e, StatusConditionID.SLEEP_ID);
+        MoveActionChangeCondition.applyCondition(e, StatusConditionID.SLEEP);
         MoveAction.displayFailMessage(e);
         return 0;
     }
@@ -110,7 +110,7 @@ public class GrassMoveList {
 
     public static int stunSpore(EventManager e) {
         MoveActionAccuracy.moveHits(e);
-        MoveActionChangeCondition.applyCondition(e, StatusConditionID.PARALYSIS_ID);
+        MoveActionChangeCondition.applyCondition(e, StatusConditionID.PARALYSIS);
         return 0;
     }
 

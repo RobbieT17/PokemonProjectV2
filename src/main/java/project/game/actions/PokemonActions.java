@@ -37,9 +37,9 @@ public class PokemonActions {
     }
 
     private void stopOnGoingMoves(Pokemon p) {
-        p.getConditions().removeCondition(StatusConditionID.FOCUSED_ID);
-        p.getConditions().removeCondition(StatusConditionID.FORCED_MOVE_ID);
-        p.getConditions().removeCondition(StatusConditionID.RAMPAGE_ID);
+        p.getConditions().removeCondition(StatusConditionID.FOCUSED);
+        p.getConditions().removeCondition(StatusConditionID.FORCED_MOVE);
+        p.getConditions().removeCondition(StatusConditionID.RAMPAGE);
         p.getConditions().setInterrupted(true);
     }
 
@@ -56,9 +56,9 @@ public class PokemonActions {
         BattleLog.add("%s used %s!", user, move);
         try {
             this.eventManager.notifyUserPokemon(EventID.USE_MOVE);
-            move.getPp().decrement(user.getConditions().hasKey(StatusConditionID.FORCED_MOVE_ID));
+            move.getPp().decrement(user.getConditions().hasKey(StatusConditionID.FORCED_MOVE));
         
-            Movedex.processMove(move.getMoveName(), this.eventManager);
+            Movedex.processMove(this.eventManager);
 
         } catch (MoveEndedEarlyException e) {
             BattleLog.add(e.getMessage());

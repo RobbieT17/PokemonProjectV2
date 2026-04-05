@@ -16,7 +16,8 @@ public class MoveEffect {
     }
 
     public void setEffect(String effect) {
-        this.effect = effect;
+        // For enum identifies (those use underscores) 
+        this.effect = effect.replaceAll("[ -]", "_");
     }
 
     public void setStats(StatData stats) {

@@ -184,9 +184,8 @@ public enum Movedex {
      * @param moveName Selected Move
      * @param e EventManager
      */
-    public static void processMove(String moveName, EventManager e) {
-        // Transform string to match Pascal_Case of enum values
-        String id = moveName.replaceAll("[ -]", "_");
-        Movedex.valueOf(id).act(e);;
+    public static void processMove(EventManager e) {
+        String moveName = e.eventData.moveUsed.getMoveName();
+        Movedex.valueOf(moveName).act(e);
     }
 }

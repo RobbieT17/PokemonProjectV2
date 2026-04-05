@@ -109,7 +109,7 @@ public class Move {
 
     @Override
     public String toString() {
-        return this.moveName;
+        return this.moveName.replaceAll("[_-]", " ");
     }
 
     public void resetStats() {

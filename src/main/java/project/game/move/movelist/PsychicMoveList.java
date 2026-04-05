@@ -19,13 +19,13 @@ public class PsychicMoveList {
     public static int rest(EventManager e) {
         MoveAction.targetsUser(e.eventData);
         MoveActionHealthRestore.restoreHp(e, 100);
-        MoveActionChangeCondition.applyCondition(e, StatusConditionID.SLEEP_ID);
+        MoveActionChangeCondition.applyCondition(e, StatusConditionID.SLEEP);
         return 0;
     }
 
     public static int zenHeadbutt(EventManager e) {
         MoveActionAttackDamage.dealDamage(e);
-        MoveActionChangeCondition.applyCondition(e, StatusConditionID.FLINCH_ID, 20);
+        MoveActionChangeCondition.applyCondition(e, StatusConditionID.FLINCH, 20);
         return 0;
     }
 }

@@ -17,7 +17,7 @@ public class MoveData {
     private AdditonalEffects effects = null;
 
     public void setId(int id) {this.id = id;}
-    public void setName(String name) {this.name = name;}
+    public void setName(String name) {this.name = name.replaceAll("[ -]", "_");}
     public void setType(String type) {this.type = type;}
     public void setCategory(String category) {this.category = category; this.contact = category.equals(Move.PHYSICAL);}
     public void setPp(int pp) {this.pp = pp;}

@@ -1,7 +1,7 @@
 package project.game.move.movelist;
 
-import project.game.event.EventManager;
 import project.game.battle.Weather;
+import project.game.event.EventManager;
 import project.game.move.MoveAction;
 import project.game.move.moveactions.MoveActionAttackDamage;
 import project.game.move.moveactions.MoveActionChangeCondition;
@@ -21,7 +21,7 @@ public class IceMoveList {
 
     public static int blizzard(EventManager e) {
         MoveActionAttackDamage.dealDamage(e);
-        MoveActionChangeCondition.applyCondition(e, StatusConditionID.FREEZE_ID, 10);
+        MoveActionChangeCondition.applyCondition(e, StatusConditionID.FREEZE, 10);
         return 0;
     }
 
@@ -38,13 +38,13 @@ public class IceMoveList {
 
     public static int iceBeam(EventManager e) {
         MoveActionAttackDamage.dealDamage(e);
-        MoveActionChangeCondition.applyCondition(e, StatusConditionID.FREEZE_ID, 10);
+        MoveActionChangeCondition.applyCondition(e, StatusConditionID.FREEZE, 10);
         return 0;
     }
 
     public static int icePunch(EventManager e) {
         MoveActionAttackDamage.dealDamage(e);
-        MoveActionChangeCondition.applyCondition(e, StatusConditionID.FREEZE_ID, 10);
+        MoveActionChangeCondition.applyCondition(e, StatusConditionID.FREEZE, 10);
         return 0;
     }
 

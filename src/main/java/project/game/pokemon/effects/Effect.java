@@ -19,7 +19,7 @@ public abstract class Effect {
 
     @Override
     public String toString() {
-        return this.effectName;
+        return this.effectName.replaceAll("[_ ]", "-");
     }
 
 // Getters

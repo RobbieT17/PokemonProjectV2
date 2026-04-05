@@ -2,8 +2,8 @@ package project.game.move.movelist;
 
 import project.game.event.EventManager;
 import project.game.move.MoveAction;
-import project.game.move.moveactions.MoveActionAttackDamage;
 import project.game.move.moveactions.MoveActionAccuracy;
+import project.game.move.moveactions.MoveActionAttackDamage;
 import project.game.move.moveactions.MoveActionChangeCondition;
 import project.game.move.moveactions.MoveActionChangeStat;
 import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;
@@ -18,24 +18,24 @@ public class PoisonMoveList {
 
     public static int poisonJab(EventManager e) {
         MoveActionAttackDamage.dealDamage(e);
-        MoveActionChangeCondition.applyCondition(e, StatusConditionID.POISON_ID, 30);
+        MoveActionChangeCondition.applyCondition(e, StatusConditionID.POISON, 30);
         return 0;
     }
 
     public static int poisonPowder(EventManager e) {
         MoveActionAccuracy.moveHits(e);
-        MoveActionChangeCondition.applyCondition(e, StatusConditionID.POISON_ID);
+        MoveActionChangeCondition.applyCondition(e, StatusConditionID.POISON);
         return 0;
     }
 
     public static int toxic(EventManager e) {
         MoveActionAccuracy.moveHits(e);
-        MoveActionChangeCondition.applyCondition(e, StatusConditionID.BAD_POISON_ID);
+        MoveActionChangeCondition.applyCondition(e, StatusConditionID.BAD_POISON);
         return 0;
     }
 
     public static int venoshock(EventManager e) {
-        if (e.eventData.attackTarget.getConditions().hasKey(StatusConditionID.POISON_ID)) {
+        if (e.eventData.attackTarget.getConditions().hasKey(StatusConditionID.POISON)) {
             e.eventData.moveUsed.doublePower();
         }
         MoveActionAttackDamage.dealDamage(e);

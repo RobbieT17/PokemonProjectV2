@@ -5,10 +5,9 @@ import project.game.event.EventData;
 import project.game.event.EventManager;
 import project.game.move.MoveAction;
 import project.game.pokemon.Pokemon;
-import project.game.pokemon.effects.StatusCondition;
 import project.game.pokemon.effects.StatusConditionManager;
-import project.game.pokemon.effects.StatusContext;
 import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;
+import project.game.pokemon.effects.StatusContext;
 
 public interface MoveActionCharge extends MoveAction{
      /*
@@ -19,7 +18,7 @@ public interface MoveActionCharge extends MoveAction{
         EventData data  = eventManager.eventData;
         Pokemon attacker = data.user;
 
-        if (!attacker.getConditions().hasKey(StatusConditionID.CHARGE_MOVE_ID)) {
+        if (!attacker.getConditions().hasKey(StatusConditionID.CHARGE_MOVE)) {
             StatusContext c = new StatusContext(attacker);
             c.move = data.moveUsed;
 
@@ -28,7 +27,7 @@ public interface MoveActionCharge extends MoveAction{
             return;
         }
         
-        attacker.getConditions().removeCondition(StatusConditionID.CHARGE_MOVE_ID);
+        attacker.getConditions().removeCondition(StatusConditionID.CHARGE_MOVE);
         MoveActionAttackDamage.dealDamage(eventManager); 
     }
 
@@ -52,7 +51,7 @@ public interface MoveActionCharge extends MoveAction{
         Pokemon attacker = data.user;
 
         // Starts rampage
-        if (!attacker.getConditions().hasKey(StatusConditionID.RAMPAGE_ID)) {
+        if (!attacker.getConditions().hasKey(StatusConditionID.RAMPAGE)) {
             StatusContext c = new StatusContext(attacker);
             c.move = data.moveUsed;
 
