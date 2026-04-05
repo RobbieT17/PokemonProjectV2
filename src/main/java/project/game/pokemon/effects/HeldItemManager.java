@@ -73,12 +73,18 @@ public interface HeldItemManager {
         return new HeldItem(p, name, flags);
 	}
 
-    // Blows up all Pokemon on field after 3 rounds. Timer resets if the holder switches out or is attacked.
+    /**
+     * Blows up all Pokemon on field after 3 rounds. 
+     * Timer resets if the holder switches out or if
+     * the holder is the target of a non-status move 
+     * attack (whether the move deals damage is irrelevant)
+     * 
+     */
     public static HeldItem bombSurprise(Pokemon p) {
         String name = HeldItemID.Bomb_Surprise.name();
-        EventID[] flags = new EventID[] {EventID.BEFORE_MOVE, EventID.SWITCH_OUT};
+        EventID[] flags = new EventID[] {EventID.BEFORE_MOVE, EventID.MOVE_HITS, EventID.SWITCH_OUT};
 
-        Counter c = new Counter(5);
+        Counter c = new Counter(3);
 
         p.getEvents().addEventListener(flags[0], name, e -> {
             if (c.inc()) {
@@ -91,6 +97,8 @@ public interface HeldItemManager {
         });
 
         p.getEvents().addEventListener(flags[1], name, e -> c.reset());
+        p.getEvents().addEventListener(flags[2], name, e -> c.reset());
+
 
         return new HeldItem(p, name, flags);
 	}
