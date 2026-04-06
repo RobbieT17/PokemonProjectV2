@@ -30,13 +30,13 @@ public interface StatusConditionManager {
         Flinch(StatusConditionManager::flinch),
         Bound(StatusConditionManager::bound),
         Confusion(StatusConditionManager::confusion),
-        Seeded(StatusConditionManager::seeded),
+        Charge(StatusConditionManager::chargeMove),
+        Recharge(StatusConditionManager::rampage),
         Forced_Move(StatusConditionManager::forcedMove),
         Focused(StatusConditionManager::focused),
         Rampage(StatusConditionManager::rampage),
-        Recharge(StatusConditionManager::rampage),
         Grounded(StatusConditionManager::grounded),
-        Charge_Move(StatusConditionManager::chargeMove),
+        Seeded(StatusConditionManager::seeded),
         Fly_State(StatusConditionManager::fly),
         Dig_State(StatusConditionManager::dig),
         Dive_State(StatusConditionManager::dive),
@@ -46,7 +46,6 @@ public interface StatusConditionManager {
 
         private final Function<StatusContext, StatusCondition> func;
   
-
         StatusConditionID(Function<StatusContext, StatusCondition> func) {
             this.func = func;
         }    
@@ -314,7 +313,7 @@ public interface StatusConditionManager {
     // Pokemon flinches and can't act for the round
     public static StatusCondition flinch(StatusContext c) {
         Pokemon p = c.target;
-        StatusConditionID id = StatusConditionID.Charge_Move;
+        StatusConditionID id = StatusConditionID.Charge;
         String name = id.name();
         EventID[] flags = new EventID[] {EventID.BEFORE_MOVE};
 
@@ -329,7 +328,7 @@ public interface StatusConditionManager {
     // Traps Pokemon from escaping battle and loses 1/8 of max HP
     public static StatusCondition bound(StatusContext c) {
         Pokemon p = c.target;
-        StatusConditionID id = StatusConditionID.Charge_Move;
+        StatusConditionID id = StatusConditionID.Charge;
         String name = id.name();
         EventID[] flags = new EventID[] {EventID.END_OF_ROUND, EventID.SWITCH_OUT};
 
@@ -355,7 +354,7 @@ public interface StatusConditionManager {
      */
     public static StatusCondition confusion(StatusContext c) {
         Pokemon p = c.target;
-        StatusConditionID id = StatusConditionID.Charge_Move;
+        StatusConditionID id = StatusConditionID.Charge;
         String name = id.name();
         EventID[] flags = new EventID[] {EventID.STATUS_BEFORE};
 
@@ -381,7 +380,7 @@ public interface StatusConditionManager {
     public static StatusCondition seeded(StatusContext c) {
         Pokemon p = c.target;
         Pokemon r = c.source;
-        StatusConditionID id = StatusConditionID.Charge_Move;
+        StatusConditionID id = StatusConditionID.Charge;
         String name = id.name();
         EventID[] flags = new EventID[] {EventID.END_OF_ROUND};
 
@@ -403,7 +402,7 @@ public interface StatusConditionManager {
         Pokemon p = c.target;
         Move m = c.move;
         int n = c.count;
-        StatusConditionID id = StatusConditionID.Charge_Move;
+        StatusConditionID id = StatusConditionID.Charge;
         String name = id.name();
         EventID[] flags = new EventID[] {EventID.MOVE_SELECTION, EventID.END_OF_ROUND};
 
@@ -425,7 +424,7 @@ public interface StatusConditionManager {
     public static StatusCondition focused(StatusContext c) {
         Pokemon p = c.target;
         Move m = c.move;
-        StatusConditionID id = StatusConditionID.Charge_Move;
+        StatusConditionID id = StatusConditionID.Charge;
         String name = id.name();
         EventID[] flags = new EventID[] {EventID.MOVE_SELECTION, EventID.USE_MOVE, EventID.MOVE_HITS};
 
@@ -449,7 +448,7 @@ public interface StatusConditionManager {
     // Grounded Pokemon are vulnerable to Ground-Type moves (even Flying-Types) 
     public static StatusCondition grounded(StatusContext c) {
         Pokemon p = c.target;
-        StatusConditionID id = StatusConditionID.Charge_Move;
+        StatusConditionID id = StatusConditionID.Charge;
         String name = id.name();
         EventID[] flags = new EventID[] {EventID.MOVE_EFFECTIVENESS};
 
@@ -471,7 +470,7 @@ public interface StatusConditionManager {
     public static StatusCondition rampage(StatusContext c) {
         Pokemon p = c.target;
         Move m = c.move;
-        StatusConditionID id = StatusConditionID.Charge_Move;
+        StatusConditionID id = StatusConditionID.Charge;
         String name = id.name();
         EventID[] flags = new EventID[] {EventID.MOVE_SELECTION, EventID.END_OF_TURN, EventID.MOVE_INTERRUPTED};
 
@@ -499,7 +498,7 @@ public interface StatusConditionManager {
     public static StatusCondition chargeMove(StatusContext c) {
         Pokemon p = c.target;
         Move m = c.move;
-        StatusConditionID id = StatusConditionID.Charge_Move;
+        StatusConditionID id = StatusConditionID.Charge;
         String name = id.name();
         EventID[] flags = new EventID[] {EventID.MOVE_SELECTION, EventID.MOVE_INTERRUPTED};
 

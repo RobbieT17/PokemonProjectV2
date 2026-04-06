@@ -17,7 +17,7 @@ public interface MoveActionCharge extends MoveAction{
         EventData data  = eventManager.eventData;
         Pokemon attacker = data.user;
 
-        if (!attacker.getConditions().hasKey(StatusConditionID.Charge_Move)) {
+        if (!attacker.getConditions().hasKey(StatusConditionID.Charge)) {
             StatusContext c = new StatusContext(attacker);
             c.move = data.moveUsed;
 
@@ -26,7 +26,7 @@ public interface MoveActionCharge extends MoveAction{
             return;
         }
         
-        attacker.getConditions().removeCondition(StatusConditionID.Charge_Move);
+        attacker.getConditions().removeCondition(StatusConditionID.Charge);
         MoveActionAttackDamage.dealDamage(eventManager); 
     }
 

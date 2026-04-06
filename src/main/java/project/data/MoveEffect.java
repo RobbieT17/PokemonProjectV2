@@ -4,6 +4,8 @@ public class MoveEffect {
     
     private boolean self;
     private int chance = 100;
+    private int duration;
+    private double percent;
     private String effect;
     private StatData stats;
 
@@ -14,6 +16,15 @@ public class MoveEffect {
     public void setChance(int chance) {
         this.chance = chance;
     }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
+    public void setPercent(double percent) {
+        this.percent = percent;
+    }
+    
 
     public void setEffect(String effect) {
         // For enum identifies (those use underscores) 
@@ -32,6 +43,10 @@ public class MoveEffect {
         return this.chance;
     }
 
+    public int getDuration() {
+        return this.duration;
+    }
+
     public String getEffect() {
         return this.effect;
     }
@@ -39,5 +54,9 @@ public class MoveEffect {
     public StatData getStats() {
         return this.stats;
     }
-    
+
+    public double getPercent() {
+        return this.percent;
+    }
+
 }

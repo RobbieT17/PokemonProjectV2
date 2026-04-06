@@ -7,6 +7,8 @@ public class AdditonalEffects {
     private MoveEffect weatherChange;
     private MoveEffect terrainChange;
     private MoveEffect switchOut;
+    private MoveEffect recoil;
+    private MoveEffect heal;
 
     public void setStatChange(MoveEffect statChange) {
         this.statChange = statChange;
@@ -23,6 +25,15 @@ public class AdditonalEffects {
     public void setSwitchOut(MoveEffect switchOut) {
         this.switchOut = switchOut;
     }
+    public void setRecoil(MoveEffect recoil) {
+        this.recoil = recoil;
+    }
+    public void setHeal(MoveEffect heal) {
+        this.heal = heal;
+    }
+    
+
+
     public MoveEffect getStatChange() {
         return this.statChange;
     }
@@ -38,6 +49,13 @@ public class AdditonalEffects {
     public MoveEffect getSwitchOut() {
         return this.switchOut;
     }
+    public  MoveEffect getRecoil() {
+        return this.recoil;
+    }
+    public MoveEffect getHeal() {
+        return this.heal;
+    }
+    
     
 
     

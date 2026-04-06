@@ -1,5 +1,7 @@
 package project.data;
 
+import java.util.ArrayList;
+
 import project.game.move.Move;
 
 public class MoveData {
@@ -14,6 +16,8 @@ public class MoveData {
     private int priority;
     private double crit = Move.UNIVERSAL_CRIT_RATE;
     private boolean contact = false;
+    private String target = "Single-Adjacent";
+    private ArrayList<Double> multiHit = null;
     private AdditonalEffects effects = null;
 
     public void setId(int id) {this.id = id;}
@@ -26,6 +30,8 @@ public class MoveData {
     public void setPriority(int priority) {this.priority = priority;}
     public void setCrit(double crit) {this.crit = crit;}
     public void setContact(boolean contact) {this.contact = contact;}
+    public void setTarget(String target) {this.target = target;}
+    public void setMultiHit(ArrayList<Double> multiHit) {this.multiHit = multiHit;}
     public void setEffects(AdditonalEffects effects) {this.effects = effects;}
     
     public int getId() {return this.id;}
@@ -38,6 +44,7 @@ public class MoveData {
     public int getPriority() {return this.priority;}
     public double getCrit() {return this.crit;}
     public boolean getContact() {return this.contact;}
-    public AdditonalEffects getEffects(){return this.effects;}
-        
+    public String getTarget() {return this.target;}
+    public ArrayList<Double> getMultiHit() {return this.multiHit;}
+    public AdditonalEffects getEffects(){return this.effects;}         
 }
