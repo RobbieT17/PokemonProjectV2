@@ -2,43 +2,25 @@ package project.game.pokemon.stats;
 
 public class StatPoint {
 
+	public enum StatID {Attack, Defense, Special_Attack, Special_Defense, Speed, Accuracy, Evasion};
+
 // Class Variables
 	private final static int LOWEST_STAT_STAGE = -6;
 	private final static int HIGHEST_STAT_STAGE = 6;
 	private final static double MULTIPLIER = 0.125;
 
-	// Stat Names
-	public static final String ATTACK_NAME = "Attack";
-	public static final String DEFENSE_NAME = "Defense";
-	public static final String SPECIAL_ATTACK_NAME = "Special-Attack";
-	public static final String SPECIAL_DEFENSE_NAME = "Special-Defense";
-	public static final String SPEED_NAME = "Speed";
-	public static final String ACCURACY_NAME = "Accuracy";
-	public static final String EVASION_NAME = "Evasion";
-
-    // Stat Types ID
-	public static final int ATTACK = 0;
-	public static final int DEFENSE = 1;
-	public static final int SPECIAL_ATTACK = 2;
-	public static final int SPECIAL_DEFENSE = 3;
-	public static final int SPEED = 4;
-	
-	public static final int ACCURACY = 5;
-	public static final int EVASION = 6;
-
 // Object Variables
-	private final String statName;
-	private final int statID; // ID for type of stat, view above
+	private final StatID statID;
 	private final int base; // Base power
 
 	private int power; // Power depending on the current stage
 	private int stage; // Stage of the stat, max: 6 min: -6
 	private double mod; // Modified Stat Multiplier
 
-	public StatPoint(String name, int id, int base) {
-		this.statName = name;
-		this.statID = id; 
+	public StatPoint(StatID id, int base) {
+		this.statID = id;
 		this.base = base;
+
 		this.power = base;
 		this.stage = 0;
 		this.mod = 1.0;
@@ -76,7 +58,7 @@ public class StatPoint {
 	}
 
 	private boolean isAccuracyOrEvasion() {
-		return this.statID == StatPoint.ACCURACY || this.statID == StatPoint.EVASION;
+		return this.statID == StatID.Accuracy || this.statID == StatID.Evasion;
 	}
 
 	// Changes a stat based on the stage and base stat
@@ -113,8 +95,8 @@ public class StatPoint {
 	// Displays stat's current power and stage
 	public String showStat() {
 		return isAccuracyOrEvasion()
-		? String.format("%s: %d%%%s%n", this.statName, this.power, this.showStage())
-		: String.format("%s: %d%s%n", this.statName, this.power, this.showStage());
+		? String.format("%s: %d%%%s%n", this.statID.name(), this.power, this.showStage())
+		: String.format("%s: %d%s%n", this.statID.name(), this.power, this.showStage());
 	}
 
 	// Attack: 52 (-32) [-4 Stage]
@@ -122,7 +104,7 @@ public class StatPoint {
 
 	@Override
 	public String toString() {
-		return this.statName;
+		return this.statID.name();
 	}
 
 // Setters
@@ -137,8 +119,7 @@ public class StatPoint {
 	public void resetMod() {this.mod = 1.0;}
 
 // Getters
-	public String getStatName() {return this.statName;}
-	public int getStatID() {return this.statID;}
+	public StatID getStatID() {return this.statID;}
 	public int getBase() {return this.base;}
 	public int getPower() {return (int) (this.power * this.mod);}
 	public int getStage() {return this.stage;}

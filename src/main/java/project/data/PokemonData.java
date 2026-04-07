@@ -2,11 +2,11 @@ package project.data;
 
 import java.util.List;
 
-import project.game.builders.PokemonBuilder;
 import project.game.builders.PokemonTypeBuilder;
 import project.game.pokemon.PokemonType;
 import project.game.pokemon.stats.HealthPoints;
 import project.game.pokemon.stats.StatPoint;
+import project.game.pokemon.stats.StatPoint.StatID;
 import project.game.pokemon.stats.Type;
 
 public class PokemonData {
@@ -70,13 +70,13 @@ public class PokemonData {
 
     public StatPoint[] getStats(int level) {
         return new StatPoint[] {
-            new StatPoint(StatPoint.ATTACK_NAME, StatPoint.ATTACK, StatPoint.calculate(this.atk, level)),
-            new StatPoint(StatPoint.DEFENSE_NAME, StatPoint.DEFENSE, StatPoint.calculate(this.def, level)),
-            new StatPoint(StatPoint.SPECIAL_ATTACK_NAME, StatPoint.SPECIAL_ATTACK, StatPoint.calculate(this.spAtk, level)),
-            new StatPoint(StatPoint.SPECIAL_DEFENSE_NAME, StatPoint.SPECIAL_DEFENSE, StatPoint.calculate(this.spDef, level)),
-            new StatPoint(StatPoint.SPEED_NAME, StatPoint.SPEED, StatPoint.calculate(this.spd, level)),
-            new StatPoint(StatPoint.ACCURACY_NAME, StatPoint.ACCURACY, 100),
-            new StatPoint(StatPoint.EVASION_NAME, StatPoint.EVASION, 100)
+            new StatPoint(StatID.Attack, StatPoint.calculate(atk, level)),
+            new StatPoint(StatID.Defense, StatPoint.calculate(def, level)),
+            new StatPoint(StatID.Special_Attack, StatPoint.calculate(spAtk, level)),
+            new StatPoint(StatID.Special_Defense, StatPoint.calculate(spDef, level)),
+            new StatPoint(StatID.Speed, StatPoint.calculate(spd, level)),
+            new StatPoint(StatID.Accuracy, 100),
+            new StatPoint(StatID.Evasion, 100)
         };
     }
 }

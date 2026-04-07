@@ -12,6 +12,7 @@ import project.game.pokemon.effects.HeldItem;
 import project.game.pokemon.stats.HealthPoints;
 import project.game.pokemon.stats.StatPoint;
 import project.game.pokemon.stats.Type;
+import project.game.pokemon.stats.StatPoint.StatID;
 
 public class Pokemon {
 
@@ -284,13 +285,13 @@ public class Pokemon {
     public int getPokedexID() {return this.pokedexID;}
     public HealthPoints getHp() {return this.hp;}
     public StatPoint[] getStats() {return this.stats;}
-    public StatPoint getAttack() {return this.stats[StatPoint.ATTACK];}
-	public StatPoint getDefense() {return this.stats[StatPoint.DEFENSE];}
-	public StatPoint getSpecialAttack() {return this.stats[StatPoint.SPECIAL_ATTACK];}
-	public StatPoint getSpecialDefense() {return this.stats[StatPoint.SPECIAL_DEFENSE];}
-	public StatPoint getSpeed() {return this.stats[StatPoint.SPEED];}
-	public StatPoint getAccuracy() {return this.stats[StatPoint.ACCURACY];}
-	public StatPoint getEvasion() {return this.stats[StatPoint.EVASION];}
+    public StatPoint getAttack() {return this.stats[StatID.Attack.ordinal()];}
+	public StatPoint getDefense() {return this.stats[StatID.Defense.ordinal()];}
+	public StatPoint getSpecialAttack() {return this.stats[StatID.Special_Attack.ordinal()];}
+	public StatPoint getSpecialDefense() {return this.stats[StatID.Special_Defense.ordinal()];}
+	public StatPoint getSpeed() {return this.stats[StatID.Speed.ordinal()];}
+	public StatPoint getAccuracy() {return this.stats[StatID.Accuracy.ordinal()];}
+	public StatPoint getEvasion() {return this.stats[StatID.Evasion.ordinal()];}
 	public double getWeight() {return this.weight;}
     public ArrayList<Move> getMoves() {return this.moves;}
     public PokemonConditions getConditions() {return this.conditions;}

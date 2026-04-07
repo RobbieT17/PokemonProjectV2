@@ -6,6 +6,7 @@ import project.game.pokemon.PokemonType;
 import project.game.pokemon.stats.HealthPoints;
 import project.game.pokemon.stats.StatPoint;
 import project.game.pokemon.stats.Type;
+import project.game.pokemon.stats.StatPoint.StatID;
 
 // Class designed to create Pokemon objects efficiently
 public class PokemonBuilder implements Builder{ 
@@ -54,8 +55,8 @@ public class PokemonBuilder implements Builder{
     public Pokemon build() {
         validateBuild();
 
-        this.acc = new StatPoint(StatPoint.ACCURACY_NAME, StatPoint.ACCURACY, 100);
-        this.eva = new StatPoint(StatPoint.EVASION_NAME, StatPoint.EVASION, 100);
+        this.acc = new StatPoint(StatID.Accuracy, 100);
+        this.eva = new StatPoint(StatID.Evasion, 100);
 
         return new Pokemon(
             this.level,
@@ -109,11 +110,11 @@ public class PokemonBuilder implements Builder{
     }
 
     public PokemonBuilder setStats(int atk, int def, int spAtk, int spDef, int spd) {
-        this.atk = new StatPoint(StatPoint.ATTACK_NAME, StatPoint.ATTACK, StatPoint.calculate(atk, this.level));
-        this.def = new StatPoint(StatPoint.DEFENSE_NAME, StatPoint.DEFENSE, StatPoint.calculate(def, this.level));
-        this.spAtk = new StatPoint(StatPoint.SPECIAL_ATTACK_NAME, StatPoint.SPECIAL_ATTACK, StatPoint.calculate(spAtk, this.level));
-        this.spDef = new StatPoint(StatPoint.SPECIAL_DEFENSE_NAME, StatPoint.SPECIAL_DEFENSE, StatPoint.calculate(spDef, this.level));
-        this.spd = new StatPoint(StatPoint.SPEED_NAME, StatPoint.SPEED, StatPoint.calculate(spd, this.level));
+        this.atk = new StatPoint(StatID.Attack, StatPoint.calculate(atk, this.level));
+        this.def = new StatPoint(StatID.Defense, StatPoint.calculate(def, this.level));
+        this.spAtk = new StatPoint(StatID.Special_Attack, StatPoint.calculate(spAtk, this.level));
+        this.spDef = new StatPoint(StatID.Special_Defense, StatPoint.calculate(spDef, this.level));
+        this.spd = new StatPoint(StatID.Speed, StatPoint.calculate(spd, this.level));
         return this;
     }
 
