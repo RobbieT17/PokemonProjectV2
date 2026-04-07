@@ -23,9 +23,9 @@ public class GameEvents {
         SWITCH_OUT,
         MOVE_SELECTION,
         USE_MOVE,
-        MOVE_INTERRUPTED;
+        MOVE_INTERRUPTED,
+        MOVE_DEALS_DAMAGE;
     }
-
 
     private final HashMap<String, Event> eventMap;
    
@@ -50,6 +50,7 @@ public class GameEvents {
         this.addEventMapEntry(EventID.MOVE_SELECTION);
         this.addEventMapEntry(EventID.USE_MOVE);
         this.addEventMapEntry(EventID.MOVE_INTERRUPTED);
+        this.addEventMapEntry(EventID.MOVE_DEALS_DAMAGE);
     }
 
     // Methods

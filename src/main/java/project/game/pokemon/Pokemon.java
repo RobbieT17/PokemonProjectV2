@@ -173,7 +173,7 @@ public class Pokemon {
 // Boolean Methods
     public boolean hasNoMoves() {
         for (Move m : this.moves) 
-            if (!(m.getPp().depleted() || m.getDisabled())) return false;
+            if (!(m.getPp().depleted() || m.isDisabled())) return false;
         return true;
     }
 

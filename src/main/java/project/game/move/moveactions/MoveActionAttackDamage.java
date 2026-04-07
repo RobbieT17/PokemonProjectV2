@@ -33,7 +33,7 @@ public interface MoveActionAttackDamage extends MoveAction {
                 : 5;
     }
 
-    private static void damageTaken(EventManager eventManager, boolean multiHit) {
+    private static void pokemonTakeDamage(EventManager eventManager, boolean multiHit) {
         EventData data = eventManager.eventData;
         Pokemon attacker = data.user;
         Pokemon defender = data.attackTarget;
@@ -47,7 +47,9 @@ public interface MoveActionAttackDamage extends MoveAction {
 
         attacker.addDealtDamage(damage);
         defender.addDamageReceived(damage);
-        defender.takeDamage(damage);    
+        defender.takeDamage(damage);
+        
+        eventManager.notifyAllPokemon(EventID.MOVE_DEALS_DAMAGE);
 
         if (data.moveUsed.getMakesContact()) {
             eventManager.notifyAllPokemon(EventID.MOVE_MAKES_CONTACT);
@@ -84,7 +86,7 @@ public interface MoveActionAttackDamage extends MoveAction {
     public static void dealDamage(EventManager eventManager) {   
         MoveEffectiveCalculations.moveEffectiveness(eventManager); 
         MoveActionAccuracy.moveHits(eventManager); 
-        damageTaken(eventManager, false);
+        pokemonTakeDamage(eventManager, false);
     }
 
     // Deals multiple hits of damage
@@ -98,7 +100,7 @@ public interface MoveActionAttackDamage extends MoveAction {
         data.hitCount = randomHits();
 
         for (int i = 0; i < data.hitCount; i++) {
-            damageTaken(eventManager, true);
+            pokemonTakeDamage(eventManager, true);
             if (defender.getConditions().isFainted()) {
                 data.hitCount = i;
                 break;

@@ -1,8 +1,11 @@
 package project.data;
 
-import java.util.ArrayList;
 
 import project.game.move.Move;
+import project.game.move.Move.MoveCategory;
+import project.game.move.Move.MoveTarget;
+import project.game.move.MoveStat;
+import project.game.move.PowerPoints;
 
 public class MoveData {
     
@@ -16,23 +19,23 @@ public class MoveData {
     private int priority;
     private double crit = Move.UNIVERSAL_CRIT_RATE;
     private boolean contact = false;
-    private String target = "Single-Adjacent";
-    private ArrayList<Double> multiHit = null;
-    private AdditonalEffects effects = null;
+    private String target = Move.MoveTarget.Single_Adjacent.name();
+    private boolean multiHit = false;
+    private AdditonalEffects addEffects = null;
 
     public void setId(int id) {this.id = id;}
     public void setName(String name) {this.name = name.replaceAll("[ -]", "_");}
     public void setType(String type) {this.type = type;}
-    public void setCategory(String category) {this.category = category; this.contact = category.equals(Move.PHYSICAL);}
+    public void setCategory(String category) {this.category = category; this.contact = category.equals(Move.MoveCategory.Physical.name());}
     public void setPp(int pp) {this.pp = pp;}
     public void setPow(int pow) {this.pow = pow;}
     public void setAcc(int acc) {this.acc = acc;}
     public void setPriority(int priority) {this.priority = priority;}
     public void setCrit(double crit) {this.crit = crit;}
     public void setContact(boolean contact) {this.contact = contact;}
-    public void setTarget(String target) {this.target = target;}
-    public void setMultiHit(ArrayList<Double> multiHit) {this.multiHit = multiHit;}
-    public void setEffects(AdditonalEffects effects) {this.effects = effects;}
+    public void setTarget(String target) {this.target = target.replaceAll("[ -]", "_");}
+    public void setMultiHit(boolean multiHit) {this.multiHit = multiHit;}
+    public void setAddEffects(AdditonalEffects addEffects) {this.addEffects = addEffects;}
     
     public int getId() {return this.id;}
     public String getName() {return this.name;}
@@ -45,6 +48,13 @@ public class MoveData {
     public double getCrit() {return this.crit;}
     public boolean getContact() {return this.contact;}
     public String getTarget() {return this.target;}
-    public ArrayList<Double> getMultiHit() {return this.multiHit;}
-    public AdditonalEffects getEffects(){return this.effects;}         
+    public boolean getMultiHit() {return this.multiHit;}
+    public AdditonalEffects getAddEffects(){return this.addEffects;}      
+    
+    // Wrapper Functions
+    public MoveCategory getMoveCategory() {return MoveCategory.valueOf(this.category);}
+    public MoveTarget getMoveTarget() {return MoveTarget.valueOf(this.target);}
+    public PowerPoints getPowerPoints() {return new PowerPoints(this.pp);}
+    public MoveStat getPower() {return new MoveStat(this.pow);}
+    public MoveStat getAccuracy() {return new MoveStat(this.acc);}
 }

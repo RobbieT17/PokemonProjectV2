@@ -59,6 +59,14 @@ public class StatPoint {
 		return "";
 	}
 
+	public static int calculateHp(int baseHp, int level) {
+		return (((2 * baseHp) * level) / 100) + level + 10;
+	}
+
+	public static int calculate(int baseStat, int level) {
+		return ((baseStat * 2 * level) / 100) + 5;
+	}
+
 // Methods
 	// If not a stage 0, shows the difference in power and current stage
 	private String showStage() {

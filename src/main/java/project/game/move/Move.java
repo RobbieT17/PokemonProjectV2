@@ -5,7 +5,11 @@ import project.game.pokemon.Pokemon;
 import project.game.pokemon.PokemonType;
 
 public class Move {
+
 // Class Variables
+public enum MoveTarget {Single_Adjacent, Single_Ally, Single_Foe, All_Adjacent, All_Allies, All_Foes, All};
+public enum MoveCategory {Physical, Special, Status};
+
     // Message when a move fails
     public static final String FAILED = "But it failed!";
 
@@ -17,26 +21,21 @@ public class Move {
     // Moves that always hit
     public static final int ALWAYS_HITS = 101; 
     
-    // Move Categories
-    public static final String PHYSICAL = "Physical";
-    public static final String SPECIAL = "Special";
-    public static final String STATUS = "Status";
-
 // Object Variables
     private final int moveID; // Unique identifier stored as int
     private final String moveName; // Name of the move
     private final String moveType; // Type of move
-    private final String category; // Three Categories (Physical, Special, Status)
-
-    private final double critRate; // Chance of a critical hit
-
+    private final MoveCategory category; // Three Categories (Physical, Special, Status)
     private final PowerPoints pp; // Power Points (The number of uses a move has)
 	private final MoveStat power; // Strength of the move
 	private final MoveStat accuracy; // Hit rate of the move
-	private final int priority; // Moves with higher priority always move first
-    private final boolean makesContact;
+    private final MoveTarget moveTarget; // The target(s) of the move used
 
-    private final AdditonalEffects additonEffects;
+    private final double critRate; // Chance of a critical hit
+    private final int priority; // Moves with higher priority always move first
+    private final boolean makesContact; // True if the move makes contact with the defender
+    private final boolean multiHit; // True if the move hits multiple times
+    private final AdditonalEffects additonEffects; // Additional Effect such as stat/condition changes
         
     private boolean disabled; // Move is currently unusable
 
@@ -46,24 +45,28 @@ public class Move {
         int id, 
         String name,
         String type,
-        String category,
-        double crit,
+        MoveCategory category,
         PowerPoints pp,
         MoveStat pow, MoveStat acc, 
+        MoveTarget target,
+        double crit,
         int prot,
         boolean contact,
+        boolean multiHit,
         AdditonalEffects additionalEffects
         ) {
         this.moveID = id;
         this.moveName = name;
         this.moveType = type;
         this.category = category;
-        this.critRate = crit;
         this.pp = pp;
         this.power = pow;
         this.accuracy = acc;
+        this.moveTarget = target;
+        this.critRate = crit; 
         this.priority = prot;
         this.makesContact = contact;
+        this.multiHit = multiHit;
         this.additonEffects = additionalEffects;
     }
 
@@ -90,7 +93,7 @@ public class Move {
         return this.moveType.equals(t);
     }
 
-    public boolean isCategory(String c) {
+    public boolean isCategory(MoveCategory c) {
         return this.category.equals(c);
     }
 
@@ -131,13 +134,15 @@ public class Move {
     public int getMoveID() {return this.moveID;}
     public String getMoveName() {return this.moveName;}
     public String getMoveType() {return this.moveType;}
-    public String getCategory() {return this.category;}
-    public double getCritRate() {return this.critRate;}
+    public MoveCategory getCategory() {return this.category;}
     public PowerPoints getPp() {return this.pp;}
     public int getPower() {return this.power != null ? this.power.power(): 0;}
     public int getAccuracy() {return this.accuracy.power();}
+    public MoveTarget getMoveTarget() {return this.moveTarget;}
+    public double getCritRate() {return this.critRate;}
     public int getPriority() {return this.priority;}
     public boolean getMakesContact() {return this.makesContact;}
+    public boolean getMultiHit() {return this.multiHit;}
     public AdditonalEffects getAdditionalEffects() {return this.additonEffects;}
-    public boolean getDisabled() {return this.disabled;}
+    public boolean isDisabled() {return this.disabled;}
 }

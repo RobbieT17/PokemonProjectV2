@@ -7,14 +7,14 @@ import project.game.event.GameEvents.EventID;
 import project.game.move.Move;
 import project.game.pokemon.Pokemon;
 
-public class BattleActions {
+public class BattleProcessor {
 
     private final Pokemon pokemon1;
     private final Pokemon pokemon2;
 
     private Pokemon[] turnOrder;
 
-    public BattleActions(Pokemon p1, Pokemon p2) {
+    public BattleProcessor(Pokemon p1, Pokemon p2) {
         this.pokemon1 = p1;
         this.pokemon2 = p2;
     }
@@ -82,10 +82,10 @@ public class BattleActions {
         Pokemon p2 = turnOrder[1];
 
         // Faster pokemon acts first, followed by the second
-        PokemonActions firstPokemonAction = new PokemonActions(p1, p2, p1.getMoveSelected());
+        PokemonProcessor firstPokemonAction = new PokemonProcessor(p1, p2, p1.getMoveSelected());
         firstPokemonAction.useTurn();
 
-        PokemonActions secondPokemonAction = new PokemonActions(p2, p1, p2.getMoveSelected());
+        PokemonProcessor secondPokemonAction = new PokemonProcessor(p2, p1, p2.getMoveSelected());
         secondPokemonAction.useTurn();
     }
 

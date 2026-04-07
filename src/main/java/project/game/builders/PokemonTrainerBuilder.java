@@ -14,14 +14,14 @@ public class PokemonTrainerBuilder implements Builder {
     private final ArrayList<Pokemon> party = new ArrayList<>();
 
     @Override
-    public void validBuild() {
+    public void validateBuild() {
         if (this.name == null) throw new IllegalStateException("Trainer does not have a name");
         if (this.party.isEmpty()) throw new IllegalStateException(String.format("%s needs at least one pokemon in their party", this.name));
     }
 
     @Override
     public PokemonTrainer build() {
-        validBuild();
+        validateBuild();
         return new PokemonTrainer(this.name, this.party.toArray(Pokemon[]::new));
     }
 
@@ -41,7 +41,6 @@ public class PokemonTrainerBuilder implements Builder {
         return this;
     }
 
- 
     public String getName() {
         return this.name;
     }
@@ -49,8 +48,5 @@ public class PokemonTrainerBuilder implements Builder {
     public ArrayList<Pokemon> getParty() {
         return this.party;
     }
-
-    
-
  
 }

@@ -84,7 +84,7 @@ public enum Movedex {
     Giga_Impact(NormalMoveList::gigaImpact),
     Grave_Shock(ZombieMoveList::graveShock),
     Grass_Knot(GrassMoveList::grassKnot),
-    Gravity_Well(SpaceMoveList::gravityWell),
+    Gravity_Well(SpaceMoveList::gravitySwitch),
     Growl(NormalMoveList::growl),
     Growth(NormalMoveList::growth),
     Gyro_Ball(SteelMoveList::gyroBall),

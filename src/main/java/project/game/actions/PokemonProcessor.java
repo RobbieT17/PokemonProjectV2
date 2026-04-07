@@ -12,12 +12,12 @@ import project.game.move.Movedex;
 import project.game.pokemon.Pokemon;
 import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;;
 
-public class PokemonActions {
+public class PokemonProcessor {
 
     private final EventData eventData;
     private final EventManager eventManager;
 
-    public PokemonActions(Pokemon attacker, Pokemon defender, Move move) {
+    public PokemonProcessor(Pokemon attacker, Pokemon defender, Move move) {
         this.eventManager = new EventManager(attacker, defender, move);
         this.eventData = this.eventManager.eventData;
     }

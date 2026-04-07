@@ -1,6 +1,6 @@
 package project.game.battle;
 
-import project.game.actions.BattleActions;
+import project.game.actions.BattleProcessor;
 import project.game.player.PokemonTrainer;
 
 /**
@@ -40,7 +40,7 @@ public class Battle {
      */
     public void processRound() {
         // Determine move order
-        BattleActions battleActions = new BattleActions(this.player1.getPokemonInBattle(), this.player2.getPokemonInBattle());
+        BattleProcessor battleActions = new BattleProcessor(this.player1.getPokemonInBattle(), this.player2.getPokemonInBattle());
         
         battleActions.constructTurnOrder();
         battleActions.processPokemonActions();

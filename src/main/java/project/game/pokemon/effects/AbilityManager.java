@@ -112,7 +112,7 @@ public interface AbilityManager {
             if (!EventData.isUser(p, e)) return;
 
             Move m = e.moveUsed;
-            if (m.getCategory().equals(Move.SPECIAL)) {
+            if (m.getCategory().equals(Move.MoveCategory.Special)) {
                 p.getSpecialAttack().setMod(150);
             }
         });

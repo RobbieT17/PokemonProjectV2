@@ -44,7 +44,7 @@ public interface HeldItemManager {
 
         p.getEvents().addEventListener(flags[0], name, e -> {
             for (Move m : p.getMoves()) {
-                if (m.isCategory(Move.STATUS)) m.disable();
+                if (m.isCategory(Move.MoveCategory.Status)) m.disable();
             }
         });
 
@@ -164,7 +164,7 @@ public interface HeldItemManager {
         EventID[] flags = new EventID[] {EventID.DAMAGE_MULTIPLIER};
 
         p.getEvents().addEventListener(flags[0], name, e -> {
-            if (!(EventData.isUser(p, e) && e.moveUsed.isCategory(Move.PHYSICAL))) return;
+            if (!(EventData.isUser(p, e) && e.moveUsed.isCategory(Move.MoveCategory.Physical))) return;
             e.otherMoveMods *= 1.1;
         });
 
@@ -191,7 +191,7 @@ public interface HeldItemManager {
         EventID[] flags = new EventID[] {EventID.DAMAGE_MULTIPLIER};
 
         p.getEvents().addEventListener(flags[0], name, e -> {
-            if (!(EventData.isUser(p, e) && e.moveUsed.isCategory(Move.SPECIAL))) return;
+            if (!(EventData.isUser(p, e) && e.moveUsed.isCategory(Move.MoveCategory.Special))) return;
             e.otherMoveMods *= 1.1;
         });
 

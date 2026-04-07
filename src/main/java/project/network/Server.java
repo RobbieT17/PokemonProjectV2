@@ -6,7 +6,6 @@ import java.net.Socket;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
-import project.data.ServerData;
 import project.game.battle.Battle;
 import project.game.player.PokemonTrainer;
 import project.game.utility.Time;

@@ -16,9 +16,8 @@ public class PokemonTypeBuilder implements Builder {
     private final ArrayList<String> weaknesses = new ArrayList<>();
     private final ArrayList<String> immunities = new ArrayList<>();
 
-
     @Override
-    public void validBuild() {
+    public void validateBuild() {
         if (this.primaryType == null) throw new IllegalStateException("Primary type has not be initialized");
     }
 
@@ -29,7 +28,7 @@ public class PokemonTypeBuilder implements Builder {
      */
     @Override
     public PokemonType build() {
-        validBuild();
+        validateBuild();
         this.setTypeMatchups();
 
         return new PokemonType(

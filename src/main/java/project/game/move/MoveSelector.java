@@ -34,7 +34,7 @@ public class MoveSelector {
                 int i = Integer.parseInt(input);
 
                 m = this.pokemon.getMoves().get(i);
-                if (!(m.getPp().depleted() || m.getDisabled())) {
+                if (!(m.getPp().depleted() || m.isDisabled())) {
                     break;
                 }
 

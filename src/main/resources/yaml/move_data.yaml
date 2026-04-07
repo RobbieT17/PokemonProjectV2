@@ -5,7 +5,7 @@ moves:
   category: Physical
   pp: 15
   pow: 75
-  effects:
+  addEffects:
     conditionChange:
       effect: Burn
       chance: 10
@@ -16,7 +16,7 @@ moves:
   category: Physical
   pp: 15
   pow: 75
-  effects:
+  addEffects:
     conditionChange:
       effect: Freeze
       chance: 10
@@ -27,7 +27,7 @@ moves:
   category: Physical
   pp: 15
   pow: 75
-  effects:
+  addEffects:
     conditionChange:
       effect: Paralysis
       chance: 10
@@ -45,7 +45,7 @@ moves:
   category: Status
   pp: 20
   target: Self
-  effects:
+  addEffects:
     statChange:
       stats:
         atk: 2
@@ -57,9 +57,10 @@ moves:
   pp: 15
   pow: 90
   acc: 95
-  effects:
+  addEffects:
     conditionChange:
       effect: Fly-State
+      self: true
 
 - id: 22
   name: Vine Whip
@@ -75,11 +76,7 @@ moves:
   pp: 15
   pow: 85
   acc: 85
-  multiHit:
-    - 0.375
-    - 0.375
-    - 0.125
-    - 0.125
+  multiHit: true
 
 
 - id: 33
@@ -95,7 +92,7 @@ moves:
   category: Physical
   pp: 15
   pow: 85
-  effects:
+  addEffects:
     conditionChange: 
       effect: Paralysis
       chance: 30
@@ -107,7 +104,7 @@ moves:
   pp: 20
   pow: 90
   acc: 85
-  effects:
+  addEffects:
     recoil:
       percent: 25
 
@@ -117,7 +114,7 @@ moves:
   category: Physical
   pp: 15
   pow: 120
-  effects:
+  addEffects:
     recoil:
       percent: 33.3
 
@@ -127,7 +124,7 @@ moves:
   category: Status
   pp: 30
   target: All-Foes
-  effects:
+  addEffects:
     statChange:
       stats:
         def: -1
@@ -138,7 +135,7 @@ moves:
   category: Physical
   pp: 25
   pow: 60
-  effects:
+  addEffects:
     conditionChange:
       effect: Flinch
       chance: 30
@@ -149,7 +146,7 @@ moves:
   category: Status
   pp: 40
   target: All-Foes
-  effects:
+  addEffects:
     statChange:
       stats:
         atk: -1
@@ -160,7 +157,7 @@ moves:
   category: Status
   pp: 20
   priority: -6
-  effects:
+  addEffects:
     switchOut:
       self: false
     
@@ -170,7 +167,7 @@ moves:
   category: Special
   pp: 25
   pow: 40
-  effects:
+  addEffects:
     conditionChange:
       effect: Burn
       chance: 10
@@ -181,7 +178,7 @@ moves:
   category: Special
   pp: 15
   pow: 90
-  effects:
+  addEffects:
     conditionChange:
       effect: Burn
       chance: 10
@@ -215,7 +212,7 @@ moves:
   category: Special
   pp: 10
   pow: 90
-  effects:
+  addEffects:
     conditionChange:
       effect: Freeze
       chance: 10
@@ -228,7 +225,7 @@ moves:
   pow: 110
   acc: 70
   target: All-Foes
-  effects:
+  addEffects:
     conditionChange:
       effect: Freeze
       chance: 10
@@ -240,9 +237,10 @@ moves:
   pp: 5
   pow: 150
   acc: 90
-  effects:
+  addEffects:
     conditionChange:
       effect: Recharge
+      self: true
 
 - id: 73
   name: Leech Seed
@@ -250,7 +248,7 @@ moves:
   category: Status
   pp: 10
   acc: 90
-  effects:
+  addEffects:
     conditionChange:
       effect: Seeded
       percent: 12.5
@@ -278,16 +276,17 @@ moves:
   category: Special
   pp: 10
   pow: 120
-  effects:
+  addEffects:
     conditionChange:
       effect: Charge
+      self: true
 
 - id: 77
   name: Poison Powder
   type: Poison
   category: Status
   pp: 35
-  effects:
+  addEffects:
     conditionChange:
       effect: Poison
   
@@ -297,7 +296,7 @@ moves:
   category: Status
   pp: 30
   acc: 75
-  effects:
+  addEffects:
     conditionChange:
       effect: Paralysis
 
@@ -307,7 +306,7 @@ moves:
   category: Status
   pp: 15
   acc: 75
-  effects:
+  addEffects:
     conditionChange:
       effect: Sleep
 
@@ -318,8 +317,9 @@ moves:
   pp: 10
   pow: 120
   contact: true
-  effects:
+  addEffects:
     conditionChange:
+      self: true
       effect: Rampage
 
 - id: 89
@@ -337,9 +337,10 @@ moves:
   category: Physical
   pp: 10
   pow: 80
-  effects:
+  addEffects:
     conditionChange:
       effect: Dig-State
+      self: true
 
 - id: 92
   name: Toxic
@@ -347,7 +348,7 @@ moves:
   category: Status
   pp: 10
   acc: 90
-  effects:
+  addEffects:
     conditionChange:
       effect: Bad-Poison
 
@@ -356,7 +357,7 @@ moves:
   type: Normal
   category: Status
   pp: 20
-  effects:
+  addEffects:
     statChange:
       stats:
         acc: -1
@@ -366,7 +367,7 @@ moves:
   type: Ghost
   category: Status
   pp: 20
-  effects:
+  addEffects:
     conditionChange:
       effect: Confusion
 
@@ -376,7 +377,7 @@ moves:
   category: Status
   pp: 40
   target: Self
-  effects:
+  addEffects:
     statChange:
       stats:
         def: 1
@@ -394,7 +395,7 @@ moves:
   pp: 5
   pow: 110
   acc: 85
-  effects:
+  addEffects:
     conditionChange:
       effect: Burn
       chance: 10
@@ -414,7 +415,7 @@ moves:
   category: Status
   pp: 20
   target: Self
-  effects:
+  addEffects:
     statChange:
       stats:
         spDef: 2
@@ -425,7 +426,7 @@ moves:
   category: Status
   pp: 5
   target: Self
-  effects:
+  addEffects:
     conditionChange:
       effect: Sleep
       duration: 2
@@ -440,6 +441,11 @@ moves:
   pow: 75
   acc: 90
   contact: false
+  target: All-Foes
+  addEffects:
+    conditionChange:
+      effect: Flinch
+      chance: 30
 
 - id: 163
   name: Slash
@@ -448,12 +454,6 @@ moves:
   pp: 20
   pow: 70
   crit: 0.125
-
-- id: 165
-  name: Struggle
-  type: Typeless
-  category: Physical
-  pow: 40
 
 - id: 174
   name: Curse
@@ -467,12 +467,20 @@ moves:
   category: Status
   pp: 10
   priority: 4
+  target: Self
+  addEffects:
+    conditionChange:
+      effect: Protect
 
 - id: 184
   name: Scary Face
   type: Normal
   category: Status
   pp: 10
+  addEffects:
+    statChange:
+      stats:
+        spd: -2
 
 - id: 196
   name: Icy Wind
@@ -481,6 +489,12 @@ moves:
   pp: 15
   pow: 55
   acc: 95
+  target: All-Foes
+  addEffects:
+    statChange:
+      stats:
+        spd: -1
+
 
 - id: 200
   name: Outrage
@@ -488,12 +502,20 @@ moves:
   category: Physical
   pp: 10
   pow: 120
+  target: Self
+  addEffects:
+    conditionChange:
+      effect: Rampage
 
 - id: 201
   name: Sandstorm
   type: Rock
   category: Status
   pp: 10
+  target: Self
+  addEffects:
+    weatherChange:
+      effect: Sandstorm
 
 - id: 202
   name: Giga Drain
@@ -501,6 +523,9 @@ moves:
   category: Special
   pp: 10
   pow: 75
+  addEffects:
+    lifeSteal:
+      percent: 50
 
 - id: 203
   name: Endure
@@ -508,12 +533,20 @@ moves:
   category: Status
   pp: 10
   priority: 4
+  target: Self
+  addEffects:
+    conditionChange:
+      effect: Endure
 
 - id: 204
   name: Charm
   type: Fairy
   category: Status
   pp: 20
+  addEffects:
+    statChange:
+      stats:
+        atk: -2
 
 - id: 206
   name: False Swipes
@@ -527,6 +560,7 @@ moves:
   type: Normal
   category: Status
   pp: 10
+  target: Self
 
 - id: 225
   name: Dragon Breath
@@ -534,6 +568,10 @@ moves:
   category: Special
   pp: 20
   pow: 60
+  addEffects:
+    conditionChange:
+      effect: Paralysis
+      chance: 30
 
 - id: 229
   name: Rapid Spin
@@ -541,30 +579,51 @@ moves:
   category: Physical
   pp: 40
   pow: 50
+  addEffects:
+    statChange:
+      stats:
+        spd: 1
 
 - id: 230
   name: Sweet Scent
   type: Normal
   category: Status
   pp: 20
+  target: All-Foes
+  addEffects:
+    statChange:
+      stats:
+        eva: -1
 
 - id: 235
   name: Synthesis
   type: Grass
   category: Status
   pp: 5
+  target: Self
+  addEffects:
+    heal:
+      percent: 50
 
 - id: 240
   name: Rain Dance
   type: Water
   category: Status
   pp: 5
+  target: Self
+  addEffects:
+    weatherChange:
+      effect: Rain
 
 - id: 241
   name: Sunny Day
   type: Fire
   category: Status
   pp: 5
+  target: Self
+  addEffects:
+    weatherChange:
+      effect: Sunny
 
 - id: 242
   name: Crunch
@@ -572,6 +631,11 @@ moves:
   category: Physical
   pp: 15
   pow: 80
+  addEffects:
+    statChange:
+      chance: 20
+      stats:
+        def: -1
 
 - id: 250
   name: Whirlpool
@@ -580,6 +644,9 @@ moves:
   pp: 15
   pow: 35
   acc: 85
+  addEffects:
+    conditionChange:
+      effect: Bound
 
 - id: 252
   name: Fake Out
@@ -587,6 +654,10 @@ moves:
   category: Physical
   pp: 10
   pow: 40
+  addEffects:
+    conditionChange:
+      effect: Flinch
+
 
 - id: 257
   name: Heat Wave
@@ -595,12 +666,21 @@ moves:
   pp: 10
   pow: 95
   acc: 90
+  target: All-Foes
+  addEffects:
+    conditionChange:
+      effect: Burn
+      chance: 10
 
 - id: 258
   name: Hail
   type: Ice
   category: Status
   pp: 10
+  target: Self
+  addEffects:
+    weatherChange:
+      effect: Sunny
 
 - id: 261
   name: Will-O-Wisp
@@ -608,6 +688,9 @@ moves:
   category: Status
   pp: 15
   acc: 85
+  addEffects:
+    conditionChange:
+      effect: Burn
 
 - id: 263
   name: Facade
@@ -623,6 +706,9 @@ moves:
   pp: 20
   pow: 150
   priority: -3
+  addEffects:
+    conditionChange:
+      effect: Focused
 
 - id: 280
   name: Brick Break
@@ -630,6 +716,9 @@ moves:
   category: Physical
   pp: 15
   pow: 75
+  addEffects:
+    barrierChange:
+      effect: Clear
 
 - id: 291
   name: Dive
@@ -637,6 +726,10 @@ moves:
   category: Physical
   pp: 10
   pow: 80
+  addEffects:
+    conditionChange:
+      effect: Dive-State
+      self: true
 
 - id: 307
   name: Blast Burn
@@ -645,6 +738,10 @@ moves:
   pp: 5
   pow: 150
   acc: 90
+  addEffects:
+    conditionChange:
+      effect: Recharge
+      self: true
 
 - id: 308
   name: Hydro Cannon
@@ -653,6 +750,10 @@ moves:
   pp: 5
   pow: 150
   acc: 90
+  addEffects:
+    conditionChange:
+      effect: Recharge
+      self: true
 
 - id: 314
   name: Air Cutter
@@ -662,6 +763,7 @@ moves:
   pow: 60
   acc: 95
   crit: 0.125
+  target: All-Foes
 
 - id: 315
   name: Overheat
@@ -670,6 +772,11 @@ moves:
   pp: 5
   pow: 130
   acc: 90
+  addEffects:
+    statChange:
+      self: true
+      stats: 
+        spAtk: -2
 
 - id: 317
   name: Rock Tomb
@@ -679,6 +786,10 @@ moves:
   pow: 60
   acc: 95
   contact: false
+  addEffects:
+    statChange:
+      stats: 
+        spd: -1
 
 - id: 330
   name: Muddy Water
@@ -687,6 +798,12 @@ moves:
   pp: 10
   pow: 90
   acc: 85
+  target: All-Foes
+  addEffects:
+    statChange:
+      chance: 30
+      stats: 
+        acc: -1
 
 - id: 331
   name: Bullet Seed
@@ -695,6 +812,7 @@ moves:
   pp: 30
   pow: 25
   contact: false
+  multiHit: true
 
 - id: 332
   name: Aerial Ace
@@ -703,12 +821,17 @@ moves:
   pp: 20
   pow: 60
   acc: 101
-
+  
 - id: 334
   name: Iron Defense
   type: Steel
   category: Status
   pp: 15
+  target: Self
+  addEffects:
+    statChange:
+      stats: 
+        def: 2
 
 - id: 337
   name: Dragon Claw
@@ -724,6 +847,10 @@ moves:
   pp: 5
   pow: 150
   acc: 90
+  addEffects:
+    conditionChange:
+      effect: Recharge
+      self: true
 
 - id: 341
   name: Mud Shot
@@ -732,6 +859,10 @@ moves:
   pp: 15
   pow: 55
   acc: 95
+  addEffects:
+    statChange:
+      stats:
+        spd: -1
 
 - id: 345
   name: Magical Leaf
@@ -746,6 +877,12 @@ moves:
   type: Dragon
   category: Status
   pp: 20
+  target: Self
+  addEffects:
+    statChange:
+      stats:
+        atk: 1
+        spd: 1
 
 - id: 352
   name: Water Pulse
@@ -753,6 +890,10 @@ moves:
   category: Special
   pp: 20
   pow: 60
+  addEffects:
+    conditionChange:
+      effect: Confusion
+      chance: 20
 
 - id: 360
   name: Gyro Ball
@@ -767,6 +908,12 @@ moves:
   category: Physical
   pp: 15
   pow: 120
+  addEffects:
+    conditionChange:
+      effect: Burn
+      chance: 10
+    recoil:
+      percent: 33.3
 
 - id: 396
   name: Aura Sphere
@@ -782,6 +929,10 @@ moves:
   category: Physical
   pp: 20
   pow: 80
+  addEffects:
+    conditionChange:
+      effect: Poison
+      chance: 30
 
 - id: 399
   name: Dark Pulse
@@ -789,6 +940,10 @@ moves:
   category: Special
   pp: 15
   pow: 80
+  addEffects:
+    conditionChange:
+      effect: Flinch
+      chance: 20
 
 - id: 401
   name: Aqua Tail
@@ -813,6 +968,10 @@ moves:
   pp: 15
   pow: 75
   acc: 95
+  addEffects:
+    conditionChange:
+      effect: Flinch
+      chance: 30
 
 - id: 406
   name: Dragon Pulse
@@ -828,6 +987,11 @@ moves:
   pp: 5
   pow: 120
   acc: 70
+  addEffects:
+    statChange:
+      chance: 10
+      stats:
+        spDef: -1
 
 - id: 412
   name: Energy Ball
@@ -835,6 +999,11 @@ moves:
   category: Special
   pp: 10
   pow: 90
+  addEffects:
+    statChange:
+      chance: 10
+      stats:
+        spDef: -1
 
 - id: 414
   name: Earth Power
@@ -842,6 +1011,11 @@ moves:
   category: Special
   pp: 10
   pow: 90
+  addEffects:
+    statChange:
+      chance: 10
+      stats:
+        spDef: -1
 
 - id: 416
   name: Giga Impact
@@ -850,6 +1024,10 @@ moves:
   pp: 5
   pow: 150
   acc: 90
+  addEffects:
+    conditionChange:
+      effect: Recharge
+      self: true
 
 - id: 419
   name: Avalanche
@@ -874,6 +1052,13 @@ moves:
   pp: 15
   pow: 65
   acc: 95
+  addEffects:
+    conditionChange:
+      effect: Burn
+      chance: 10
+    conditionChange2:
+      effect: Flinch
+      chance: 10
 
 - id: 428
   name: Zen Headbutt
@@ -882,6 +1067,10 @@ moves:
   pp: 15
   pow: 80
   acc: 90
+  addEffects:
+    conditionChange:
+      effect: Flinch
+      chance: 20
 
 - id: 430
   name: Flash Cannon
@@ -889,6 +1078,11 @@ moves:
   category: Special
   pp: 10
   pow: 80
+  addEffects:
+    statChange:
+      chance: 10
+      stats:
+        spDef: -1
 
 - id: 437
   name: Leaf Storm
@@ -897,6 +1091,11 @@ moves:
   pp: 5
   pow: 130
   acc: 90
+  addEffects:
+    statChange:
+      self: true
+      stats:
+        spAtk: -2
 
 - id: 438
   name: Power Whip
@@ -936,6 +1135,9 @@ moves:
   pp: 15
   pow: 50
   contact: false
+  addEffects:
+    conditionChange:
+      effect: Grounded
 
 - id: 488
   name: Flame Charge
@@ -943,6 +1145,11 @@ moves:
   category: Physical
   pp: 20
   pow: 50
+  addEffects:
+    statChange:
+      self: true
+      stats:
+        spd: 1
 
 - id: 491
   name: Acid Spray
@@ -950,12 +1157,25 @@ moves:
   category: Special
   pp: 20
   pow: 40
+  addEffects:
+    statChange:
+      stats:
+        spDef: -2
 
 - id: 504
   name: Shell Smash
   type: Normal
   category: Status
   pp: 15
+  target: Self
+  addEffects:
+    statChange:
+      stats:
+        atk: 2
+        def: -1
+        spAtk: 2
+        spDef: -1
+        spd: 2
 
 - id: 512
   name: Acrobatics
@@ -971,6 +1191,9 @@ moves:
   pp: 5
   pow: 100
   acc: 50
+  addEffects:
+    conditionChange:
+      effect: Burn
 
 - id: 518
   name: Water Pldge
@@ -993,6 +1216,11 @@ moves:
   pp: 20
   pow: 60
   contact: false
+  target: All-Adjacent
+  addEffects:
+    statChange:
+      stats:
+        spd: -1
 
 - id: 525
   name: Dragon Tail
@@ -1002,6 +1230,9 @@ moves:
   pow: 60
   acc: 90
   priority: -6
+  addEffects:
+    switchOut:
+      self: false
 
 - id: 535
   name: Heat Crash
@@ -1017,6 +1248,9 @@ moves:
   pp: 10
   pow: 110
   acc: 70
+  addEffects:
+    conditionChange:
+      effect: Confusion
 
 - id: 572
   name: Petal Blizzard
@@ -1025,6 +1259,7 @@ moves:
   pp: 15
   pow: 90
   contact: false
+  target: All-Adjacent
 
 - id: 707
   name: Stomping Tantrum
@@ -1039,6 +1274,11 @@ moves:
   category: Physical
   pp: 10
   pow: 85
+  addEffects:
+    statChange:
+      chance: 20
+      stats:
+        def: -1
 
 - id: 784
   name: Breaking Swipe
@@ -1046,6 +1286,11 @@ moves:
   category: Physical
   pp: 15
   pow: 60
+  target: All-Foes
+  addEffects:
+    statChange:
+      stats:
+        atk: -1
 
 - id: 812
   name: Flip Turn
@@ -1053,6 +1298,9 @@ moves:
   category: Special
   pp: 20
   pow: 60
+  addEffects:
+    switchOut:
+      self: true
 
 - id: 815
   name: Scorching Sands
@@ -1060,13 +1308,20 @@ moves:
   category: Special
   pp: 10
   pow: 70
+  addEffects:
+    conditionChange:
+      effect: Burn
+      chance: 30
 
 - id: 834
-  name: Water Crash
+  name: Wave Crash
   type: Water
   category: Physical
   pp: 10
   pow: 120
+  addEffects:
+    recoil:
+      percent: 33.3
 
 - id: 861
   name: Ice Spinner
@@ -1074,6 +1329,9 @@ moves:
   category: Physical
   pp: 15
   pow: 80
+  addEffects:
+    terrainChange:
+      effect: Clear
 
 - id: 885
   name: Trailblaze
@@ -1081,6 +1339,11 @@ moves:
   category: Physical
   pp: 20
   pow: 50
+  addEffects:
+    statChange:
+      self: true
+      stats:
+        spd: 1
 
 - id: 886
   name: Chilling Water
@@ -1088,9 +1351,8 @@ moves:
   category: Special
   pp: 20
   pow: 50
-  effects:
+  addEffects:
     statChange: 
-      self: false
       stats:
         atk: -1
 
@@ -1106,7 +1368,133 @@ moves:
   type: Zombie
   category: Physical
   pp: 10
-  pow: 30
+  pow: 25
+  acc: 75
+  addEffects:
+    conditionChange:
+      effect: Infect
 
+- id: 965
+  name: Rotten Bite
+  type: Zombie
+  category: Physical
+  pp: 15
+  pow: 70
+  acc: 95
+  addEffects:
+    conditionChange:
+      effect: Infect
+      chance: 10
+    statChange:
+      chance: 30
+      stats:
+        atk: -1
 
+- id: 966
+  name: Vampire Fang
+  type: Zombie
+  category: Physical
+  pp: 15
+  pow: 60
+  acc: 95
+  addEffects:
+    conditionChange:
+      effect: Infect
+      chance: 10
+    conditionChange2:
+      effect: Flinch
+      chance: 10
 
+- id: 967
+  name: Necrotic Claw
+  type: Zombie
+  category: Physical
+  pp: 10
+  pow: 90
+  acc: 90
+  addEffects:
+    conditionChange:
+      effect: Confusion
+      chance: 20
+
+- id: 968
+  name: Viral Spread
+  type: Zombie
+  category: Special
+  pp: 5
+  pow: 65
+  target: All-Foes
+  addEffects:
+    conditionChange:
+      effect: Infect
+      chance: 30
+
+- id: 969
+  name: Grave Shock
+  type: Zombie
+  category: Special
+  pp: 5
+  pow: 120
+  addEffects:
+    conditionChange:
+      effect: Infect
+      chance: 30
+    conditionChange2:
+      self: true
+      effect: Charge
+
+- id: 970
+  name: Cosmic Punch
+  type: Space
+  category: Physical
+  pp: 15
+  pow: 80
+  acc: 95
+  addEffects:
+    statChange:
+      stats:
+        spDef: -1
+
+- id: 971
+  name: Gravity Switch
+  type: Space
+  category: Status
+  pp: 5
+  target: Self
+  addEffects:
+    terrainChange:
+      effect: Gravity
+
+- id: 972
+  name: Stellar Beam
+  type: Space
+  category: Special
+  pp: 10
+  pow: 100
+  acc: 90
+
+- id: 972
+  name: Orbit Strike
+  type: Space
+  category: Physical
+  pp: 15
+  pow: 85
+  acc: 95
+  addEffects:
+    statChange:
+      stats:
+        spAtk: -1
+
+- id: 973
+  name: Black Hole
+  type: Space
+  category: Special
+  pp: 10
+  pow: 75
+  acc: 100
+  target: All-Adjacent
+  addEffects:
+    statChange:
+      stats:
+        spd: -1
+    

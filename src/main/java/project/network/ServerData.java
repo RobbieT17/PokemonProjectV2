@@ -1,9 +1,11 @@
-package project.data;
+package project.network;
 
 import java.util.HashMap;
 import java.util.List;
 
-import project.game.builders.MoveBuilder;
+import project.data.MoveData;
+import project.data.PokemonData;
+import project.data.YamlLoader;
 import project.game.builders.PokemonBuilder;
 import project.game.move.Move;
 import project.game.pokemon.Pokemon;
@@ -28,7 +30,7 @@ public class ServerData {
 
     public String[] getPokemonMovePool(String pokemonName) {
         List<String> moveList = this.pokemonDatabase.get(pokemonName).getMovePool();
-        return moveList.toArray(new String[0]);
+        return moveList.toArray(String[]::new);
     } 
 
     /**
@@ -68,20 +70,35 @@ public class ServerData {
             throw new IllegalArgumentException(moveName + " not found in pokemon database\n");
         }
 
-        return new MoveBuilder()
-        .setId(data.getId())
-        .setName(data.getName())
-        .setType(data.getType())
-        .setCategory(data.getCategory())
-        .setPP(data.getPp())
-        .setPower(data.getPow())
-        .setAccuracy(data.getAcc())
-        .setCritRatio(data.getCrit())
-        .setPriority(data.getPriority())
-        .setContact(data.getContact())
-        // .setAdditionEffects(data.getAdditionalEffects())
-        .build();
+        // return new MoveBuilder()
+        // .setId(data.getId())
+        // .setName(data.getName())
+        // .setType(data.getType())
+        // .setCategory(data.getCategory())
+        // .setPP(data.getPp())
+        // .setPower(data.getPow())
+        // .setAccuracy(data.getAcc())
+        // .setCritRatio(data.getCrit())
+        // .setPriority(data.getPriority())
+        // .setContact(data.getContact())
+        // setAdditionEffects(data.getAdditionalEffects())
+        // .build();
+        
+        return new Move(
+            data.getId(), 
+            data.getName(), 
+            data.getType(), 
+            data.getMoveCategory(), 
+            data.getPowerPoints(), 
+            data.getPower(), 
+            data.getAccuracy(), 
+            data.getMoveTarget(), 
+            data.getCrit(), 
+            data.getPriority(),
+            data.getContact(), 
+            data.getMultiHit(), 
+            data.getAddEffects()
+        );
     }
 
-    
 }

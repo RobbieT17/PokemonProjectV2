@@ -37,6 +37,7 @@ public interface StatusConditionManager {
         Rampage(StatusConditionManager::rampage),
         Grounded(StatusConditionManager::grounded),
         Seeded(StatusConditionManager::seeded),
+        Endure(StatusConditionManager::endure),
         Fly_State(StatusConditionManager::fly),
         Dig_State(StatusConditionManager::dig),
         Dive_State(StatusConditionManager::dive),
@@ -75,7 +76,7 @@ public interface StatusConditionManager {
         });
 
         p.getEvents().addEventListener(flags[1], name, e -> {
-            if (!(EventData.isUser(p, e) && e.moveUsed.isCategory(Move.PHYSICAL))) return;
+            if (!(EventData.isUser(p, e) && e.moveUsed.isCategory(Move.MoveCategory.Physical))) return;
             e.otherMoveMods *= 0.5;
         });
 
@@ -87,6 +88,9 @@ public interface StatusConditionManager {
      * Frozen Pokemon cannot act or dodge attacks
      * At the beginning of each round there is a 20%
      * chance for the Pokemon to thaw
+     * 
+     * Moves that remove the effect:
+     * - Flare Blitz
      */
     public static StatusCondition freeze(StatusContext c) {
         Pokemon p = c.target;
@@ -141,7 +145,7 @@ public interface StatusConditionManager {
         
         // Damage Multiplier: Special Moves deal 50% less damage
         p.getEvents().addEventListener(flags[1], name, e -> {
-            if (EventData.isUser(p, e) && e.moveUsed.isCategory(Move.SPECIAL)) {
+            if (EventData.isUser(p, e) && e.moveUsed.isCategory(Move.MoveCategory.Special)) {
                 e.otherMoveMods *= 0.5;
             }
         });
@@ -249,7 +253,6 @@ public interface StatusConditionManager {
         BattleLog.add("%s fell asleep!", p);
         return new StatusCondition(p, name, flags);
     }
-
 
     public static StatusCondition fly(StatusContext c) {
         Pokemon p = c.target;
@@ -507,6 +510,15 @@ public interface StatusConditionManager {
 
         return new StatusCondition(p, id.name(), flags);
 	}
+
+    public static StatusCondition endure(StatusContext c) {
+        Pokemon p = c.target;
+        StatusConditionID id = StatusConditionID.Endure;
+        String name = id.name();
+        EventID[] flags = new EventID[] {EventID.MOVE_DEALS_DAMAGE, EventID.END_OF_ROUND};
+
+        return new StatusCondition(p, name, flags);
+    }
     
 // Public Class Methods
     public static String failMessage(StatusConditionID id) {
@@ -532,5 +544,4 @@ public interface StatusConditionManager {
         };
     }
     
-
 }

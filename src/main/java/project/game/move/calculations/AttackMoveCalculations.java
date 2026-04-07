@@ -6,7 +6,6 @@ import project.game.battle.BattleField;
 import project.game.battle.Weather;
 import project.game.event.EventData;
 import project.game.event.EventManager;
-import project.game.event.GameEvents;
 import project.game.event.GameEvents.EventID;
 import project.game.move.Move;
 import project.game.pokemon.Pokemon;
@@ -108,11 +107,11 @@ public interface AttackMoveCalculations {
         double random = random();
         double addition = data.otherMoveMods;
 
-        double attack = move.getCategory().equals(Move.SPECIAL) 
+        double attack = move.getCategory().equals(Move.MoveCategory.Special) 
         ? calculateAttack(attacker.getSpecialAttack(), isCritical) 
         : calculateAttack(attacker.getAttack(), isCritical);
 
-        double defense = move.getCategory().equals(Move.SPECIAL) 
+        double defense = move.getCategory().equals(Move.MoveCategory.Special) 
         ? calculateDefense(defender.getSpecialDefense(), isCritical) 
         : calculateDefense(defender.getDefense(), isCritical);
         
