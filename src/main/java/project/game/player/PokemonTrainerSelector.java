@@ -55,12 +55,11 @@ public class PokemonTrainerSelector {
             return null;
         }
 
-         // Maps input to enum
+        // Maps input to enum
         Pokedex dex = Pokedex.values()[input];
-        String pokemonName = dex.name();
 
         // Retrieve pokemon data from the database
-        return Server.SERVER_DATA.newPokemonInstance(pokemonName);
+        return Server.SERVER_DATA.newPokemonInstance(dex, Pokemon.DEFAULT_LEVEL);
     }
 
     /**

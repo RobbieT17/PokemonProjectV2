@@ -6,13 +6,14 @@ import project.game.move.Move.MoveCategory;
 import project.game.move.Move.MoveTarget;
 import project.game.move.MoveStat;
 import project.game.move.PowerPoints;
+import project.game.pokemon.stats.Type;
 
 public class MoveBuilder implements Builder {
     
     // Must Set
     private int id = 0;
     private String name = null;
-    private String type = null;
+    private Type type = null;
     private MoveCategory category = null;   
     private PowerPoints pp = null;
     
@@ -74,7 +75,7 @@ public class MoveBuilder implements Builder {
         return this;
     }
 
-    public MoveBuilder setType(String t) {
+    public MoveBuilder setType(Type t) {
         this.type = t;
         return this;
     }

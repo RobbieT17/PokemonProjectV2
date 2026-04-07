@@ -63,7 +63,7 @@ public interface HeldItemManager {
 
         p.getEvents().addEventListener(flags[0], name, e -> {
             double percent = 1.0 / 16.0;
-            if (p.isType(Type.POISON)) {
+            if (p.isType(Type.Poison)) {
                 p.restoreHpPercentMaxHP(percent, " from its Black Sludge");
                 return;
             }

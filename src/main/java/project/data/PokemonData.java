@@ -2,6 +2,13 @@ package project.data;
 
 import java.util.List;
 
+import project.game.builders.PokemonBuilder;
+import project.game.builders.PokemonTypeBuilder;
+import project.game.pokemon.PokemonType;
+import project.game.pokemon.stats.HealthPoints;
+import project.game.pokemon.stats.StatPoint;
+import project.game.pokemon.stats.Type;
+
 public class PokemonData {
     
     private int id;
@@ -43,4 +50,33 @@ public class PokemonData {
     public int getSpd() {return spd;}
     public List<String> getMovePool() {return movePool;}
 
+    // Wrapper Getters
+    public Type getPrimaryType() {return Type.valueOf(this.type1);}
+    public Type getSecondaryType() {return Type.valueOf(this.type2);}
+    public HealthPoints getHealthPoints(int level) {return new HealthPoints(StatPoint.calculateHp(this.hp, level));}
+
+    public PokemonType getPokemonType() {
+        return this.type2 != null 
+        
+        ? new PokemonTypeBuilder()
+                .setPrimaryType(this.getPrimaryType())
+                .setSecondaryType(this.getSecondaryType())
+                .build()
+
+        : new PokemonTypeBuilder()
+                .setPrimaryType(this.getPrimaryType())
+                .build();
+    }
+
+    public StatPoint[] getStats(int level) {
+        return new StatPoint[] {
+            new StatPoint(StatPoint.ATTACK_NAME, StatPoint.ATTACK, StatPoint.calculate(this.atk, level)),
+            new StatPoint(StatPoint.DEFENSE_NAME, StatPoint.DEFENSE, StatPoint.calculate(this.def, level)),
+            new StatPoint(StatPoint.SPECIAL_ATTACK_NAME, StatPoint.SPECIAL_ATTACK, StatPoint.calculate(this.spAtk, level)),
+            new StatPoint(StatPoint.SPECIAL_DEFENSE_NAME, StatPoint.SPECIAL_DEFENSE, StatPoint.calculate(this.spDef, level)),
+            new StatPoint(StatPoint.SPEED_NAME, StatPoint.SPEED, StatPoint.calculate(this.spd, level)),
+            new StatPoint(StatPoint.ACCURACY_NAME, StatPoint.ACCURACY, 100),
+            new StatPoint(StatPoint.EVASION_NAME, StatPoint.EVASION, 100)
+        };
+    }
 }

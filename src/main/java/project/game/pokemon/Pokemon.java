@@ -11,7 +11,7 @@ import project.game.pokemon.effects.Ability;
 import project.game.pokemon.effects.HeldItem;
 import project.game.pokemon.stats.HealthPoints;
 import project.game.pokemon.stats.StatPoint;
-
+import project.game.pokemon.stats.Type;
 
 public class Pokemon {
 
@@ -33,8 +33,11 @@ public class Pokemon {
     private final StatPoint[] stats; // [atk, def, spAtk, spDef, spd, acc, eva]
     private final double weight; // Weight of the Pokemon
 
-    // Moves
-    private final ArrayList<Move> moves; // Available moves, can have up to four
+    // Available moves, can have up to four
+    private final ArrayList<Move> moves; 
+
+    // Event Listeners
+    private final GameEvents events;
 
     //Conditions
     private final PokemonConditions conditions; 
@@ -50,10 +53,6 @@ public class Pokemon {
 
     // Pokemon's Name (Given by the player)
     private String nickname; 
-
-
-    // Event Listeners
-    private final GameEvents events;
 
     // Other Stats
     private Move moveSelected; // Move selected for the round
@@ -111,7 +110,6 @@ public class Pokemon {
         if (this.hp.depleted()) this.faints();   
     }
 
-    
     // Takes damage equal to a percent of max HP
     public void takeDamagePercentMaxHP(double percent, String message) {
         int damage = (int) (this.getHp().getCurrentHealthPoints() * percent);
@@ -151,7 +149,6 @@ public class Pokemon {
         this.restoreHP(heal);
     }
 
-
     public boolean hpLessThanPercent(double percent) {
         return this.hp.getCurrentHealthPoints() / (double) this.hp.getMaxHealthPoints() < 0.01 * percent; 
     }
@@ -159,7 +156,6 @@ public class Pokemon {
     public boolean firstRound() {
         return this.roundCount == 0;
     }
-
 
     @Override
     /**
@@ -169,7 +165,6 @@ public class Pokemon {
         return this.nickname != null ? this.nickname : this.pokemonName;
     }
 
-
 // Boolean Methods
     public boolean hasNoMoves() {
         for (Move m : this.moves) 
@@ -177,7 +172,7 @@ public class Pokemon {
         return true;
     }
 
-    public boolean isType(String type) {
+    public boolean isType(Type type) {
         return this.pokemonType.typeEquals(type);
     }
  

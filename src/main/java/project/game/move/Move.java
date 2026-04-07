@@ -3,6 +3,7 @@ package project.game.move;
 import project.data.AdditonalEffects;
 import project.game.pokemon.Pokemon;
 import project.game.pokemon.PokemonType;
+import project.game.pokemon.stats.Type;
 
 public class Move {
 
@@ -24,7 +25,7 @@ public enum MoveCategory {Physical, Special, Status};
 // Object Variables
     private final int moveID; // Unique identifier stored as int
     private final String moveName; // Name of the move
-    private final String moveType; // Type of move
+    private final Type moveType; // Type of move
     private final MoveCategory category; // Three Categories (Physical, Special, Status)
     private final PowerPoints pp; // Power Points (The number of uses a move has)
 	private final MoveStat power; // Strength of the move
@@ -44,7 +45,7 @@ public enum MoveCategory {Physical, Special, Status};
     public Move(
         int id, 
         String name,
-        String type,
+        Type type,
         MoveCategory category,
         PowerPoints pp,
         MoveStat pow, MoveStat acc, 
@@ -81,16 +82,16 @@ public enum MoveCategory {Physical, Special, Status};
      */
     public boolean isType(PokemonType t) {
         return (t.hasSecondaryType()) 
-        ? this.moveType.equals(t.getPrimaryType().typeName())  || this.moveType.equals(t.getSecondaryType().typeName()) 
-        : this.moveType.equals(t.getPrimaryType().typeName());
+        ? this.isType(t.getPrimaryType()) || this.isType(t.getSecondaryType()) 
+        : this.isType(t.getPrimaryType());
     }
 
     /**
      * @param t a type name
      * @return true if the move matches the type
      */
-    public boolean isType(String t) {
-        return this.moveType.equals(t);
+    public boolean isType(Type t) {
+        return this.moveType.equals(t.name());
     }
 
     public boolean isCategory(MoveCategory c) {
@@ -100,7 +101,7 @@ public enum MoveCategory {Physical, Special, Status};
     // Displays the move's name, type, and PP available
     public String moveStats() {
         return new StringBuilder()
-        .append(String.format("%s <%s>: %s%n", this.moveName, this.moveType.toUpperCase(), this.pp))
+        .append(String.format("%s <%s>: %s%n", this.moveName, this.moveType.name().toUpperCase(), this.pp))
         .toString();
     }
 
@@ -133,7 +134,7 @@ public enum MoveCategory {Physical, Special, Status};
 // Getters
     public int getMoveID() {return this.moveID;}
     public String getMoveName() {return this.moveName;}
-    public String getMoveType() {return this.moveType;}
+    public Type getMoveType() {return this.moveType;}
     public MoveCategory getCategory() {return this.category;}
     public PowerPoints getPp() {return this.pp;}
     public int getPower() {return this.power != null ? this.power.power(): 0;}

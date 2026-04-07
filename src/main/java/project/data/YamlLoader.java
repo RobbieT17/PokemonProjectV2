@@ -28,10 +28,12 @@ public class YamlLoader {
                 map.put(data.getName(), data);
             }
 
+            System.out.println("Pokemon database initialized");
             return map;
 
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.printf("[ERROR] Failed to load pokemon database: %s\n", e.getMessage());
+            System.exit(1);
         }
         return null;
     }
@@ -54,10 +56,12 @@ public class YamlLoader {
                 map.put(data.getName(), data);
             }
 
+            System.out.println("Move database initialized");
             return map;
 
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.printf("[ERROR] Failed to load move database: %s\n", e.getMessage());
+            System.exit(1);
         }
         return null;
     }

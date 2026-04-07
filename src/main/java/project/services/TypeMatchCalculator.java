@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 import project.game.pokemon.stats.Type;
+import project.game.pokemon.stats.TypeName;
 
 public class TypeMatchCalculator {
 
@@ -24,35 +25,39 @@ public class TypeMatchCalculator {
         return s.length() > 2 ? s.substring(0, s.length() - 2) + "\n" : s + "\n";    
     }
 
-    private static String[] removeElement(String[] array, int value) {
-        String[] newArray = new String[array.length - 1];
+    private static TypeName[] removeElement(Type[] array, Type value) {
+        TypeName[] newArray = new TypeName[array.length - 1];
+        int c = 0;
 
-        for (int i = 0, j = 0; i < array.length; i++) 
-            if (i != value) newArray[j++] = array[i];
+        for (Type t : array) {
+            if (t != value) {
+                newArray[c++] = t.toTypeName();
+            }
+        }
             
         return newArray;
     }
 
-    private static double effectiveness(Type t1, String t2) {
+    private static double effectiveness(Type t1, Type t2) {
         return 
-        Arrays.asList(t1.immunities()).contains(t2) 
+        Arrays.asList(t1.getImmunities()).contains(t2.toTypeName()) 
         ? 0.0
-        : Arrays.asList(t1.resistances()).contains(t2) 
+        : Arrays.asList(t1.getResistances()).contains(t2.toTypeName()) 
             ? 0.5
-            : Arrays.asList(t1.weaknesses()).contains(t2)
+            : Arrays.asList(t1.getWeaknesses()).contains(t2.toTypeName())
                 ? 2.0
                 : 1.0;
     }
 
-    private static void displayOptions(String[] set, String prompt) {
+    private static void displayOptions(TypeName[] set, String prompt) {
         StringBuilder sb = new StringBuilder();
         
         for (int i = 0; i < set.length; i += 2) {
             
-            sb.append(String.format("[%2d] %-20s", i, set[i].toUpperCase()));
+            sb.append(String.format("[%2d] %-20s", i, set[i].name().toUpperCase()));
     
             if (i + 1 < set.length) 
-                sb.append(String.format("[%2d] %s", i + 1, set[i + 1].toUpperCase()));
+                sb.append(String.format("[%2d] %s", i + 1, set[i + 1].name().toUpperCase()));
             
             sb.append(System.lineSeparator());
         }
@@ -61,15 +66,15 @@ public class TypeMatchCalculator {
         System.out.print(prompt);
     }
 
-    private static String selectOption(String[] set) {
+    private static Type selectOption(TypeName[] set) {
         Scanner scanner = new Scanner(System.in);
         boolean done = false;
-        String type = null;
+        TypeName typeName = null;
 
         while (!done) {
             try {
                 int input = scanner.nextInt();
-                type = set[input];
+                typeName = set[input];
                 done = true;
             } catch (Exception e) {
                 System.out.println("Invalid input, try again");
@@ -78,14 +83,14 @@ public class TypeMatchCalculator {
             }
 
         }
-        return type;
+        return Type.valueOf(typeName.name());
     }
 
     private static double[] calculateMatchups(Type type) {
-        double[] values = new double[Type.ALL_TYPES.length];
+        double[] values = new double[Type.values().length];
 
-        for (int i = 0; i < values.length; i++) 
-            values[i] = effectiveness(type, Type.ALL_TYPES[i]);
+        for (Type t : Type.values()) 
+            TypeMatchCalculator.effectiveness(type, Type.valueOf(t.name()));
 
         return values;     
     }
@@ -110,11 +115,11 @@ public class TypeMatchCalculator {
 
         for (int i = 0; i < values.length; i++) {
             switch ((int) (values[i] * 100)) {
-                case 0 -> immune.add(Type.ALL_TYPES[i].toUpperCase());
-                case 25 -> heavyResist.add(Type.ALL_TYPES[i].toUpperCase());
-                case 50 -> resist.add(Type.ALL_TYPES[i].toUpperCase());
-                case 200 -> weak.add(Type.ALL_TYPES[i].toUpperCase());
-                case 400 -> heavyWeak.add(Type.ALL_TYPES[i].toUpperCase());
+                case 0 -> immune.add(Type.values()[i].name().toUpperCase());
+                case 25 -> heavyResist.add(Type.values()[i].name().toUpperCase());
+                case 50 -> resist.add(Type.values()[i].name().toUpperCase());
+                case 200 -> weak.add(Type.values()[i].name().toUpperCase());
+                case 400 -> heavyWeak.add(Type.values()[i].name().toUpperCase());
             }
         }
 
@@ -128,17 +133,16 @@ public class TypeMatchCalculator {
          
     }
 
-    private static Type selectType(String[] set, String prompt) {
+    private static Type selectType(TypeName[] set, String prompt) {
         displayOptions(set, prompt);
-        return Type.getType(selectOption(set));   
+        return selectOption(set);   
     }
     
-
     public static void main(String[] args) {
-        Type type1 = selectType(Type.ALL_TYPES, "Select First Type: ");
-        Type type2 = selectType(removeElement(Type.ALL_TYPES, type1.typeId()), "Select Second Type: ");
+        Type type1 = selectType(TypeName.values(), "Select First Type: ");
+        Type type2 = selectType(removeElement(Type.values(), type1), "Select Second Type: ");
             
-        System.out.printf("%nType: %s-%s%n%n", type1.typeName().toUpperCase(), type2.typeName().toUpperCase());
+        System.out.printf("%nType: %s-%s%n%n", type1.name().toUpperCase(), type2.name().toUpperCase());
         showMatchups(calculateMatchups(type1, type2));
     }
 }

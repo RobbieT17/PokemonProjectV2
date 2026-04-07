@@ -83,15 +83,15 @@ public interface MoveActionChangeCondition extends MoveAction {
 
     private static boolean cannotApplyCondition(Pokemon p, StatusConditionID id) {
         return switch (id) {
-            case StatusConditionID.Burn -> p.isType(Type.FIRE) || p.getConditions().hasPrimary();
-            case StatusConditionID.Freeze -> p.isType(Type.ICE) || p.getConditions().hasPrimary();
+            case StatusConditionID.Burn -> p.isType(Type.Fire) || p.getConditions().hasPrimary();
+            case StatusConditionID.Freeze -> p.isType(Type.Ice) || p.getConditions().hasPrimary();
             case StatusConditionID.Infect -> p.getConditions().hasPrimary();
-            case StatusConditionID.Paralysis -> p.isType(Type.ELECTRIC) || p.getConditions().hasPrimary();
-            case StatusConditionID.Poison, StatusConditionID.Bad_Poison -> p.isType(Type.POISON) || p.isType(Type.STEEL) || p.getConditions().hasPrimary();
-            case StatusConditionID.Sleep -> p.isType(Type.DIGITAL) || p.getConditions().hasPrimary();
+            case StatusConditionID.Paralysis -> p.isType(Type.Electric) || p.getConditions().hasPrimary();
+            case StatusConditionID.Poison, StatusConditionID.Bad_Poison -> p.isType(Type.Poison) || p.isType(Type.Steel) || p.getConditions().hasPrimary();
+            case StatusConditionID.Sleep -> p.isType(Type.Digital) || p.getConditions().hasPrimary();
             case StatusConditionID.Flinch -> p.getConditions().hasMoved();
             case StatusConditionID.Bound, StatusConditionID.Confusion -> p.getConditions().hasKey(id);
-            case StatusConditionID.Seeded -> p.isType(Type.GRASS) || p.getConditions().hasKey(id);
+            case StatusConditionID.Seeded -> p.isType(Type.Grass) || p.getConditions().hasKey(id);
             default -> false;
         };
     }

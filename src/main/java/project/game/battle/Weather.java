@@ -73,10 +73,10 @@ public interface Weather {
         switch (BattleField.currentWeather) {
             case Weather.SANDSTORM ->  {
                 // Digital, Ground, Rock, and Steel types are immune to sandstorm
-                if (p.isType(Type.DIGITAL) || 
-                    p.isType(Type.GROUND) || 
-                    p.isType(Type.ROCK) || 
-                    p.isType(Type.STEEL)) return;
+                if (p.isType(Type.Digital) || 
+                    p.isType(Type.Ground) || 
+                    p.isType(Type.Rock) || 
+                    p.isType(Type.Steel)) return;
 
                 int damage = (int) (p.getHp().getMaxHealthPoints() / 8.0);
                 BattleLog.add("%s took %d damage from the sandstorm!", p, damage);
@@ -84,7 +84,7 @@ public interface Weather {
             }
             case Weather.HAIL ->  {
                 // Digital and Ice types are immune to hail
-                if (p.isType(Type.DIGITAL) || p.isType(Type.ICE)) return;
+                if (p.isType(Type.Digital) || p.isType(Type.Ice)) return;
 
                 int damage = (int) (p.getHp().getMaxHealthPoints() / 16.0);  
                 BattleLog.add("%s took %d damage from the hail!", p, damage);

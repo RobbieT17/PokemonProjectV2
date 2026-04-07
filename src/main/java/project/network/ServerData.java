@@ -6,8 +6,8 @@ import java.util.List;
 import project.data.MoveData;
 import project.data.PokemonData;
 import project.data.YamlLoader;
-import project.game.builders.PokemonBuilder;
 import project.game.move.Move;
+import project.game.pokemon.Pokedex;
 import project.game.pokemon.Pokemon;
 
 public class ServerData {
@@ -40,22 +40,22 @@ public class ServerData {
      * @param pokemonName
      * @return new Pokemon Object
      */
-    public Pokemon newPokemonInstance(String pokemonName) {
-        PokemonData data = this.pokemonDatabase.get(pokemonName);
+    public Pokemon newPokemonInstance(Pokedex pokemon, int level) {
+        PokemonData data = this.pokemonDatabase.get(pokemon.name());
 
         if (data == null) {
-            throw new IllegalArgumentException(pokemonName + " not found in pokemon database\n");
+            throw new IllegalArgumentException(pokemon.name() + " not found in pokemon database\n");
         }
 
-        return new PokemonBuilder()
-        .setPokedexNo(data.getId())
-        .setName(data.getName())
-        .setTypes(data.getType1(), data.getType2())
-        .setWeight(data.getWeight())
-        .setHp(data.getHp())
-        .setStats(data.getAtk(), data.getDef(), data.getSpAtk(), data.getSpDef(), data.getSpd())
-        .setLevel(Pokemon.DEFAULT_LEVEL)
-        .build();
+        return new Pokemon(
+            level, 
+            data.getName(), 
+            data.getPokemonType(), 
+            data.getId(), 
+            data.getWeight(), 
+            data.getHealthPoints(level),
+            data.getStats(level)
+        );
     }
 
     /**
@@ -69,25 +69,11 @@ public class ServerData {
         if (data == null) {
             throw new IllegalArgumentException(moveName + " not found in pokemon database\n");
         }
-
-        // return new MoveBuilder()
-        // .setId(data.getId())
-        // .setName(data.getName())
-        // .setType(data.getType())
-        // .setCategory(data.getCategory())
-        // .setPP(data.getPp())
-        // .setPower(data.getPow())
-        // .setAccuracy(data.getAcc())
-        // .setCritRatio(data.getCrit())
-        // .setPriority(data.getPriority())
-        // .setContact(data.getContact())
-        // setAdditionEffects(data.getAdditionalEffects())
-        // .build();
         
         return new Move(
             data.getId(), 
             data.getName(), 
-            data.getType(), 
+            data.getMoveType(), 
             data.getMoveCategory(), 
             data.getPowerPoints(), 
             data.getPower(), 

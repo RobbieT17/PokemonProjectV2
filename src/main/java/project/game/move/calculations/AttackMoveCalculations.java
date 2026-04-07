@@ -28,9 +28,9 @@ public interface AttackMoveCalculations {
      */
     private static double weatherBonus(Move m) {
         return (BattleField.currentWeather == Weather.SUNNY) 
-        ? (m.isType(Type.FIRE)) ? 1.5 : (m.isType(Type.WATER)) ? 0.5 : 1.0
+        ? (m.isType(Type.Fire)) ? 1.5 : (m.isType(Type.Water)) ? 0.5 : 1.0
         :  (BattleField.currentWeather == Weather.RAIN) 
-            ? (m.isType(Type.WATER)) ? 1.5 : (m.isType(Type.FIRE)) ? 0.5 : 1.0
+            ? (m.isType(Type.Water)) ? 1.5 : (m.isType(Type.Fire)) ? 0.5 : 1.0
             : 1.0
         ;
     }

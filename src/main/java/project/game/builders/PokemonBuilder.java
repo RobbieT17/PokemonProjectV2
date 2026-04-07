@@ -5,6 +5,7 @@ import project.game.pokemon.Pokemon;
 import project.game.pokemon.PokemonType;
 import project.game.pokemon.stats.HealthPoints;
 import project.game.pokemon.stats.StatPoint;
+import project.game.pokemon.stats.Type;
 
 // Class designed to create Pokemon objects efficiently
 public class PokemonBuilder implements Builder{ 
@@ -42,7 +43,6 @@ public class PokemonBuilder implements Builder{
         if (this.hp == null) throw new IllegalStateException("Hp not initialized");
         if (this.atk == null) throw new IllegalStateException("Stats not initialized");
         if (this.weight == 0.0) throw new IllegalStateException("Weight not initialized");
-    
     }
 
     /**
@@ -79,14 +79,14 @@ public class PokemonBuilder implements Builder{
         return this;
     }
 
-    public PokemonBuilder setTypes(String t) {
+    public PokemonBuilder setTypes(Type t) {
         this.types = new PokemonTypeBuilder()
         .setPrimaryType(t)
         .build();
         return this;
     }
 
-    public PokemonBuilder setTypes(String t1, String t2) {
+    public PokemonBuilder setTypes(Type t1, Type t2) {
         if (t2 == null) {
             return this.setTypes(t1);
         }

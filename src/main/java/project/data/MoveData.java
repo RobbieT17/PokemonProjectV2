@@ -6,6 +6,7 @@ import project.game.move.Move.MoveCategory;
 import project.game.move.Move.MoveTarget;
 import project.game.move.MoveStat;
 import project.game.move.PowerPoints;
+import project.game.pokemon.stats.Type;
 
 public class MoveData {
     
@@ -52,6 +53,7 @@ public class MoveData {
     public AdditonalEffects getAddEffects(){return this.addEffects;}      
     
     // Wrapper Functions
+    public Type getMoveType() {return Type.valueOf(this.type);}
     public MoveCategory getMoveCategory() {return MoveCategory.valueOf(this.category);}
     public MoveTarget getMoveTarget() {return MoveTarget.valueOf(this.target);}
     public PowerPoints getPowerPoints() {return new PowerPoints(this.pp);}

@@ -45,7 +45,7 @@ public interface AbilityManager {
             if (!EventData.isUser(p, e)) return;
 
             Move move = e.moveUsed;
-            if (move.isType(Type.FIRE) && p.hpLessThanPercent(33)) {
+            if (move.isType(Type.Fire) && p.hpLessThanPercent(33)) {
                 e.otherMoveMods *= 1.5;
                 BattleLog.add("%s's Blaze increased the power of its Fire-Type attack!", p);
             } 
@@ -77,7 +77,7 @@ public interface AbilityManager {
             if (!EventData.isUser(p, e)) return;
 
             Move move = e.moveUsed;
-            if (move.isType(Type.GRASS) && p.hpLessThanPercent(33)) {
+            if (move.isType(Type.Grass) && p.hpLessThanPercent(33)) {
                 e.otherMoveMods *= 1.5;
                 BattleLog.add("%s's Overgrow increased the power of its Grass-Type attack!", p);
             }         
@@ -136,7 +136,7 @@ public interface AbilityManager {
             if (!EventData.isUser(p, e)) return;
 
             Move move = e.moveUsed;
-            if (move.isType(Type.WATER) && p.hpLessThanPercent(33)) {
+            if (move.isType(Type.Water) && p.hpLessThanPercent(33)) {
                 e.otherMoveMods *= 1.5; 
                 BattleLog.add("%s's Overgrow increased the power of its Water-Type attack!", p);
             }        
@@ -153,7 +153,7 @@ public interface AbilityManager {
         p.getEvents().addEventListener(flags[0], name, e -> {
             if (!EventData.isTarget(p, e)) return;
 
-            if (e.moveUsed.isType(Type.WATER)) {
+            if (e.moveUsed.isType(Type.Water)) {
                 e.moveEffectiveness = 0;
                 throw new MoveInterruptedException("%s's Water Absorb soaked up the water!", p);
             }

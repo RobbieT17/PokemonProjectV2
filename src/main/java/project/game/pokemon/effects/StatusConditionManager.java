@@ -152,14 +152,14 @@ public interface StatusConditionManager {
 
         // Turn Order: Infected Zombie-Type Pokemon have double speed
         p.getEvents().addEventListener(flags[2], name, e -> {
-            if (p.isType(Type.ZOMBIE)) {
+            if (p.isType(Type.Zombie)) {
                 p.getSpeed().setMod(200);
             }
         });
 
         // End of Round: Infected Non-Zombie-Type Pokemon lose 1/12 of their max HP
         p.getEvents().addEventListener(flags[3], name, e -> {
-            if (!p.isType(Type.ZOMBIE)) {
+            if (!p.isType(Type.Zombie)) {
                 p.takeDamagePercentMaxHP(1.0 / 12.0, " from the infection");
             }
             
@@ -458,7 +458,7 @@ public interface StatusConditionManager {
         p.getEvents().addEventListener(flags[0], name, e -> {
             if (!EventData.isTarget(p, e)) return;
 
-            if (e.moveUsed.isType(Type.GROUND) && e.moveEffectiveness == 0) {
+            if (e.moveUsed.isType(Type.Ground) && e.moveEffectiveness == 0) {
                 e.moveEffectiveness = 1.0;
             }
         });

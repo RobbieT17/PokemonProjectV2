@@ -2,11 +2,12 @@ package project.game.move.calculations;
 
 import project.game.event.EventData;
 import project.game.event.EventManager;
-import project.game.event.GameEvents;
 import project.game.event.GameEvents.EventID;
 import project.game.exceptions.MoveInterruptedException;
 import project.game.move.Move;
 import project.game.pokemon.Pokemon;
+import project.game.pokemon.stats.Type;
+import project.game.pokemon.stats.TypeName;
 
 public interface MoveEffectiveCalculations {
      /**
@@ -14,18 +15,18 @@ public interface MoveEffectiveCalculations {
      * @param type the move's type
      * @param p the pokemon's types
      */
-    public static double typeEffectiveness(String type, Pokemon p){
+    public static double typeEffectiveness(Type type, Pokemon p){
         double effect = 1.0; // Default type effectiveness
 
-        for (String t : p.getPokemonType().getTypeResistances()) // Pokemon resists type, halves damage
-            if (t.equals(type)) effect *= 0.5;
+        for (TypeName t : p.getPokemonType().getTypeResistances()) // Pokemon resists type, halves damage
+            if (t == type.toTypeName()) effect *= 0.5;
         
-        for (String t : p.getPokemonType().getTypeWeaknesses()) // Pokemon weak to type, doubles damage
-            if (t.equals(type)) effect *= 2;
+        for (TypeName t : p.getPokemonType().getTypeWeaknesses()) // Pokemon weak to type, doubles damage
+            if (t == type.toTypeName()) effect *= 2;
 
-        for (String t : p.getPokemonType().getTypeImmunities()) { // Pokemon immune to type, nullifies damage
+        for (TypeName t : p.getPokemonType().getTypeImmunities()) { // Pokemon immune to type, nullifies damage
             // if (immunityExceptionFound(type, p)) break;
-            if (t.equals(type)) effect = 0;
+            if (t == type.toTypeName()) effect = 0;
         } 
         
         return effect;

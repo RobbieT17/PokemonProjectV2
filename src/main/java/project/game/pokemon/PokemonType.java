@@ -1,6 +1,7 @@
 package project.game.pokemon;
 
 import project.game.pokemon.stats.Type;
+import project.game.pokemon.stats.TypeName;
 
 public class PokemonType {
 
@@ -8,9 +9,9 @@ public class PokemonType {
 	private final Type primary; // Main Type
 	private final Type secondary; // Secondary Type (not all Pokemon have one)
 
-	private final String[] typeResistances; // Types the Pokemon resists (receive half damage)
-	private final String[] typeWeaknesses;  // Types the Pokemon is weak to (receive double damage)
-	private final String[] typeImmunities; // Types the Pokemon is immune to (receives no damage)
+	private final TypeName[] typeResistances; // Types the Pokemon resists (receive half damage)
+	private final TypeName[] typeWeaknesses;  // Types the Pokemon is weak to (receive double damage)
+	private final TypeName[] typeImmunities; // Types the Pokemon is immune to (receives no damage)
 	
 	
 // Constructor	
@@ -18,9 +19,9 @@ public class PokemonType {
 	public PokemonType(
         Type type1, 
         Type type2,
-        String[]  resistances,
-        String[]  weaknesses,
-        String[] immunities
+        TypeName[]  resistances,
+        TypeName[]  weaknesses,
+        TypeName[] immunities
         ) {
 		this.primary = type1;
 		this.secondary = type2;
@@ -37,25 +38,25 @@ public class PokemonType {
 	}
 
 	// Returns true if the types matches
-	public boolean typeEquals(String type) {
+	public boolean typeEquals(Type type) {
 		return (this.hasSecondaryType()) 
-		? this.primary.isType(type) || this.secondary.isType(type)
-		: this.primary.isType(type);
+		? this.primary == type || this.secondary == type
+		: this.primary == type;
 	}
 
 	@Override
 	public String toString() {
 		return new StringBuilder()
-		.append(this.primary.typeName())
-		.append(this.hasSecondaryType() ? String.format("-%s", this.secondary.typeName()) : "")
+		.append(this.primary.name())
+		.append(this.hasSecondaryType() ? String.format("-%s", this.secondary.name()) : "")
 		.toString();
 	}
 	
 // Getters
 	public Type getPrimaryType() {return this.primary;}
 	public Type getSecondaryType() {return this.secondary;}
-	public String[] getTypeResistances() {return this.typeResistances;}
-	public String[] getTypeWeaknesses() {return this.typeWeaknesses;}
-	public String[] getTypeImmunities() {return this.typeImmunities;}
+	public TypeName[] getTypeResistances() {return this.typeResistances;}
+	public TypeName[] getTypeWeaknesses() {return this.typeWeaknesses;}
+	public TypeName[] getTypeImmunities() {return this.typeImmunities;}
 }
 
