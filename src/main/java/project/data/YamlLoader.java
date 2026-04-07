@@ -28,7 +28,7 @@ public class YamlLoader {
                 map.put(data.getName(), data);
             }
 
-            System.out.println("Pokemon database initialized");
+            System.out.println("[ INFO ] Pokemon database initialized");
             return map;
 
         } catch (Exception e) {
@@ -56,7 +56,7 @@ public class YamlLoader {
                 map.put(data.getName(), data);
             }
 
-            System.out.println("Move database initialized");
+            System.out.println("[ INFO ] Move database initialized");
             return map;
 
         } catch (Exception e) {
