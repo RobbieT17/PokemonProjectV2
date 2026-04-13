@@ -1,19 +1,23 @@
 package project.game.event;
 
+import project.game.battle.BattleData;
 import project.game.event.GameEvents.EventID;
 import project.game.move.Move;
 import project.game.pokemon.Pokemon;
 
 public class EventManager {
     
+    public final BattleData battleData;
     public final EventData eventData;
   
-    public EventManager(Pokemon p1, Pokemon p2) {
-        this.eventData = new EventData(p1, p2, null);
+    public EventManager(BattleData data, Pokemon p1, Pokemon p2) {
+        this.battleData = data;
+        this.eventData = new EventData(data, p1, p2, null);
     }
 
-    public EventManager(Pokemon p1, Pokemon p2, Move m) {
-        this.eventData = new EventData(p1, p2, m);
+    public EventManager(BattleData data, Pokemon p1, Pokemon p2, Move m) {
+        this.battleData = data;
+        this.eventData = new EventData(data, p1, p2, m);
     }
 
     public void notifyUserPokemon(EventID id) {

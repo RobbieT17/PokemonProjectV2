@@ -1,7 +1,6 @@
 package project.game.move.movelist;
 
-import project.game.battle.BattleField;
-import project.game.battle.Weather;
+import project.game.battle.Weather.WeatherEffect;
 import project.game.event.EventManager;
 import project.game.move.moveactions.MoveActionAttackDamage;
 import project.game.move.moveactions.MoveActionChangeCondition;
@@ -37,9 +36,9 @@ public class FlyingMoveList {
 
     public static int hurricane(EventManager e) {
         // Adjust accuracy based on weather
-        if (BattleField.currentWeather == Weather.RAIN) {
+        if (e.battleData.isCurrentWeather(WeatherEffect.Rain)) {
             e.eventData.moveUsed.perfectAccuracy();
-        } else if (BattleField.currentWeather == Weather.SUNNY) {
+        } else if (e.battleData.isCurrentWeather(WeatherEffect.Sunny)) {
             e.eventData.moveUsed.setAccuracy(50);
         }
 

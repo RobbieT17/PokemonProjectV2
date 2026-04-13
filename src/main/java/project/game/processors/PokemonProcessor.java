@@ -1,5 +1,6 @@
-package project.game.actions;
+package project.game.processors;
 
+import project.game.battle.BattleData;
 import project.game.battle.BattleLog;
 import project.game.event.EventData;
 import project.game.event.EventManager;
@@ -17,8 +18,8 @@ public class PokemonProcessor {
     private final EventData eventData;
     private final EventManager eventManager;
 
-    public PokemonProcessor(Pokemon attacker, Pokemon defender, Move move) {
-        this.eventManager = new EventManager(attacker, defender, move);
+    public PokemonProcessor(BattleData data, Pokemon attacker, Pokemon defender, Move move) {
+        this.eventManager = new EventManager(data, attacker, defender, move);
         this.eventData = this.eventManager.eventData;
     }
 
@@ -57,8 +58,11 @@ public class PokemonProcessor {
         try {
             this.eventManager.notifyUserPokemon(EventID.USE_MOVE);
             move.getPp().decrement(user.getConditions().hasKey(StatusConditionID.Forced_Move));
-        
-            Movedex.processMove(this.eventManager);
+
+            MoveProcessor moveProcessor = new MoveProcessor(eventManager);
+            
+            moveProcessor.findMoveTargets();
+            moveProcessor.processMove();
 
         } catch (MoveEndedEarlyException e) {
             BattleLog.add(e.getMessage());

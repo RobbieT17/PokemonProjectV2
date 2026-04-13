@@ -2,8 +2,7 @@ package project.game.move.calculations;
 
 import java.util.Random;
 
-import project.game.battle.BattleField;
-import project.game.battle.Weather;
+import project.game.battle.Weather.WeatherEffect;
 import project.game.event.EventData;
 import project.game.event.EventManager;
 import project.game.event.GameEvents.EventID;
@@ -26,10 +25,11 @@ public interface AttackMoveCalculations {
      * When Sunny: Fire-Type Moves (50% damage boost), Water-Type Moves (50% damage drop)
      * When Rainy: Fire-Type Moves (50% damage drop), Water-Type Moves (50% damage boost)
      */
-    private static double weatherBonus(Move m) {
-        return (BattleField.currentWeather == Weather.SUNNY) 
+    private static double weatherBonus(EventData e) {
+        Move m = e.moveUsed;
+        return (e.battleData.isCurrentWeather(WeatherEffect.Sunny)) 
         ? (m.isType(Type.Fire)) ? 1.5 : (m.isType(Type.Water)) ? 0.5 : 1.0
-        :  (BattleField.currentWeather == Weather.RAIN) 
+        :  (e.battleData.isCurrentWeather(WeatherEffect.Rain)) 
             ? (m.isType(Type.Water)) ? 1.5 : (m.isType(Type.Fire)) ? 0.5 : 1.0
             : 1.0
         ;
@@ -102,7 +102,7 @@ public interface AttackMoveCalculations {
         double effectiveness = data.moveEffectiveness;  
 
         double stab = sameTypeAttackBonus(attacker, move);
-        double weather = weatherBonus(move);
+        double weather = weatherBonus(data);
         double crit = isCritical ? 1.5 : 1.0;
         double random = random();
         double addition = data.otherMoveMods;

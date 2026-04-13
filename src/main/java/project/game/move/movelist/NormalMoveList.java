@@ -1,8 +1,7 @@
 package project.game.move.movelist;
 
-import project.game.battle.BattleField;
 import project.game.battle.BattleLog;
-import project.game.battle.Weather;
+import project.game.battle.Weather.WeatherEffect;
 import project.game.event.EventManager;
 import project.game.move.Move;
 import project.game.move.Movedex;
@@ -69,7 +68,7 @@ public class NormalMoveList {
 
     public static int growth(EventManager e) {
         MoveAction.targetsUser(e.eventData);
-        if (BattleField.currentWeather == Weather.SUNNY) {
+        if (e.battleData.isCurrentWeather(WeatherEffect.Sunny)) {
             MoveActionChangeStat.changeStats(e, MoveAction.stats(2, 0, 2, 0, 0, 0, 0));
         } else {
             MoveActionChangeStat.changeStats(e, MoveAction.stats(1, 0, 1, 0, 0, 0, 0));
@@ -133,7 +132,7 @@ public class NormalMoveList {
 
         BattleLog.add("%s used %s!", a, randomMove);
         
-        EventManager newE = new EventManager(a, e.eventData.attackTarget, randomMove);
+        EventManager newE = new EventManager(e.battleData, a, e.eventData.attackTarget, randomMove);
         Movedex.processMove(newE);
         return 0;
     }

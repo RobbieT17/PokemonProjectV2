@@ -1,7 +1,6 @@
 package project.game.move.movelist;
 
-import project.game.battle.BattleField;
-import project.game.battle.Weather;
+import project.game.battle.Weather.WeatherEffect;
 import project.game.event.EventManager;
 import project.game.move.moveactions.MoveAction;
 import project.game.move.moveactions.MoveActionAccuracy;
@@ -100,7 +99,7 @@ public class GrassMoveList {
     }
 
     public static int solarBeam(EventManager e) {
-        if (BattleField.currentWeather == Weather.SUNNY) {
+        if (e.battleData.isCurrentWeather(WeatherEffect.Sunny)) {
             MoveActionAttackDamage.dealDamage(e);
         } else {
             MoveActionCharge.chargeMove(e);
@@ -116,8 +115,8 @@ public class GrassMoveList {
 
     public static int synthesis(EventManager e) {
         MoveAction.targetsUser(e.eventData);
-        double percent = (BattleField.currentWeather == Weather.SUNNY) ? 67 :
-                         (BattleField.currentWeather == Weather.CLEAR) ? 50 : 25;
+        double percent = (e.battleData.isCurrentWeather(WeatherEffect.Sunny)) ? 67 :
+                         (e.battleData.isCurrentWeather(WeatherEffect.Clear)) ? 50 : 25;
         MoveActionHealthRestore.restoreHp(e, percent);
         return 0;
     }

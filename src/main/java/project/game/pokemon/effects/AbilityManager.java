@@ -2,9 +2,8 @@ package project.game.pokemon.effects;
 
 import java.util.function.Function;
 
-import project.game.battle.BattleField;
 import project.game.battle.BattleLog;
-import project.game.battle.Weather;
+import project.game.battle.Weather.WeatherEffect;
 import project.game.event.EventData;
 import project.game.event.GameEvents.EventID;
 import project.game.exceptions.MoveInterruptedException;
@@ -60,7 +59,7 @@ public interface AbilityManager {
         EventID[] flags = new EventID[] {EventID.FIND_MOVE_ORDER};
 
         p.getEvents().addEventListener(flags[0], name, e -> {
-            if (BattleField.currentWeather == Weather.SUNNY) {
+            if (e.battleData.isCurrentWeather(WeatherEffect.Sunny)) {
                 p.getSpeed().setMod(200);
             }
         });
@@ -92,7 +91,7 @@ public interface AbilityManager {
         EventID[] flags = new EventID[] {EventID.WEATHER_EFFECT};
 
         p.getEvents().addEventListener(flags[0], name, e -> {
-            if (BattleField.currentWeather == Weather.RAIN) {
+            if (e.battleData.isCurrentWeather(WeatherEffect.Rain)) {
                 p.restoreHpPercentMaxHP(1.0 / 16.0, " from its Rain Dish");
             }
         });
@@ -118,7 +117,7 @@ public interface AbilityManager {
         });
 
         p.getEvents().addEventListener(flags[1], name, e -> {
-            if (BattleField.currentWeather == Weather.SUNNY && !p.getConditions().isFainted()) {
+            if (e.battleData.isCurrentWeather(WeatherEffect.Sunny)  && !p.getConditions().isFainted()) {
                 p.takeDamagePercentMaxHP(1.0 / 8.0, " from its Solar Power");
                 if (p.getConditions().isFainted()) throw new PokemonFaintedException();
             }

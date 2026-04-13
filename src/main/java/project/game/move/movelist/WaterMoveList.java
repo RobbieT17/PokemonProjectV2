@@ -1,6 +1,6 @@
 package project.game.move.movelist;
 
-import project.game.battle.Weather;
+import project.game.battle.Weather.WeatherEffect;
 import project.game.event.EventManager;
 import project.game.move.moveactions.MoveAction;
 import project.game.move.moveactions.MoveActionAttackDamage;
@@ -62,7 +62,7 @@ public class WaterMoveList {
     }
 
     public static int rainDance(EventManager e) {
-        MoveActionChangeWeather.changeWeather(e, Weather.RAIN);
+        MoveActionChangeWeather.changeWeather(e, WeatherEffect.Rain);
         return 0;
     }
 

@@ -1,7 +1,8 @@
-package project.game.actions;
+package project.game.processors;
 
 import java.util.Random;
 
+import project.game.battle.BattleData;
 import project.game.event.EventManager;
 import project.game.event.GameEvents.EventID;
 import project.game.move.Move;
@@ -9,19 +10,22 @@ import project.game.pokemon.Pokemon;
 
 public class BattleProcessor {
 
+    private final BattleData battleData;
+
     private final Pokemon pokemon1;
     private final Pokemon pokemon2;
 
     private Pokemon[] turnOrder;
 
-    public BattleProcessor(Pokemon p1, Pokemon p2) {
-        this.pokemon1 = p1;
-        this.pokemon2 = p2;
+    public BattleProcessor(BattleData data) {
+        this.battleData = data;
+        this.pokemon1 = data.getPlayer1().getPokemonInBattle();
+        this.pokemon2 = data.getPlayer2().getPokemonInBattle();
     }
 
     // Finds the order which the Pokemon in battle will move
     public void constructTurnOrder() {
-        EventManager eventManager = new EventManager(this.pokemon1, this.pokemon2);
+        EventManager eventManager = new EventManager(this.battleData, this.pokemon1, this.pokemon2);
         eventManager.notifyAllPokemon(EventID.FIND_MOVE_ORDER);
 
         Pokemon[] order = new Pokemon[2];
@@ -82,10 +86,10 @@ public class BattleProcessor {
         Pokemon p2 = turnOrder[1];
 
         // Faster pokemon acts first, followed by the second
-        PokemonProcessor firstPokemonAction = new PokemonProcessor(p1, p2, p1.getMoveSelected());
+        PokemonProcessor firstPokemonAction = new PokemonProcessor(this.battleData, p1, p2, p1.getMoveSelected());
         firstPokemonAction.useTurn();
 
-        PokemonProcessor secondPokemonAction = new PokemonProcessor(p2, p1, p2.getMoveSelected());
+        PokemonProcessor secondPokemonAction = new PokemonProcessor(this.battleData, p2, p1, p2.getMoveSelected());
         secondPokemonAction.useTurn();
     }
 
@@ -105,7 +109,7 @@ public class BattleProcessor {
         this.pokemon1.endOfRoundReset();
         this.pokemon2.endOfRoundReset();
 
-        EventManager eventManager = new EventManager(this.pokemon1, this.pokemon2);
+        EventManager eventManager = new EventManager(this.battleData, this.pokemon1, this.pokemon2);
         eventManager.notifyAllPokemon(EventID.WEATHER_EFFECT);
         eventManager.notifyAllPokemon(EventID.END_OF_ROUND);
     }

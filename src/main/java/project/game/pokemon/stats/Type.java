@@ -99,10 +99,10 @@ public enum Type {
         ),
 
         Space(
-            new TypeName[] { TypeName.Bug, TypeName.Fighting, TypeName.Grass, TypeName.Normal, TypeName.Space },
+            new TypeName[] { TypeName.Bug, TypeName.Fighting, TypeName.Grass, TypeName.Space },
             new TypeName[] { TypeName.Ice, TypeName.Rock },
             new TypeName[] { TypeName.Flying, TypeName.Sound }
-        ),
+        ), 
 
         Steel(
             new TypeName[] { TypeName.Bug, TypeName.Dragon, TypeName.Fairy, TypeName.Flying, TypeName.Grass, TypeName.Ice,
@@ -118,7 +118,7 @@ public enum Type {
 
         Zombie(
             new TypeName[] { TypeName.Bug, TypeName.Dark, TypeName.Electric, TypeName.Fighting, TypeName.Ghost,
-                            TypeName.Ground, TypeName.Ice, TypeName.Normal, TypeName.Poison, TypeName.Psychic },
+                            TypeName.Ground, TypeName.Normal, TypeName.Poison, TypeName.Psychic, TypeName.Sound },
             new TypeName[] { TypeName.Fire, TypeName.Grass, TypeName.Steel },
             new TypeName[] { TypeName.Zombie }
         );
@@ -143,4 +143,4 @@ public enum Type {
         public TypeName[] getResistances() { return this.resistances; }
         public TypeName[] getWeaknesses() { return this.weaknesses; }
         public TypeName[] getImmunities() { return this.immunities; }
-    }
+}

@@ -74,14 +74,5 @@ public class AdditonalEffects {
     public MoveEffect getLifeSteal() {
         return this.lifeSteal;
     }
-    
-    
-
-    
-   
-
-    
-    
-    
-    
+     
 }

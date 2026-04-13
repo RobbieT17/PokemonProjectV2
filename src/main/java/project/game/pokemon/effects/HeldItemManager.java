@@ -2,7 +2,6 @@ package project.game.pokemon.effects;
 
 import java.util.function.Function;
 
-import project.game.battle.BattleField;
 import project.game.battle.BattleLog;
 import project.game.event.EventData;
 import project.game.event.GameEvents.EventID;
@@ -89,8 +88,8 @@ public interface HeldItemManager {
         p.getEvents().addEventListener(flags[0], name, e -> {
             if (c.inc()) {
                 BattleLog.add("Surprise! %s's Bomb Surprise goes off!", p);
-                BattleField.player1.getPokemonInBattle().faints();
-                BattleField.player2.getPokemonInBattle().faints();
+                e.battleData.getPlayer1().getPokemonInBattle().faints();
+                e.battleData.getPlayer2().getPokemonInBattle().faints();
                 
                 throw new MoveInterruptedException();
             }

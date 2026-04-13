@@ -1,7 +1,7 @@
 package project.game.battle;
 
-import project.game.actions.BattleProcessor;
 import project.game.player.PokemonTrainer;
+import project.game.processors.BattleProcessor;
 
 /**
  * This class acts as an instance of a pokemon battle. It is responsible for tracking
@@ -13,11 +13,14 @@ public class Battle {
 // Object Variables
 
     // Players
+    private final BattleData battleData;
+
     private final PokemonTrainer player1;
     private final PokemonTrainer player2;
 
 // Constructor
     public Battle(PokemonTrainer p1, PokemonTrainer p2) {
+        this.battleData = new BattleData(p1, p2);
         this.player1 = p1;
         this.player2 = p2;
     }
@@ -40,7 +43,7 @@ public class Battle {
      */
     public void processRound() {
         // Determine move order
-        BattleProcessor battleActions = new BattleProcessor(this.player1.getPokemonInBattle(), this.player2.getPokemonInBattle());
+        BattleProcessor battleActions = new BattleProcessor(this.battleData);
         
         battleActions.constructTurnOrder();
         battleActions.processPokemonActions();

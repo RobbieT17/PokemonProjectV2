@@ -8,7 +8,7 @@ import project.game.pokemon.stats.Type;
 public class Move {
 
 // Class Variables
-public enum MoveTarget {Single_Adjacent, Single_Ally, Single_Foe, All_Adjacent, All_Allies, All_Foes, All};
+public enum MoveTarget {Self, Single_Adjacent, Single_Ally, Single_Foe, All_Adjacent, All_Allies, All_Foes, All};
 public enum MoveCategory {Physical, Special, Status};
 
     // Message when a move fails

@@ -2,6 +2,8 @@ package project.game.event;
 
 import java.util.ArrayList;
 
+import project.game.battle.BattleData;
+import project.game.battle.Weather.WeatherEffect;
 import project.game.move.Move;
 import project.game.pokemon.Pokemon;
 import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;
@@ -10,6 +12,8 @@ import project.game.utility.Protection;
 
 public class EventData {
     // Turn Info: Relevant to a singular Pokemon turn, this data is reset after each turn
+    public final BattleData battleData; // Contains trainer info
+    
     public final ArrayList<Pokemon> pokemonList; // List of Pokemon included in the event
     public final Pokemon user; // User of the move
     public final Move moveUsed; // Move Used
@@ -27,7 +31,7 @@ public class EventData {
     public StatusConditionID statusChange; // Status Condition a Pokemon received
     public StatusConditionID immuneStateChange; // The immunity state a Pokemon changed to
 
-    public int weatherChange; // Change in weather
+    public WeatherEffect weatherChange; // Change in weather
     
     public Protection protectionType; // The kind of damage nullifier
 
@@ -48,7 +52,8 @@ public class EventData {
     public String message = ""; // A message produced 
    
 
-    public EventData(Pokemon a, Pokemon b, Move m) {
+    public EventData(BattleData data, Pokemon a, Pokemon b, Move m) {
+        this.battleData = data;
         this.user = a;
         this.moveUsed = m;
         this.pokemonList = buildPokemonList(a, b);

@@ -1,6 +1,6 @@
 package project.game.move.movelist;
 
-import project.game.battle.Weather;
+import project.game.battle.Weather.WeatherEffect;
 import project.game.event.EventManager;
 import project.game.move.moveactions.MoveAction;
 import project.game.move.moveactions.MoveActionAttackDamage;
@@ -26,7 +26,7 @@ public class IceMoveList {
     }
 
     public static int hail(EventManager e) {
-        MoveActionChangeWeather.changeWeather(e, Weather.HAIL);
+        MoveActionChangeWeather.changeWeather(e, WeatherEffect.Hail);
         return 0;
     }
 
