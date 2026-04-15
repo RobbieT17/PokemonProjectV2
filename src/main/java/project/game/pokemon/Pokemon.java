@@ -56,6 +56,7 @@ public class Pokemon {
     private String nickname; 
 
     // Other Stats
+    private Pokemon targetSelected; // Pokemon the target of the move for the round (null if the target is itself)
     private Move moveSelected; // Move selected for the round
     private Move firstMove; // First move used since switched in
     private Move lastMove; // Move used the last turn
@@ -83,7 +84,7 @@ public class Pokemon {
         this.hp = hp;
         this.stats = stats;
 
-        this.moves = new ArrayList<Move>();
+        this.moves = new ArrayList<Move>(); 
         this.conditions = new PokemonConditions();
         this.events = new GameEvents();
     }
@@ -197,19 +198,29 @@ public class Pokemon {
         this.damageDealt = 0;
     }
 
-    public void setMove(Move m) {
+    public void setTargetSelected(Pokemon p) {
+        this.targetSelected = p;
+    }
+
+    public void setMoveSelected(Move m) {
         this.moveSelected = m;
     }
 
     public void resetMove() {
-        if (this.moveSelected == null) return;
-        if (this.firstRound()) this.firstMove = this.moveSelected;
+        if (this.moveSelected == null) {
+            return;
+        }
+
+        if (this.firstRound()) {
+            this.firstMove = this.moveSelected;
+        }
 
         this.moveSelected.resetStats();
         this.lastMove = this.moveSelected;
         this.moveSelected = null;
     }
 
+    // TODO: Remove this function, I want Pokemon classes to be immutable in the final version
     public void addMove(Move m) {
         if (this.moves.size() > 4) { // 4 moves max
             throw new IllegalStateException("Pokemon cannot have more than 4 moves");
@@ -295,6 +306,7 @@ public class Pokemon {
 	public double getWeight() {return this.weight;}
     public ArrayList<Move> getMoves() {return this.moves;}
     public PokemonConditions getConditions() {return this.conditions;}
+    public Pokemon getTargetSelected() {return this.targetSelected;}
     public Move getMoveSelected() {return this.moveSelected;}
     public Move getFirstMove() {return this.firstMove;}
     public Move getLastMove() {return this.lastMove;}

@@ -21,8 +21,8 @@ private static void defenderProtects(Pokemon p) {
 }
 
 // Accuracy Function
-    public static void moveHits(EventManager eventManager) {
-        EventData data = eventManager.eventData;
+    public static void rollForAccuracy(EventManager eventManager) {
+        EventData data = eventManager.data;
 
         Pokemon attacker = data.user;
         Pokemon defender = data.attackTarget;

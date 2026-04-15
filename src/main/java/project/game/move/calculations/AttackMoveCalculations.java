@@ -7,6 +7,7 @@ import project.game.event.EventData;
 import project.game.event.EventManager;
 import project.game.event.GameEvents.EventID;
 import project.game.move.Move;
+import project.game.move.Move.MoveCategory;
 import project.game.pokemon.Pokemon;
 import project.game.pokemon.stats.StatPoint;
 import project.game.pokemon.stats.Type;
@@ -90,7 +91,7 @@ public interface AttackMoveCalculations {
      * @return calculated damage
      */
     public static int calculateDamage(EventManager eventManager) {
-        EventData data = eventManager.eventData; 
+        EventData data = eventManager.data; 
         criticalHit(data.moveUsed.getCritRate()); // Rolls for a critical hit
 
         eventManager.notifyAllPokemon(EventID.DAMAGE_MULTIPLIER);
@@ -107,11 +108,11 @@ public interface AttackMoveCalculations {
         double random = random();
         double addition = data.otherMoveMods;
 
-        double attack = move.getCategory().equals(Move.MoveCategory.Special) 
+        double attack = move.getCategory().equals(MoveCategory.Special) 
         ? calculateAttack(attacker.getSpecialAttack(), isCritical) 
         : calculateAttack(attacker.getAttack(), isCritical);
 
-        double defense = move.getCategory().equals(Move.MoveCategory.Special) 
+        double defense = move.getCategory().equals(MoveCategory.Special) 
         ? calculateDefense(defender.getSpecialDefense(), isCritical) 
         : calculateDefense(defender.getDefense(), isCritical);
         

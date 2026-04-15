@@ -102,7 +102,7 @@ public class PokemonTrainerMoveSelector {
                     this.client.writeToBuffer("%s learned %s!\n", pokemon, move);  
                 }
                 catch (IllegalStateException e) {
-                    this.client.writeToBuffer("%s already knows %s. Try again!\n", pokemon, move);  
+                    this.client.writeToBuffer("%s already knows %s, try again.\n", pokemon, move);  
                 }
                 
             }

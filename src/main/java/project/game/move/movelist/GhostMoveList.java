@@ -3,7 +3,7 @@ package project.game.move.movelist;
 import project.game.event.EventManager;
 import project.game.move.moveactions.MoveAction;
 import project.game.move.moveactions.MoveActionAccuracy;
-import project.game.move.moveactions.MoveActionAttackDamage;
+import project.game.move.moveactions.MoveActionAttack;
 import project.game.move.moveactions.MoveActionChangeCondition;
 import project.game.move.moveactions.MoveActionChangeStat;
 import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;
@@ -11,7 +11,7 @@ import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;
 public class GhostMoveList {
 
     public static int confuseRay(EventManager e) {
-        MoveActionAccuracy.moveHits(e);
+        MoveActionAccuracy.rollForAccuracy(e);
         MoveActionChangeCondition.applyCondition(e, StatusConditionID.Confusion);
         MoveAction.displayFailMessage(e);
         return 0;
@@ -23,7 +23,7 @@ public class GhostMoveList {
     }
 
     public static int shadowClaw(EventManager e) {
-        MoveActionAttackDamage.dealDamage(e);
+        MoveActionAttack.attackTarget(e);
         return 0;
     }
 }

@@ -185,7 +185,7 @@ public enum Movedex {
      * @param e EventManager
      */
     public static void processMove(EventManager e) {
-        String moveName = e.eventData.moveUsed.getMoveName();
+        String moveName = e.data.moveUsed.getMoveName();
         Movedex.valueOf(moveName).act(e);
     }
 }

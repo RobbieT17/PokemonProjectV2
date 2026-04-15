@@ -4,7 +4,7 @@ import project.game.event.EventManager;
 import project.game.exceptions.MoveInterruptedException;
 import project.game.move.Move;
 import project.game.move.moveactions.MoveAction;
-import project.game.move.moveactions.MoveActionAttackDamage;
+import project.game.move.moveactions.MoveActionAttack;
 import project.game.move.moveactions.MoveActionChangeCondition;
 import project.game.move.moveactions.MoveActionChangeStat;
 import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;
@@ -12,29 +12,29 @@ import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;
 public class DarkMoveList {
 
     public static int bite(EventManager e) {
-        MoveActionAttackDamage.dealDamage(e);
+        MoveActionAttack.attackTarget(e);
         MoveActionChangeCondition.applyCondition(e ,StatusConditionID.Flinch,30);
         return 0;
     }
 
     public static int crunch(EventManager e) {
-        MoveActionAttackDamage.dealDamage(e);
+        MoveActionAttack.attackTarget(e);
         MoveActionChangeStat.changeStats(e, MoveAction.stats(0, -1, 0, 0, 0, 0, 0), 20);
         return 0;
     }
 
     public static int darkPulse(EventManager e) {
-        MoveActionAttackDamage.dealDamage(e);
+        MoveActionAttack.attackTarget(e);
         MoveActionChangeCondition.applyCondition(e, StatusConditionID.Flinch, 20);
         return 0;
     }
 
     public static int fakeOut(EventManager e) {
-        if (!e.eventData.user.firstRound()) {
+        if (!e.data.user.firstRound()) {
             throw new MoveInterruptedException(Move.FAILED);
         }
 
-        MoveActionAttackDamage.dealDamage(e);
+        MoveActionAttack.attackTarget(e);
         MoveActionChangeCondition.applyCondition(e, StatusConditionID.Flinch);
 
         return 0;

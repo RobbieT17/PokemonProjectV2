@@ -9,7 +9,7 @@ import project.game.exceptions.MoveInterruptedException;
 import project.game.exceptions.PokemonCannotActException;
 import project.game.exceptions.PokemonFaintedException;
 import project.game.move.Move;
-import project.game.move.moveactions.MoveActionAttackDamage;
+import project.game.move.moveactions.MoveActionAttack;
 import project.game.pokemon.Pokemon;
 import project.game.pokemon.stats.Type;
 import project.game.utility.Counter;
@@ -261,7 +261,7 @@ public interface StatusConditionManager {
         String name = id.name();
         EventID[] flags = new EventID[] {EventID.MOVE_SELECTION, EventID.MOVE_ACCURACY};
 
-        p.getEvents().addEventListener(flags[0], name, e -> p.setMove(m));
+        p.getEvents().addEventListener(flags[0], name, e -> p.setMoveSelected(m));
         p.getEvents().addEventListener(flags[1], name, e -> {
             Move a = e.moveUsed;
             if (!EventData.isTarget(p, e)) return;
@@ -281,7 +281,7 @@ public interface StatusConditionManager {
         String name = id.name();
         EventID[] flags = new EventID[] {EventID.MOVE_SELECTION, EventID.MOVE_ACCURACY};
 
-        p.getEvents().addEventListener(flags[0], name, e -> p.setMove(m));
+        p.getEvents().addEventListener(flags[0], name, e -> p.setMoveSelected(m));
         p.getEvents().addEventListener(flags[1], name, e -> {
             if (!EventData.isTarget(p, e)) return;
             if (e.moveUsed.getMoveID() == 89) return;
@@ -300,7 +300,7 @@ public interface StatusConditionManager {
         String name = id.name();
         EventID[] flags = new EventID[] {EventID.MOVE_SELECTION, EventID.MOVE_ACCURACY};
 
-        p.getEvents().addEventListener(flags[0], name, e -> p.setMove(m));
+        p.getEvents().addEventListener(flags[0], name, e -> p.setMoveSelected(m));
         p.getEvents().addEventListener(flags[1], name, e -> {
             Move a = e.moveUsed;
             if (!EventData.isTarget(p, e)) return; 
@@ -371,7 +371,7 @@ public interface StatusConditionManager {
             BattleLog.add("%s is confused!", p);
             if (!RandomValues.chance(50)) return;
 
-            MoveActionAttackDamage.takeConfusionDamage(p);
+            MoveActionAttack.takeConfusionDamage(p);
             checkIfFaints(p);
             throw new PokemonCannotActException();
         });
@@ -411,7 +411,7 @@ public interface StatusConditionManager {
 
         Counter counter = new Counter(n);
 
-        p.getEvents().addEventListener(flags[0], name, e -> p.setMove(m));
+        p.getEvents().addEventListener(flags[0], name, e -> p.setMoveSelected(m));
         p.getEvents().addEventListener(flags[1], name, e -> {
             if (counter.inc()) p.getConditions().removeCondition(id); 
         });
@@ -433,7 +433,7 @@ public interface StatusConditionManager {
 
         State state = new State(); // State True: Lost Focus
     
-        p.getEvents().addEventListener(flags[0], name, e -> p.setMove(m));
+        p.getEvents().addEventListener(flags[0], name, e -> p.setMoveSelected(m));
 
         p.getEvents().addEventListener(flags[1], name, e -> {
             p.getConditions().removeCondition(id);
@@ -479,7 +479,7 @@ public interface StatusConditionManager {
 
         Counter counter = new Counter(RandomValues.generateInt(2, 3));
 
-        p.getEvents().addEventListener(flags[0], name, e -> p.setMove(m));
+        p.getEvents().addEventListener(flags[0], name, e -> p.setMoveSelected(m));
         p.getEvents().addEventListener(flags[1], name, e -> {
             if (counter.inc()) {
                 p.getConditions().removeCondition(id);
@@ -505,7 +505,7 @@ public interface StatusConditionManager {
         String name = id.name();
         EventID[] flags = new EventID[] {EventID.MOVE_SELECTION, EventID.MOVE_INTERRUPTED};
 
-        p.getEvents().addEventListener(flags[0], name, e -> p.setMove(m));
+        p.getEvents().addEventListener(flags[0], name, e -> p.setMoveSelected(m));
         p.getEvents().addEventListener(flags[1], name, e -> p.getConditions().removeCondition(id));
 
         return new StatusCondition(p, id.name(), flags);

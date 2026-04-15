@@ -1,7 +1,6 @@
 package project.game.move;
 
 import project.data.AdditonalEffects;
-import project.game.pokemon.Pokemon;
 import project.game.pokemon.PokemonType;
 import project.game.pokemon.stats.Type;
 
@@ -72,10 +71,6 @@ public enum MoveCategory {Physical, Special, Status};
     }
 
 // Methods
-    public static String noEffectOn(Pokemon p) {
-        return String.format("But it doesn't affect %s...", p);
-    }
-
     /**
      * @param t A Pokemon's typing
      * @return true if the move type is one of the Pokemon's types
@@ -91,7 +86,7 @@ public enum MoveCategory {Physical, Special, Status};
      * @return true if the move matches the type
      */
     public boolean isType(Type t) {
-        return this.moveType.equals(t.name());
+        return this.moveType == t;
     }
 
     public boolean isCategory(MoveCategory c) {
@@ -105,9 +100,10 @@ public enum MoveCategory {Physical, Special, Status};
         .toString();
     }
 
-    public boolean equals(Move m) {
+    @Override
+    public boolean equals(Object m) {
         return m != null 
-        ? this.moveID == m.moveID
+        ? this.moveID == ((Move) m).moveID
         : false;
     }
 
@@ -142,8 +138,8 @@ public enum MoveCategory {Physical, Special, Status};
     public MoveTarget getMoveTarget() {return this.moveTarget;}
     public double getCritRate() {return this.critRate;}
     public int getPriority() {return this.priority;}
-    public boolean getMakesContact() {return this.makesContact;}
-    public boolean getMultiHit() {return this.multiHit;}
+    public boolean isContactMove() {return this.makesContact;}
+    public boolean isMultiHit() {return this.multiHit;}
     public AdditonalEffects getAdditionalEffects() {return this.additonEffects;}
     public boolean isDisabled() {return this.disabled;}
 }

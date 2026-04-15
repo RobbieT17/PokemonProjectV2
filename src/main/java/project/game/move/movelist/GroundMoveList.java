@@ -2,7 +2,7 @@ package project.game.move.movelist;
 
 import project.game.event.EventManager;
 import project.game.move.moveactions.MoveAction;
-import project.game.move.moveactions.MoveActionAttackDamage;
+import project.game.move.moveactions.MoveActionAttack;
 import project.game.move.moveactions.MoveActionChangeCondition;
 import project.game.move.moveactions.MoveActionChangeStat;
 import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;
@@ -10,7 +10,7 @@ import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;
 public class GroundMoveList {
 
     public static int bulldoze(EventManager e) {
-        MoveActionAttackDamage.dealDamage(e);
+        MoveActionAttack.attackTarget(e);
         MoveActionChangeStat.changeStats(e, MoveAction.stats(0, 0, 0, 0, -1, 0, 0));
         return 0;
     }
@@ -21,37 +21,37 @@ public class GroundMoveList {
     }
 
     public static int earthquake(EventManager e) {
-        if (e.eventData.attackTarget.getConditions().hasKey(StatusConditionID.Dig_State)) {
-            e.eventData.moveUsed.doublePower();
+        if (e.data.attackTarget.getConditions().hasKey(StatusConditionID.Dig_State)) {
+            e.data.moveUsed.doublePower();
         }
-        MoveActionAttackDamage.dealDamage(e);
+        MoveActionAttack.attackTarget(e);
         return 0;
     }
 
     public static int earthPower(EventManager e) {
-        MoveActionAttackDamage.dealDamage(e);
+        MoveActionAttack.attackTarget(e);
         MoveActionChangeStat.changeStats(e, MoveAction.stats(0, 0, 0, -1, 0, 0, 0), 10);
         return 0;
     }
 
     public static int mudShot(EventManager e) {
-        MoveActionAttackDamage.dealDamage(e);
+        MoveActionAttack.attackTarget(e);
         MoveActionChangeStat.changeStats(e, MoveAction.stats(0, 0, 0, 0, -1, 0, 0));
         return 0;
     }
 
     public static int scorchingSands(EventManager e) {
-        e.eventData.user.getConditions().removeCondition(StatusConditionID.Freeze);
-        MoveActionAttackDamage.dealDamage(e);
+        e.data.user.getConditions().removeCondition(StatusConditionID.Freeze);
+        MoveActionAttack.attackTarget(e);
         MoveActionChangeCondition.applyCondition(e, StatusConditionID.Burn, 30);
         return 0;
     }
 
     public static int stompingTantrum(EventManager e) {
-        if (e.eventData.user.getConditions().isInterrupted()) {
-            e.eventData.moveUsed.doublePower();
+        if (e.data.user.getConditions().isInterrupted()) {
+            e.data.moveUsed.doublePower();
         }
-        MoveActionAttackDamage.dealDamage(e);
+        MoveActionAttack.attackTarget(e);
         return 0;
     }
 }

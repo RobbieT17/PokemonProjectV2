@@ -25,8 +25,11 @@ public class BattleProcessor {
 
     // Finds the order which the Pokemon in battle will move
     public void constructTurnOrder() {
-        EventManager eventManager = new EventManager(this.battleData, this.pokemon1, this.pokemon2);
-        eventManager.notifyAllPokemon(EventID.FIND_MOVE_ORDER);
+        EventManager eventManager1 = new EventManager(this.battleData, this.pokemon1);
+        EventManager eventManager2 = new EventManager(this.battleData, this.pokemon2);
+
+        eventManager1.notifyUserPokemon(EventID.FIND_MOVE_ORDER);
+        eventManager2.notifyUserPokemon(EventID.FIND_MOVE_ORDER);
 
         Pokemon[] order = new Pokemon[2];
 
@@ -82,15 +85,11 @@ public class BattleProcessor {
      * Each pokemon acts and targets their opponent with the move chosen
      */
     public void processPokemonActions() {
-        Pokemon p1 = turnOrder[0];
-        Pokemon p2 = turnOrder[1];
-
         // Faster pokemon acts first, followed by the second
-        PokemonProcessor firstPokemonAction = new PokemonProcessor(this.battleData, p1, p2, p1.getMoveSelected());
-        firstPokemonAction.useTurn();
-
-        PokemonProcessor secondPokemonAction = new PokemonProcessor(this.battleData, p2, p1, p2.getMoveSelected());
-        secondPokemonAction.useTurn();
+        for (Pokemon p : this.turnOrder) {
+            PokemonProcessor pokemonProcessor = new PokemonProcessor(new EventManager(this.battleData, p));
+            pokemonProcessor.useTurn();
+        }
     }
 
     /**
@@ -106,11 +105,13 @@ public class BattleProcessor {
      * reset any Pokemon params needed.
      */
     public void processRoundEnd() {
-        this.pokemon1.endOfRoundReset();
-        this.pokemon2.endOfRoundReset();
+        for (Pokemon p : this.turnOrder) {
+            p.endOfRoundReset();
 
-        EventManager eventManager = new EventManager(this.battleData, this.pokemon1, this.pokemon2);
-        eventManager.notifyAllPokemon(EventID.WEATHER_EFFECT);
-        eventManager.notifyAllPokemon(EventID.END_OF_ROUND);
+            EventManager eventManager = new EventManager(this.battleData, p);
+            eventManager.notifyUserPokemon(EventID.WEATHER_EFFECT);
+            eventManager.notifyUserPokemon(EventID.END_OF_ROUND);
+        }
+
     }
 }

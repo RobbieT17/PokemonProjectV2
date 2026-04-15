@@ -10,15 +10,15 @@ import project.game.processors.WeatherProcessor;
 public interface MoveActionChangeWeather extends MoveAction {
     
     // Changes current weather
-    public static void changeWeather(EventManager eventManager, WeatherEffect e) {
-        EventData data  = eventManager.eventData;
-        data.weatherChange = e;
+    public static void changeWeather(EventManager eventManager, WeatherEffect w) {
+        EventData data  = eventManager.data;
+        data.weatherChange = w;
 
-        if (data.battleData.isCurrentWeather(e)) {
+        if (data.battleData.isCurrentWeather(w)) {
             throw new MoveInterruptedException(Move.FAILED);
         }
 
         WeatherProcessor weatherProcessor = new WeatherProcessor(data.battleData);
-        weatherProcessor.changeWeather(e);
+        weatherProcessor.changeWeather(w);
     }
 }

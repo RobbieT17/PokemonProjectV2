@@ -38,6 +38,14 @@ public class PokemonConditions {
         return this.primaryCondition != null;
     }
 
+    /**
+     * @return True the Pokemon has any of these conditions:<br>
+     * <ol>
+     * <li>Fly-State
+     * <li>Dig-State
+     * <li>Dive-State
+     * </ol>
+     */
     public boolean inImmuneState() {
         return 
         this.hasKey(StatusConditionID.Fly_State) ||

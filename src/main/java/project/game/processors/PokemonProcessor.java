@@ -1,26 +1,21 @@
 package project.game.processors;
 
-import project.game.battle.BattleData;
 import project.game.battle.BattleLog;
-import project.game.event.EventData;
 import project.game.event.EventManager;
 import project.game.event.GameEvents.EventID;
 import project.game.exceptions.MoveEndedEarlyException;
 import project.game.exceptions.MoveInterruptedException;
 import project.game.exceptions.PokemonCannotActException;
 import project.game.move.Move;
-import project.game.move.Movedex;
 import project.game.pokemon.Pokemon;
 import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;;
 
 public class PokemonProcessor {
 
-    private final EventData eventData;
     private final EventManager eventManager;
-
-    public PokemonProcessor(BattleData data, Pokemon attacker, Pokemon defender, Move move) {
-        this.eventManager = new EventManager(data, attacker, defender, move);
-        this.eventData = this.eventManager.eventData;
+    
+    public PokemonProcessor(EventManager e) {
+        this.eventManager = e;
     }
 
     private void updateBeforeMoveEvents() {
@@ -41,7 +36,6 @@ public class PokemonProcessor {
         p.getConditions().removeCondition(StatusConditionID.Focused);
         p.getConditions().removeCondition(StatusConditionID.Forced_Move);
         p.getConditions().removeCondition(StatusConditionID.Rampage);
-        p.getConditions().setInterrupted(true);
     }
 
     /**
@@ -51,8 +45,8 @@ public class PokemonProcessor {
      * @param defender the target Pokemon
      */
     private void useMove() {
-        Pokemon user = this.eventData.user;
-        Move move = this.eventData.moveUsed;
+        Pokemon user = this.eventManager.data.user;
+        Move move = this.eventManager.data.moveUsed;
 
         BattleLog.add("%s used %s!", user, move);
         try {
@@ -60,11 +54,9 @@ public class PokemonProcessor {
             move.getPp().decrement(user.getConditions().hasKey(StatusConditionID.Forced_Move));
 
             MoveProcessor moveProcessor = new MoveProcessor(eventManager);
-            
-            moveProcessor.findMoveTargets();
             moveProcessor.processMove();
 
-        } catch (MoveEndedEarlyException e) {
+        } catch (MoveEndedEarlyException e) { // TODO: Entering immune state should throw this exception
             BattleLog.add(e.getMessage());
         }
     }
@@ -78,7 +70,7 @@ public class PokemonProcessor {
      * @param defender the target Pokemon
      */
     public void useTurn(){
-        Pokemon user = this.eventData.user;
+        Pokemon user = this.eventManager.data.user;
 
         try {
             this.updateBeforeMoveEvents();
@@ -90,6 +82,7 @@ public class PokemonProcessor {
 
             this.updateInterruptedMoveEvents();
             this.stopOnGoingMoves(user);
+            user.getConditions().setInterrupted(true);
                   
         } 
         user.getConditions().setHasMoved(true); 

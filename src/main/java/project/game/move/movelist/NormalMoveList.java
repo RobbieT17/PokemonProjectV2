@@ -6,7 +6,7 @@ import project.game.event.EventManager;
 import project.game.move.Move;
 import project.game.move.Movedex;
 import project.game.move.moveactions.MoveAction;
-import project.game.move.moveactions.MoveActionAttackDamage;
+import project.game.move.moveactions.MoveActionAttack;
 import project.game.move.moveactions.MoveActionBracing;
 import project.game.move.moveactions.MoveActionChangeCondition;
 import project.game.move.moveactions.MoveActionChangeStat;
@@ -18,45 +18,45 @@ import project.game.utility.RandomValues;
 public class NormalMoveList {
 
     public static int bodySlam(EventManager e) {
-        MoveActionAttackDamage.dealDamage(e);
+        MoveActionAttack.attackTarget(e);
         MoveActionChangeCondition.applyCondition(e, StatusConditionID.Paralysis, 30);
         return 0;
     }
 
     public static int doubleEdge(EventManager e) {
-        MoveActionAttackDamage.dealDamageRecoil(e, 33);
+        MoveActionAttack.attackTarget(e);
         return 0;
     }
 
     public static int endure(EventManager e) {
-        MoveActionBracing.pokemonProtects(e, e.eventData.user.getConditions().getEndure(), e.eventData.user + " braced itself!");
+        MoveActionBracing.pokemonProtects(e, e.data.user.getConditions().getEndure(), e.data.user + " braced itself!");
         return 0;
     }
 
     public static int facade(EventManager e) {
-        Pokemon a = e.eventData.user;
+        Pokemon a = e.data.user;
         if (a.getConditions().hasKey(StatusConditionID.Burn) ||
             a.getConditions().hasKey(StatusConditionID.Paralysis) ||
             a.getConditions().hasKey(StatusConditionID.Poison)) {
-            e.eventData.moveUsed.doublePower();
+            e.data.moveUsed.doublePower();
         }
-        MoveActionAttackDamage.dealDamage(e);
+        MoveActionAttack.attackTarget(e);
         return 0;
     }
 
     public static int falseSwipe(EventManager e) {
-        e.eventData.attackTarget.getConditions().getEndure().setActive(true);
-        MoveActionAttackDamage.dealDamage(e);
+        e.data.attackTarget.getConditions().getEndure().setActive(true);
+        MoveActionAttack.attackTarget(e);
         return 0;
     }
 
     public static int furyAttack(EventManager e) {
-        MoveActionAttackDamage.multiHit(e);
+        MoveActionAttack.attackTarget(e);
         return 0;
     }
 
     public static int gigaImpact(EventManager e) {
-        MoveActionAttackDamage.dealDamage(e);
+        MoveActionAttack.attackTarget(e);
         MoveActionCharge.rechargeMove(e);
         return 0;
     }
@@ -67,8 +67,8 @@ public class NormalMoveList {
     }
 
     public static int growth(EventManager e) {
-        MoveAction.targetsUser(e.eventData);
-        if (e.battleData.isCurrentWeather(WeatherEffect.Sunny)) {
+        MoveAction.targetsUser(e.data);
+        if (e.data.battleData.isCurrentWeather(WeatherEffect.Sunny)) {
             MoveActionChangeStat.changeStats(e, MoveAction.stats(2, 0, 2, 0, 0, 0, 0));
         } else {
             MoveActionChangeStat.changeStats(e, MoveAction.stats(1, 0, 1, 0, 0, 0, 0));
@@ -77,19 +77,19 @@ public class NormalMoveList {
     }
 
     public static int hyperBeam(EventManager e) {
-        MoveActionAttackDamage.dealDamage(e);
+        MoveActionAttack.attackTarget(e);
         MoveActionCharge.rechargeMove(e);
         return 0;
     }
 
     public static int protect(EventManager e) {
-        MoveActionBracing.pokemonProtects(e, e.eventData.user.getConditions().getProtect(), e.eventData.user + " protected itself!");
+        MoveActionBracing.pokemonProtects(e, e.data.user.getConditions().getProtect(), e.data.user + " protected itself!");
         return 0;
     }
 
     public static int rapidSpin(EventManager e) {
-        MoveAction.affectsUser(e.eventData);
-        MoveActionAttackDamage.dealDamage(e);
+        MoveAction.affectsUser(e.data);
+        MoveActionAttack.attackTarget(e);
         MoveActionChangeStat.changeStats(e, MoveAction.stats(0, 0, 0, 0, 1, 0, 0));
         return 0;
     }
@@ -100,25 +100,25 @@ public class NormalMoveList {
     }
 
     public static int scratch(EventManager e) {
-        MoveActionAttackDamage.dealDamage(e);
+        MoveActionAttack.attackTarget(e);
         return 0;
     }
 
     public static int shellSmash(EventManager e) {
-        MoveAction.targetsUser(e.eventData);
+        MoveAction.targetsUser(e.data);
         MoveActionChangeStat.changeStats(e, MoveAction.stats(1, -1, 1, -1, 1, 0, 0));
         return 0;
     }
 
     public static int slash(EventManager e) {
-        MoveActionAttackDamage.dealDamage(e);
+        MoveActionAttack.attackTarget(e);
         return 0;
     }
 
     // TODO: Needs fixing
     public static int sleepTalk(EventManager e) {
-        Pokemon a = e.eventData.user;
-        Move m = e.eventData.moveUsed;
+        Pokemon a = e.data.user;
+        Move m = e.data.moveUsed;
         if (!a.getConditions().hasKey(StatusConditionID.Sleep)) {
             BattleLog.add(Move.FAILED);
             return 0;
@@ -130,9 +130,12 @@ public class NormalMoveList {
             randomMove = a.getMoves().get(i);
         }
 
+        // Sets new move
+        a.setMoveSelected(randomMove);
+
         BattleLog.add("%s used %s!", a, randomMove);
         
-        EventManager newE = new EventManager(e.battleData, a, e.eventData.attackTarget, randomMove);
+        EventManager newE = new EventManager(e.data.battleData, a);
         Movedex.processMove(newE);
         return 0;
     }
@@ -148,13 +151,13 @@ public class NormalMoveList {
     }
 
     public static int swordsDance(EventManager e) {
-        MoveAction.targetsUser(e.eventData);
+        MoveAction.targetsUser(e.data);
         MoveActionChangeStat.changeStats(e, MoveAction.stats(2, 0, 0, 0, 0, 0, 0));
         return 0;
     }
 
     public static int tackle(EventManager e) {
-        MoveActionAttackDamage.dealDamage(e);
+        MoveActionAttack.attackTarget(e);
         return 0;
     }
 
@@ -164,12 +167,12 @@ public class NormalMoveList {
     }
 
     public static int takeDown(EventManager e) {
-        MoveActionAttackDamage.dealDamageRecoil(e, 25);
+        MoveActionAttack.attackTarget(e);
         return 0;
     }
 
     public static int struggle(EventManager e) {
-        MoveActionAttackDamage.dealDamageRecoil(e, 25);
+        MoveActionAttack.attackTarget(e);
         return 0;
     }
 }

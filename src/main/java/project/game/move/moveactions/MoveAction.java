@@ -20,7 +20,7 @@ public interface MoveAction {
     }
 
     public static void displayFailMessage(EventManager e) {
-        BattleLog.add(e.eventData.message);
+        BattleLog.add(e.data.message);
     }
 
 

@@ -18,7 +18,7 @@ public interface MoveActionChangeStat extends MoveAction {
      * @param chance The stat change success rate
      */
     private static void changeEachStat(EventManager eventManager, int[] stats) {
-        EventData data  = eventManager.eventData;
+        EventData data  = eventManager.data;
         Pokemon p = data.effectTarget;
         data.statChanges = stats;
 
@@ -42,7 +42,7 @@ public interface MoveActionChangeStat extends MoveAction {
     }
 
     public static void changeStats(EventManager eventManager, int[] stats, double chance) {
-        EventData data  = eventManager.eventData;
+        EventData data  = eventManager.data;
         data.statProb = chance;
         if (data.user.getConditions().isFainted() || new Random().nextDouble() > chance * 0.01) {
             data.statFailed = true;

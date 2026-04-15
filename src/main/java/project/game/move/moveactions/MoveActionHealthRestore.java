@@ -8,7 +8,7 @@ import project.game.pokemon.Pokemon;
 public interface MoveActionHealthRestore extends MoveAction {
         // Restores a percentage of a Pokemon's maximum HP
     public static void restoreHp(EventManager eventManager, double percent) {
-        EventData data  = eventManager.eventData;
+        EventData data  = eventManager.data;
         Pokemon p = data.attackTarget;
 
         data.healPercent = percent;

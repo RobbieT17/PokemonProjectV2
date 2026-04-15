@@ -9,7 +9,7 @@ import project.game.utility.Protection;
 
 public interface  MoveActionBracing extends MoveAction {
      public static void pokemonProtects(EventManager eventManager, Protection b, String success) {
-        EventData data  = eventManager.eventData;
+        EventData data  = eventManager.data;
         Pokemon p = data.user;
         data.protectionType = b;
         data.message = success;

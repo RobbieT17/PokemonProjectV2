@@ -109,7 +109,7 @@ public interface HeldItemManager {
 
         p.getEvents().addEventListener(flags[0], name, e -> {
             if (p.firstRound()) return;
-            p.setMove(p.getFirstMove());
+            p.setMoveSelected(p.getFirstMove());
         });
 
         p.getEvents().addEventListener(flags[1], name, e -> p.getAttack().setMod(150));
@@ -124,7 +124,7 @@ public interface HeldItemManager {
 
         p.getEvents().addEventListener(flags[0], name, e -> {
             if (p.firstRound()) return;
-            p.setMove(p.getFirstMove());
+            p.setMoveSelected(p.getFirstMove());
         });
 
         p.getEvents().addEventListener(flags[1], name, e -> p.getSpeed().setMod(150));
@@ -139,7 +139,7 @@ public interface HeldItemManager {
 
         p.getEvents().addEventListener(flags[0], name, e -> {
             if (p.firstRound()) return;
-            p.setMove(p.getFirstMove());
+            p.setMoveSelected(p.getFirstMove());
         });
 
         p.getEvents().addEventListener(flags[1], name, e -> p.getSpecialAttack().setMod(150));

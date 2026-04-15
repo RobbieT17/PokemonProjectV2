@@ -151,7 +151,7 @@ public class ClientHandler implements Runnable {
             return null;
         }
 
-        p.setMove(m);
+        p.setMoveSelected(m);
 
         Server.logp(this.playerNum, "Move selected.");
         this.writeToBuffer("You selected %s", p.getMoveSelected());

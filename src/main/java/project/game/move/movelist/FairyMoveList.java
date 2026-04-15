@@ -8,7 +8,7 @@ import project.game.move.moveactions.MoveActionChangeStat;
 public class FairyMoveList {
 
     public static int charm(EventManager e) {
-        MoveActionAccuracy.moveHits(e);
+        MoveActionAccuracy.rollForAccuracy(e);
         MoveActionChangeStat.changeStats(e, MoveAction.stats(-2, 0, 0, 0, 0, 0, 0));
         return 0;
     }

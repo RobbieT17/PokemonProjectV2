@@ -59,4 +59,16 @@ public class MoveEffect {
         return this.percent;
     }
 
+    // Wrapper Functions
+    public int[] statsToIntArray() {
+        return new int[] {
+            this.stats.getAtk(),
+            this.stats.getDef(),
+            this.stats.getSpAtk(),
+            this.stats.getSpDef(),
+            this.stats.getSpd(),
+            this.stats.getAcc(),
+            this.stats.getEva()
+        };
+    }
 }

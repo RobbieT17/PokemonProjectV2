@@ -97,7 +97,7 @@ public interface MoveActionChangeCondition extends MoveAction {
     }
 
     public static void applyCondition(EventManager eventManager, StatusConditionID id, double chance) {
-        EventData data  = eventManager.eventData;
+        EventData data  = eventManager.data;
         Pokemon p = data.effectTarget;
         data.statusChange = id;
         data.statusProb = chance;
@@ -128,9 +128,9 @@ public interface MoveActionChangeCondition extends MoveAction {
             case StatusConditionID.Bound -> applyBound(c);
             case StatusConditionID.Confusion -> applyConfusion(c);
             case StatusConditionID.Seeded -> applySeeded(c);
-            case StatusConditionID.Fly_State -> flyState(c);
-            case StatusConditionID.Dig_State -> digState(c);
-            case StatusConditionID.Dive_State -> diveState(c);
+            case StatusConditionID.Fly_State -> {enterImmuneState(eventManager, id); flyState(c);}
+            case StatusConditionID.Dig_State -> {enterImmuneState(eventManager, id); digState(c);}
+            case StatusConditionID.Dive_State -> {enterImmuneState(eventManager, id); diveState(c);}
             default -> throw new IllegalArgumentException(StatusCondition.ID_ERR);
         }  
     }
@@ -146,25 +146,23 @@ public interface MoveActionChangeCondition extends MoveAction {
      * Pokemon leaves the state and attacks on the second turn
      */
     public static void enterImmuneState(EventManager eventManager, StatusConditionID state) {
-        EventData data  = eventManager.eventData;
+        EventData data  = eventManager.data;
         Pokemon attacker = data.user;
         data.immuneStateChange = state;
 
-        // Enters state
-        if (!attacker.getConditions().inImmuneState()) {
-            applyCondition(eventManager, state, 100);
-            return;
-        }
-
-        attacker.getConditions().removeCondition(data.immuneStateChange);
-        MoveActionAttackDamage.dealDamage(eventManager);
+        // Leave states if in it already (2nd part of the move)
+        if (attacker.getConditions().inImmuneState()) {
+            attacker.getConditions().removeCondition(data.immuneStateChange);
+            MoveActionAttack.attackTarget(eventManager);
+        } 
+    
     }
 
     /*
      * Pokemon is knocked out of their semi-invulnerable state, interrupted
      */
     public static void leaveImmuneState(EventManager eventManager, StatusConditionID state, String message) {
-        EventData data  = eventManager.eventData;
+        EventData data  = eventManager.data;
         Pokemon p = data.attackTarget;
         data.immuneStateChange = StatusConditionID.No_Invul;
     

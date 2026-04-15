@@ -14,7 +14,7 @@ public interface MoveActionCharge extends MoveAction{
      * Can be interrupted by status effects
      */
     public static void chargeMove(EventManager eventManager) {
-        EventData data  = eventManager.eventData;
+        EventData data  = eventManager.data;
         Pokemon attacker = data.user;
 
         if (!attacker.getConditions().hasKey(StatusConditionID.Charge)) {
@@ -27,7 +27,7 @@ public interface MoveActionCharge extends MoveAction{
         }
         
         attacker.getConditions().removeCondition(StatusConditionID.Charge);
-        MoveActionAttackDamage.dealDamage(eventManager); 
+        MoveActionAttack.attackTarget(eventManager); 
     }
 
 
@@ -36,7 +36,7 @@ public interface MoveActionCharge extends MoveAction{
     }
 
     public static void rechargeMove(EventManager eventManager) {
-        EventData data  = eventManager.eventData;
+        EventData data  = eventManager.data;
         data.user.getConditions().setRecharge(true);
     }
 
@@ -46,7 +46,7 @@ public interface MoveActionCharge extends MoveAction{
      * cannot act due to a status condition
      */
     public static void rampageMove(EventManager eventManager) {
-        EventData data  = eventManager.eventData;
+        EventData data  = eventManager.data;
         Pokemon attacker = data.user;
 
         // Starts rampage
@@ -57,7 +57,7 @@ public interface MoveActionCharge extends MoveAction{
             attacker.getConditions().addCondition(StatusConditionManager.rampage(c));
         }
        
-        MoveActionAttackDamage.dealDamage(eventManager);       
+        MoveActionAttack.attackTarget(eventManager);       
     }
 
 }

@@ -12,9 +12,12 @@ import project.game.utility.Protection;
 
 public class EventData {
     // Turn Info: Relevant to a singular Pokemon turn, this data is reset after each turn
-    public final BattleData battleData; // Contains trainer info
+    public final BattleData battleData; // Contains trainer and battlefied info (e.g. Weather effects)
     
+    
+    // TODO get rid of var pokemonList at some point, this is a bit redunant
     public final ArrayList<Pokemon> pokemonList; // List of Pokemon included in the event
+
     public final Pokemon user; // User of the move
     public final Move moveUsed; // Move Used
 
