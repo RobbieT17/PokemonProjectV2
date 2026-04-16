@@ -1,5 +1,6 @@
 package project.game.processors;
 
+import project.game.battle.BattleData;
 import project.game.battle.BattleLog;
 import project.game.event.EventManager;
 import project.game.event.GameEvents.EventID;
@@ -14,8 +15,8 @@ public class PokemonProcessor {
 
     private final EventManager eventManager;
     
-    public PokemonProcessor(EventManager e) {
-        this.eventManager = e;
+    public PokemonProcessor(BattleData data, Pokemon p) {
+        this.eventManager = new EventManager(data, p);
     }
 
     private void updateBeforeMoveEvents() {
@@ -71,7 +72,8 @@ public class PokemonProcessor {
      */
     public void useTurn(){
         Pokemon user = this.eventManager.data.user;
-
+        eventManager.updateEventMaps();
+        
         try {
             this.updateBeforeMoveEvents();
             this.useMove();

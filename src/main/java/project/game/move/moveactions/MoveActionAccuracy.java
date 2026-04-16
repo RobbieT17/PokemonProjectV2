@@ -28,14 +28,14 @@ private static void defenderProtects(Pokemon p) {
         Pokemon defender = data.attackTarget;
         Move move = data.moveUsed;
 
-        eventManager.notifyAllPokemon(EventID.MOVE_ACCURACY);
+        eventManager.notifyAttackTargetPokemon(EventID.MOVE_ACCURACY);
         defenderProtects(defender);
 
         int accuracy = move.getAccuracy();
 
         if (accuracy == Move.ALWAYS_HITS || defender.getConditions().isImmobilized()) {
             data.moveHits = true;
-            eventManager.notifyAllPokemon(EventID.MOVE_HITS);
+            eventManager.notifyAttackTargetPokemon(EventID.MOVE_HITS);
             return;
         }
 		
@@ -48,6 +48,6 @@ private static void defenderProtects(Pokemon p) {
         }
             
         data.moveHits = true;
-        eventManager.notifyAllPokemon(EventID.MOVE_HITS);
+        eventManager.notifyAttackTargetPokemon(EventID.MOVE_HITS);
     }
 }

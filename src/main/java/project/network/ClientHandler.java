@@ -9,6 +9,7 @@ import java.net.Socket;
 
 import project.game.move.Move;
 import project.game.move.MoveSelector;
+import project.game.move.Move.MoveTarget;
 import project.game.player.PokemonTrainer;
 import project.game.player.PokemonTrainerSelector;
 import project.game.pokemon.Pokemon;
@@ -159,6 +160,23 @@ public class ClientHandler implements Runnable {
         return m;
     }
 
+    // Prompts user to select the target of the move
+    // TODO: Currently, no input is needed bc only implemented single battle (will add double battles soon)
+    public Pokemon selectTargetPokemon(Move m) {
+        Server.logp(this.playerNum, "Selecting a target...");
+
+        Pokemon target;
+        if (m.getMoveTarget() == MoveTarget.Self) {
+            target = Server.PLAYERS[this.clientId].getPokemonInBattle();
+        }
+        else {
+            target = Server.PLAYERS[(this.clientId + 1) % 2].getPokemonInBattle();
+        }
+
+        this.player.getPokemonInBattle().setTargetSelected(target);
+        return target;
+    }
+
     public void setup() {
         // Notifies client the server connection was successful
         this.writeToBuffer("You are now connected to the server.");
@@ -190,7 +208,8 @@ public class ClientHandler implements Runnable {
         while (this.socket.isConnected()) {
             Server.lock(); // Waits for server to finish processing
 
-            this.selectMove(this.player.getPokemonInBattle());
+            Move m = this.selectMove(this.player.getPokemonInBattle());
+            this.selectTargetPokemon(m);
             this.writeToBuffer("Waiting for opponent....");
             Server.lock(); // Waits for opponent
 

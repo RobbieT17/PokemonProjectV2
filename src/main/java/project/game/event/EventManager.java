@@ -24,16 +24,8 @@ public class EventManager {
         this.data.effectTarget.getEvents().updateEvent(id, this.data);
     }
 
-    public void notifyAllPokemon(EventID eventName) {
-        for (Pokemon p : this.data.pokemonList) {
-            p.getEvents().updateEvent(eventName, this.data);
-        }
-    }
-
     public void updateEventMaps() {
-        for (Pokemon p : this.data.pokemonList) {
-            p.getEvents().updateEventMaps();
-        }
+        this.data.user.getEvents().updateEventMaps();
     }
 
 }

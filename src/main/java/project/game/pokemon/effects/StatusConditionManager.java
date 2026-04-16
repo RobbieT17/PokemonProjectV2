@@ -316,7 +316,7 @@ public interface StatusConditionManager {
     // Pokemon flinches and can't act for the round
     public static StatusCondition flinch(StatusContext c) {
         Pokemon p = c.target;
-        StatusConditionID id = StatusConditionID.Charge;
+        StatusConditionID id = StatusConditionID.Flinch;
         String name = id.name();
         EventID[] flags = new EventID[] {EventID.BEFORE_MOVE};
 

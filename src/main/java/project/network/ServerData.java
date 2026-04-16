@@ -64,10 +64,10 @@ public class ServerData {
      * @return New Move Object
      */
     public Move newMoveInstance(String moveName) {
-        MoveData data = this.moveDatabase.get(moveName);
+        MoveData data = this.moveDatabase.get(moveName.replaceAll("[ -]", "_"));
 
         if (data == null) {
-            throw new IllegalArgumentException(moveName + " not found in pokemon database\n");
+            throw new IllegalArgumentException(moveName + " not found in move database\n");
         }
         
         return new Move(

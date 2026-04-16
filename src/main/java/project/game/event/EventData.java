@@ -14,10 +14,6 @@ public class EventData {
     // Turn Info: Relevant to a singular Pokemon turn, this data is reset after each turn
     public final BattleData battleData; // Contains trainer and battlefied info (e.g. Weather effects)
     
-    
-    // TODO get rid of var pokemonList at some point, this is a bit redunant
-    public final ArrayList<Pokemon> pokemonList; // List of Pokemon included in the event
-
     public final Pokemon user; // User of the move
     public final Move moveUsed; // Move Used
 
@@ -54,25 +50,14 @@ public class EventData {
 
     public String message = ""; // A message produced 
    
-
-    public EventData(BattleData data, Pokemon a, Pokemon b, Move m) {
+    public EventData(BattleData data, Pokemon user, Pokemon target, Move m) {
         this.battleData = data;
-        this.user = a;
+        this.user = user;
         this.moveUsed = m;
-        this.pokemonList = buildPokemonList(a, b);
 
-        this.attackTarget = b;
-        this.effectTarget = b; 
+        this.attackTarget = target;
+        this.effectTarget = target; 
         this.otherMoveMods = 1.0;
-    }
-
-    private ArrayList<Pokemon> buildPokemonList(Pokemon a, Pokemon b) {
-        ArrayList<Pokemon> list = new ArrayList<>();
-
-        list.add(a);
-        list.add(b);
-
-        return list;
     }
 
     // Methods

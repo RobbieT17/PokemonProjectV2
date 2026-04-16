@@ -33,6 +33,7 @@ public class GameEvents {
         this.eventMap = new HashMap<>();
 
         this.addEventMapEntry(EventID.MOVE_HITS);
+        this.addEventMapEntry(EventID.STAT_CHANGE);
         this.addEventMapEntry(EventID.STATUS_CONDITION_CHANGE);
         this.addEventMapEntry(EventID.SWITCH_IN);
         this.addEventMapEntry(EventID.MOVE_MAKES_CONTACT);

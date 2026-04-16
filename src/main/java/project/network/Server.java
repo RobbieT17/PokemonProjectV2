@@ -130,11 +130,6 @@ public class Server {
     }
 
     public static void main(String[] args) throws IOException {
-
-        Pokemon p1 = SERVER_DATA.newPokemonInstance(Pokedex.Venusaur, 50);
-        Pokemon p2 = SERVER_DATA.newPokemonInstance(Pokedex.Charizard, 1);
-        Pokemon p3 = SERVER_DATA.newPokemonInstance(Pokedex.Blastoise, 100);
-
         ServerSocket serverSocket = new ServerSocket(Server.PORT);
         start(serverSocket);
         beginBattle();

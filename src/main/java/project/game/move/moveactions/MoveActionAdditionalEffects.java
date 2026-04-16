@@ -29,6 +29,10 @@ public interface MoveActionAdditionalEffects {
     public static void applyAdditionEffects(EventManager e) {
         AdditonalEffects ae = e.data.moveUsed.getAdditionalEffects();
 
+        if (ae == null) {
+            return;
+        }
+
         MoveEffect statChange = ae.getStatChange();
         MoveEffect conditionChange = ae.getConditionChange();
         MoveEffect conditionChange2 = ae.getConditionChange2();

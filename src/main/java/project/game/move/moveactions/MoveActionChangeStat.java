@@ -22,7 +22,7 @@ public interface MoveActionChangeStat extends MoveAction {
         Pokemon p = data.effectTarget;
         data.statChanges = stats;
 
-        eventManager.notifyAllPokemon(EventID.STAT_CHANGE);
+        eventManager.notifyAttackTargetPokemon(EventID.STAT_CHANGE);
         
         for (int i = 0; i < stats.length; i++) {
             int change = stats[i];

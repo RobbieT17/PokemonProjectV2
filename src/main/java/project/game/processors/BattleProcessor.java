@@ -87,7 +87,7 @@ public class BattleProcessor {
     public void processPokemonActions() {
         // Faster pokemon acts first, followed by the second
         for (Pokemon p : this.turnOrder) {
-            PokemonProcessor pokemonProcessor = new PokemonProcessor(new EventManager(this.battleData, p));
+            PokemonProcessor pokemonProcessor = new PokemonProcessor(this.battleData, p);
             pokemonProcessor.useTurn();
         }
     }
