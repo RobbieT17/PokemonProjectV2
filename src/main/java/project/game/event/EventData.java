@@ -1,7 +1,5 @@
 package project.game.event;
 
-import java.util.ArrayList;
-
 import project.game.battle.BattleData;
 import project.game.battle.Weather.WeatherEffect;
 import project.game.move.Move;

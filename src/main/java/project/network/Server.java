@@ -7,9 +7,8 @@ import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
 import project.game.battle.Battle;
+import project.game.battle.BattleStatus;
 import project.game.player.PokemonTrainer;
-import project.game.pokemon.Pokedex;
-import project.game.pokemon.Pokemon;
 import project.game.utility.Time;
 
 
@@ -30,8 +29,10 @@ public class Server {
 
     // Syncronizines client threads and server for processing
     public static final CyclicBarrier BARRIER = new CyclicBarrier(Server.NUM_CLIENTS + 1); 
-    public static int round = 0; // The current round number of the battle
 
+    // Values for round 
+    public static int round = 0; // The current round number of the battle
+    public static boolean skipRound; // Skips the round (usually if a Pokemon faints and the owners needs to switch them out)
 
 // Class Methods
     /**
@@ -73,6 +74,27 @@ public class Server {
         System.out.printf("[PLAYER %d] %s\n", n, String.format(s, args));
     }
 
+    // Checks for a fainted Pokemon. If so, the next round is skipped
+    public static void checkForFaintedPokemon() {
+        Server.skipRound = false; // Defaults to false, toggles true if pokemon fainted is found
+
+        for (PokemonTrainer pt : Server.PLAYERS) {
+            if (pt.getPokemonInBattle().getConditions().isFainted()) {
+                Server.log("%s fainted.", pt.getPokemonInBattle());
+                Server.skipRound = true;
+            }
+        }
+    }
+
+    // Checks if the winner of the battle has been determined
+    public static boolean checkForWinCon(BattleStatus status) {
+        if (status.getStatus() > 0) {
+            Server.log("Battle over. Terminating processes...");
+            return true;
+        }
+        return false;
+    }
+
     // Starts the server on the specified port
     // Waits for two clients to connect before finishing
     public static void start(ServerSocket ss) {
@@ -97,6 +119,35 @@ public class Server {
         }
     }
 
+    public static void battleLoop(Battle battle) {
+        while (true) {
+            Server.log("Waiting for players...");
+            Server.lock(); // Waits for players to choose a move
+
+            Time.hold(1); // Holds to simulate server delay
+
+            Server.log("Processing round...");  
+                
+            if (!Server.skipRound) {
+                BattleStatus status = battle.processRound();
+                Server.checkForFaintedPokemon();
+
+                if (Server.checkForWinCon(status)) {
+                    break;
+                }
+
+                Server.log("Round %d", ++Server.round);
+            }
+            else {
+                // Skips the round and resets skip round to false
+                battle.switchInMessage();
+                Server.skipRound = false;
+            }
+            
+            Server.lock();
+        }
+    }
+
 
     // Starts a new Pokemon battle
     public static void beginBattle() {
@@ -111,27 +162,20 @@ public class Server {
         Server.lock();
 
         battle.initiatationMessage();
+        battle.switchInMessage();
+        Server.log("Round %d", ++Server.round);
 
         Server.lock();
 
-        while (true) {
-            Server.log("Waiting for players...");
-            Server.lock(); // Waits for players to choose a move
-
-            Time.hold(3); // Holds to simulate server delay
-
-            Server.log("Processing round...");  
-            battle.processRound();
-
-            Server.log("Round %d", ++Server.round);
-            Server.lock();
-        }
+        Server.battleLoop(battle);
             
     }
 
     public static void main(String[] args) throws IOException {
         ServerSocket serverSocket = new ServerSocket(Server.PORT);
-        start(serverSocket);
-        beginBattle();
+        Server.start(serverSocket);
+        Server.beginBattle();
+        Server.close(serverSocket);
+        System.exit(0);
     }
 }

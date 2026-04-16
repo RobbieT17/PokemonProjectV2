@@ -7,6 +7,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 
+import project.debug.MockPokemonTeam;
+import project.game.event.GameEvents.EventID;
 import project.game.move.Move;
 import project.game.move.MoveSelector;
 import project.game.move.Move.MoveTarget;
@@ -17,6 +19,8 @@ import project.game.pokemon.PokemonSelector;
 
 // NOTE: This class is run server side
 public class ClientHandler implements Runnable {
+
+    private final static boolean debug = true; // For debugging, uses preset pokemon team
 
     private Socket socket;
     private BufferedReader bufferedReader;
@@ -100,6 +104,8 @@ public class ClientHandler implements Runnable {
 
         this.writeToBuffer("Please enter your name >>");
         this.clientName = this.readFromBuffer();
+
+        this.clientName = !this.clientName.isEmpty() ? this.clientName : "Player " + this.playerNum;
         
         // Welcome message
         this.writeToBuffer("=======================================");
@@ -117,10 +123,16 @@ public class ClientHandler implements Runnable {
     public void buildTeam() {
         Server.logp(this.playerNum, "Building team...");
 
-        PokemonTrainerSelector pokemonTrainerSelector = new PokemonTrainerSelector(this);
-        Server.PLAYERS[this.clientId] = pokemonTrainerSelector.initializPokemonTrainer();
-        this.player = Server.PLAYERS[this.clientId]; // Adds a reference to the trainer object for easier access
-        
+        if (debug) {
+            this.writeToBuffer("<DEBUG MODE ACTIVE> Using preset team build.");
+            this.player = MockPokemonTeam.build(this.clientId, this.clientName);
+        }
+        else {
+            PokemonTrainerSelector pokemonTrainerSelector = new PokemonTrainerSelector(this);
+            this.player = pokemonTrainerSelector.initializPokemonTrainer();
+        }
+
+        Server.PLAYERS[this.clientId] = this.player; // Adds reference of trainer to Server class
         Server.logp(this.playerNum, "Ready for battle.");
     }
 
@@ -137,7 +149,10 @@ public class ClientHandler implements Runnable {
         }
 
         this.player.sendOut(p);
+
         Server.logp(this.playerNum, "Sent out %s.", this.player.getPokemonInBattle());
+        this.writeToBuffer("You sent out %s.", this.player.getPokemonInBattle());
+
         return p;
     }
 
@@ -145,8 +160,17 @@ public class ClientHandler implements Runnable {
     public Move selectMove(Pokemon p) {
         Server.logp(this.playerNum, "Selecting a move...");
 
-        MoveSelector selector = new MoveSelector(this, p);
-        Move m = selector.chooseMove();
+        p.getEvents().updateEvent(EventID.MOVE_SELECTION, null);
+
+        Move m;
+        if (p.getMoveSelected() == null) {
+            MoveSelector selector = new MoveSelector(this, p);
+            m = selector.chooseMove();
+        }
+        else {
+            m = p.getMoveSelected();
+        }
+        
 
         if (m == null) {
             return null;
@@ -165,6 +189,10 @@ public class ClientHandler implements Runnable {
     public Pokemon selectTargetPokemon(Move m) {
         Server.logp(this.playerNum, "Selecting a target...");
 
+        if (m == null) {
+            return null;
+        }
+
         Pokemon target;
         if (m.getMoveTarget() == MoveTarget.Self) {
             target = Server.PLAYERS[this.clientId].getPokemonInBattle();
@@ -174,6 +202,9 @@ public class ClientHandler implements Runnable {
         }
 
         this.player.getPokemonInBattle().setTargetSelected(target);
+
+        Server.logp(this.playerNum, "Target locked.");
+        this.writeToBuffer("Target: %s", target == this.player.getPokemonInBattle() ? "Self" : target);
         return target;
     }
 
@@ -198,8 +229,7 @@ public class ClientHandler implements Runnable {
         this.selectPokemon();
 
         // Waits for other player to finish setup
-        this.writeToBuffer("You sent out %s.\nWaiting for opponent...", this.player.getPokemonInBattle(), 
-        this.playerNum);
+        this.writeToBuffer("Waiting for opponent...");
         Server.lock();
     }
 
@@ -208,11 +238,24 @@ public class ClientHandler implements Runnable {
         while (this.socket.isConnected()) {
             Server.lock(); // Waits for server to finish processing
 
-            Move m = this.selectMove(this.player.getPokemonInBattle());
-            this.selectTargetPokemon(m);
-            this.writeToBuffer("Waiting for opponent....");
-            Server.lock(); // Waits for opponent
+            // A skipped round indicates a Pokemon fainted the last round, checks if this client's pokemon fainted
+            if (Server.skipRound) {
+                // Fainted Pokemon needs to be switched out, player selects a new Pokemon
+                // Notifies the server to skip the round
+                if (this.player.getPokemonInBattle().getConditions().isFainted()) {
+                    this.selectPokemon();
+                }
+                else { // Indicates the other player's pokemon fainted
+                    this.writeToBuffer("Waiting for opponent to choose new Pokemon....");
+                }
+            } 
+            else {
+                Move m = this.selectMove(this.player.getPokemonInBattle());
+                this.selectTargetPokemon(m);
+                this.writeToBuffer("Waiting for opponent....");
+            }
 
+            Server.lock(); // Waits for opponent
             this.writeToBuffer("Waiting for server...");
 
             if (this.socket.isClosed()) { // Checks if socket was closed
@@ -234,7 +277,7 @@ public class ClientHandler implements Runnable {
         return this.player;
     }
 
-// Main Function: Clients inputs a commands to send back to the server (currenly echos what was read to terminal)
+// Main Function: Clients inputs commands to send back to the server 
     @Override
     public void run() {
         this.setup();

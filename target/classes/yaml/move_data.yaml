@@ -73,8 +73,8 @@ moves:
   name: Fury Attack
   type: Normal
   category: Physical
-  pp: 15
-  pow: 85
+  pp: 20
+  pow: 15
   acc: 85
   multiHit: true
 

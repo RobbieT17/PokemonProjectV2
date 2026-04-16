@@ -5,6 +5,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.net.ConnectException;
 import java.net.Socket;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
@@ -87,12 +88,16 @@ public class Client {
 
     public static void main(String[] args) throws IOException {
         // Step 1: Establish connection with the server
-        Socket socket = new Socket("localhost", Server.PORT);
-        Client client = new Client(socket);
-        
-        // Step 2: Send/Recieve data to/from the server
-        client.readFromServer();
-        client.sendToServer();
+        try {
+            Socket socket = new Socket("localhost", Server.PORT);
+            Client client = new Client(socket);
+            
+            // Step 2: Send/Recieve data to/from the server
+            client.readFromServer();
+            client.sendToServer();
+        } catch (ConnectException e) {
+            System.out.println("[ERROR] Failed to connect to server.");
+        }
     
     }
 }

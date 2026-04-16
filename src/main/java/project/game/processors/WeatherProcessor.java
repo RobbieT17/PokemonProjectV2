@@ -61,10 +61,9 @@ public class WeatherProcessor {
         switch (this.battleData.getCurrenWeather().getWeatherEffect()) {
             case WeatherEffect.Sandstorm ->  {
                 // Digital, Ground, Rock, and Steel types are immune to sandstorm
-                if (p.isType(Type.Digital) || 
-                    p.isType(Type.Ground) || 
-                    p.isType(Type.Rock) || 
-                    p.isType(Type.Steel)) return;
+                if (p.isType(Type.Digital) || p.isType(Type.Ground) || p.isType(Type.Rock) || p.isType(Type.Steel)) {
+                    return;
+                }
 
                 int damage = (int) (p.getHp().getMaxHealthPoints() / 8.0);
                 BattleLog.add("%s took %d damage from the sandstorm!", p, damage);
@@ -72,7 +71,9 @@ public class WeatherProcessor {
             }
             case WeatherEffect.Hail ->  {
                 // Digital and Ice types are immune to hail
-                if (p.isType(Type.Digital) || p.isType(Type.Ice)) return;
+                if (p.isType(Type.Digital) || p.isType(Type.Ice)) {
+                    return;
+                }
 
                 int damage = (int) (p.getHp().getMaxHealthPoints() / 16.0);  
                 BattleLog.add("%s took %d damage from the hail!", p, damage);

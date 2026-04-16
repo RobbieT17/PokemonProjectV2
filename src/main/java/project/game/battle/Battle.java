@@ -1,5 +1,6 @@
 package project.game.battle;
 
+import project.game.exceptions.BattleEndedException;
 import project.game.player.PokemonTrainer;
 import project.game.processors.BattleProcessor;
 
@@ -32,24 +33,48 @@ public class Battle {
      */
     public void initiatationMessage() {
         BattleLog.add("Let the battle begin!");
-        BattleLog.add("%s sends out %s!", this.player1, this.player1.getPokemonInBattle());
-        BattleLog.add("%s sends out %s!", this.player2, this.player2.getPokemonInBattle());
+        BattleLog.out();
+    }
+
+    /**
+     * Brodacts a new switched in Pokemon. This done by checking if the player's Pokemon
+     * just switched in this turn.
+     */
+    public void switchInMessage() {
+        if (this.player1.getPokemonInBattle().getConditions().isSwitchedIn()) {
+            BattleLog.add("%s sends out %s!", this.player1, this.player1.getPokemonInBattle());
+        }
+        if (this.player2.getPokemonInBattle().getConditions().isSwitchedIn()) {
+            BattleLog.add("%s sends out %s!", this.player2, this.player2.getPokemonInBattle());
+        }
         BattleLog.out();
     }
 
     /**
      * Processes the round based on what each player chose.
      * For now, it just prints out which moves each pokemon used.
+     * 
+     * @returns A positive int if a win condition is met
      */
-    public void processRound() {
-        // Determine move order
-        BattleProcessor battleActions = new BattleProcessor(this.battleData);
+    public BattleStatus processRound() {
+        BattleStatus status;
+        try {
+            BattleProcessor battleProcessor = new BattleProcessor(this.battleData);
         
-        battleActions.constructTurnOrder();
-        battleActions.processPokemonActions();
-        battleActions.checkWinConditions();
-        battleActions.processRoundEnd();
+            battleProcessor.constructTurnOrder();
+            battleProcessor.processPokemonActions();
+            battleProcessor.checkWinConditions();
+            battleProcessor.processRoundEnd();
 
+            
+            status = new BattleStatus(0);
+        } catch (BattleEndedException e) {
+            BattleLog.add(e.getMessage());
+            status = new BattleStatus(1, e.getMessage());
+        }
+        
         BattleLog.out();
+        return status;
+     
     }
 }

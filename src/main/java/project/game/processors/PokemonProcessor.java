@@ -72,6 +72,11 @@ public class PokemonProcessor {
      */
     public void useTurn(){
         Pokemon user = this.eventManager.data.user;
+
+        if (user.getConditions().isFainted()) {
+            return;
+        }
+
         eventManager.updateEventMaps();
         
         try {

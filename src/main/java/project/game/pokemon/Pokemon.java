@@ -114,7 +114,7 @@ public class Pokemon {
 
     // Takes damage equal to a percent of max HP
     public void takeDamagePercentMaxHP(double percent, String message) {
-        int damage = (int) (this.getHp().getCurrentHealthPoints() * percent);
+        int damage = (int) (this.getHp().getMaxHealthPoints() * percent);
         BattleLog.add("%s took %d damage%s", this, damage, message + "!");
         this.takeDamage(damage);
     }
@@ -246,23 +246,18 @@ public class Pokemon {
         if (this.conditions.isFainted()) {
             this.conditions.clearPrimary();
             this.conditions.clearVolatileConditions();
-            return;
         }
             
         this.clearStatMods();
         this.conditions.setTookDamage(false);
         this.conditions.setHasMoved(false);
-     
-    
-        if (this.conditions.isSwitchedIn()) {
-            this.conditions.setSwitchedIn(false);
-            return;
-        }
+        this.conditions.setSwitchedIn(false);
 
-        this.resetMove();
         this.damageDealt = 0;
         this.damageReceived = 0;
         this.roundCount++;
+
+        this.resetMove();
     }
 
     // Clears any temporary effects and volatile conditions

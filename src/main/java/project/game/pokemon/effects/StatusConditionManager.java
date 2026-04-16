@@ -380,6 +380,11 @@ public interface StatusConditionManager {
         return new StatusCondition(p, name, flags);
     }
 
+    /**
+     * A Pokemon is seeded! This means the opposing
+     * Pokemon in battle drains HP from the bearer
+     * at the end of each round.
+     */
     public static StatusCondition seeded(StatusContext c) {
         Pokemon p = c.target;
         Pokemon r = c.source;
@@ -505,8 +510,12 @@ public interface StatusConditionManager {
         String name = id.name();
         EventID[] flags = new EventID[] {EventID.MOVE_SELECTION, EventID.MOVE_INTERRUPTED};
 
-        p.getEvents().addEventListener(flags[0], name, e -> p.setMoveSelected(m));
-        p.getEvents().addEventListener(flags[1], name, e -> p.getConditions().removeCondition(id));
+        p.getEvents().addEventListener(flags[0], name, e -> {
+            p.setMoveSelected(m);
+        });
+        p.getEvents().addEventListener(flags[1], name, e -> {
+            p.getConditions().removeCondition(id);
+        });
 
         return new StatusCondition(p, id.name(), flags);
 	}

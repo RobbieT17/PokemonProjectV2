@@ -5,7 +5,10 @@ import java.util.Random;
 import project.game.battle.BattleData;
 import project.game.event.EventManager;
 import project.game.event.GameEvents.EventID;
+import project.game.exceptions.BattleEndedException;
+import project.game.exceptions.PokemonFaintedException;
 import project.game.move.Move;
+import project.game.player.PokemonTrainer;
 import project.game.pokemon.Pokemon;
 
 public class BattleProcessor {
@@ -83,35 +86,61 @@ public class BattleProcessor {
 
     /**
      * Each pokemon acts and targets their opponent with the move chosen
+     * Function terminates early if a <b>PokemonFaintedException</b> is caught.
      */
     public void processPokemonActions() {
         // Faster pokemon acts first, followed by the second
-        for (Pokemon p : this.turnOrder) {
+        try {
+            for (Pokemon p : this.turnOrder) {
             PokemonProcessor pokemonProcessor = new PokemonProcessor(this.battleData, p);
             pokemonProcessor.useTurn();
         }
+        } catch (PokemonFaintedException e) {
+            return;
+        }
+        
     }
 
     /**
      * Checks if a Pokemon has fainted or the battle has been won (player is out of Pokemon)
      */
     public void checkWinConditions() {
-
+        PokemonTrainer t1 = this.pokemon1.getOwner();
+        PokemonTrainer t2 = this.pokemon2.getOwner();
+        
+        if (t1.outOfPokemon() && t2.outOfPokemon()) {
+            throw new BattleEndedException("Both players are out of Pokemon, it's a tie!");
+        }
+        else if (t1.outOfPokemon()) {
+            throw new BattleEndedException(t2, t1);
+        }
+        else if (t2.outOfPokemon()){
+            throw new BattleEndedException(t1, t2);
+        }
     }
 
     /**
      * Process the after effects of a round.
      * Updates specific events and also
      * reset any Pokemon params needed.
+     * 
      */
     public void processRoundEnd() {
         for (Pokemon p : this.turnOrder) {
             p.endOfRoundReset();
 
-            EventManager eventManager = new EventManager(this.battleData, p);
-            eventManager.notifyUserPokemon(EventID.WEATHER_EFFECT);
-            eventManager.notifyUserPokemon(EventID.END_OF_ROUND);
+            try {
+                EventManager eventManager = new EventManager(this.battleData, p);
+                eventManager.updateEventMaps();
+                eventManager.notifyUserPokemon(EventID.WEATHER_EFFECT);
+                eventManager.notifyUserPokemon(EventID.END_OF_ROUND);
+            } catch (PokemonFaintedException e) { 
+                // Some effects might cause the Pokemon to faint, skip to next Pokemon if so
+                continue;
+            }
+            
         }
 
     }
+
 }
