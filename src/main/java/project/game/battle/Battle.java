@@ -37,7 +37,7 @@ public class Battle {
     }
 
     /**
-     * Brodacts a new switched in Pokemon. This done by checking if the player's Pokemon
+     * Brodcasts a new switched-in Pokemon alert. This done by checking if the player's Pokemon
      * just switched in this turn.
      */
     public void switchInMessage() {

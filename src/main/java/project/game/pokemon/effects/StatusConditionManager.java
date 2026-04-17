@@ -120,7 +120,7 @@ public interface StatusConditionManager {
      * and reduces special-move damage by 50%. If the infected Pokemon uses a contact move,
      * the targeted Pokemon is also infected.
      *  
-     * If the infected Pokemon is a Zombie-Type, their speed is doubled instead of the debuffs.
+     * If the infected Pokemon is a Zombie-Type, their speed is doubled instead.
      * Only Non-Zombie Pokemon can infect Zombie-Type Pokemon.
      */
      public static StatusCondition infect(StatusContext c) {
@@ -331,7 +331,7 @@ public interface StatusConditionManager {
     // Traps Pokemon from escaping battle and loses 1/8 of max HP
     public static StatusCondition bound(StatusContext c) {
         Pokemon p = c.target;
-        StatusConditionID id = StatusConditionID.Charge;
+        StatusConditionID id = StatusConditionID.Bound;
         String name = id.name();
         EventID[] flags = new EventID[] {EventID.END_OF_ROUND, EventID.SWITCH_OUT};
 
@@ -357,7 +357,7 @@ public interface StatusConditionManager {
      */
     public static StatusCondition confusion(StatusContext c) {
         Pokemon p = c.target;
-        StatusConditionID id = StatusConditionID.Charge;
+        StatusConditionID id = StatusConditionID.Confusion;
         String name = id.name();
         EventID[] flags = new EventID[] {EventID.STATUS_BEFORE};
 
@@ -388,7 +388,7 @@ public interface StatusConditionManager {
     public static StatusCondition seeded(StatusContext c) {
         Pokemon p = c.target;
         Pokemon r = c.source;
-        StatusConditionID id = StatusConditionID.Charge;
+        StatusConditionID id = StatusConditionID.Seeded;
         String name = id.name();
         EventID[] flags = new EventID[] {EventID.END_OF_ROUND};
 
@@ -410,7 +410,7 @@ public interface StatusConditionManager {
         Pokemon p = c.target;
         Move m = c.move;
         int n = c.count;
-        StatusConditionID id = StatusConditionID.Charge;
+        StatusConditionID id = StatusConditionID.Forced_Move;
         String name = id.name();
         EventID[] flags = new EventID[] {EventID.MOVE_SELECTION, EventID.END_OF_ROUND};
 
@@ -432,7 +432,7 @@ public interface StatusConditionManager {
     public static StatusCondition focused(StatusContext c) {
         Pokemon p = c.target;
         Move m = c.move;
-        StatusConditionID id = StatusConditionID.Charge;
+        StatusConditionID id = StatusConditionID.Focused;
         String name = id.name();
         EventID[] flags = new EventID[] {EventID.MOVE_SELECTION, EventID.USE_MOVE, EventID.MOVE_HITS};
 
@@ -456,7 +456,7 @@ public interface StatusConditionManager {
     // Grounded Pokemon are vulnerable to Ground-Type moves (even Flying-Types) 
     public static StatusCondition grounded(StatusContext c) {
         Pokemon p = c.target;
-        StatusConditionID id = StatusConditionID.Charge;
+        StatusConditionID id = StatusConditionID.Grounded;
         String name = id.name();
         EventID[] flags = new EventID[] {EventID.MOVE_EFFECTIVENESS};
 
@@ -478,7 +478,7 @@ public interface StatusConditionManager {
     public static StatusCondition rampage(StatusContext c) {
         Pokemon p = c.target;
         Move m = c.move;
-        StatusConditionID id = StatusConditionID.Charge;
+        StatusConditionID id = StatusConditionID.Rampage;
         String name = id.name();
         EventID[] flags = new EventID[] {EventID.MOVE_SELECTION, EventID.END_OF_TURN, EventID.MOVE_INTERRUPTED};
 
@@ -533,12 +533,13 @@ public interface StatusConditionManager {
     public static String failMessage(StatusConditionID id) {
         return switch (id) {
             case StatusConditionID.Burn -> "is already burned!";
+            case StatusConditionID.Infect -> "is already infected!";
             case StatusConditionID.Freeze -> "is already frozen!";
             case StatusConditionID.Paralysis -> "is already paralyzed!";
             case StatusConditionID.Poison, StatusConditionID.Bad_Poison -> "is already poisoned!";
             case StatusConditionID.Sleep -> "is already asleep!";
             
-            default -> throw new IllegalArgumentException(StatusCondition.ID_ERR);
+            default -> throw new IllegalArgumentException(StatusCondition.ID_ERR + id);
         };
     }
 
@@ -549,7 +550,7 @@ public interface StatusConditionManager {
             case StatusConditionID.Sleep -> " woke up!";
             case StatusConditionID.Bound -> " was freed!";
             case StatusConditionID.Confusion -> " snapped out of confusion!";
-            default -> throw new IllegalArgumentException(StatusCondition.ID_ERR);
+            default -> throw new IllegalArgumentException(StatusCondition.ID_ERR + id);
         };
     }
     

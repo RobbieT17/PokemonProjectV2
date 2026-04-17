@@ -22,7 +22,7 @@ public class PokemonConditions {
     private Protection protect; 
     private Protection endure;
 
-    private StatusCondition primaryCondition; // Non-Volatile Condition (Burn, Freeze, Paralysis, Poison, Sleep)
+    private StatusCondition primaryCondition; // Non-Volatile Condition (Burn, Freeze, Infect, Paralysis, Poison, Sleep)
     private final HashMap<String, StatusCondition> conditions; // All other conditions
 
 

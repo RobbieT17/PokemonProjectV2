@@ -27,22 +27,17 @@ public class MockPokemonTeam {
         p1.addMove(MockPokemonTeam.mockMove("Poison Powder"));
         p1.setNickName("Vince");
 
-        p2.addMove(MockPokemonTeam.mockMove("Take Down"));
+        p2.addMove(MockPokemonTeam.mockMove("Orbital Strike"));
         p2.addMove(MockPokemonTeam.mockMove("Leech Seed"));
         p2.addMove(MockPokemonTeam.mockMove("Amnesia"));
         p2.addMove(MockPokemonTeam.mockMove("Poison Powder"));
         p2.setNickName("Vance");
 
-        PokemonTrainer pt = new PokemonTrainerBuilder()
+        return new PokemonTrainerBuilder()
         .setName(name)
         .addPokemon(p1)
         .addPokemon(p2)
         .build();
-
-        p1.setOwner(pt);
-        p2.setOwner(pt);
-
-        return pt;
     }
 
     private static PokemonTrainer build2(String name) {
@@ -51,7 +46,7 @@ public class MockPokemonTeam {
 
         p1.addMove(MockPokemonTeam.mockMove("Sunny Day"));
         p1.addMove(MockPokemonTeam.mockMove("Inferno"));
-        p1.addMove(MockPokemonTeam.mockMove("Fake Out"));
+        p1.addMove(MockPokemonTeam.mockMove("Graveyard Shock"));
         p1.addMove(MockPokemonTeam.mockMove("Flamethrower"));
         p1.setNickName("Charlie");
 
@@ -61,17 +56,11 @@ public class MockPokemonTeam {
         p2.addMove(MockPokemonTeam.mockMove("Rain Dance"));
         p2.setNickName("Barry");
 
-        PokemonTrainer pt = new PokemonTrainerBuilder()
+        return new PokemonTrainerBuilder()
         .setName(name)
         .addPokemon(p1)
         .addPokemon(p2)
         .build();
-
-        p1.setOwner(pt);
-        p2.setOwner(pt);
-
-        return pt;
-
     }
 
     public static PokemonTrainer build(int id, String name) {

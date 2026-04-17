@@ -22,7 +22,9 @@ public class PokemonTrainer {
         this.team = team;
 
         // Sets the pokemons' owner to the this trainer
-        for (Pokemon p : team) p.setOwner(this);
+        for (Pokemon p : team) {
+            p.setOwner(this);
+        }
     }
 
 // Methods

@@ -10,7 +10,7 @@ import project.game.pokemon.effects.StatusContext;
 
 public interface MoveActionCharge extends MoveAction{
      /*
-     * Charges move first round, then unleashes it on the second
+     * Charges move first round, then unleashes it on the second.
      * Can be interrupted by status effects
      */
     public static void chargeMove(EventManager eventManager) {
@@ -41,9 +41,10 @@ public interface MoveActionCharge extends MoveAction{
     }
 
     /**
-     * Forces Pokemon to use the same move for 2-3 turns
-     * Rampage is disrupt if the move misses or the Pokemon
-     * cannot act due to a status condition
+     * Forces Pokemon to use the same move for 2-3 turns.
+     * Rampage is disrupted if the move misses or the Pokemon
+     * cannot act due to a status condition. If the move
+     * ends uninterrupted, the user becomes confused.
      */
     public static void rampageMove(EventManager eventManager) {
         EventData data  = eventManager.data;
@@ -59,5 +60,6 @@ public interface MoveActionCharge extends MoveAction{
        
         MoveActionAttack.attackTarget(eventManager);       
     }
+
 
 }

@@ -5,8 +5,7 @@ import project.game.pokemon.Pokemon;
 
 public class StatusCondition extends Effect {
 // Error Messages
-    public static final String ID_ERR = "Invalid status condition ID";
-
+    public static final String ID_ERR = "Invalid status condition ID: ";
 
     public StatusCondition(Pokemon p, String name, EventID[] flags) {
         super(p, name, flags);
