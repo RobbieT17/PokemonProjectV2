@@ -80,7 +80,7 @@ public interface HeldItemManager {
      */
     public static HeldItem bombSurprise(Pokemon p) {
         String name = HeldItemID.Bomb_Surprise.name();
-        EventID[] flags = new EventID[] {EventID.BEFORE_MOVE, EventID.DEF_MOVE_HITS, EventID.SWITCH_OUT};
+        EventID[] flags = new EventID[] {EventID.END_OF_ROUND, EventID.DEF_MOVE_HITS, EventID.SWITCH_OUT};
 
         Counter c = new Counter(3);
 
@@ -89,13 +89,15 @@ public interface HeldItemManager {
                 BattleLog.add("Surprise! %s's Bomb Surprise goes off!", p);
                 e.battleData.getPlayer1().getPokemonInBattle().faints();
                 e.battleData.getPlayer2().getPokemonInBattle().faints();
-                
-                throw new MoveInterruptedException();
             }
         });
 
-        p.getEvents().addEventListener(flags[1], name, e -> c.reset());
-        p.getEvents().addEventListener(flags[2], name, e -> c.reset());
+        p.getEvents().addEventListener(flags[1], name, e -> {
+            c.reset();
+        });
+        p.getEvents().addEventListener(flags[2], name, e -> {
+            c.reset();
+        });
 
         return new HeldItem(p, name, flags);
 	}
@@ -106,7 +108,7 @@ public interface HeldItemManager {
         EventID[] flags = new EventID[] {EventID.MOVE_SELECTION, EventID.ATK_DAMAGE_MULTIPLIER};
 
         p.getEvents().addEventListener(flags[0], name, e -> {
-            if (p.firstRound()) return;
+            if (p.isFirstRound()) return;
             p.setMoveSelected(p.getFirstMove());
         });
 
@@ -121,7 +123,7 @@ public interface HeldItemManager {
         EventID[] flags = new EventID[] {EventID.MOVE_SELECTION, EventID.FIND_MOVE_ORDER};
 
         p.getEvents().addEventListener(flags[0], name, e -> {
-            if (p.firstRound()) return;
+            if (p.isFirstRound()) return;
             p.setMoveSelected(p.getFirstMove());
         });
 
@@ -136,7 +138,7 @@ public interface HeldItemManager {
         EventID[] flags = new EventID[] {EventID.MOVE_SELECTION, EventID.ATK_DAMAGE_MULTIPLIER};
 
         p.getEvents().addEventListener(flags[0], name, e -> {
-            if (p.firstRound()) return;
+            if (p.isFirstRound()) return;
             p.setMoveSelected(p.getFirstMove());
         });
 

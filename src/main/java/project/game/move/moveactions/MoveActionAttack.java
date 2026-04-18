@@ -44,7 +44,7 @@ public interface MoveActionAttack extends MoveAction {
 
         BattleLog.add("%s took %d damage!", defender, damage);
         BattleLog.add(!isMultiHit ? MoveEffectiveCalculations.isSuperEffective(data.moveEffectiveness) : "");
-        BattleLog.add(data.criticalHit ? "Critical hit!" : "");
+        BattleLog.add(data.criticalHit ? "A critical hit!" : "");
 
         attacker.addDealtDamage(damage);
         defender.addDamageReceived(damage);

@@ -64,8 +64,12 @@ public interface BattleLog {
 	public static void out() {
 		while (!MESSAGE_QUEUE.isEmpty()) {
 			String message = MESSAGE_QUEUE.poll();
-			if (message.equals("")|| message.equals("\n")) 
+			if (message.isEmpty()) {
+				// Do nothing
+			}
+			else if (message.equals("\n")) {
 				Server.broadcast(message);
+			}
 			else {
 				Server.broadcast("%s\n", message);
 				Time.hold();

@@ -48,6 +48,10 @@ public interface StatDisplay {
         return String.format("- %s <%s> (HP: %s) %s%n", p, p.getPokemonType(), p.getHp(), showCondition(p));
     }
 
+    public static String showAbility(Pokemon p) {
+        return p.getAbility() != null ? p.getAbility().toString() : "";
+    }
+
     public static String showItem(Pokemon p) {
         return p.getItem() != null ? p.getItem().toString() : "";
     }
@@ -68,13 +72,16 @@ public interface StatDisplay {
 
     public static String showSomeStats(Pokemon p) {
         return new StringBuilder()
+        .append(String.format("============================================================%n"))
         .append(String.format("Name: %s  |  ", p))
-        .append(String.format("Type: %s%n", p.getPokemonType().toString()))
-        .append(String.format("%nHP: %s%n", p.getHp().toString()))
-        .append(String.format("%nItem: %s%n", showItem(p)))
+        .append(String.format("Type: %s  |  ", p.getPokemonType().toString()))
+        .append(String.format("HP: %s%n", p.getHp().toString()))
+        .append(String.format("%nAbility: %s%n", showAbility(p)))
+        .append(String.format("Item: %s%n", showItem(p)))
         .append(String.format("%nStatus Effect: %s%n", showCondition(p)))
         .append(String.format("Other Effects: %s%n", showVolatileConditions(p)))
         .append(String.format("%nMOVES: %n%s", listMoves(p)))
+        .append(String.format("============================================================%n"))
         .toString();
     }
 }

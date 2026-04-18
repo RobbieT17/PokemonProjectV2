@@ -96,7 +96,7 @@ public enum MoveCategory {Physical, Special, Status};
     // Displays the move's name, type, and PP available
     public String moveStats() {
         return new StringBuilder()
-        .append(String.format("%s <%s>: %s%n", this.moveName, this.moveType.name().toUpperCase(), this.pp))
+        .append(String.format("%s <%s>: %s%n", this, this.moveType.name().toUpperCase(), this.pp))
         .toString();
     }
 
@@ -118,11 +118,16 @@ public enum MoveCategory {Physical, Special, Status};
         this.disabled = false;
     }
 
+    public boolean alwaysHit() {
+        return this.accuracy.base() == Move.ALWAYS_HITS;
+    }
+
 // Setters
     public void setPower(int pow) {this.power.setPower(pow);}
     public void doublePower() {this.power.setMod(200);}
     public void changePowerByPercent(double pow) {this.power.setMod(pow);}
     public void setAccuracy(int acc) {this.accuracy.setPower(acc);}
+    public void changeAccuracyByPercent(double acc) {this.accuracy.setMod(acc);}
     public void perfectAccuracy() {this.accuracy.setPower(Move.ALWAYS_HITS);}
     public void enable() {this.disabled = false;}
     public void disable() {this.disabled = true;}

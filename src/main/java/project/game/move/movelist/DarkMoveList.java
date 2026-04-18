@@ -10,7 +10,7 @@ import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;
 public class DarkMoveList {
 
     public static int fakeOut(EventManager e) {
-        if (!e.data.user.firstRound()) {
+        if (!e.data.user.isFirstRound()) {
             throw new MoveInterruptedException(Move.FAILED);
         }
 

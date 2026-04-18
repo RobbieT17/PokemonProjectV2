@@ -136,7 +136,7 @@ public class Server {
                     break;
                 }
 
-                Server.log("Round %d", ++Server.round);
+                Server.log("ROUND %d", ++Server.round);
             }
             else {
                 // Skips the round and resets skip round to false

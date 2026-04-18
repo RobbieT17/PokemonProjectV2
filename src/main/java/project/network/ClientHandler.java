@@ -105,7 +105,7 @@ public class ClientHandler implements Runnable {
         this.writeToBuffer("Please enter your name >>");
         this.clientName = this.readFromBuffer();
 
-        this.clientName = !this.clientName.isEmpty() ? this.clientName : "Player" + this.playerNum;
+        this.clientName = !this.clientName.isEmpty() ? this.clientName : "P" + this.playerNum;
         
         // Welcome message
         this.writeToBuffer("=======================================");
@@ -249,6 +249,8 @@ public class ClientHandler implements Runnable {
                 }
             } 
             else {
+                this.writeToBuffer("Round %d", Server.round);
+
                 Move m = this.selectMove(this.player.getPokemonInBattle());
                 this.selectTargetPokemon(m);
                 this.writeToBuffer("Waiting for opponent....");

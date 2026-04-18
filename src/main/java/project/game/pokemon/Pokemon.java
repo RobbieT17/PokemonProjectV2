@@ -9,6 +9,8 @@ import project.game.move.Move;
 import project.game.player.PokemonTrainer;
 import project.game.pokemon.effects.Ability;
 import project.game.pokemon.effects.HeldItem;
+import project.game.pokemon.effects.AbilityManager.AbilityID;
+import project.game.pokemon.effects.HeldItemManager.HeldItemID;
 import project.game.pokemon.stats.HealthPoints;
 import project.game.pokemon.stats.StatPoint;
 import project.game.pokemon.stats.Type;
@@ -151,14 +153,6 @@ public class Pokemon {
         this.restoreHP(heal);
     }
 
-    public boolean hpLessThanPercent(double percent) {
-        return this.hp.getCurrentHealthPoints() / (double) this.hp.getMaxHealthPoints() < 0.01 * percent; 
-    }
-
-    public boolean firstRound() {
-        return this.roundCount == 0;
-    }
-
     @Override
     /**
      * Returns the Pokemon's name (uses nickname if initialized)
@@ -168,7 +162,7 @@ public class Pokemon {
     }
 
 // Boolean Methods
-    public boolean hasNoMoves() {
+    public boolean isOutOfMoves() {
         for (Move m : this.moves) 
             if (!(m.getPp().depleted() || m.isDisabled())) return false;
         return true;
@@ -176,6 +170,14 @@ public class Pokemon {
 
     public boolean isType(Type type) {
         return this.pokemonType.typeEquals(type);
+    }
+
+    public boolean isHpLessThanPercent(double percent) {
+        return this.hp.getCurrentHealthPoints() / (double) this.hp.getMaxHealthPoints() < 0.01 * percent; 
+    }
+
+    public boolean isFirstRound() {
+        return this.roundCount == 0;
     }
  
 // Setters
@@ -194,24 +196,12 @@ public class Pokemon {
         this.damageReceived += d;
     }
 
-    public void resetDamageDealt() {
-        this.damageDealt = 0;
-    }
-
-    public void setTargetSelected(Pokemon p) {
-        this.targetSelected = p;
-    }
-
-    public void setMoveSelected(Move m) {
-        this.moveSelected = m;
-    }
-
     public void resetMove() {
         if (this.moveSelected == null) {
             return;
         }
 
-        if (this.firstRound()) {
+        if (this.isFirstRound()) {
             this.firstMove = this.moveSelected;
         }
 
@@ -279,9 +269,20 @@ public class Pokemon {
     }
 
 // Setters
-    public void setAbility(Ability a) {this.ability = a;}
+    public void setAbility(AbilityID a) {
+        this.ability = a.apply(this);
+        this.getEvents().updateEventMaps();
+    }
+
+    public void setItem(HeldItemID i) {
+        this.item = i.apply(this);
+        this.getEvents().updateEventMaps();
+    }
+
+    public void resetDamageDealt() {this.damageDealt = 0;}
+    public void setTargetSelected(Pokemon p) {this.targetSelected = p;}
+    public void setMoveSelected(Move m) {this.moveSelected = m;}
     public void setOwner(PokemonTrainer pt) {this.owner = pt;}
-    public void setItem(HeldItem i) {this.item = i;}
     public void setNickName(String n) {this.nickname = !n.isEmpty() ? n : null;}
 
 // Getters

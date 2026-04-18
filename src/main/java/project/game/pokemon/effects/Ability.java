@@ -14,5 +14,5 @@ public class Ability extends Effect {
         this.getBearer().getEvents().removeEventListener(this.getFlags(), this.getEffectName());
         this.getBearer().setAbility(null);
     }
-    
+
 }

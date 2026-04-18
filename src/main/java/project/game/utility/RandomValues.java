@@ -11,7 +11,7 @@ public interface  RandomValues {
      */
     public static int generateInt(int min, int max) {
         if (min > max) throw new IllegalArgumentException("Max must be greater than min");
-        return new Random().nextInt((max - min) + 1) + min;
+        return new Random(System.currentTimeMillis()).nextInt((max - min) + 1) + min;
     }
 
     /**
@@ -19,8 +19,10 @@ public interface  RandomValues {
      * @param value
      * @return True if the next random double is less than the value
      */
-    public static boolean chance(double value) {
-        if (value > 100 || value <= 0) throw new IllegalArgumentException("Chance must be between 1-100%");
-        return (new Random().nextDouble() <= value * 0.01);
+    public static boolean chance(double prob) {
+        if (prob > 100 || prob <= 0) throw new IllegalArgumentException("Chance must be between 1-100%");
+        long seed = System.currentTimeMillis();
+        double chance = new Random(seed).nextDouble();
+        return (chance <= prob * 0.01);
     }
 }

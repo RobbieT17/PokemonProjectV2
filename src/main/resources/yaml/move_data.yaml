@@ -1051,7 +1051,7 @@ moves:
   type: Fire
   category: Physical
   pp: 15
-  pow: 650
+  pow: 65
   acc: 95
   addEffects:
     conditionChange:

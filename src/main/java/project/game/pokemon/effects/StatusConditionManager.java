@@ -205,7 +205,7 @@ public interface StatusConditionManager {
         EventID[] flags = new EventID[] {EventID.END_OF_ROUND};
 
         p.getEvents().addEventListener(flags[0], name, e -> {
-            p.takeDamagePercentMaxHP(1.0 / 2.0, " from the poison");
+            p.takeDamagePercentMaxHP(1.0 / 8.0, " from the poison");
             checkIfFaints(p);
         });
 

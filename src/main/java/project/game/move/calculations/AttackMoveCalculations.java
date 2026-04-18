@@ -43,7 +43,7 @@ public interface AttackMoveCalculations {
 
     // Generates random number (between 0.85 and 1) so moves do slightly more/less damage each time
     private static double random() {
-        return 0.85 + (1 - 0.85) * new Random().nextDouble();
+        return 0.85 + (1 - 0.85) * new Random(System.currentTimeMillis()).nextDouble();
     }
 
     /**
@@ -92,7 +92,7 @@ public interface AttackMoveCalculations {
      */
     public static int calculateDamage(EventManager eventManager) {
         EventData data = eventManager.data; 
-        criticalHit(data.moveUsed.getCritRate()); // Rolls for a critical hit
+        data.criticalHit = criticalHit(data.moveUsed.getCritRate()); // Rolls for a critical hit
 
         eventManager.notifyUserPokemon(EventID.ATK_DAMAGE_MULTIPLIER);
         eventManager.notifyAttackTargetPokemon(EventID.DEF_DAMAGE_MULTIPLIER);

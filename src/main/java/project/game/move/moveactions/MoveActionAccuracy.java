@@ -8,6 +8,7 @@ import project.game.event.GameEvents.EventID;
 import project.game.exceptions.MoveInterruptedException;
 import project.game.move.Move;
 import project.game.pokemon.Pokemon;
+import project.game.utility.RandomValues;
 
 public interface MoveActionAccuracy {
     // Protection Functions
@@ -45,17 +46,17 @@ private static void defenderProtects(Pokemon p) {
         }
 		
         // Calcuates hit rate
-        double modifiedAccuracy = 0.01 * accuracy
-        * ((double) attacker.getAccuracy().getPower() / (double) defender.getEvasion().getPower());
+        double modifiedAccuracy = accuracy * ((double) attacker.getAccuracy().getPower() 
+        / (double) defender.getEvasion().getPower());
 
-        if (new Random().nextDouble() > modifiedAccuracy) { // Move misses
-            data.moveHits = false;
-            throw new MoveInterruptedException("But %s avoided the attack!", defender); 
-        }
-        else { // Move hits
+        if (RandomValues.chance(modifiedAccuracy)) { // Move hits
             data.moveHits = true;
             eventManager.notifyUserPokemon(EventID.ATK_MOVE_HITS);
             eventManager.notifyAttackTargetPokemon(EventID.DEF_MOVE_HITS);
+        }
+        else { // Move misses
+            data.moveHits = false;
+            throw new MoveInterruptedException("But %s avoided the attack!", defender); 
         }      
         
     }

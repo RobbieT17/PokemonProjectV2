@@ -14,6 +14,7 @@ import project.game.pokemon.stats.Type;
 public interface AbilityManager {
 
     public enum AbilityID {
+        All_Or_Nothing(AbilityManager::allOrNothing),
         Blaze(AbilityManager::blaze),
         Chlorophyll(AbilityManager::chlorophyll),
         Overgrow(AbilityManager::overgrow),
@@ -34,6 +35,34 @@ public interface AbilityManager {
 
     }
 
+    /**
+     * Pokemon move accuracy is decreased by 30% but all attack move
+     * land a critical hit.
+     * 
+     */
+    public static Ability allOrNothing(Pokemon p) {
+        String name = AbilityID.All_Or_Nothing.name();
+        EventID[] flags = new EventID[] {EventID.ATK_MOVE_ACCURACY, EventID.ATK_DAMAGE_MULTIPLIER};
+
+        // Reduces move accuracy by 30%. Moves with perfect accuracy reduce to 70
+        p.getEvents().addEventListener(flags[0], name, e -> {
+            Move m = e.moveUsed;
+            if (m.alwaysHit()) {
+                m.setAccuracy(70);
+            }
+            else {
+                m.changeAccuracyByPercent(70);
+            }
+        });
+
+        // Always lands a critical hit
+        p.getEvents().addEventListener(flags[1], name, e -> {
+            e.criticalHit = true;
+        });
+
+        return new Ability(p, name, flags);
+    }
+
     // Increases Fire-Type attacks by 50% while under 1/3 Max HP
     public static Ability blaze(Pokemon p) {
         String name = AbilityID.Blaze.name();
@@ -41,7 +70,7 @@ public interface AbilityManager {
 
         p.getEvents().addEventListener(flags[0], name , e -> {
             Move move = e.moveUsed;
-            if (move.isType(Type.Fire) && p.hpLessThanPercent(33)) {
+            if (move.isType(Type.Fire) && p.isHpLessThanPercent(33)) {
                 e.otherMoveMods *= 1.5;
                 BattleLog.add("%s's Blaze increased the power of its Fire-Type attack!", p);
             } 
@@ -71,7 +100,7 @@ public interface AbilityManager {
 
         p.getEvents().addEventListener(flags[0], name, e -> {
             Move move = e.moveUsed;
-            if (move.isType(Type.Grass) && p.hpLessThanPercent(33)) {
+            if (move.isType(Type.Grass) && p.isHpLessThanPercent(33)) {
                 e.otherMoveMods *= 1.5;
                 BattleLog.add("%s's Overgrow increased the power of its Grass-Type attack!", p);
             }         
@@ -126,7 +155,7 @@ public interface AbilityManager {
 
         p.getEvents().addEventListener(flags[0], name, e -> {
             Move move = e.moveUsed;
-            if (move.isType(Type.Water) && p.hpLessThanPercent(33)) {
+            if (move.isType(Type.Water) && p.isHpLessThanPercent(33)) {
                 e.otherMoveMods *= 1.5; 
                 BattleLog.add("%s's Overgrow increased the power of its Water-Type attack!", p);
             }        
@@ -143,7 +172,10 @@ public interface AbilityManager {
         p.getEvents().addEventListener(flags[0], name, e -> {
             if (e.moveUsed.isType(Type.Water)) {
                 e.moveEffectiveness = 0;
-                throw new MoveInterruptedException("%s's Water Absorb soaked up the water!", p);
+                BattleLog.add("%s's Water Absorb soaked up the water!", p);
+                p.restoreHpPercentMaxHP(25, "");
+
+                throw new MoveInterruptedException();
             }
         });
 
