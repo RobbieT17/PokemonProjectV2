@@ -5,59 +5,52 @@ import java.util.HashMap;
 public class GameEvents {
 
     public enum EventID {
-        MOVE_HITS,
-        STAT_CHANGE,
-        STATUS_CONDITION_CHANGE,
-        SWITCH_IN,
-        MOVE_MAKES_CONTACT,
         END_OF_TURN,
         END_OF_ROUND,
-        DAMAGE_MULTIPLIER,
-        MOVE_EFFECTIVENESS,
-        FIND_MOVE_ORDER,
         WEATHER_EFFECT,
-        MOVE_ACCURACY,
-        PRIMARY_STATUS_BEFORE,
-        STATUS_BEFORE,
-        BEFORE_MOVE,
-        SWITCH_OUT,
         MOVE_SELECTION,
         USE_MOVE,
         MOVE_INTERRUPTED,
-        MOVE_DEALS_DAMAGE;
+        FIND_MOVE_ORDER,
+        PRIMARY_STATUS_BEFORE,
+        STATUS_BEFORE,
+        BEFORE_MOVE,
+        SWITCH_IN,
+        SWITCH_OUT,
+        ATK_MOVE_HITS,
+        ATK_STAT_CHANGE,
+        ATK_STATUS_CONDITION_CHANGE,
+        ATK_MOVE_MAKES_CONTACT,
+        ATK_DAMAGE_MULTIPLIER,
+        ATK_MOVE_EFFECTIVENESS,
+        ATK_MOVE_ACCURACY,
+        ATK_MOVE_DEALS_DAMAGE,
+        DEF_MOVE_HITS,
+        DEF_STAT_CHANGE,
+        DEF_STATUS_CONDITION_CHANGE,
+        DEF_MOVE_MAKES_CONTACT,
+        DEF_DAMAGE_MULTIPLIER,
+        DEF_MOVE_EFFECTIVENESS,
+        DEF_MOVE_ACCURACY,
+        DEF_MOVE_DEALS_DAMAGE,
     }
 
     private final HashMap<String, Event> eventMap;
    
     public GameEvents() {
-        this.eventMap = new HashMap<>();
-
-        this.addEventMapEntry(EventID.MOVE_HITS);
-        this.addEventMapEntry(EventID.STAT_CHANGE);
-        this.addEventMapEntry(EventID.STATUS_CONDITION_CHANGE);
-        this.addEventMapEntry(EventID.SWITCH_IN);
-        this.addEventMapEntry(EventID.MOVE_MAKES_CONTACT);
-        this.addEventMapEntry(EventID.END_OF_TURN);
-        this.addEventMapEntry(EventID.END_OF_ROUND);
-        this.addEventMapEntry(EventID.DAMAGE_MULTIPLIER);
-        this.addEventMapEntry(EventID.MOVE_EFFECTIVENESS);
-        this.addEventMapEntry(EventID.FIND_MOVE_ORDER);
-        this.addEventMapEntry(EventID.WEATHER_EFFECT);
-        this.addEventMapEntry(EventID.MOVE_ACCURACY);
-        this.addEventMapEntry(EventID.PRIMARY_STATUS_BEFORE);
-        this.addEventMapEntry(EventID.STATUS_BEFORE);
-        this.addEventMapEntry(EventID.BEFORE_MOVE);
-        this.addEventMapEntry(EventID.SWITCH_OUT);
-        this.addEventMapEntry(EventID.MOVE_SELECTION);
-        this.addEventMapEntry(EventID.USE_MOVE);
-        this.addEventMapEntry(EventID.MOVE_INTERRUPTED);
-        this.addEventMapEntry(EventID.MOVE_DEALS_DAMAGE);
+        this.eventMap = addEventMapEntries();
     }
 
     // Methods
-    private void addEventMapEntry(EventID eventId) {
-        String name = eventId.name();
-        this.eventMap.put(name, new Event(name));
+    private HashMap<String, Event> addEventMapEntries() {
+        HashMap<String, Event> map = new HashMap<>();
+    
+        for (EventID event : EventID.values()) {
+            String name = event.name();
+            map.put(name, new Event(name));
+        }  
+
+        return map;     
     }
 
     public void updateEvent(EventID eventId, EventData data) {

@@ -19,6 +19,6 @@ public interface  MoveActionBracing extends MoveAction {
             b.reset();
             b.set();   
         }
-        BattleLog.add(b.isActive() ? success : Move.FAILED);
+        BattleLog.add(b.isActive() ? data.message : Move.FAILED);
     }
 }

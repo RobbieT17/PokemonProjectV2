@@ -94,7 +94,8 @@ public interface AttackMoveCalculations {
         EventData data = eventManager.data; 
         criticalHit(data.moveUsed.getCritRate()); // Rolls for a critical hit
 
-        eventManager.notifyAttackTargetPokemon(EventID.DAMAGE_MULTIPLIER);
+        eventManager.notifyUserPokemon(EventID.ATK_DAMAGE_MULTIPLIER);
+        eventManager.notifyAttackTargetPokemon(EventID.DEF_DAMAGE_MULTIPLIER);
         
         Pokemon attacker = data.user;
         Pokemon defender = data.attackTarget;

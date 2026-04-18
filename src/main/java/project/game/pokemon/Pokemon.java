@@ -146,7 +146,7 @@ public class Pokemon {
 
      // Takes damage equal to a percent of max HP
      public void restoreHpPercentMaxHP(double percent, String message) {
-        int heal = (int) (this.hp.getCurrentHealthPoints() * percent);
+        int heal = (int) (this.hp.getMaxHealthPoints() * percent * 0.01);
         BattleLog.add("%s restored %d HP%s", this, heal, message + "!");
         this.restoreHP(heal);
     }
@@ -282,7 +282,7 @@ public class Pokemon {
     public void setAbility(Ability a) {this.ability = a;}
     public void setOwner(PokemonTrainer pt) {this.owner = pt;}
     public void setItem(HeldItem i) {this.item = i;}
-    public void setNickName(String n) {this.nickname = n != "" ? n : null;}
+    public void setNickName(String n) {this.nickname = !n.isEmpty() ? n : null;}
 
 // Getters
     public int getLevel() {return this.level;}

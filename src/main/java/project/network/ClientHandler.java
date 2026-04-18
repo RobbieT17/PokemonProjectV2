@@ -105,7 +105,7 @@ public class ClientHandler implements Runnable {
         this.writeToBuffer("Please enter your name >>");
         this.clientName = this.readFromBuffer();
 
-        this.clientName = !this.clientName.isEmpty() ? this.clientName : "Player " + this.playerNum;
+        this.clientName = !this.clientName.isEmpty() ? this.clientName : "Player" + this.playerNum;
         
         // Welcome message
         this.writeToBuffer("=======================================");
@@ -241,7 +241,6 @@ public class ClientHandler implements Runnable {
             // A skipped round indicates a Pokemon fainted the last round, checks if this client's pokemon fainted
             if (Server.skipRound) {
                 // Fainted Pokemon needs to be switched out, player selects a new Pokemon
-                // Notifies the server to skip the round
                 if (this.player.getPokemonInBattle().getConditions().isFainted()) {
                     this.selectPokemon();
                 }

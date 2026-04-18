@@ -3,10 +3,10 @@ package project.game.pokemon.effects;
 import java.util.function.Function;
 
 import project.game.battle.BattleLog;
-import project.game.event.EventData;
 import project.game.event.GameEvents.EventID;
 import project.game.exceptions.MoveInterruptedException;
 import project.game.move.Move;
+import project.game.move.Move.MoveCategory;
 import project.game.pokemon.Pokemon;
 import project.game.pokemon.stats.Type;
 import project.game.utility.Counter;
@@ -39,7 +39,7 @@ public interface HeldItemManager {
     // Increases Pokemon's Sp.Def by 50% but disables Status Move (except Me First)
     public static HeldItem assaultVest(Pokemon p) {
         String name = HeldItemID.Assault_Vest.name();
-        EventID[] flags = new EventID[] {EventID.MOVE_SELECTION, EventID.DAMAGE_MULTIPLIER};
+        EventID[] flags = new EventID[] {EventID.MOVE_SELECTION, EventID.DEF_DAMAGE_MULTIPLIER};
 
         p.getEvents().addEventListener(flags[0], name, e -> {
             for (Move m : p.getMoves()) {
@@ -48,7 +48,6 @@ public interface HeldItemManager {
         });
 
         p.getEvents().addEventListener(flags[1], name, e -> {
-            if (!EventData.isTarget(p, e)) return;
             p.getSpecialDefense().setMod(150);
         });
 
@@ -81,7 +80,7 @@ public interface HeldItemManager {
      */
     public static HeldItem bombSurprise(Pokemon p) {
         String name = HeldItemID.Bomb_Surprise.name();
-        EventID[] flags = new EventID[] {EventID.BEFORE_MOVE, EventID.MOVE_HITS, EventID.SWITCH_OUT};
+        EventID[] flags = new EventID[] {EventID.BEFORE_MOVE, EventID.DEF_MOVE_HITS, EventID.SWITCH_OUT};
 
         Counter c = new Counter(3);
 
@@ -98,14 +97,13 @@ public interface HeldItemManager {
         p.getEvents().addEventListener(flags[1], name, e -> c.reset());
         p.getEvents().addEventListener(flags[2], name, e -> c.reset());
 
-
         return new HeldItem(p, name, flags);
 	}
 
     // Boosts Attack stat by 50% but forces Pokemon to use first move selected (rests after switch out)
     public static HeldItem choiceBand(Pokemon p) {
         String name = HeldItemID.Choice_Band.name();
-        EventID[] flags = new EventID[] {EventID.MOVE_SELECTION, EventID.DAMAGE_MULTIPLIER};
+        EventID[] flags = new EventID[] {EventID.MOVE_SELECTION, EventID.ATK_DAMAGE_MULTIPLIER};
 
         p.getEvents().addEventListener(flags[0], name, e -> {
             if (p.firstRound()) return;
@@ -135,7 +133,7 @@ public interface HeldItemManager {
     // Boosts Sp-Attack stat by 50% but forces Pokemon to use first move selected (rests after switch out)
     public static HeldItem choiceSpecs(Pokemon p) {
         String name = HeldItemID.Choice_Specs.name();
-        EventID[] flags = new EventID[] {EventID.MOVE_SELECTION, EventID.DAMAGE_MULTIPLIER};
+        EventID[] flags = new EventID[] {EventID.MOVE_SELECTION, EventID.ATK_DAMAGE_MULTIPLIER};
 
         p.getEvents().addEventListener(flags[0], name, e -> {
             if (p.firstRound()) return;
@@ -160,11 +158,12 @@ public interface HeldItemManager {
     // Boosts physical-move power by 10%
     public static HeldItem muscleBand(Pokemon p) {
         String name = HeldItemID.Muscle_Band.name();
-        EventID[] flags = new EventID[] {EventID.DAMAGE_MULTIPLIER};
+        EventID[] flags = new EventID[] {EventID.ATK_DAMAGE_MULTIPLIER};
 
         p.getEvents().addEventListener(flags[0], name, e -> {
-            if (!(EventData.isUser(p, e) && e.moveUsed.isCategory(Move.MoveCategory.Physical))) return;
-            e.otherMoveMods *= 1.1;
+            if (e.moveUsed.isCategory(MoveCategory.Physical)) {
+                e.otherMoveMods *= 1.1;
+            }
         });
 
         return new HeldItem(p, name, flags);
@@ -173,11 +172,9 @@ public interface HeldItemManager {
     // Contact with this Pokemon causes the attack to lose 1/6 of its max HP
     public static HeldItem rockyHelmet(Pokemon p) {
         String name = HeldItemID.Rocky_Helmet.name();
-        EventID[] flags = new EventID[] {EventID.MOVE_MAKES_CONTACT};
+        EventID[] flags = new EventID[] {EventID.DEF_MOVE_MAKES_CONTACT};
 
         p.getEvents().addEventListener(flags[0], name, e -> {
-            if (!EventData.isTarget(p, e)) return;
-
             e.user.takeDamagePercentMaxHP(1.0 / 6.0, String.format(" from %s's Rocky Helmet", p));
         });
 
@@ -187,11 +184,12 @@ public interface HeldItemManager {
     // Boosts special-move power by 10%
     public static HeldItem wiseGlasses(Pokemon p) {
         String name = HeldItemID.Wise_Glasses.name();
-        EventID[] flags = new EventID[] {EventID.DAMAGE_MULTIPLIER};
+        EventID[] flags = new EventID[] {EventID.ATK_DAMAGE_MULTIPLIER};
 
         p.getEvents().addEventListener(flags[0], name, e -> {
-            if (!(EventData.isUser(p, e) && e.moveUsed.isCategory(Move.MoveCategory.Special))) return;
-            e.otherMoveMods *= 1.1;
+            if (e.moveUsed.isCategory(MoveCategory.Special)) {
+                e.otherMoveMods *= 1.1;
+            }
         });
 
         return new HeldItem(p, name, flags);

@@ -94,7 +94,7 @@ public enum Type {
         ),
 
         Sound(
-            new TypeName[] { TypeName.Dark, TypeName.Fairy, TypeName.Sound, TypeName.Water },
+            new TypeName[] { TypeName.Dark, TypeName.Fairy, TypeName.Ghost, TypeName.Sound},
             new TypeName[] { TypeName.Ground, TypeName.Space }
         ),
 

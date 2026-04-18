@@ -12,14 +12,28 @@ public class EventManager {
         this.data = new EventData(data, user, user.getTargetSelected(), user.getMoveSelected());
     }
 
+    /**
+     * Notifies the user Pokemon (the move user) of the specified event 
+     * @param id Event ID
+     */
     public void notifyUserPokemon(EventID id) {
         this.data.user.getEvents().updateEvent(id, this.data);
     }
 
+    /**
+     * Notifies the attack target Pokemon of the specified event
+     * @param id Event ID
+     */
     public void notifyAttackTargetPokemon(EventID id) {
         this.data.attackTarget.getEvents().updateEvent(id, this.data);
     }
 
+    /**
+     * Notifes the effect target Pokemon of the specified event.
+     * Does not send a notification if the user is also the effect
+     * target.
+     * @param id Event ID
+     */
     public void notifyEffectTargetPokemon(EventID id) {
         this.data.effectTarget.getEvents().updateEvent(id, this.data);
     }

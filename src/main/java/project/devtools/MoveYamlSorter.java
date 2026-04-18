@@ -30,10 +30,16 @@ public class MoveYamlSorter {
         printDuplicateMoves(moves);
 
         // Sort by ID, then by name if IDs match
+        // moves.sort(
+        //         Comparator
+        //                 .comparingInt((Map<String, Object> m) -> ((Number) m.get("id")).intValue())
+        //                 .thenComparing(m -> String.valueOf(m.get("name")))
+        // );
+
         moves.sort(
-                Comparator
-                        .comparingInt((Map<String, Object> m) -> ((Number) m.get("id")).intValue())
-                        .thenComparing(m -> String.valueOf(m.get("name")))
+            Comparator
+                .comparing((Map<String, Object> m) -> String.valueOf(m.get("name")), String.CASE_INSENSITIVE_ORDER)
+                .thenComparingInt(m -> ((Number) m.get("id")).intValue())
         );
 
         DumperOptions options = new DumperOptions();

@@ -58,7 +58,7 @@ public class PokemonProcessor {
             moveProcessor.processMove();
 
         } catch (MoveEndedEarlyException e) { // TODO: Entering immune state should throw this exception
-            BattleLog.add(e.getMessage());
+            eventManager.data.message = e.getMessage();
         }
     }
 

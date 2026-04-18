@@ -14,7 +14,7 @@ public interface MoveActionChangeWeather extends MoveAction {
         EventData data  = eventManager.data;
         data.weatherChange = w;
 
-        if (data.battleData.isCurrentWeather(w)) {
+        if (data.battleData.isCurrentWeather(data.weatherChange)) {
             throw new MoveInterruptedException(Move.FAILED);
         }
 

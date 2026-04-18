@@ -6,7 +6,6 @@ import project.game.move.Movedex;
 import project.game.move.Move.MoveCategory;
 import project.game.move.Move.MoveTarget;
 import project.game.move.moveactions.MoveActionAccuracy;
-import project.game.move.moveactions.MoveActionAdditionalEffects;
 import project.game.move.moveactions.MoveActionAttack;
 
 public class MoveProcessor {
@@ -39,11 +38,18 @@ public class MoveProcessor {
      */
     private void defaultMoveProcess() {
         Move move = this.eventManager.data.moveUsed;
+
+        AdditionalEffectsProcessor additionalEffectsProcessor = new AdditionalEffectsProcessor(this.eventManager);
+        additionalEffectsProcessor.applyAdditionEffectsBefore();
+
+        if (this.eventManager.data.moveEndedEarly) {
+            return;
+        }
        
         if (move.getMoveTarget() != MoveTarget.Self) {
             if (move.getCategory() == MoveCategory.Status) { 
                 // Status do not deal direct damage to the target, but still have an accuracy check
-                MoveActionAccuracy.rollForAccuracy(eventManager);
+                MoveActionAccuracy.rollForAccuracy(this.eventManager);
             }
             else {
                 // Attacks the target Pokemon for damage
@@ -52,7 +58,7 @@ public class MoveProcessor {
         }
 
         // Applies additional effects
-        MoveActionAdditionalEffects.applyAdditionEffects(eventManager);
+        additionalEffectsProcessor.applyAdditionEffects();
     }
 
     /**

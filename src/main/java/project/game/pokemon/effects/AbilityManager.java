@@ -4,7 +4,6 @@ import java.util.function.Function;
 
 import project.game.battle.BattleLog;
 import project.game.battle.Weather.WeatherEffect;
-import project.game.event.EventData;
 import project.game.event.GameEvents.EventID;
 import project.game.exceptions.MoveInterruptedException;
 import project.game.exceptions.PokemonFaintedException;
@@ -38,11 +37,9 @@ public interface AbilityManager {
     // Increases Fire-Type attacks by 50% while under 1/3 Max HP
     public static Ability blaze(Pokemon p) {
         String name = AbilityID.Blaze.name();
-        EventID[] flags = new EventID[] {EventID.DAMAGE_MULTIPLIER};
+        EventID[] flags = new EventID[] {EventID.ATK_DAMAGE_MULTIPLIER};
 
         p.getEvents().addEventListener(flags[0], name , e -> {
-            if (!EventData.isUser(p, e)) return;
-
             Move move = e.moveUsed;
             if (move.isType(Type.Fire) && p.hpLessThanPercent(33)) {
                 e.otherMoveMods *= 1.5;
@@ -70,11 +67,9 @@ public interface AbilityManager {
     // Increases Grass-Type attacks by 50% while under 1/3 Max HP
     public static Ability overgrow(Pokemon p) {
         String name = AbilityID.Overgrow.name();
-        EventID[] flags = new EventID[] {EventID.DAMAGE_MULTIPLIER};
+        EventID[] flags = new EventID[] {EventID.ATK_DAMAGE_MULTIPLIER};
 
         p.getEvents().addEventListener(flags[0], name, e -> {
-            if (!EventData.isUser(p, e)) return;
-
             Move move = e.moveUsed;
             if (move.isType(Type.Grass) && p.hpLessThanPercent(33)) {
                 e.otherMoveMods *= 1.5;
@@ -105,11 +100,9 @@ public interface AbilityManager {
      */
     public static Ability solarPower(Pokemon p) {
         String name = AbilityID.Solar_Power.name();
-        EventID[] flags = new EventID[] {EventID.DAMAGE_MULTIPLIER, EventID.WEATHER_EFFECT};
+        EventID[] flags = new EventID[] {EventID.ATK_DAMAGE_MULTIPLIER, EventID.WEATHER_EFFECT};
 
         p.getEvents().addEventListener(flags[0], name, e -> {
-            if (!EventData.isUser(p, e)) return;
-
             Move m = e.moveUsed;
             if (m.getCategory().equals(Move.MoveCategory.Special)) {
                 p.getSpecialAttack().setMod(150);
@@ -129,11 +122,9 @@ public interface AbilityManager {
     // Increases Water-Type attacks by 50% while under 1/3 Max HP
     public static Ability torrent(Pokemon p) {
         String name = AbilityID.Torrent.name();
-        EventID[] flags = new EventID[] {EventID.DAMAGE_MULTIPLIER};
+        EventID[] flags = new EventID[] {EventID.ATK_DAMAGE_MULTIPLIER};
 
         p.getEvents().addEventListener(flags[0], name, e -> {
-            if (!EventData.isUser(p, e)) return;
-
             Move move = e.moveUsed;
             if (move.isType(Type.Water) && p.hpLessThanPercent(33)) {
                 e.otherMoveMods *= 1.5; 
@@ -147,11 +138,9 @@ public interface AbilityManager {
     // Water moves deal no effect and instead heal the Pokemon
     public static Ability waterAbsorb(Pokemon p) {
         String name = AbilityID.Water_Absorb.name();
-        EventID[] flags = new EventID[] {EventID.MOVE_EFFECTIVENESS};
+        EventID[] flags = new EventID[] {EventID.DEF_MOVE_EFFECTIVENESS};
 
         p.getEvents().addEventListener(flags[0], name, e -> {
-            if (!EventData.isTarget(p, e)) return;
-
             if (e.moveUsed.isType(Type.Water)) {
                 e.moveEffectiveness = 0;
                 throw new MoveInterruptedException("%s's Water Absorb soaked up the water!", p);

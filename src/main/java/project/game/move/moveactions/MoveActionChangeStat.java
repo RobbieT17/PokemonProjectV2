@@ -20,10 +20,7 @@ public interface MoveActionChangeStat extends MoveAction {
     private static void changeEachStat(EventManager eventManager, int[] stats) {
         EventData data  = eventManager.data;
         Pokemon p = data.effectTarget;
-        data.statChanges = stats;
-
-        eventManager.notifyAttackTargetPokemon(EventID.STAT_CHANGE);
-        
+    
         for (int i = 0; i < stats.length; i++) {
             int change = stats[i];
             if (change == 0) {
@@ -44,21 +41,28 @@ public interface MoveActionChangeStat extends MoveAction {
     public static void changeStats(EventManager eventManager, int[] stats, double chance) {
         EventData data  = eventManager.data;
         data.statProb = chance;
-        if (data.user.getConditions().isFainted() || new Random().nextDouble() > chance * 0.01) {
+        data.statChanges = stats;
+
+        eventManager.notifyUserPokemon(EventID.ATK_STAT_CHANGE);
+        eventManager.notifyEffectTargetPokemon(EventID.DEF_STAT_CHANGE);
+
+        if (new Random().nextDouble() > data.statProb * 0.01) {
             data.statFailed = true;
             return;
         }
-        changeEachStat(eventManager, stats);
-    }
+        MoveActionChangeStat.changeEachStat(eventManager, data.statChanges);
+    }  
 
     public static void changeStats(EventManager eventManager, int[] stats) {
-        changeStats(eventManager, stats, 100);
+        MoveActionChangeStat.changeStats(eventManager, stats, 100);
     }
 
     // Resets all stat changes back to neutral
     public static void resetStats(EventManager eventManager, Pokemon p) {
-        for (StatPoint s : p.getStats()) s.setStage(0);
-        BattleLog.add("%s stat changes were cleared...", p);
+        for (StatPoint s : p.getStats()) {
+            s.setStage(0);
+        } 
+        BattleLog.add("%s stat changes were nullified!", p);
     }
 
 }

@@ -123,7 +123,6 @@ public class PokemonTrainerSelector {
         // (OPTION) Give an item to the pokemon
         this.assignHeldItem(pokemon);
     
-       
         return pokemon;
     }
 

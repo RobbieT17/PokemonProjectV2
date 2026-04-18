@@ -22,15 +22,15 @@ public class MockPokemonTeam {
         Pokemon p2 = MockPokemonTeam.mockPokemon(Pokedex.Venusaur);
 
         p1.addMove(MockPokemonTeam.mockMove("Solar Beam"));
-        p1.addMove(MockPokemonTeam.mockMove("Leech Seed"));
+        p1.addMove(MockPokemonTeam.mockMove("Scratch"));
         p1.addMove(MockPokemonTeam.mockMove("Amnesia"));
         p1.addMove(MockPokemonTeam.mockMove("Poison Powder"));
         p1.setNickName("Vince");
 
         p2.addMove(MockPokemonTeam.mockMove("Orbital Strike"));
-        p2.addMove(MockPokemonTeam.mockMove("Leech Seed"));
-        p2.addMove(MockPokemonTeam.mockMove("Amnesia"));
-        p2.addMove(MockPokemonTeam.mockMove("Poison Powder"));
+        p2.addMove(MockPokemonTeam.mockMove("Vine Whip"));
+        p2.addMove(MockPokemonTeam.mockMove("Growth"));
+        p2.addMove(MockPokemonTeam.mockMove("Synthesis"));
         p2.setNickName("Vance");
 
         return new PokemonTrainerBuilder()
@@ -44,10 +44,10 @@ public class MockPokemonTeam {
         Pokemon p1 = MockPokemonTeam.mockPokemon(Pokedex.Charizard);
         Pokemon p2 = MockPokemonTeam.mockPokemon(Pokedex.Blastoise);
 
+        p1.addMove(MockPokemonTeam.mockMove("Infect"));
+        p1.addMove(MockPokemonTeam.mockMove("Dragon Dance"));
         p1.addMove(MockPokemonTeam.mockMove("Sunny Day"));
-        p1.addMove(MockPokemonTeam.mockMove("Inferno"));
-        p1.addMove(MockPokemonTeam.mockMove("Graveyard Shock"));
-        p1.addMove(MockPokemonTeam.mockMove("Flamethrower"));
+        p1.addMove(MockPokemonTeam.mockMove("Fire Fang"));
         p1.setNickName("Charlie");
 
         p2.addMove(MockPokemonTeam.mockMove("Fury Attack"));

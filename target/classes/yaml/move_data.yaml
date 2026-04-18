@@ -58,7 +58,7 @@ moves:
   pow: 90
   acc: 95
   addEffects:
-    conditionChange:
+    semiImmune:
       effect: Fly-State
       self: true
 
@@ -238,7 +238,7 @@ moves:
   pow: 150
   acc: 90
   addEffects:
-    conditionChange:
+    charge:
       effect: Recharge
       self: true
 
@@ -277,7 +277,7 @@ moves:
   pp: 10
   pow: 120
   addEffects:
-    conditionChange:
+    charge:
       effect: Charge
       self: true
 
@@ -318,7 +318,7 @@ moves:
   pow: 120
   contact: true
   addEffects:
-    conditionChange:
+    charge:
       self: true
       effect: Rampage
 
@@ -338,7 +338,7 @@ moves:
   pp: 10
   pow: 80
   addEffects:
-    conditionChange:
+    semiImmune:
       effect: Dig-State
       self: true
 
@@ -504,7 +504,8 @@ moves:
   pow: 120
   target: Self
   addEffects:
-    conditionChange:
+    charge:
+      self: true
       effect: Rampage
 
 - id: 201
@@ -707,7 +708,7 @@ moves:
   pow: 150
   priority: -3
   addEffects:
-    conditionChange:
+    charge:
       effect: Focused
 
 - id: 280
@@ -727,7 +728,7 @@ moves:
   pp: 10
   pow: 80
   addEffects:
-    conditionChange:
+    semiImmune:
       effect: Dive-State
       self: true
 
@@ -739,7 +740,7 @@ moves:
   pow: 150
   acc: 90
   addEffects:
-    conditionChange:
+    charge:
       effect: Recharge
       self: true
 
@@ -751,7 +752,7 @@ moves:
   pow: 150
   acc: 90
   addEffects:
-    conditionChange:
+    charge:
       effect: Recharge
       self: true
 
@@ -848,7 +849,7 @@ moves:
   pow: 150
   acc: 90
   addEffects:
-    conditionChange:
+    charge:
       effect: Recharge
       self: true
 
@@ -1025,7 +1026,7 @@ moves:
   pow: 150
   acc: 90
   addEffects:
-    conditionChange:
+    charge:
       effect: Recharge
       self: true
 
@@ -1050,7 +1051,7 @@ moves:
   type: Fire
   category: Physical
   pp: 15
-  pow: 65
+  pow: 650
   acc: 95
   addEffects:
     conditionChange:
@@ -1366,9 +1367,8 @@ moves:
 - id: 964
   name: Infect
   type: Zombie
-  category: Physical
+  category: Status
   pp: 10
-  pow: 25
   acc: 75
   addEffects:
     conditionChange:
@@ -1439,7 +1439,7 @@ moves:
     conditionChange:
       effect: Infect
       chance: 30
-    conditionChange2:
+    charge:
       self: true
       effect: Charge
 
@@ -1473,7 +1473,7 @@ moves:
   pow: 100
   acc: 90
 
-- id: 972
+- id: 973
   name: Orbital Strike
   type: Space
   category: Physical
@@ -1485,7 +1485,7 @@ moves:
       stats:
         spAtk: -1
 
-- id: 973
+- id: 974
   name: Black Hole
   type: Space
   category: Special

@@ -47,9 +47,12 @@ public interface MoveEffectiveCalculations {
 
         data.moveEffectiveness = effectiveness;
 
-        eventManager.notifyAttackTargetPokemon(EventID.MOVE_EFFECTIVENESS);
+        eventManager.notifyUserPokemon(EventID.ATK_MOVE_EFFECTIVENESS);
+        eventManager.notifyAttackTargetPokemon(EventID.DEF_MOVE_EFFECTIVENESS);
 
-        if (effectiveness == 0) throw new MoveInterruptedException(MoveEffectiveCalculations.noEffectOn(p));     
+        if (effectiveness == 0) {
+            throw new MoveInterruptedException(MoveEffectiveCalculations.noEffectOn(p));
+        }     
     }
  
     // A message to be displayed indicating if the move was super effective or not

@@ -8,6 +8,7 @@ import project.game.move.moveactions.MoveActionAttack;
 import project.game.move.moveactions.MoveActionCharge;
 import project.game.move.moveactions.MoveActionHealthRestore;
 import project.game.pokemon.Pokemon;
+import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;
 
 public class GrassMoveList {
 
@@ -28,8 +29,12 @@ public class GrassMoveList {
     public static int solarBeam(EventManager e) {
         if (e.data.battleData.isCurrentWeather(WeatherEffect.Sunny)) {
             MoveActionAttack.attackTarget(e);
+            e.data.user.getConditions().removeCondition(StatusConditionID.Charge);
         } else {
-            MoveActionCharge.chargeMove(e);
+            MoveActionCharge.enterChargeState(e, StatusConditionID.Charge);
+            if (!e.data.moveEndedEarly) {
+                MoveActionAttack.attackTarget(e);
+            }
         }
         return 0;
     }

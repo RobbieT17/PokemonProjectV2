@@ -46,6 +46,7 @@ public class EventData {
     public double drainPercent; // Percentage of damage dealt applied to heal
     public double healPercent; // Percentage of max HP restored
 
+    public boolean moveEndedEarly; // True if move ends early
     public String message = ""; // A message produced 
    
     public EventData(BattleData data, Pokemon user, Pokemon target, Move m) {
@@ -57,21 +58,4 @@ public class EventData {
         this.effectTarget = target; 
         this.otherMoveMods = 1.0;
     }
-
-    // Methods
-
-    /**
-     * Checks if the Pokemon is the user of the move this turn
-     * @param p Pokemon
-     * @param e event data
-     * @return True if the Pokeon is the users
-     */
-    public static boolean isUser(Pokemon p, EventData e) {
-        return p == e.user;
-    }
-
-    public static boolean isTarget(Pokemon p, EventData e) {
-        return p == e.attackTarget;
-    }
-
 }

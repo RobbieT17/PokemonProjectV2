@@ -50,10 +50,12 @@ public interface MoveActionAttack extends MoveAction {
         defender.addDamageReceived(damage);
         defender.takeDamage(damage);
         
-        eventManager.notifyAttackTargetPokemon(EventID.MOVE_DEALS_DAMAGE);
+        eventManager.notifyUserPokemon(EventID.ATK_MOVE_DEALS_DAMAGE);
+        eventManager.notifyAttackTargetPokemon(EventID.DEF_MOVE_DEALS_DAMAGE);
 
         if (data.moveUsed.isContactMove()) {
-            eventManager.notifyAttackTargetPokemon(EventID.MOVE_MAKES_CONTACT);
+            eventManager.notifyUserPokemon(EventID.ATK_MOVE_MAKES_CONTACT);
+            eventManager.notifyAttackTargetPokemon(EventID.DEF_MOVE_MAKES_CONTACT);
         }
     }
 
@@ -65,7 +67,7 @@ public interface MoveActionAttack extends MoveAction {
         for (int i = 0; i < data.hitCount; i++) {
             dealDamage(eventManager);
             if (data.attackTarget.getConditions().isFainted()) {
-                data.hitCount = i;
+                data.hitCount = ++i;
                 break;
             }
         }

@@ -12,6 +12,8 @@ public class AdditonalEffects {
     private MoveEffect recoil;
     private MoveEffect heal;
     private MoveEffect lifeSteal;
+    private MoveEffect charge;
+    private MoveEffect semiImmune;
 
     public void setStatChange(MoveEffect statChange) {
         this.statChange = statChange;
@@ -43,6 +45,12 @@ public class AdditonalEffects {
     public void setLifeSteal(MoveEffect lifeSteal) {
         this.lifeSteal = lifeSteal;
     }
+    public void setCharge(MoveEffect charge) {
+        this.charge = charge;
+    }
+    public void setSemiImmune(MoveEffect semiImmune) {
+        this.semiImmune = semiImmune;
+    }
 
     public MoveEffect getStatChange() {
         return this.statChange;
@@ -73,6 +81,12 @@ public class AdditonalEffects {
     }
     public MoveEffect getLifeSteal() {
         return this.lifeSteal;
+    }
+    public MoveEffect getCharge() {
+        return this.charge;
+    }
+    public MoveEffect getSemiImmune() {
+        return this.semiImmune;
     }
      
 }

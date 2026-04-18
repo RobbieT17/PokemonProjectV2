@@ -28,26 +28,35 @@ private static void defenderProtects(Pokemon p) {
         Pokemon defender = data.attackTarget;
         Move move = data.moveUsed;
 
-        eventManager.notifyAttackTargetPokemon(EventID.MOVE_ACCURACY);
+        eventManager.notifyUserPokemon(EventID.ATK_MOVE_ACCURACY);
+        eventManager.notifyAttackTargetPokemon(EventID.DEF_MOVE_ACCURACY);
+
         defenderProtects(defender);
 
         int accuracy = move.getAccuracy();
 
+        // Move Guarenteed to hit if has perfect accuracy or the target is immobilized
         if (accuracy == Move.ALWAYS_HITS || defender.getConditions().isImmobilized()) {
             data.moveHits = true;
-            eventManager.notifyAttackTargetPokemon(EventID.MOVE_HITS);
+
+            eventManager.notifyUserPokemon(EventID.ATK_MOVE_HITS);
+            eventManager.notifyAttackTargetPokemon(EventID.DEF_MOVE_HITS);
             return;
         }
 		
+        // Calcuates hit rate
         double modifiedAccuracy = 0.01 * accuracy
         * ((double) attacker.getAccuracy().getPower() / (double) defender.getEvasion().getPower());
 
-        if (new Random().nextDouble() > modifiedAccuracy) {
+        if (new Random().nextDouble() > modifiedAccuracy) { // Move misses
             data.moveHits = false;
             throw new MoveInterruptedException("But %s avoided the attack!", defender); 
         }
-            
-        data.moveHits = true;
-        eventManager.notifyAttackTargetPokemon(EventID.MOVE_HITS);
+        else { // Move hits
+            data.moveHits = true;
+            eventManager.notifyUserPokemon(EventID.ATK_MOVE_HITS);
+            eventManager.notifyAttackTargetPokemon(EventID.DEF_MOVE_HITS);
+        }      
+        
     }
 }

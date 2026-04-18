@@ -1,0 +1,1497 @@
+moves:
+- id: 491
+  name: Acid Spray
+  type: Poison
+  category: Special
+  pp: 20
+  pow: 40
+  addEffects:
+    statChange:
+      stats:
+        spDef: -2
+
+- id: 512
+  name: Acrobatics
+  type: Flying
+  category: Physical
+  pp: 15
+  pow: 55
+
+- id: 332
+  name: Aerial Ace
+  type: Flying
+  category: Physical
+  pp: 20
+  pow: 60
+  acc: 101
+
+- id: 314
+  name: Air Cutter
+  type: Flying
+  category: Special
+  pp: 25
+  pow: 60
+  acc: 95
+  crit: 0.125
+  target: All-Foes
+
+- id: 403
+  name: Air Slash
+  type: Flying
+  category: Special
+  pp: 15
+  pow: 75
+  acc: 95
+  addEffects:
+    conditionChange:
+      effect: Flinch
+      chance: 30
+
+- id: 133
+  name: Amnesia
+  type: Psychic
+  category: Status
+  pp: 20
+  target: Self
+  addEffects:
+    statChange:
+      stats:
+        spDef: 2
+
+- id: 453
+  name: Aqua Jet
+  type: Water
+  category: Physical
+  pp: 20
+  pow: 40
+  priority: 1
+
+- id: 401
+  name: Aqua Tail
+  type: Water
+  category: Physical
+  pp: 10
+  pow: 90
+  acc: 90
+
+- id: 396
+  name: Aura Sphere
+  type: Fighting
+  category: Special
+  pp: 20
+  pow: 80
+  acc: 101
+
+- id: 419
+  name: Avalanche
+  type: Ice
+  category: Physical
+  pp: 10
+  pow: 60
+  priority: -4
+
+- id: 44
+  name: Bite
+  type: Dark
+  category: Physical
+  pp: 25
+  pow: 60
+  addEffects:
+    conditionChange:
+      effect: Flinch
+      chance: 30
+
+- id: 974
+  name: Black Hole
+  type: Space
+  category: Special
+  pp: 10
+  pow: 75
+  acc: 100
+  target: All-Adjacent
+  addEffects:
+    statChange:
+      stats:
+        spd: -1
+
+- id: 307
+  name: Blast Burn
+  type: Fire
+  category: Special
+  pp: 5
+  pow: 150
+  acc: 90
+  addEffects:
+    charge:
+      effect: Recharge
+      self: true
+
+- id: 59
+  name: Blizzard
+  type: Ice
+  category: Special
+  pp: 5
+  pow: 110
+  acc: 70
+  target: All-Foes
+  addEffects:
+    conditionChange:
+      effect: Freeze
+      chance: 10
+
+- id: 34
+  name: Body Slam
+  type: Normal
+  category: Physical
+  pp: 15
+  pow: 85
+  addEffects:
+    conditionChange:
+      effect: Paralysis
+      chance: 30
+
+- id: 784
+  name: Breaking Swipe
+  type: Dragon
+  category: Physical
+  pp: 15
+  pow: 60
+  target: All-Foes
+  addEffects:
+    statChange:
+      stats:
+        atk: -1
+
+- id: 280
+  name: Brick Break
+  type: Fighting
+  category: Physical
+  pp: 15
+  pow: 75
+  addEffects:
+    barrierChange:
+      effect: Clear
+
+- id: 523
+  name: Bulldoze
+  type: Ground
+  category: Physical
+  pp: 20
+  pow: 60
+  contact: false
+  target: All-Adjacent
+  addEffects:
+    statChange:
+      stats:
+        spd: -1
+
+- id: 331
+  name: Bullet Seed
+  type: Grass
+  category: Physical
+  pp: 30
+  pow: 25
+  contact: false
+  multiHit: true
+
+- id: 204
+  name: Charm
+  type: Fairy
+  category: Status
+  pp: 20
+  addEffects:
+    statChange:
+      stats:
+        atk: -2
+
+- id: 886
+  name: Chilling Water
+  type: Water
+  category: Special
+  pp: 20
+  pow: 50
+  addEffects:
+    statChange:
+      stats:
+        atk: -1
+
+- id: 109
+  name: Confuse Ray
+  type: Ghost
+  category: Status
+  pp: 20
+  addEffects:
+    conditionChange:
+      effect: Confusion
+
+- id: 970
+  name: Cosmic Punch
+  type: Space
+  category: Physical
+  pp: 15
+  pow: 80
+  acc: 95
+  addEffects:
+    statChange:
+      stats:
+        spDef: -1
+
+- id: 242
+  name: Crunch
+  type: Dark
+  category: Physical
+  pp: 15
+  pow: 80
+  addEffects:
+    statChange:
+      chance: 20
+      stats:
+        def: -1
+
+- id: 174
+  name: Curse
+  type: Ghost
+  category: Status
+  pp: 10
+
+- id: 399
+  name: Dark Pulse
+  type: Dark
+  category: Special
+  pp: 15
+  pow: 80
+  addEffects:
+    conditionChange:
+      effect: Flinch
+      chance: 20
+
+- id: 91
+  name: Dig
+  type: Ground
+  category: Physical
+  pp: 10
+  pow: 80
+  addEffects:
+    semiImmune:
+      effect: Dig-State
+      self: true
+
+- id: 291
+  name: Dive
+  type: Water
+  category: Physical
+  pp: 10
+  pow: 80
+  addEffects:
+    semiImmune:
+      effect: Dive-State
+      self: true
+
+- id: 38
+  name: Double-Edge
+  type: Normal
+  category: Physical
+  pp: 15
+  pow: 120
+  addEffects:
+    recoil:
+      percent: 33.3
+
+- id: 225
+  name: Dragon Breath
+  type: Dragon
+  category: Special
+  pp: 20
+  pow: 60
+  addEffects:
+    conditionChange:
+      effect: Paralysis
+      chance: 30
+
+- id: 337
+  name: Dragon Claw
+  type: Dragon
+  category: Physical
+  pp: 15
+  pow: 80
+
+- id: 349
+  name: Dragon Dance
+  type: Dragon
+  category: Status
+  pp: 20
+  target: Self
+  addEffects:
+    statChange:
+      stats:
+        atk: 1
+        spd: 1
+
+- id: 406
+  name: Dragon Pulse
+  type: Dragon
+  category: Special
+  pp: 10
+  pow: 85
+
+- id: 525
+  name: Dragon Tail
+  type: Dragon
+  category: Physical
+  pp: 10
+  pow: 60
+  acc: 90
+  priority: -6
+  addEffects:
+    switchOut:
+      self: false
+
+- id: 414
+  name: Earth Power
+  type: Ground
+  category: Special
+  pp: 10
+  pow: 90
+  addEffects:
+    statChange:
+      chance: 10
+      stats:
+        spDef: -1
+
+- id: 89
+  name: Earthquake
+  type: Ground
+  category: Physical
+  pp: 10
+  pow: 100
+  contact: false
+  target: All-Adjacent
+
+- id: 52
+  name: Ember
+  type: Fire
+  category: Special
+  pp: 25
+  pow: 40
+  addEffects:
+    conditionChange:
+      effect: Burn
+      chance: 10
+
+- id: 203
+  name: Endure
+  type: Normal
+  category: Status
+  pp: 10
+  priority: 4
+  target: Self
+  addEffects:
+    conditionChange:
+      effect: Endure
+
+- id: 412
+  name: Energy Ball
+  type: Grass
+  category: Special
+  pp: 10
+  pow: 90
+  addEffects:
+    statChange:
+      chance: 10
+      stats:
+        spDef: -1
+
+- id: 263
+  name: Facade
+  type: Normal
+  category: Physical
+  pp: 20
+  pow: 70
+
+- id: 252
+  name: Fake Out
+  type: Dark
+  category: Physical
+  pp: 10
+  pow: 40
+  addEffects:
+    conditionChange:
+      effect: Flinch
+
+- id: 206
+  name: False Swipes
+  type: Normal
+  category: Physical
+  pp: 40
+  pow: 40
+
+- id: 126
+  name: Fire Blast
+  type: Fire
+  category: Special
+  pp: 5
+  pow: 110
+  acc: 85
+  addEffects:
+    conditionChange:
+      effect: Burn
+      chance: 10
+
+- id: 424
+  name: Fire Fang
+  type: Fire
+  category: Physical
+  pp: 15
+  pow: 65
+  acc: 95
+  addEffects:
+    conditionChange:
+      effect: Burn
+      chance: 100
+    conditionChange2:
+      effect: Flinch
+      chance: 100
+
+- id: 519
+  name: Fire Pledge
+  type: Fire
+  category: Special
+  pp: 10
+  pow: 80
+
+- id: 7
+  name: Fire Punch
+  type: Fire
+  category: Physical
+  pp: 15
+  pow: 75
+  addEffects:
+    conditionChange:
+      effect: Burn
+      chance: 10
+
+- id: 488
+  name: Flame Charge
+  type: Fire
+  category: Physical
+  pp: 20
+  pow: 50
+  addEffects:
+    statChange:
+      self: true
+      stats:
+        spd: 1
+
+- id: 53
+  name: Flamethrower
+  type: Fire
+  category: Special
+  pp: 15
+  pow: 90
+  addEffects:
+    conditionChange:
+      effect: Burn
+      chance: 10
+
+- id: 394
+  name: Flare Blitz
+  type: Fire
+  category: Physical
+  pp: 15
+  pow: 120
+  addEffects:
+    conditionChange:
+      effect: Burn
+      chance: 10
+    recoil:
+      percent: 33.3
+
+- id: 430
+  name: Flash Cannon
+  type: Steel
+  category: Special
+  pp: 10
+  pow: 80
+  addEffects:
+    statChange:
+      chance: 10
+      stats:
+        spDef: -1
+
+- id: 812
+  name: Flip Turn
+  type: Water
+  category: Special
+  pp: 20
+  pow: 60
+  addEffects:
+    switchOut:
+      self: true
+
+- id: 19
+  name: Fly
+  type: Flying
+  category: Physical
+  pp: 15
+  pow: 90
+  acc: 95
+  addEffects:
+    semiImmune:
+      effect: Fly-State
+      self: true
+
+- id: 411
+  name: Focus Blast
+  type: Fighting
+  category: Special
+  pp: 5
+  pow: 120
+  acc: 70
+  addEffects:
+    statChange:
+      chance: 10
+      stats:
+        spDef: -1
+
+- id: 264
+  name: Focus Punch
+  type: Fighting
+  category: Physical
+  pp: 20
+  pow: 150
+  priority: -3
+  addEffects:
+    charge:
+      effect: Focused
+
+- id: 338
+  name: Frenzy Plant
+  type: Grass
+  category: Special
+  pp: 5
+  pow: 150
+  acc: 90
+  addEffects:
+    charge:
+      effect: Recharge
+      self: true
+
+- id: 31
+  name: Fury Attack
+  type: Normal
+  category: Physical
+  pp: 20
+  pow: 15
+  acc: 85
+  multiHit: true
+
+- id: 202
+  name: Giga Drain
+  type: Grass
+  category: Special
+  pp: 10
+  pow: 75
+  addEffects:
+    lifeSteal:
+      percent: 50
+
+- id: 416
+  name: Giga Impact
+  type: Normal
+  category: Physical
+  pp: 5
+  pow: 150
+  acc: 90
+  addEffects:
+    charge:
+      effect: Recharge
+      self: true
+
+- id: 447
+  name: Grass Knot
+  type: Grass
+  category: Special
+  pp: 20
+  pow: 120
+  contact: true
+
+- id: 969
+  name: Graveyard Shock
+  type: Zombie
+  category: Special
+  pp: 5
+  pow: 120
+  addEffects:
+    conditionChange:
+      effect: Infect
+      chance: 30
+    charge:
+      self: true
+      effect: Charge
+
+- id: 971
+  name: Gravity Switch
+  type: Space
+  category: Status
+  pp: 5
+  target: Self
+  addEffects:
+    terrainChange:
+      effect: Gravity
+
+- id: 45
+  name: Growl
+  type: Normal
+  category: Status
+  pp: 40
+  target: All-Foes
+  addEffects:
+    statChange:
+      stats:
+        atk: -1
+
+- id: 74
+  name: Growth
+  type: Normal
+  category: Status
+  pp: 20
+
+- id: 360
+  name: Gyro Ball
+  type: Steel
+  category: Physical
+  pp: 5
+  pow: 150
+
+- id: 258
+  name: Hail
+  type: Ice
+  category: Status
+  pp: 10
+  target: Self
+  addEffects:
+    weatherChange:
+      effect: Sunny
+
+- id: 114
+  name: Haze
+  type: Ice
+  category: Status
+  pp: 30
+
+- id: 535
+  name: Heat Crash
+  type: Fire
+  category: Physical
+  pp: 10
+  pow: 120
+
+- id: 257
+  name: Heat Wave
+  type: Fire
+  category: Special
+  pp: 10
+  pow: 95
+  acc: 90
+  target: All-Foes
+  addEffects:
+    conditionChange:
+      effect: Burn
+      chance: 10
+
+- id: 542
+  name: Hurricane
+  type: Flying
+  category: Special
+  pp: 10
+  pow: 110
+  acc: 70
+  addEffects:
+    conditionChange:
+      effect: Confusion
+
+- id: 308
+  name: Hydro Cannon
+  type: Water
+  category: Special
+  pp: 5
+  pow: 150
+  acc: 90
+  addEffects:
+    charge:
+      effect: Recharge
+      self: true
+
+- id: 56
+  name: Hydro Pump
+  type: Water
+  category: Special
+  pp: 5
+  pow: 110
+  acc: 80
+
+- id: 63
+  name: Hyper Beam
+  type: Normal
+  category: Special
+  pp: 5
+  pow: 150
+  acc: 90
+  addEffects:
+    charge:
+      effect: Recharge
+      self: true
+
+- id: 58
+  name: Ice Beam
+  type: Ice
+  category: Special
+  pp: 10
+  pow: 90
+  addEffects:
+    conditionChange:
+      effect: Freeze
+      chance: 10
+
+- id: 8
+  name: Ice Punch
+  type: Ice
+  category: Physical
+  pp: 15
+  pow: 75
+  addEffects:
+    conditionChange:
+      effect: Freeze
+      chance: 10
+
+- id: 861
+  name: Ice Spinner
+  type: Ice
+  category: Physical
+  pp: 15
+  pow: 80
+  addEffects:
+    terrainChange:
+      effect: Clear
+
+- id: 196
+  name: Icy Wind
+  type: Ice
+  category: Special
+  pp: 15
+  pow: 55
+  acc: 95
+  target: All-Foes
+  addEffects:
+    statChange:
+      stats:
+        spd: -1
+
+- id: 964
+  name: Infect
+  type: Zombie
+  category: Physical
+  pp: 10
+  pow: 25
+  acc: 75
+  addEffects:
+    conditionChange:
+      effect: Infect
+
+- id: 517
+  name: Inferno
+  type: Fire
+  category: Special
+  pp: 5
+  pow: 100
+  acc: 50
+  addEffects:
+    conditionChange:
+      effect: Burn
+
+- id: 334
+  name: Iron Defense
+  type: Steel
+  category: Status
+  pp: 15
+  target: Self
+  addEffects:
+    statChange:
+      stats:
+        def: 2
+
+- id: 437
+  name: Leaf Storm
+  type: Grass
+  category: Physical
+  pp: 5
+  pow: 130
+  acc: 90
+  addEffects:
+    statChange:
+      self: true
+      stats:
+        spAtk: -2
+
+- id: 73
+  name: Leech Seed
+  type: Grass
+  category: Status
+  pp: 10
+  acc: 90
+  addEffects:
+    conditionChange:
+      effect: Seeded
+      percent: 12.5
+
+- id: 710
+  name: Liquidation
+  type: Water
+  category: Physical
+  pp: 10
+  pow: 85
+  addEffects:
+    statChange:
+      chance: 20
+      stats:
+        def: -1
+
+- id: 345
+  name: Magical Leaf
+  type: Grass
+  category: Special
+  pp: 20
+  pow: 60
+  acc: 101
+
+- id: 341
+  name: Mud Shot
+  type: Ground
+  category: Special
+  pp: 15
+  pow: 55
+  acc: 95
+  addEffects:
+    statChange:
+      stats:
+        spd: -1
+
+- id: 330
+  name: Muddy Water
+  type: Water
+  category: Special
+  pp: 10
+  pow: 90
+  acc: 85
+  target: All-Foes
+  addEffects:
+    statChange:
+      chance: 30
+      stats:
+        acc: -1
+
+- id: 967
+  name: Necrotic Claw
+  type: Zombie
+  category: Physical
+  pp: 10
+  pow: 90
+  acc: 90
+  addEffects:
+    conditionChange:
+      effect: Confusion
+      chance: 20
+
+- id: 973
+  name: Orbital Strike
+  type: Space
+  category: Physical
+  pp: 15
+  pow: 85
+  acc: 95
+  addEffects:
+    statChange:
+      stats:
+        spAtk: -1
+
+- id: 200
+  name: Outrage
+  type: Dragon
+  category: Physical
+  pp: 10
+  pow: 120
+  target: Self
+  addEffects:
+    charge:
+      self: true
+      effect: Rampage
+
+- id: 315
+  name: Overheat
+  type: Fire
+  category: Special
+  pp: 5
+  pow: 130
+  acc: 90
+  addEffects:
+    statChange:
+      self: true
+      stats:
+        spAtk: -2
+
+- id: 572
+  name: Petal Blizzard
+  type: Grass
+  category: Physical
+  pp: 15
+  pow: 90
+  contact: false
+  target: All-Adjacent
+
+- id: 80
+  name: Petal Dance
+  type: Grass
+  category: Special
+  pp: 10
+  pow: 120
+  contact: true
+  addEffects:
+    charge:
+      self: true
+      effect: Rampage
+
+- id: 398
+  name: Poison Jab
+  type: Poison
+  category: Physical
+  pp: 20
+  pow: 80
+  addEffects:
+    conditionChange:
+      effect: Poison
+      chance: 30
+
+- id: 77
+  name: Poison Powder
+  type: Poison
+  category: Status
+  pp: 35
+  addEffects:
+    conditionChange:
+      effect: Poison
+
+- id: 438
+  name: Power Whip
+  type: Grass
+  category: Physical
+  pp: 10
+  pow: 120
+  acc: 85
+
+- id: 182
+  name: Protect
+  type: Normal
+  category: Status
+  pp: 10
+  priority: 4
+  target: Self
+  addEffects:
+    conditionChange:
+      effect: Protect
+
+- id: 240
+  name: Rain Dance
+  type: Water
+  category: Status
+  pp: 5
+  target: Self
+  addEffects:
+    weatherChange:
+      effect: Rain
+
+- id: 229
+  name: Rapid Spin
+  type: Normal
+  category: Physical
+  pp: 40
+  pow: 50
+  addEffects:
+    statChange:
+      stats:
+        spd: 1
+
+- id: 75
+  name: Razor Leaf
+  type: Grass
+  category: Physical
+  pp: 25
+  pow: 55
+  acc: 95
+  crit: 0.125
+  contact: false
+  target: All-Foes
+
+- id: 156
+  name: Rest
+  type: Psychic
+  category: Status
+  pp: 5
+  target: Self
+  addEffects:
+    conditionChange:
+      effect: Sleep
+      duration: 2
+    heal:
+      percent: 100
+
+- id: 46
+  name: Roar
+  type: Sound
+  category: Status
+  pp: 20
+  priority: -6
+  addEffects:
+    switchOut:
+      self: false
+
+- id: 157
+  name: Rock Slide
+  type: Rock
+  category: Physical
+  pp: 10
+  pow: 75
+  acc: 90
+  contact: false
+  target: All-Foes
+  addEffects:
+    conditionChange:
+      effect: Flinch
+      chance: 30
+
+- id: 317
+  name: Rock Tomb
+  type: Rock
+  category: Physical
+  pp: 15
+  pow: 60
+  acc: 95
+  contact: false
+  addEffects:
+    statChange:
+      stats:
+        spd: -1
+
+- id: 965
+  name: Rotten Bite
+  type: Zombie
+  category: Physical
+  pp: 15
+  pow: 70
+  acc: 95
+  addEffects:
+    conditionChange:
+      effect: Infect
+      chance: 10
+    statChange:
+      chance: 30
+      stats:
+        atk: -1
+
+- id: 201
+  name: Sandstorm
+  type: Rock
+  category: Status
+  pp: 10
+  target: Self
+  addEffects:
+    weatherChange:
+      effect: Sandstorm
+
+- id: 184
+  name: Scary Face
+  type: Normal
+  category: Status
+  pp: 10
+  addEffects:
+    statChange:
+      stats:
+        spd: -2
+
+- id: 815
+  name: Scorching Sands
+  type: Ground
+  category: Special
+  pp: 10
+  pow: 70
+  addEffects:
+    conditionChange:
+      effect: Burn
+      chance: 30
+
+- id: 10
+  name: Scratch
+  type: Normal
+  category: Physical
+  pp: 35
+  pow: 40
+
+- id: 402
+  name: Seed Bomb
+  type: Grass
+  category: Physical
+  pp: 15
+  pow: 80
+  contact: false
+
+- id: 421
+  name: Shadow Claw
+  type: Ghost
+  category: Physical
+  pp: 15
+  pow: 70
+  crit: 0.125
+
+- id: 504
+  name: Shell Smash
+  type: Normal
+  category: Status
+  pp: 15
+  target: Self
+  addEffects:
+    statChange:
+      stats:
+        atk: 2
+        def: -1
+        spAtk: 2
+        spDef: -1
+        spd: 2
+
+- id: 163
+  name: Slash
+  type: Normal
+  category: Physical
+  pp: 20
+  pow: 70
+  crit: 0.125
+
+- id: 79
+  name: Sleep Powder
+  type: Grass
+  category: Status
+  pp: 15
+  acc: 75
+  addEffects:
+    conditionChange:
+      effect: Sleep
+
+- id: 214
+  name: Sleep Talk
+  type: Normal
+  category: Status
+  pp: 10
+  target: Self
+
+- id: 479
+  name: Smack Down
+  type: Rock
+  category: Physical
+  pp: 15
+  pow: 50
+  contact: false
+  addEffects:
+    conditionChange:
+      effect: Grounded
+
+- id: 108
+  name: Smokescreen
+  type: Normal
+  category: Status
+  pp: 20
+  addEffects:
+    statChange:
+      stats:
+        acc: -1
+
+- id: 76
+  name: Solar Beam
+  type: Grass
+  category: Special
+  pp: 10
+  pow: 120
+  addEffects:
+    charge:
+      effect: Charge
+      self: true
+
+- id: 972
+  name: Stellar Beam
+  type: Space
+  category: Special
+  pp: 10
+  pow: 100
+  acc: 90
+
+- id: 707
+  name: Stomping Tantrum
+  type: Ground
+  category: Physical
+  pp: 10
+  pow: 75
+
+- id: 78
+  name: Stun Spore
+  type: Grass
+  category: Status
+  pp: 30
+  acc: 75
+  addEffects:
+    conditionChange:
+      effect: Paralysis
+
+- id: 241
+  name: Sunny Day
+  type: Fire
+  category: Status
+  pp: 5
+  target: Self
+  addEffects:
+    weatherChange:
+      effect: Sunny
+
+- id: 57
+  name: Surf
+  type: Water
+  category: Special
+  pp: 15
+  pow: 90
+  target: All-Adjacent
+
+- id: 230
+  name: Sweet Scent
+  type: Normal
+  category: Status
+  pp: 20
+  target: All-Foes
+  addEffects:
+    statChange:
+      stats:
+        eva: -1
+
+- id: 129
+  name: Swift
+  type: Space
+  category: Special
+  pp: 20
+  pow: 60
+  acc: 101
+  target: All-Foes
+
+- id: 14
+  name: Swords Dance
+  type: Normal
+  category: Status
+  pp: 20
+  target: Self
+  addEffects:
+    statChange:
+      stats:
+        atk: 2
+
+- id: 235
+  name: Synthesis
+  type: Grass
+  category: Status
+  pp: 5
+  target: Self
+  addEffects:
+    heal:
+      percent: 50
+
+- id: 33
+  name: Tackle
+  type: Normal
+  category: Physical
+  pp: 35
+  pow: 40
+
+- id: 39
+  name: Tail Whip
+  type: Normal
+  category: Status
+  pp: 30
+  target: All-Foes
+  addEffects:
+    statChange:
+      stats:
+        def: -1
+
+- id: 36
+  name: Take Down
+  type: Normal
+  category: Physical
+  pp: 20
+  pow: 90
+  acc: 85
+  addEffects:
+    recoil:
+      percent: 25
+
+- id: 915
+  name: Temper Flare
+  type: Fire
+  category: Physical
+  pp: 10
+  pow: 75
+
+- id: 9
+  name: Thunder Punch
+  type: Electric
+  category: Physical
+  pp: 15
+  pow: 75
+  addEffects:
+    conditionChange:
+      effect: Paralysis
+      chance: 10
+
+- id: 92
+  name: Toxic
+  type: Poison
+  category: Status
+  pp: 10
+  acc: 90
+  addEffects:
+    conditionChange:
+      effect: Bad-Poison
+
+- id: 885
+  name: Trailblaze
+  type: Grass
+  category: Physical
+  pp: 20
+  pow: 50
+  addEffects:
+    statChange:
+      self: true
+      stats:
+        spd: 1
+
+- id: 966
+  name: Vampire Fang
+  type: Zombie
+  category: Physical
+  pp: 15
+  pow: 60
+  acc: 95
+  addEffects:
+    conditionChange:
+      effect: Infect
+      chance: 10
+    conditionChange2:
+      effect: Flinch
+      chance: 10
+
+- id: 474
+  name: Venoshock
+  type: Poison
+  category: Special
+  pp: 10
+  pow: 65
+
+- id: 22
+  name: Vine Whip
+  type: Grass
+  category: Physical
+  pp: 25
+  pow: 40
+
+- id: 968
+  name: Viral Spread
+  type: Zombie
+  category: Special
+  pp: 5
+  pow: 65
+  target: All-Foes
+  addEffects:
+    conditionChange:
+      effect: Infect
+      chance: 30
+
+- id: 55
+  name: Water Gun
+  type: Water
+  category: Special
+  pp: 25
+  pow: 40
+
+- id: 518
+  name: Water Pldge
+  type: Water
+  category: Special
+  pp: 10
+  pow: 80
+
+- id: 352
+  name: Water Pulse
+  type: Water
+  category: Special
+  pp: 20
+  pow: 60
+  addEffects:
+    conditionChange:
+      effect: Confusion
+      chance: 20
+
+- id: 834
+  name: Wave Crash
+  type: Water
+  category: Physical
+  pp: 10
+  pow: 120
+  addEffects:
+    recoil:
+      percent: 33.3
+
+- id: 250
+  name: Whirlpool
+  type: Water
+  category: Special
+  pp: 15
+  pow: 35
+  acc: 85
+  addEffects:
+    conditionChange:
+      effect: Bound
+
+- id: 261
+  name: Will-O-Wisp
+  type: Fire
+  category: Status
+  pp: 15
+  acc: 85
+  addEffects:
+    conditionChange:
+      effect: Burn
+
+- id: 110
+  name: Withdraw
+  type: Water
+  category: Status
+  pp: 40
+  target: Self
+  addEffects:
+    statChange:
+      stats:
+        def: 1
+
+- id: 428
+  name: Zen Headbutt
+  type: Psychic
+  category: Physical
+  pp: 15
+  pow: 80
+  acc: 90
+  addEffects:
+    conditionChange:
+      effect: Flinch
+      chance: 20

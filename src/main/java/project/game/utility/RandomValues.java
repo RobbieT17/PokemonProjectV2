@@ -14,6 +14,11 @@ public interface  RandomValues {
         return new Random().nextInt((max - min) + 1) + min;
     }
 
+    /**
+     * Random chance.
+     * @param value
+     * @return True if the next random double is less than the value
+     */
     public static boolean chance(double value) {
         if (value > 100 || value <= 0) throw new IllegalArgumentException("Chance must be between 1-100%");
         return (new Random().nextDouble() <= value * 0.01);

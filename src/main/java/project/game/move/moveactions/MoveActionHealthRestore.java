@@ -10,9 +10,12 @@ public interface MoveActionHealthRestore extends MoveAction {
     public static void restoreHp(EventManager eventManager, double percent) {
         EventData data  = eventManager.data;
         Pokemon p = data.attackTarget;
-
         data.healPercent = percent;
-        if (p.getHp().atFullHP()) throw new MoveInterruptedException("But %s is already at full health!", p);
-        p.restoreHpPercentMaxHP(percent, "");
+
+        if (p.getHp().atFullHP()) {
+            throw new MoveInterruptedException("But %s is already at full health!", p);
+        }
+
+        p.restoreHpPercentMaxHP(data.healPercent, "");
     }
 }

@@ -63,9 +63,8 @@ public class Battle {
         
             battleProcessor.constructTurnOrder();
             battleProcessor.processPokemonActions();
-            battleProcessor.checkWinConditions();
             battleProcessor.processRoundEnd();
-
+            battleProcessor.checkWinConditions();
             
             status = new BattleStatus(0);
         } catch (BattleEndedException e) {

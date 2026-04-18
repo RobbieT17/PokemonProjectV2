@@ -3,12 +3,12 @@ package project.game.pokemon.effects;
 import java.util.function.Function;
 
 import project.game.battle.BattleLog;
-import project.game.event.EventData;
 import project.game.event.GameEvents.EventID;
 import project.game.exceptions.MoveInterruptedException;
 import project.game.exceptions.PokemonCannotActException;
 import project.game.exceptions.PokemonFaintedException;
 import project.game.move.Move;
+import project.game.move.Move.MoveCategory;
 import project.game.move.moveactions.MoveActionAttack;
 import project.game.pokemon.Pokemon;
 import project.game.pokemon.stats.Type;
@@ -68,7 +68,7 @@ public interface StatusConditionManager {
         Pokemon p = c.target;
         StatusConditionID id = StatusConditionID.Burn;
         String name = id.name();
-        EventID[] flags = new EventID[] {EventID.END_OF_ROUND, EventID.DAMAGE_MULTIPLIER};
+        EventID[] flags = new EventID[] {EventID.END_OF_ROUND, EventID.ATK_DAMAGE_MULTIPLIER};
 
         p.getEvents().addEventListener(flags[0], name, e -> {
             p.takeDamagePercentMaxHP(1.0 / 16.0, " from the burn");
@@ -76,8 +76,10 @@ public interface StatusConditionManager {
         });
 
         p.getEvents().addEventListener(flags[1], name, e -> {
-            if (!(EventData.isUser(p, e) && e.moveUsed.isCategory(Move.MoveCategory.Physical))) return;
-            e.otherMoveMods *= 0.5;
+            if (e.moveUsed.isCategory(MoveCategory.Physical)) {
+                e.otherMoveMods *= 0.5;
+            }
+           
         });
 
         BattleLog.add("%s was burned!", p);
@@ -117,8 +119,8 @@ public interface StatusConditionManager {
 
     /*
      * Infected Pokemon lose 1/12 of their max HP at the end of each round
-     * and reduces special-move damage by 50%. If the infected Pokemon uses a contact move,
-     * the targeted Pokemon is also infected.
+     * and reduces special-move power by 50%. If the infected Pokemon (unless a Zombie-Type) 
+     * uses a contact move, the targeted Pokemon has a 10% chance to also be infected.
      *  
      * If the infected Pokemon is a Zombie-Type, their speed is doubled instead.
      * Only Non-Zombie Pokemon can infect Zombie-Type Pokemon.
@@ -128,24 +130,28 @@ public interface StatusConditionManager {
         StatusConditionID id = StatusConditionID.Infect;
         String name = id.name();
         EventID[] flags = new EventID[] {
-            EventID.MOVE_MAKES_CONTACT, EventID.DAMAGE_MULTIPLIER, 
+            EventID.ATK_MOVE_MAKES_CONTACT, EventID.ATK_DAMAGE_MULTIPLIER, 
             EventID.FIND_MOVE_ORDER, EventID.END_OF_ROUND
         };
 
         // Move makes contact: Infected Pokemon infects their targert
         p.getEvents().addEventListener(flags[0], name, e -> {
-            Pokemon t = e.effectTarget;
+            Pokemon t = e.attackTarget;
 
-            if (EventData.isUser(p, e) && !t.getConditions().hasPrimary()) {
-                t.getConditions().setPrimaryCondition(infect(c));
-                BattleLog.add("%s was infected!", t);
+            if (!p.isType(Type.Zombie) && !t.getConditions().hasPrimary()) {
+                // Rolls for infection
+                if (RandomValues.chance(10)) {
+                    StatusContext context = new StatusContext(t);
+                    t.getConditions().setPrimaryCondition(infect(context));
+                }
+                
             }
             
         }); 
         
         // Damage Multiplier: Special Moves deal 50% less damage
         p.getEvents().addEventListener(flags[1], name, e -> {
-            if (EventData.isUser(p, e) && e.moveUsed.isCategory(Move.MoveCategory.Special)) {
+            if (!p.isType(Type.Zombie) && e.moveUsed.isCategory(Move.MoveCategory.Special)) {
                 e.otherMoveMods *= 0.5;
             }
         });
@@ -199,7 +205,7 @@ public interface StatusConditionManager {
         EventID[] flags = new EventID[] {EventID.END_OF_ROUND};
 
         p.getEvents().addEventListener(flags[0], name, e -> {
-            p.takeDamagePercentMaxHP(1.0 / 8.0, " from the poison");
+            p.takeDamagePercentMaxHP(1.0 / 2.0, " from the poison");
             checkIfFaints(p);
         });
 
@@ -259,13 +265,17 @@ public interface StatusConditionManager {
         Move m = c.move;
         StatusConditionID id = StatusConditionID.Fly_State;
         String name = id.name();
-        EventID[] flags = new EventID[] {EventID.MOVE_SELECTION, EventID.MOVE_ACCURACY};
+        EventID[] flags = new EventID[] {EventID.MOVE_SELECTION, EventID.DEF_MOVE_ACCURACY};
 
-        p.getEvents().addEventListener(flags[0], name, e -> p.setMoveSelected(m));
+        p.getEvents().addEventListener(flags[0], name, e -> {
+            p.setMoveSelected(m);
+        });
         p.getEvents().addEventListener(flags[1], name, e -> {
             Move a = e.moveUsed;
-            if (!EventData.isTarget(p, e)) return;
-            if (a.getMoveID() == 479 ||  a.getMoveID() == 542) return;
+
+            if (a.getMoveID() == 479 ||  a.getMoveID() == 542) {
+                return;
+            }
             
             throw new MoveInterruptedException("But %s is high in the sky!", p);
         });
@@ -279,14 +289,15 @@ public interface StatusConditionManager {
         Move m = c.move;
         StatusConditionID id = StatusConditionID.Dig_State;
         String name = id.name();
-        EventID[] flags = new EventID[] {EventID.MOVE_SELECTION, EventID.MOVE_ACCURACY};
+        EventID[] flags = new EventID[] {EventID.MOVE_SELECTION, EventID.DEF_MOVE_ACCURACY};
 
         p.getEvents().addEventListener(flags[0], name, e -> p.setMoveSelected(m));
         p.getEvents().addEventListener(flags[1], name, e -> {
-            if (!EventData.isTarget(p, e)) return;
-            if (e.moveUsed.getMoveID() == 89) return;
+            if (e.moveUsed.getMoveID() != 89) {
+                return;
+            }
 
-            throw new MoveInterruptedException("But %s is high in the sky!", p);
+            throw new MoveInterruptedException("But %s is underground!", p);
         });
 
         BattleLog.add("%s dug underground!", p);
@@ -298,13 +309,15 @@ public interface StatusConditionManager {
         Move m = c.move;
         StatusConditionID id = StatusConditionID.Dive_State;
         String name = id.name();
-        EventID[] flags = new EventID[] {EventID.MOVE_SELECTION, EventID.MOVE_ACCURACY};
+        EventID[] flags = new EventID[] {EventID.MOVE_SELECTION, EventID.DEF_MOVE_ACCURACY};
 
         p.getEvents().addEventListener(flags[0], name, e -> p.setMoveSelected(m));
         p.getEvents().addEventListener(flags[1], name, e -> {
             Move a = e.moveUsed;
-            if (!EventData.isTarget(p, e)) return; 
-            if (a.getMoveID() == 57 || a.getMoveID() == 250) return;
+
+            if (a.getMoveID() == 57 || a.getMoveID() == 250) {
+                return;
+            }
 
             throw new MoveInterruptedException("But %s is underwater!", p);
         });
@@ -426,15 +439,15 @@ public interface StatusConditionManager {
 
     /*
      * Pokemon concentrates energy, and then attacks on the next turn
-     * If the Pokemon is hit with an attack, it lose it focus and
-     * their attack will fail.
+     * If the Pokemon is hit with an attack, it loses its focus and
+     * the attack will fail.
      */
     public static StatusCondition focused(StatusContext c) {
         Pokemon p = c.target;
         Move m = c.move;
         StatusConditionID id = StatusConditionID.Focused;
         String name = id.name();
-        EventID[] flags = new EventID[] {EventID.MOVE_SELECTION, EventID.USE_MOVE, EventID.MOVE_HITS};
+        EventID[] flags = new EventID[] {EventID.MOVE_SELECTION, EventID.USE_MOVE, EventID.DEF_MOVE_HITS};
 
         State state = new State(); // State True: Lost Focus
     
@@ -442,11 +455,12 @@ public interface StatusConditionManager {
 
         p.getEvents().addEventListener(flags[1], name, e -> {
             p.getConditions().removeCondition(id);
-            if (state.getBool()) throw new PokemonCannotActException("%s lost it's focus and couldn't move!", p);     
+            if (state.getBool()) {
+                throw new PokemonCannotActException("%s lost it's focus and couldn't move!", p);
+            }     
         });
 
         p.getEvents().addEventListener(flags[2], name, e -> {
-            if (!EventData.isTarget(p, e)) return;
             state.set(true);
         });
 
@@ -458,11 +472,9 @@ public interface StatusConditionManager {
         Pokemon p = c.target;
         StatusConditionID id = StatusConditionID.Grounded;
         String name = id.name();
-        EventID[] flags = new EventID[] {EventID.MOVE_EFFECTIVENESS};
+        EventID[] flags = new EventID[] {EventID.DEF_MOVE_EFFECTIVENESS};
 
         p.getEvents().addEventListener(flags[0], name, e -> {
-            if (!EventData.isTarget(p, e)) return;
-
             if (e.moveUsed.isType(Type.Ground) && e.moveEffectiveness == 0) {
                 e.moveEffectiveness = 1.0;
             }
@@ -524,7 +536,7 @@ public interface StatusConditionManager {
         Pokemon p = c.target;
         StatusConditionID id = StatusConditionID.Endure;
         String name = id.name();
-        EventID[] flags = new EventID[] {EventID.MOVE_DEALS_DAMAGE, EventID.END_OF_ROUND};
+        EventID[] flags = new EventID[] {EventID.DEF_MOVE_DEALS_DAMAGE, EventID.END_OF_ROUND};
 
         return new StatusCondition(p, name, flags);
     }

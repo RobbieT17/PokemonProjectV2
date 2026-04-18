@@ -13,7 +13,7 @@ public interface MoveActionCharge extends MoveAction{
      * Charges move first round, then unleashes it on the second.
      * Can be interrupted by status effects
      */
-    public static void chargeMove(EventManager eventManager) {
+    private static void chargeMove(EventManager eventManager) {
         EventData data  = eventManager.data;
         Pokemon attacker = data.user;
 
@@ -23,19 +23,20 @@ public interface MoveActionCharge extends MoveAction{
 
             attacker.getConditions().addCondition(StatusConditionManager.chargeMove(c));    
             BattleLog.add("%s begins charging!", attacker);
-            return;
+            eventManager.data.moveEndedEarly = true;
+        }
+        else {
+            attacker.getConditions().removeCondition(StatusConditionID.Charge);
+            eventManager.data.moveEndedEarly = false;
         }
         
-        attacker.getConditions().removeCondition(StatusConditionID.Charge);
-        MoveActionAttack.attackTarget(eventManager); 
     }
 
-
-    public static void focusMove(EventManager eventManager) {
+    private static void focusMove(EventManager eventManager) {
         BattleLog.add("<NOT IMPLEMENTED: Focus Move>");
     }
 
-    public static void rechargeMove(EventManager eventManager) {
+    private static void rechargeMove(EventManager eventManager) {
         EventData data  = eventManager.data;
         data.user.getConditions().setRecharge(true);
     }
@@ -46,7 +47,7 @@ public interface MoveActionCharge extends MoveAction{
      * cannot act due to a status condition. If the move
      * ends uninterrupted, the user becomes confused.
      */
-    public static void rampageMove(EventManager eventManager) {
+    private static void rampageMove(EventManager eventManager) {
         EventData data  = eventManager.data;
         Pokemon attacker = data.user;
 
@@ -57,9 +58,17 @@ public interface MoveActionCharge extends MoveAction{
 
             attacker.getConditions().addCondition(StatusConditionManager.rampage(c));
         }
-       
-        MoveActionAttack.attackTarget(eventManager);       
+             
     }
 
+    public static void enterChargeState(EventManager eventManager, StatusConditionID id) {
+        switch (id) {
+            case StatusConditionID.Charge -> MoveActionCharge.chargeMove(eventManager);
+            case StatusConditionID.Recharge -> MoveActionCharge.rechargeMove(eventManager);
+            case StatusConditionID.Rampage -> MoveActionCharge.rampageMove(eventManager);
+            case StatusConditionID.Focused -> MoveActionCharge.focusMove(eventManager);
+            default -> throw new IllegalArgumentException("Unexpected value: " + id);
+        }
+    }
 
 }
