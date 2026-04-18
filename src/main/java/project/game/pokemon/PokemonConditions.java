@@ -57,6 +57,10 @@ public class PokemonConditions {
         return this.conditions.containsKey(key.name());
     }
 
+    public boolean hasPrimaryCondition(StatusConditionID id) {
+        return this.hasPrimary() ? this.primaryCondition.getEffectName() == id.name() : false;
+    }
+
 // Methods
     public void clearPrimary() {
         if (this.primaryCondition == null) return;

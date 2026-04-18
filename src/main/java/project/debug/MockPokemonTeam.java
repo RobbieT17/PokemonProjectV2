@@ -25,26 +25,28 @@ public class MockPokemonTeam {
         Pokemon p3 = MockPokemonTeam.mockPokemon(Pokedex.Blastoise);
 
         p1.addMove(MockPokemonTeam.mockMove("Solar Beam"));
-        p1.addMove(MockPokemonTeam.mockMove("Scratch"));
-        p1.addMove(MockPokemonTeam.mockMove("Scary Face"));
-        p1.addMove(MockPokemonTeam.mockMove("Tail Whip"));
+        p1.addMove(MockPokemonTeam.mockMove("Leaf Storm"));
+        p1.addMove(MockPokemonTeam.mockMove("Sunny Day"));
+        p1.addMove(MockPokemonTeam.mockMove("Growth"));
         p1.setNickName("Vince");
-        p1.setAbility(AbilityID.Water_Absorb);
+        p1.setAbility(AbilityID.Chlorophyll);
+        p1.setItem(HeldItemID.Black_Sludge);
 
-        p2.addMove(MockPokemonTeam.mockMove("Orbital Strike"));
-        p2.addMove(MockPokemonTeam.mockMove("Vine Whip"));
-        p2.addMove(MockPokemonTeam.mockMove("Growth"));
+        p2.addMove(MockPokemonTeam.mockMove("Poison Powder"));
+        p2.addMove(MockPokemonTeam.mockMove("Venoshock"));
+        p2.addMove(MockPokemonTeam.mockMove("Energy Ball"));
         p2.addMove(MockPokemonTeam.mockMove("Synthesis"));
         p2.setNickName("Vance");
-        p2.setAbility(AbilityID.Chlorophyll);
+        p2.setAbility(AbilityID.Water_Absorb);
+        p2.setItem(HeldItemID.Leftovers);
 
-        p3.addMove(MockPokemonTeam.mockMove("Necrotic Claw"));
+        p3.addMove(MockPokemonTeam.mockMove("Rock Slide"));
         p3.addMove(MockPokemonTeam.mockMove("Bulldoze"));
-        p3.addMove(MockPokemonTeam.mockMove("Gyro Ball"));
+        p3.addMove(MockPokemonTeam.mockMove("Aqua Jet"));
         p3.addMove(MockPokemonTeam.mockMove("Shell Smash"));
         p3.setNickName("Bob");
         p3.setAbility(AbilityID.Torrent);
-        p3.setItem(HeldItemID.Bomb_Surprise);
+        p3.setItem(HeldItemID.Rocky_Helmet);
 
         return new PokemonTrainerBuilder()
         .setName(name)
@@ -58,19 +60,22 @@ public class MockPokemonTeam {
         Pokemon p1 = MockPokemonTeam.mockPokemon(Pokedex.Charizard);
         Pokemon p2 = MockPokemonTeam.mockPokemon(Pokedex.Blastoise);
 
-        p1.addMove(MockPokemonTeam.mockMove("Infect"));
+        p1.addMove(MockPokemonTeam.mockMove("Will-O-Wisp"));
         p1.addMove(MockPokemonTeam.mockMove("Dragon Dance"));
-        p1.addMove(MockPokemonTeam.mockMove("Amnesia"));
+        p1.addMove(MockPokemonTeam.mockMove("Aerial Ace"));
         p1.addMove(MockPokemonTeam.mockMove("Fire Fang"));
         p1.setNickName("Charlie");
-        p1.setAbility(AbilityID.Simple);
+        p1.setAbility(AbilityID.Blaze);
+        p1.setItem(HeldItemID.Muscle_Band);
 
-        p2.addMove(MockPokemonTeam.mockMove("Aqua Jet"));
+        p2.addMove(MockPokemonTeam.mockMove("Water Pulse"));
         p2.addMove(MockPokemonTeam.mockMove("Icy Wind"));
-        p2.addMove(MockPokemonTeam.mockMove("Bite"));
+        p2.addMove(MockPokemonTeam.mockMove("Earth Power"));
         p2.addMove(MockPokemonTeam.mockMove("Rain Dance"));
-        p2.setAbility(AbilityID.Torrent);
         p2.setNickName("Barry");
+        p2.setAbility(AbilityID.Torrent);
+        p2.setItem(HeldItemID.Wise_Glasses);
+        
 
         return new PokemonTrainerBuilder()
         .setName(name)

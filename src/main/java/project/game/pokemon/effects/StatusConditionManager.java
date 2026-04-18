@@ -68,10 +68,10 @@ public interface StatusConditionManager {
         Pokemon p = c.target;
         StatusConditionID id = StatusConditionID.Burn;
         String name = id.name();
-        EventID[] flags = new EventID[] {EventID.END_OF_ROUND, EventID.ATK_DAMAGE_MULTIPLIER};
+        EventID[] flags = new EventID[] {EventID.PRIMARY_STATUS_AFTER, EventID.ATK_DAMAGE_MULTIPLIER};
 
         p.getEvents().addEventListener(flags[0], name, e -> {
-            p.takeDamagePercentMaxHP(1.0 / 16.0, " from the burn");
+            p.takeDamagePercentMaxHP(100.0 / 16.0, " from the burn");
             checkIfFaints(p);
         });
 
@@ -131,7 +131,7 @@ public interface StatusConditionManager {
         String name = id.name();
         EventID[] flags = new EventID[] {
             EventID.ATK_MOVE_MAKES_CONTACT, EventID.ATK_DAMAGE_MULTIPLIER, 
-            EventID.FIND_MOVE_ORDER, EventID.END_OF_ROUND
+            EventID.FIND_MOVE_ORDER, EventID.PRIMARY_STATUS_AFTER
         };
 
         // Move makes contact: Infected Pokemon infects their targert
@@ -166,7 +166,7 @@ public interface StatusConditionManager {
         // End of Round: Infected Non-Zombie-Type Pokemon lose 1/12 of their max HP
         p.getEvents().addEventListener(flags[3], name, e -> {
             if (!p.isType(Type.Zombie)) {
-                p.takeDamagePercentMaxHP(1.0 / 12.0, " from the infection");
+                p.takeDamagePercentMaxHP(100.0 / 12.0, " from the infection");
             }
             
         });      
@@ -202,10 +202,10 @@ public interface StatusConditionManager {
         Pokemon p = c.target;
         StatusConditionID id = StatusConditionID.Poison;
         String name = id.name();
-        EventID[] flags = new EventID[] {EventID.END_OF_ROUND};
+        EventID[] flags = new EventID[] {EventID.PRIMARY_STATUS_AFTER};
 
         p.getEvents().addEventListener(flags[0], name, e -> {
-            p.takeDamagePercentMaxHP(1.0 / 8.0, " from the poison");
+            p.takeDamagePercentMaxHP(12.5, " from the poison");
             checkIfFaints(p);
         });
 
@@ -221,13 +221,13 @@ public interface StatusConditionManager {
         Pokemon p = c.target;
         StatusConditionID id = StatusConditionID.Bad_Poison;
         String name = id.name();
-        EventID[] flags = new EventID[] {EventID.END_OF_ROUND};
+        EventID[] flags = new EventID[] {EventID.PRIMARY_STATUS_AFTER};
 
         Counter counter = new Counter();
 
         p.getEvents().addEventListener(flags[0], name, e -> {
             counter.inc();
-            p.takeDamagePercentMaxHP(counter.getCount() / 16.0, " from the poison");
+            p.takeDamagePercentMaxHP(100 * counter.getCount() / 16.0, " from the poison");
             checkIfFaints(p);
         });
 
@@ -346,7 +346,7 @@ public interface StatusConditionManager {
         Pokemon p = c.target;
         StatusConditionID id = StatusConditionID.Bound;
         String name = id.name();
-        EventID[] flags = new EventID[] {EventID.END_OF_ROUND, EventID.SWITCH_OUT};
+        EventID[] flags = new EventID[] {EventID.STATUS_AFTER, EventID.SWITCH_OUT};
 
         Counter counter = new Counter(RandomValues.generateInt(2, 5));
 
@@ -356,7 +356,7 @@ public interface StatusConditionManager {
                 return;
             }
 
-            p.takeDamagePercentMaxHP(1.0 / 8.0, " from the bound");
+            p.takeDamagePercentMaxHP(12.5, " from the bound");
             checkIfFaints(p);
         });
 
@@ -403,7 +403,7 @@ public interface StatusConditionManager {
         Pokemon r = c.source;
         StatusConditionID id = StatusConditionID.Seeded;
         String name = id.name();
-        EventID[] flags = new EventID[] {EventID.END_OF_ROUND};
+        EventID[] flags = new EventID[] {EventID.STATUS_AFTER};
 
         p.getEvents().addEventListener(flags[0], name, e -> {
             int damage = (int) (p.getHp().getMaxHealthPoints() / 8.0);
@@ -425,7 +425,7 @@ public interface StatusConditionManager {
         int n = c.count;
         StatusConditionID id = StatusConditionID.Forced_Move;
         String name = id.name();
-        EventID[] flags = new EventID[] {EventID.MOVE_SELECTION, EventID.END_OF_ROUND};
+        EventID[] flags = new EventID[] {EventID.MOVE_SELECTION, EventID.STATUS_AFTER};
 
         Counter counter = new Counter(n);
 
@@ -536,7 +536,7 @@ public interface StatusConditionManager {
         Pokemon p = c.target;
         StatusConditionID id = StatusConditionID.Endure;
         String name = id.name();
-        EventID[] flags = new EventID[] {EventID.DEF_MOVE_DEALS_DAMAGE, EventID.END_OF_ROUND};
+        EventID[] flags = new EventID[] {EventID.DEF_MOVE_DEALS_DAMAGE, EventID.STATUS_AFTER};
 
         return new StatusCondition(p, name, flags);
     }

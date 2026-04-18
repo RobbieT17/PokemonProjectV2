@@ -167,7 +167,13 @@ public class Server {
 
         Server.lock();
 
-        Server.battleLoop(battle);
+        try {
+            Server.battleLoop(battle);
+        } catch (Exception e) {
+            Server.broadcast("An unexpected error occured.");
+            e.printStackTrace();
+        }
+        
             
     }
 

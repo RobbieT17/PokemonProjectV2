@@ -7,7 +7,6 @@ public class StatPoint {
 // Class Variables
 	private final static int LOWEST_STAT_STAGE = -6;
 	private final static int HIGHEST_STAT_STAGE = 6;
-	private final static double MULTIPLIER = 0.125;
 
 // Object Variables
 	private final StatID statID;

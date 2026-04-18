@@ -4,7 +4,6 @@ import java.util.function.Function;
 
 import project.game.battle.BattleLog;
 import project.game.event.GameEvents.EventID;
-import project.game.exceptions.MoveInterruptedException;
 import project.game.move.Move;
 import project.game.move.Move.MoveCategory;
 import project.game.pokemon.Pokemon;
@@ -60,12 +59,13 @@ public interface HeldItemManager {
         EventID[] flags = new EventID[] {EventID.END_OF_ROUND};
 
         p.getEvents().addEventListener(flags[0], name, e -> {
-            double percent = 1.0 / 16.0;
+            double percent = 6.25;
             if (p.isType(Type.Poison)) {
                 p.restoreHpPercentMaxHP(percent, " from its Black Sludge");
-                return;
             }
-            p.takeDamagePercentMaxHP(percent, " from its Black Sludge");
+            else {
+               p.takeDamagePercentMaxHP(percent, " from its Black Sludge"); 
+            }   
         });
 
         return new HeldItem(p, name, flags);
@@ -152,7 +152,7 @@ public interface HeldItemManager {
         String name = HeldItemID.Leftovers.name();
         EventID[] flags = new EventID[] {EventID.END_OF_ROUND};
 
-        p.getEvents().addEventListener(flags[0], name, e -> p.restoreHpPercentMaxHP(1.0 / 16.0, " from its Leftovers"));
+        p.getEvents().addEventListener(flags[0], name, e -> p.restoreHpPercentMaxHP(6.25, " from its Leftovers"));
 
         return new HeldItem(p, name, flags);
 	}
@@ -177,7 +177,7 @@ public interface HeldItemManager {
         EventID[] flags = new EventID[] {EventID.DEF_MOVE_MAKES_CONTACT};
 
         p.getEvents().addEventListener(flags[0], name, e -> {
-            e.user.takeDamagePercentMaxHP(1.0 / 6.0, String.format(" from %s's Rocky Helmet", p));
+            e.user.takeDamagePercentMaxHP(100.0, String.format(" from %s's Rocky Helmet", p));
         });
 
         return new HeldItem(p, name, flags);

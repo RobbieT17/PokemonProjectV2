@@ -103,7 +103,7 @@ public interface MoveActionChangeCondition extends MoveAction {
             return;
         }
 
-        if (new Random().nextDouble() > chance * 0.01) {
+        if (new Random(System.currentTimeMillis()).nextDouble() > chance * 0.01) {
             data.statusFailed = true;
             return;
         }

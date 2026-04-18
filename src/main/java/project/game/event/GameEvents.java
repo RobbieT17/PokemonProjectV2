@@ -5,16 +5,18 @@ import java.util.HashMap;
 public class GameEvents {
 
     public enum EventID {
-        END_OF_TURN,
-        END_OF_ROUND,
-        WEATHER_EFFECT,
         MOVE_SELECTION,
-        USE_MOVE,
-        MOVE_INTERRUPTED,
         FIND_MOVE_ORDER,
+        USE_MOVE,
+        MOVE_INTERRUPTED,  
         PRIMARY_STATUS_BEFORE,
         STATUS_BEFORE,
         BEFORE_MOVE,
+        PRIMARY_STATUS_AFTER,
+        STATUS_AFTER,
+        END_OF_TURN,
+        END_OF_ROUND,
+        WEATHER_EFFECT,
         SWITCH_IN,
         SWITCH_OUT,
         ATK_MOVE_HITS,

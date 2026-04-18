@@ -54,8 +54,7 @@ public class PokemonProcessor {
             this.eventManager.notifyUserPokemon(EventID.USE_MOVE);
             move.getPp().decrement(user.getConditions().hasKey(StatusConditionID.Forced_Move));
 
-            MoveProcessor moveProcessor = new MoveProcessor(eventManager);
-            moveProcessor.processMove();
+            new MoveProcessor(eventManager).processMove();
 
         } catch (MoveEndedEarlyException e) { // TODO: Entering immune state should throw this exception
             eventManager.data.message = e.getMessage();
@@ -72,8 +71,9 @@ public class PokemonProcessor {
      */
     public void useTurn(){
         Pokemon user = this.eventManager.data.user;
+        Pokemon target = this.eventManager.data.attackTarget;
 
-        if (user.getConditions().isFainted()) {
+        if (user.getConditions().isFainted() || target.getConditions().isFainted()) {
             return;
         }
 
@@ -98,9 +98,4 @@ public class PokemonProcessor {
         eventManager.updateEventMaps();
     }
 
-    public void processEndOfRound() {
-        
-    }
-
-   
 }

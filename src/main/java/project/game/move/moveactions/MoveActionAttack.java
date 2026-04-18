@@ -47,7 +47,6 @@ public interface MoveActionAttack extends MoveAction {
         BattleLog.add(data.criticalHit ? "A critical hit!" : "");
 
         attacker.addDealtDamage(damage);
-        defender.addDamageReceived(damage);
         defender.takeDamage(damage);
         
         eventManager.notifyUserPokemon(EventID.ATK_MOVE_DEALS_DAMAGE);
@@ -103,7 +102,6 @@ public interface MoveActionAttack extends MoveAction {
     public static void takeConfusionDamage(Pokemon p) {
         int damage = (int) (((((2 * p.getLevel()) / 5.0 + 2) * 40 * (p.getAttack().getPower() / (double) p.getDefense().getPower())) / 50.0 + 2)); 
         BattleLog.add("%s took %d damage from their own confusion!", p, damage);
-        p.addDamageReceived(damage);
         p.takeDamage(damage); 
     }
 

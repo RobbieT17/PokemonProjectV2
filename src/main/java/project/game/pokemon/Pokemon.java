@@ -116,7 +116,7 @@ public class Pokemon {
 
     // Takes damage equal to a percent of max HP
     public void takeDamagePercentMaxHP(double percent, String message) {
-        int damage = (int) (this.getHp().getMaxHealthPoints() * percent);
+        int damage = (int) (this.getHp().getMaxHealthPoints() * percent * 0.01);
         BattleLog.add("%s took %d damage%s", this, damage, message + "!");
         this.takeDamage(damage);
     }
@@ -176,7 +176,7 @@ public class Pokemon {
         return this.hp.getCurrentHealthPoints() / (double) this.hp.getMaxHealthPoints() < 0.01 * percent; 
     }
 
-    public boolean isFirstRound() {
+    public boolean isFirstRound() { 
         return this.roundCount == 0;
     }
  

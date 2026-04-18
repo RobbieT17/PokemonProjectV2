@@ -15,69 +15,63 @@ public class BattleProcessor {
 
     private final BattleData battleData;
 
-    private final Pokemon pokemon1;
-    private final Pokemon pokemon2;
+    private final PokemonTrainer player1;
+    private final PokemonTrainer player2;
 
     private Pokemon[] turnOrder;
 
     public BattleProcessor(BattleData data) {
         this.battleData = data;
-        this.pokemon1 = data.getPlayer1().getPokemonInBattle();
-        this.pokemon2 = data.getPlayer2().getPokemonInBattle();
+        this.player1 = data.getPlayer1();
+        this.player2 = data.getPlayer2();
     }
 
-    // Finds the order which the Pokemon in battle will move
+    // Finds the order which the Pokemon in battle will act
     public void constructTurnOrder() {
-        EventManager eventManager1 = new EventManager(this.battleData, this.pokemon1);
-        EventManager eventManager2 = new EventManager(this.battleData, this.pokemon2);
+        Pokemon pokemon1 = this.player1.getPokemonInBattle();
+        Pokemon pokemon2 = this.player2.getPokemonInBattle();
+
+        EventManager eventManager1 = new EventManager(this.battleData, pokemon1);
+        EventManager eventManager2 = new EventManager(this.battleData, pokemon2);
 
         eventManager1.notifyUserPokemon(EventID.FIND_MOVE_ORDER);
         eventManager2.notifyUserPokemon(EventID.FIND_MOVE_ORDER);
 
         Pokemon[] order = new Pokemon[2];
 
-        Move m1 = this.pokemon1.getMoveSelected();
-        Move m2 = this.pokemon2.getMoveSelected();
+        Move m1 = pokemon1.getMoveSelected();
+        Move m2 = pokemon2.getMoveSelected();
 
-        int speed1 = this.pokemon1.getSpeed().getPower();
-        int speed2 = this.pokemon2.getSpeed().getPower();
+        int speed1 = pokemon1.getSpeed().getPower();
+        int speed2 = pokemon2.getSpeed().getPower();
 
-        // Handles null moves (pokemon may not always have selected a move)
-        if (m2 == null) {
-            order[0] = this.pokemon1;
-            order[1] = this.pokemon2;
-        }
-        else if (m1 == null) {
-            order[0] = this.pokemon2;
-            order[1] = this.pokemon1;
-        }
         // Higher Priority Moves act first
-        else if (m1.getPriority() > m2.getPriority()) {
-            order[0] = this.pokemon1; 
-            order[1] = this.pokemon2;
+        if (m1.getPriority() > m2.getPriority()) {
+            order[0] = pokemon1; 
+            order[1] = pokemon2;
         }
-        else if (m1.getPriority() < m2.getPriority()) {
-            order[0] = this.pokemon2; 
-            order[1] = this.pokemon1;
+        else if (m2.getPriority() > m1.getPriority()) {
+            order[0] = pokemon2; 
+            order[1] = pokemon1;
         }
         // Pokemon with higher speed acts firsts
         else if (speed1 > speed2) {
-            order[0] = this.pokemon1;
-            order[1] = this.pokemon2;
+            order[0] = pokemon1;
+            order[1] = pokemon2;
         }
-        else if (speed1 < speed2) {
-            order[0] = this.pokemon2;
-            order[1] = this.pokemon1;
+        else if (speed2 > speed1) {
+            order[0] = pokemon2;
+            order[1] = pokemon1;
         }
         // Speed Tie, move order is random
         else {
-            if (new Random().nextDouble() < 0.5){
-                order[0] = this.pokemon1;
-                order[1] = this.pokemon2;
+            if (new Random(System.currentTimeMillis()).nextDouble() < 0.5){
+                order[0] = pokemon1;
+                order[1] = pokemon2;
             }
             else {
-                order[0] = this.pokemon2;
-                order[1] = this.pokemon1;
+                order[0] = pokemon2;
+                order[1] = pokemon1;
             }
         }
 
@@ -90,13 +84,8 @@ public class BattleProcessor {
      */
     public void processPokemonActions() {
         // Faster pokemon acts first, followed by the second
-        try {
-            for (Pokemon p : this.turnOrder) {
-            PokemonProcessor pokemonProcessor = new PokemonProcessor(this.battleData, p);
-            pokemonProcessor.useTurn();
-        }
-        } catch (PokemonFaintedException e) {
-            return;
+        for (Pokemon p : this.turnOrder) {
+            new PokemonProcessor(this.battleData, p).useTurn();
         }
         
     }
@@ -104,18 +93,15 @@ public class BattleProcessor {
     /**
      * Checks if a Pokemon has fainted or the battle has been won (player is out of Pokemon)
      */
-    public void checkWinConditions() {
-        PokemonTrainer t1 = this.pokemon1.getOwner();
-        PokemonTrainer t2 = this.pokemon2.getOwner();
-        
-        if (t1.outOfPokemon() && t2.outOfPokemon()) {
+    public void checkWinConditions() {        
+        if (this.player1.outOfPokemon() && this.player2.outOfPokemon()) {
             throw new BattleEndedException("Both players are out of Pokemon, it's a tie!");
         }
-        else if (t1.outOfPokemon()) {
-            throw new BattleEndedException(t2, t1);
+        else if (this.player1.outOfPokemon()) {
+            throw new BattleEndedException(this.player2, this.player1);
         }
-        else if (t2.outOfPokemon()){
-            throw new BattleEndedException(t1, t2);
+        else if (this.player2.outOfPokemon()){
+            throw new BattleEndedException(this.player1, this.player2);
         }
     }
 
@@ -129,14 +115,18 @@ public class BattleProcessor {
         for (Pokemon p : this.turnOrder) {
             p.endOfRoundReset();
 
+            if (p.getConditions().isFainted()) { // Skips Pokemon if fainted
+                continue;
+            }
+
             try {
                 // TODO: Tick weather
 
                 EventManager eventManager = new EventManager(this.battleData, p);
                 eventManager.updateEventMaps();
                 eventManager.notifyUserPokemon(EventID.WEATHER_EFFECT);
-                // eventManager.notifyUserPokemon(EventID.PRIMARY_STATUS_AFTER);
-                // eventManager.notifyUserPokemon(EventID.STATUS_AFTER);
+                eventManager.notifyUserPokemon(EventID.PRIMARY_STATUS_AFTER);
+                eventManager.notifyUserPokemon(EventID.STATUS_AFTER);
                 eventManager.notifyUserPokemon(EventID.END_OF_ROUND);
             } catch (PokemonFaintedException e) { 
                 // Some effects might cause the Pokemon to faint, skip to next Pokemon if so

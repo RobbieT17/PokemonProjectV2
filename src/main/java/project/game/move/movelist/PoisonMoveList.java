@@ -8,7 +8,9 @@ public class PoisonMoveList {
 
    
     public static int venoshock(EventManager e) {
-        if (e.data.attackTarget.getConditions().hasKey(StatusConditionID.Poison)) {
+        if (e.data.attackTarget.getConditions().hasPrimaryCondition(StatusConditionID.Poison) ||
+            e.data.attackTarget.getConditions().hasPrimaryCondition(StatusConditionID.Bad_Poison)) 
+        {
             e.data.moveUsed.doublePower();
         }
         MoveActionAttack.attackTarget(e);

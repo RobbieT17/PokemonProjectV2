@@ -73,7 +73,7 @@ public interface AbilityManager {
             Move move = e.moveUsed;
             if (move.isType(Type.Fire) && p.isHpLessThanPercent(33)) {
                 e.otherMoveMods *= 1.5;
-                BattleLog.add("%s's Blaze increased the power of its Fire-Type attack!", p);
+                BattleLog.add("Blaze increased the power of %s's Fire-Type attack!", p);
             } 
         });
 
@@ -103,7 +103,7 @@ public interface AbilityManager {
             Move move = e.moveUsed;
             if (move.isType(Type.Grass) && p.isHpLessThanPercent(33)) {
                 e.otherMoveMods *= 1.5;
-                BattleLog.add("%s's Overgrow increased the power of its Grass-Type attack!", p);
+                BattleLog.add("Overgrow increased the power of %s's Grass-Type attack!", p);
             }         
         });
 
@@ -117,7 +117,7 @@ public interface AbilityManager {
 
         p.getEvents().addEventListener(flags[0], name, e -> {
             if (e.battleData.isCurrentWeather(WeatherEffect.Rain)) {
-                p.restoreHpPercentMaxHP(1.0 / 16.0, " from its Rain Dish");
+                p.restoreHpPercentMaxHP(6.25, " from its Rain Dish");
             }
         });
 
@@ -157,7 +157,7 @@ public interface AbilityManager {
 
         p.getEvents().addEventListener(flags[1], name, e -> {
             if (e.battleData.isCurrentWeather(WeatherEffect.Sunny)  && !p.getConditions().isFainted()) {
-                p.takeDamagePercentMaxHP(1.0 / 8.0, " from its Solar Power");
+                p.takeDamagePercentMaxHP(12.5, " from its Solar Power");
                 if (p.getConditions().isFainted()) throw new PokemonFaintedException();
             }
         });
@@ -174,7 +174,7 @@ public interface AbilityManager {
             Move move = e.moveUsed;
             if (move.isType(Type.Water) && p.isHpLessThanPercent(33)) {
                 e.otherMoveMods *= 1.5; 
-                BattleLog.add("%s's Overgrow increased the power of its Water-Type attack!", p);
+                BattleLog.add("Torrent increased the power of %s's Water-Type attack!", p);
             }        
         });
 
