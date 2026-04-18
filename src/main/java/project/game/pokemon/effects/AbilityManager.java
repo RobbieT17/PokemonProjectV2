@@ -19,6 +19,7 @@ public interface AbilityManager {
         Chlorophyll(AbilityManager::chlorophyll),
         Overgrow(AbilityManager::overgrow),
         Rain_Dish(AbilityManager::rainDish),
+        Simple(AbilityManager::simple),
         Solar_Power(AbilityManager::solarPower),
         Torrent(AbilityManager::torrent),
         Water_Absorb(AbilityManager::waterAbsorb);
@@ -117,6 +118,22 @@ public interface AbilityManager {
         p.getEvents().addEventListener(flags[0], name, e -> {
             if (e.battleData.isCurrentWeather(WeatherEffect.Rain)) {
                 p.restoreHpPercentMaxHP(1.0 / 16.0, " from its Rain Dish");
+            }
+        });
+
+        return new Ability(p, name, flags);
+    }
+
+    /**
+     * Doubles the number of stages of all stat changes. 
+     */
+    public static Ability simple(Pokemon p) {
+        String name = AbilityID.Simple.name();
+        EventID[] flags = new EventID[] {EventID.DEF_STAT_CHANGE};
+
+        p.getEvents().addEventListener(flags[0], name, e -> {
+            for (int i = 0; i < e.statChanges.length; i++) {
+                e.statChanges[i] *= 2;
             }
         });
 

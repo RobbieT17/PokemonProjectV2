@@ -30,12 +30,10 @@ public class EventManager {
 
     /**
      * Notifes the effect target Pokemon of the specified event.
-     * Does not send a notification if the user is also the effect
-     * target.
      * @param id Event ID
      */
     public void notifyEffectTargetPokemon(EventID id) {
-        this.data.effectTarget.getEvents().updateEvent(id, this.data);
+        this.data.effectTarget.getEvents().updateEvent(id, this.data);   
     }
 
     public void updateEventMaps() {

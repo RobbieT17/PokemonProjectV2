@@ -26,8 +26,8 @@ public class MockPokemonTeam {
 
         p1.addMove(MockPokemonTeam.mockMove("Solar Beam"));
         p1.addMove(MockPokemonTeam.mockMove("Scratch"));
-        p1.addMove(MockPokemonTeam.mockMove("Amnesia"));
-        p1.addMove(MockPokemonTeam.mockMove("Poison Powder"));
+        p1.addMove(MockPokemonTeam.mockMove("Scary Face"));
+        p1.addMove(MockPokemonTeam.mockMove("Tail Whip"));
         p1.setNickName("Vince");
         p1.setAbility(AbilityID.Water_Absorb);
 
@@ -60,11 +60,10 @@ public class MockPokemonTeam {
 
         p1.addMove(MockPokemonTeam.mockMove("Infect"));
         p1.addMove(MockPokemonTeam.mockMove("Dragon Dance"));
-        p1.addMove(MockPokemonTeam.mockMove("Aerial Ace"));
+        p1.addMove(MockPokemonTeam.mockMove("Amnesia"));
         p1.addMove(MockPokemonTeam.mockMove("Fire Fang"));
         p1.setNickName("Charlie");
-        p1.setAbility(AbilityID.Blaze);
-        p1.setAbility(AbilityID.All_Or_Nothing);
+        p1.setAbility(AbilityID.Simple);
 
         p2.addMove(MockPokemonTeam.mockMove("Aqua Jet"));
         p2.addMove(MockPokemonTeam.mockMove("Icy Wind"));

@@ -80,7 +80,6 @@ public class StatPoint {
 			default -> 1.0;
 		};
 
-
 		this.power = (int) (this.base * mod);
 	}
 
@@ -101,7 +100,6 @@ public class StatPoint {
 			case 6 -> 3;
 			default -> 1.0;
 		};
-
 
 		this.power = (int) (this.base * mod);
 	}
