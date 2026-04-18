@@ -177,7 +177,7 @@ public interface HeldItemManager {
         EventID[] flags = new EventID[] {EventID.DEF_MOVE_MAKES_CONTACT};
 
         p.getEvents().addEventListener(flags[0], name, e -> {
-            e.user.takeDamagePercentMaxHP(100.0, String.format(" from %s's Rocky Helmet", p));
+            e.user.takeDamagePercentMaxHP(100.0 / 6.0, String.format(" from %s's Rocky Helmet", p));
         });
 
         return new HeldItem(p, name, flags);

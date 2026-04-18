@@ -63,6 +63,7 @@ public class Battle {
         
             battleProcessor.constructTurnOrder();
             battleProcessor.processPokemonActions();
+            battleProcessor.updateBattleData();
             battleProcessor.processRoundEnd();
             battleProcessor.checkWinConditions();
             

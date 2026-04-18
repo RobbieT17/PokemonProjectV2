@@ -1,7 +1,5 @@
 package project.game.processors;
 
-import java.util.Random;
-
 import project.game.battle.BattleData;
 import project.game.event.EventManager;
 import project.game.event.GameEvents.EventID;
@@ -10,6 +8,7 @@ import project.game.exceptions.PokemonFaintedException;
 import project.game.move.Move;
 import project.game.player.PokemonTrainer;
 import project.game.pokemon.Pokemon;
+import project.game.utility.RandomValues;
 
 public class BattleProcessor {
 
@@ -65,7 +64,7 @@ public class BattleProcessor {
         }
         // Speed Tie, move order is random
         else {
-            if (new Random(System.currentTimeMillis()).nextDouble() < 0.5){
+            if (RandomValues.chance(50)){
                 order[0] = pokemon1;
                 order[1] = pokemon2;
             }
@@ -91,18 +90,10 @@ public class BattleProcessor {
     }
 
     /**
-     * Checks if a Pokemon has fainted or the battle has been won (player is out of Pokemon)
+     * Updates things like weather and terrain effects 
      */
-    public void checkWinConditions() {        
-        if (this.player1.outOfPokemon() && this.player2.outOfPokemon()) {
-            throw new BattleEndedException("Both players are out of Pokemon, it's a tie!");
-        }
-        else if (this.player1.outOfPokemon()) {
-            throw new BattleEndedException(this.player2, this.player1);
-        }
-        else if (this.player2.outOfPokemon()){
-            throw new BattleEndedException(this.player1, this.player2);
-        }
+    public void updateBattleData() {
+        new WeatherProcessor(this.battleData).updateWeather();
     }
 
     /**
@@ -121,6 +112,7 @@ public class BattleProcessor {
 
             try {
                 // TODO: Tick weather
+                new WeatherProcessor(this.battleData).pokemonTakeWeatherDamage(p);
 
                 EventManager eventManager = new EventManager(this.battleData, p);
                 eventManager.updateEventMaps();
@@ -135,6 +127,21 @@ public class BattleProcessor {
             
         }
 
+    }
+
+    /**
+     * Checks if a Pokemon has fainted or the battle has been won (player is out of Pokemon)
+     */
+    public void checkWinConditions() {        
+        if (this.player1.outOfPokemon() && this.player2.outOfPokemon()) {
+            throw new BattleEndedException("Both players are out of Pokemon, it's a tie!");
+        }
+        else if (this.player1.outOfPokemon()) {
+            throw new BattleEndedException(this.player2, this.player1);
+        }
+        else if (this.player2.outOfPokemon()){
+            throw new BattleEndedException(this.player1, this.player2);
+        }
     }
 
 }

@@ -60,7 +60,7 @@ public class MockPokemonTeam {
         Pokemon p1 = MockPokemonTeam.mockPokemon(Pokedex.Charizard);
         Pokemon p2 = MockPokemonTeam.mockPokemon(Pokedex.Blastoise);
 
-        p1.addMove(MockPokemonTeam.mockMove("Will-O-Wisp"));
+        p1.addMove(MockPokemonTeam.mockMove("Sandstorm"));
         p1.addMove(MockPokemonTeam.mockMove("Dragon Dance"));
         p1.addMove(MockPokemonTeam.mockMove("Aerial Ace"));
         p1.addMove(MockPokemonTeam.mockMove("Fire Fang"));

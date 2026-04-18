@@ -1,13 +1,12 @@
 package project.game.move.moveactions;
 
-import java.util.Random;
-
 import project.game.battle.BattleLog;
 import project.game.event.EventData;
 import project.game.event.EventManager;
 import project.game.event.GameEvents.EventID;
 import project.game.pokemon.Pokemon;
 import project.game.pokemon.stats.StatPoint;
+import project.game.utility.RandomValues;
 
 public interface MoveActionChangeStat extends MoveAction {
      /**
@@ -46,11 +45,13 @@ public interface MoveActionChangeStat extends MoveAction {
         eventManager.notifyUserPokemon(EventID.ATK_STAT_CHANGE);
         eventManager.notifyEffectTargetPokemon(EventID.DEF_STAT_CHANGE);
 
-        if (new Random().nextDouble() > data.statProb * 0.01) {
-            data.statFailed = true;
-            return;
+        if (RandomValues.chance(chance)) {
+            MoveActionChangeStat.changeEachStat(eventManager, data.statChanges);    
         }
-        MoveActionChangeStat.changeEachStat(eventManager, data.statChanges);
+        else {
+            data.statFailed = true;
+        }
+       
     }  
 
     public static void changeStats(EventManager eventManager, int[] stats) {

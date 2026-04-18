@@ -1,4 +1,4 @@
-package project.game.player;
+package project.game.selectors;
 
 import project.game.move.Move;
 import project.game.pokemon.Pokemon;

@@ -1,5 +1,6 @@
-package project.game.move;
+package project.game.selectors;
 
+import project.game.move.Move;
 import project.game.pokemon.Pokemon;
 import project.game.utility.StatDisplay;
 import project.network.ClientHandler;

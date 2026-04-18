@@ -1,6 +1,7 @@
-package project.game.player;
+package project.game.selectors;
 
 import project.game.builders.PokemonTrainerBuilder;
+import project.game.player.PokemonTrainer;
 import project.game.pokemon.Pokedex;
 import project.game.pokemon.Pokemon;
 import project.network.ClientHandler;

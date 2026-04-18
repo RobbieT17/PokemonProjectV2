@@ -13,7 +13,7 @@ public class BattleData {
     public BattleData(PokemonTrainer pt1, PokemonTrainer pt2) {
         this.player1 = pt1;
         this.player2 = pt2;
-        this.currenWeather = new Weather(Weather.WeatherEffect.Clear);
+        this.currenWeather = new Weather(WeatherEffect.Clear);
     }
 
     public boolean isCurrentWeather(WeatherEffect e) {

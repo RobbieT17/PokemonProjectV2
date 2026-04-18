@@ -10,12 +10,12 @@ import java.net.Socket;
 import project.debug.MockPokemonTeam;
 import project.game.event.GameEvents.EventID;
 import project.game.move.Move;
-import project.game.move.MoveSelector;
 import project.game.move.Move.MoveTarget;
 import project.game.player.PokemonTrainer;
-import project.game.player.PokemonTrainerSelector;
 import project.game.pokemon.Pokemon;
-import project.game.pokemon.PokemonSelector;
+import project.game.selectors.MoveSelector;
+import project.game.selectors.PokemonSelector;
+import project.game.selectors.PokemonTrainerSelector;
 
 // NOTE: This class is run server side
 public class ClientHandler implements Runnable {
@@ -142,12 +142,6 @@ public class ClientHandler implements Runnable {
 
         PokemonSelector selector = new PokemonSelector(this);
         Pokemon p = selector.choosePokemon();
-
-        if (p == null) {
-            Server.broadcast("Player %d is out of Pokemon!", this.playerNum);
-            return null;
-        }
-
         this.player.sendOut(p);
 
         Server.logp(this.playerNum, "Sent out %s.", this.player.getPokemonInBattle());

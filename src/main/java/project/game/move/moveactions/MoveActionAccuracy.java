@@ -1,7 +1,5 @@
 package project.game.move.moveactions;
 
-import java.util.Random;
-
 import project.game.event.EventData;
 import project.game.event.EventManager;
 import project.game.event.GameEvents.EventID;

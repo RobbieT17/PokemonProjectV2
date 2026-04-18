@@ -5,8 +5,6 @@ import project.data.MoveEffect;
 import project.game.battle.BattleLog;
 import project.game.battle.Weather.WeatherEffect;
 import project.game.event.EventManager;
-import project.game.exceptions.MoveEndedEarlyException;
-import project.game.exceptions.PokemonFaintedException;
 import project.game.move.moveactions.MoveActionChangeCondition;
 import project.game.move.moveactions.MoveActionChangeStat;
 import project.game.move.moveactions.MoveActionChangeWeather;

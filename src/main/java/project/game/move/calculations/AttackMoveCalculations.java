@@ -1,7 +1,5 @@
 package project.game.move.calculations;
 
-import java.util.Random;
-
 import project.game.battle.Weather.WeatherEffect;
 import project.game.event.EventData;
 import project.game.event.EventManager;
@@ -11,6 +9,7 @@ import project.game.move.Move.MoveCategory;
 import project.game.pokemon.Pokemon;
 import project.game.pokemon.stats.StatPoint;
 import project.game.pokemon.stats.Type;
+import project.game.utility.RandomValues;
 
 public interface AttackMoveCalculations {
      /*
@@ -38,12 +37,12 @@ public interface AttackMoveCalculations {
 
       // Generates random number for a critical hit
     private static boolean criticalHit(double rate) {
-		return new Random().nextDouble() <= rate;
+		return RandomValues.randomDouble() <= rate;
     }
 
     // Generates random number (between 0.85 and 1) so moves do slightly more/less damage each time
     private static double random() {
-        return 0.85 + (1 - 0.85) * new Random(System.currentTimeMillis()).nextDouble();
+        return 0.85 + (1 - 0.85) * RandomValues.randomDouble();
     }
 
     /**

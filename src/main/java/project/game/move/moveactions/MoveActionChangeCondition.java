@@ -1,7 +1,5 @@
 package project.game.move.moveactions;
 
-import java.util.Random;
-
 import project.game.event.EventData;
 import project.game.event.EventManager;
 import project.game.move.Move;
@@ -11,6 +9,7 @@ import project.game.pokemon.effects.StatusConditionManager;
 import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;
 import project.game.pokemon.effects.StatusContext;
 import project.game.pokemon.stats.Type;
+import project.game.utility.RandomValues;
 
 public interface MoveActionChangeCondition extends MoveAction {
     
@@ -97,13 +96,15 @@ public interface MoveActionChangeCondition extends MoveAction {
         data.statusChange = id;
         data.statusProb = chance;
         
+        // Checks if
         if (cannotApplyCondition(p, id)) {
             data.statusFailed = true;
             data.message = Move.FAILED;
             return;
         }
 
-        if (new Random(System.currentTimeMillis()).nextDouble() > chance * 0.01) {
+        // Rolls for hit-chance
+        if (!RandomValues.chance(chance)) { // Bad Roll, condition not applied
             data.statusFailed = true;
             return;
         }

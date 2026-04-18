@@ -19,6 +19,11 @@ public class Counter {
 // Methods
     // Increments the counter, returns true if terminated
     public boolean inc() { 
+        // Does not inc if duration is set to -1
+        if (this.duration == -1) {
+            return false;
+        }
+
         this.count++;
         return this.count > this.duration;
     }

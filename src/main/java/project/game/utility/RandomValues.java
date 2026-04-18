@@ -11,12 +11,18 @@ public interface  RandomValues {
      */
     public static int generateInt(int min, int max) {
         if (min > max) throw new IllegalArgumentException("Max must be greater than min");
-        return new Random(System.currentTimeMillis()).nextInt((max - min) + 1) + min;
+        long seed = System.currentTimeMillis();
+        return new Random(seed).nextInt((max - min) + 1) + min;
+    }
+
+    public static double randomDouble() {
+        long seed = System.currentTimeMillis();
+        return new Random(seed).nextDouble();
     }
 
     /**
      * Random chance.
-     * @param value
+     * @param prob the higher the value, the higher truth likelihood
      * @return True if the next random double is less than the value
      */
     public static boolean chance(double prob) {

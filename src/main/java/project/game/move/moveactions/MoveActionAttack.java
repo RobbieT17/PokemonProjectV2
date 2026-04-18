@@ -1,7 +1,5 @@
 package project.game.move.moveactions;
 
-import java.util.Random;
-
 import project.game.battle.BattleLog;
 import project.game.event.EventData;
 import project.game.event.EventManager;
@@ -9,6 +7,7 @@ import project.game.event.GameEvents.EventID;
 import project.game.move.calculations.AttackMoveCalculations;
 import project.game.move.calculations.MoveEffectiveCalculations;
 import project.game.pokemon.Pokemon;
+import project.game.utility.RandomValues;
 
 public interface MoveActionAttack extends MoveAction {
     
@@ -23,7 +22,7 @@ public interface MoveActionAttack extends MoveAction {
      * @return # of hits
      */
     private static int randomHits() {
-        double value = new Random().nextDouble();
+        double value = RandomValues.randomDouble();
         return value <= 0.35 
         ? 2
         : value <= 0.7

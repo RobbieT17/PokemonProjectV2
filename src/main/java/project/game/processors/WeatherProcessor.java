@@ -37,7 +37,7 @@ public class WeatherProcessor {
      */
     private String weatherReport(WeatherEffect e) {
         return switch (e) {
-            case WeatherEffect.Clear -> this.weatherStopped(e);        
+            case WeatherEffect.Clear -> this.weatherStopped(this.battleData.getCurrenWeather().getWeatherEffect());        
             case WeatherEffect.Sunny -> "The sunlight light grew harsh.";    
             case WeatherEffect.Rain -> "It began to rain!"; 
             case WeatherEffect.Sandstorm -> "A sandstorm kicked up!";
@@ -52,8 +52,8 @@ public class WeatherProcessor {
      * @param change Weather ID to change to
      */
     public void changeWeather(WeatherEffect change) {
-        this.battleData.setCurrenWeather(new Weather(change));
         BattleLog.add(this.weatherReport(change));
+        this.battleData.setCurrenWeather(new Weather(change));
     }
 
     // Pokemon takes damage from Sandstorm / Hail Weather
@@ -79,8 +79,17 @@ public class WeatherProcessor {
                 BattleLog.add("%s took %d damage from the hail!", p, damage);
                 p.takeDamage(damage);
             }
-            default -> throw new IllegalArgumentException("Unexpected weather value");
+            case WeatherEffect.Clear, WeatherEffect.Sunny, WeatherEffect.Rain -> {
+                // These weather effects do not cause damage
+            }
+            default -> throw new IllegalStateException("Unexpected weather value");
         }
         if (p.getConditions().isFainted()) throw new PokemonFaintedException();
+    }
+
+    public void updateWeather() {
+        if (this.battleData.getCurrenWeather().getCounter().inc()) { // Weather expires
+            this.changeWeather(WeatherEffect.Clear);
+        }
     }
 }
