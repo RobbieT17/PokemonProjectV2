@@ -61,25 +61,68 @@ public class StatPoint {
 		return this.statID == StatID.Accuracy || this.statID == StatID.Evasion;
 	}
 
+
 	// Changes a stat based on the stage and base stat
 	public void changeStat() {
-		this.power = (int) (this.base * (1 + StatPoint.MULTIPLIER * this.stage));
+		double mod = switch (this.stage){
+			case -6 -> 0.25;
+			case -5 -> 0.28;
+			case -4 -> 0.33;
+			case -3 -> 0.4;
+			case -2 -> 0.5;
+			case -1 -> 0.66;
+			case 1 -> 1.5;
+			case 2 -> 2;
+			case 3 -> 2.5;
+			case 4 -> 3;
+			case 5 -> 3.5;
+			case 6 -> 4;
+			default -> 1.0;
+		};
+
+
+		this.power = (int) (this.base * mod);
 	}
 
 	// Changes a stat based on an accuracy/evasion of 100%
 	public void changeStatForAccuracyOrEvasion() {
-		this.power = (int) (100 + StatPoint.MULTIPLIER * 100 * this.stage);
+		double mod = switch (this.stage){
+			case -6 -> 0.33;
+			case -5 -> 0.375;
+			case -4 -> 0.429;
+			case -3 -> 0.5;
+			case -2 -> 0.6;
+			case -1 -> 0.75;
+			case 1 -> 1.33;
+			case 2 -> 1.66;
+			case 3 -> 2;
+			case 4 -> 2.33;
+			case 5 -> 2.66;
+			case 6 -> 3;
+			default -> 1.0;
+		};
+
+
+		this.power = (int) (this.base * mod);
 	}
 
 	// Changes stage of a stat. The stage should never be outside the range of -6 and 6
 	public void changeStage(int change) {
 		this.stage += change;
 
-		if (this.stage < StatPoint.LOWEST_STAT_STAGE) this.stage = StatPoint.LOWEST_STAT_STAGE;
-		else if (this.stage > StatPoint.HIGHEST_STAT_STAGE) this.stage = StatPoint.HIGHEST_STAT_STAGE;
+		if (this.stage < StatPoint.LOWEST_STAT_STAGE) {
+			this.stage = StatPoint.LOWEST_STAT_STAGE;
+		}
+		else if (this.stage > StatPoint.HIGHEST_STAT_STAGE) {
+			this.stage = StatPoint.HIGHEST_STAT_STAGE;
+		}
 
-		if (this.isAccuracyOrEvasion()) this.changeStatForAccuracyOrEvasion();
-		else this.changeStat(); 
+		if (this.isAccuracyOrEvasion()) {
+			this.changeStatForAccuracyOrEvasion();
+		}
+		else {
+			this.changeStat(); 
+		}
 	}
 
 	/**
@@ -104,7 +147,7 @@ public class StatPoint {
 
 	@Override
 	public String toString() {
-		return this.statID.name();
+		return this.statID.name().replaceAll("_", "-");
 	}
 
 // Setters
