@@ -41,11 +41,11 @@ public class Battle {
      * just switched in this turn.
      */
     public void switchInMessage() {
-        if (this.player1.getPokemonInBattle().getConditions().isSwitchedIn()) {
-            BattleLog.add("%s sends out %s!", this.player1, this.player1.getPokemonInBattle());
+        if (this.player1.getPokemonInBattle().getConditions().isSwitchedIn()) { 
+            this.player1.sendOutPokemon();
         }
         if (this.player2.getPokemonInBattle().getConditions().isSwitchedIn()) {
-            BattleLog.add("%s sends out %s!", this.player2, this.player2.getPokemonInBattle());
+            this.player2.sendOutPokemon();
         }
         BattleLog.out();
     }

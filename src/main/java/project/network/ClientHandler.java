@@ -8,6 +8,7 @@ import java.io.OutputStreamWriter;
 import java.net.Socket;
 
 import project.debug.MockPokemonTeam;
+import project.game.battle.BattlePosition;
 import project.game.event.GameEvents.EventID;
 import project.game.move.Move;
 import project.game.move.Move.MoveTarget;
@@ -29,7 +30,9 @@ public class ClientHandler implements Runnable {
 
     private String clientName;
     private int playerNum;
+
     private PokemonTrainer player;
+    private PokemonTrainer opponent;
 
     /**
      * Creates a new class to handle a client connection on the server side
@@ -142,7 +145,7 @@ public class ClientHandler implements Runnable {
 
         PokemonSelector selector = new PokemonSelector(this);
         Pokemon p = selector.choosePokemon();
-        this.player.sendOut(p);
+        this.player.setPokemonInBattle(p);
 
         Server.logp(this.playerNum, "Sent out %s.", this.player.getPokemonInBattle());
         this.writeToBuffer("You sent out %s.", this.player.getPokemonInBattle());
@@ -165,8 +168,7 @@ public class ClientHandler implements Runnable {
             m = p.getMoveSelected();
         }
         
-
-        if (m == null) {
+        if (m == null) { // Returning null means the player switched out their Pokemon
             return null;
         }
 
@@ -180,26 +182,31 @@ public class ClientHandler implements Runnable {
 
     // Prompts user to select the target of the move
     // TODO: Currently, no input is needed bc only implemented single battle (will add double battles soon)
-    public Pokemon selectTargetPokemon(Move m) {
+    public BattlePosition selectTargetPokemon(Move m) {
         Server.logp(this.playerNum, "Selecting a target...");
 
         if (m == null) {
             return null;
         }
 
-        Pokemon target;
+        BattlePosition pos;
         if (m.getMoveTarget() == MoveTarget.Self) {
-            target = Server.PLAYERS[this.clientId].getPokemonInBattle();
+            pos = this.player.getBattlePosition();
         }
         else {
-            target = Server.PLAYERS[(this.clientId + 1) % 2].getPokemonInBattle();
+            pos = this.opponent.getBattlePosition();
         }
 
-        this.player.getPokemonInBattle().setTargetSelected(target);
+        this.player.getPokemonInBattle().setTargetSelected(pos);
+
+        Pokemon target = pos.getCurrentPokemon();
+        this.writeToBuffer("Target: %s", target == this.player.getPokemonInBattle() 
+            ? "Self" 
+            : this.opponent.showPokemonInBattle()
+        );
 
         Server.logp(this.playerNum, "Target locked.");
-        this.writeToBuffer("Target: %s", target == this.player.getPokemonInBattle() ? "Self" : target);
-        return target;
+        return pos;
     }
 
     public void setup() {
@@ -214,13 +221,17 @@ public class ClientHandler implements Runnable {
         this.writeToBuffer("You are Player %d, waiting for opponent...", this.playerNum);
         Server.lock();
 
+        // Sets opponent
+        this.opponent = Server.PLAYERS[(this.clientId + 1) % 2];
+
         this.writeToBuffer("==================================\n==================================");
         this.writeToBuffer("Let the battle begin!");
-        this.writeToBuffer("Your opponent:\n%s", Server.CLIENTS[(this.clientId + 1) % 2].player.showPokemon());
+        this.writeToBuffer("Your opponent:\n%s", this.opponent.showPokemon());
         this.writeToBuffer("==================================");
 
         // Client chooses a pokemon to first use in battle.
         this.selectPokemon();
+        this.player.updateShowPokemon();
 
         // Waits for other player to finish setup
         this.writeToBuffer("Waiting for opponent...");
@@ -246,7 +257,14 @@ public class ClientHandler implements Runnable {
                 this.writeToBuffer("Round %d", Server.round);
 
                 Move m = this.selectMove(this.player.getPokemonInBattle());
-                this.selectTargetPokemon(m);
+
+                if (m != null) {
+                    this.selectTargetPokemon(m);
+                }
+                else {
+                    this.selectPokemon();
+                }
+   
                 this.writeToBuffer("Waiting for opponent....");
             }
 

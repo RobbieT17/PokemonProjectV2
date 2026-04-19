@@ -1059,7 +1059,7 @@ moves:
       chance: 10
     conditionChange2:
       effect: Flinch
-      chance: 10
+      chance: 100
 
 - id: 428
   name: Zen Headbutt

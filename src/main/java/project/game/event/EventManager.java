@@ -9,7 +9,11 @@ public class EventManager {
     public final EventData data;
   
     public EventManager(BattleData data, Pokemon user) {
-        this.data = new EventData(data, user, user.getTargetSelected(), user.getMoveSelected());
+        this.data = new EventData(
+            data, 
+            user, 
+            user.getTargetSelected() != null ? user.getTargetSelected().getCurrentPokemon() : null, 
+            user.getMoveSelected());
     }
 
     /**

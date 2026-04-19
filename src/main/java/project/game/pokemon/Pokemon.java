@@ -3,6 +3,7 @@ package project.game.pokemon;
 import java.util.ArrayList;
 
 import project.game.battle.BattleLog;
+import project.game.battle.BattlePosition;
 import project.game.event.GameEvents;
 import project.game.event.GameEvents.EventID;
 import project.game.move.Move;
@@ -58,7 +59,7 @@ public class Pokemon {
     private String nickname; 
 
     // Other Stats
-    private Pokemon targetSelected; // Pokemon the target of the move for the round (null if the target is itself)
+    private BattlePosition targetSelected; // Pokemon the target of the move for the round (null if the target is itself)
     private Move moveSelected; // Move selected for the round
     private Move firstMove; // First move used since switched in
     private Move lastMove; // Move used the last turn
@@ -280,7 +281,7 @@ public class Pokemon {
     }
 
     public void resetDamageDealt() {this.damageDealt = 0;}
-    public void setTargetSelected(Pokemon p) {this.targetSelected = p;}
+    public void setTargetSelected(BattlePosition bp) {this.targetSelected = bp;}
     public void setMoveSelected(Move m) {this.moveSelected = m;}
     public void setOwner(PokemonTrainer pt) {this.owner = pt;}
     public void setNickName(String n) {this.nickname = !n.isEmpty() ? n : null;}
@@ -302,7 +303,7 @@ public class Pokemon {
 	public double getWeight() {return this.weight;}
     public ArrayList<Move> getMoves() {return this.moves;}
     public PokemonConditions getConditions() {return this.conditions;}
-    public Pokemon getTargetSelected() {return this.targetSelected;}
+    public BattlePosition getTargetSelected() {return this.targetSelected;}
     public Move getMoveSelected() {return this.moveSelected;}
     public Move getFirstMove() {return this.firstMove;}
     public Move getLastMove() {return this.lastMove;}

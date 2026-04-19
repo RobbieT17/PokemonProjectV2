@@ -1,5 +1,7 @@
 package project.game.player;
 
+import project.game.battle.BattleLog;
+import project.game.battle.BattlePosition;
 import project.game.pokemon.Pokemon;
 import project.game.utility.StatDisplay;
 
@@ -8,8 +10,9 @@ public class PokemonTrainer {
 // Object Variables
     private final String playerName; // Player name
     private final Pokemon[] team; // Pokemon Team to use in battle
+    private final BattlePosition battlePosition;
 
-    private Pokemon pokemonInBattle; // Current pokemon on the battlefield
+    private Pokemon showPokemon; // Pokemon in battle
 
 // Constructor
     /**
@@ -20,6 +23,7 @@ public class PokemonTrainer {
     public PokemonTrainer(String name, Pokemon[] team) {
         this.playerName = name;
         this.team = team;
+        this.battlePosition = new BattlePosition(this);
 
         // Sets the pokemons' owner to the this trainer
         for (Pokemon p : team) {
@@ -65,21 +69,42 @@ public class PokemonTrainer {
         .toString();
     }
 
-    // Sends a Pokemon to the battle, the Pokemon cannot act until the next turn
-    public void sendOut(Pokemon p) {
-        this.pokemonInBattle = p;
-        this.pokemonInBattle.getConditions().setSwitchedIn(true);
+    // Sends out a Pokemon, returns the Pokemon already in battle
+    public void sendOutPokemon() {
+        this.getPokemonInBattle().getConditions().setSwitchedIn(false);
+        this.updateShowPokemon();
+
+        if (this.getPokemonLastInBattle() != null) {
+            BattleLog.add("%s returns %s!", this, this.getPokemonLastInBattle());
+        }
+
+        BattleLog.add("%s sends out %s!", this, this.getPokemonInBattle());
+    }
+
+    // Sets the current Pokemon in battle
+    public void setPokemonInBattle(Pokemon p) {
+        p.getConditions().setSwitchedIn(true);
+        this.battlePosition.setCurrentPokemon(p);
     }
 
     // Returns the Pokemon on the battle
     public void returns() {
-        if (this.pokemonInBattle == null) return;
+        if (this.battlePosition.getCurrentPokemon() == null) return;
     
-        this.pokemonInBattle.backToTrainer();
-        this.pokemonInBattle = null;
+        this.battlePosition.getCurrentPokemon().backToTrainer();
+        this.battlePosition.setCurrentPokemon(null);
     }
 
-    
+    // Sets show Pokemon to current Pokemon in battle
+    public void updateShowPokemon() {
+        this.showPokemon = this.battlePosition.getCurrentPokemon();
+    }
+
+    // Shows the current Pokemon in battle (hides if the pokemon was switched out)
+    // Only update this at the end of the turn to reflect 
+    public Pokemon showPokemonInBattle() {
+        return this.showPokemon;
+    }
 
     @Override
     public String toString() {
@@ -95,7 +120,15 @@ public class PokemonTrainer {
         return this.team;
     }
 
+    public BattlePosition getBattlePosition() {
+        return this.battlePosition;
+    }
+
     public Pokemon getPokemonInBattle() {
-        return this.pokemonInBattle;
+        return this.getBattlePosition().getCurrentPokemon();
+    }
+
+    public Pokemon getPokemonLastInBattle() {
+        return this.getBattlePosition().getPrevPokemon();
     }
 }

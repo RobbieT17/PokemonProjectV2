@@ -173,8 +173,7 @@ public class Server {
             Server.broadcast("An unexpected error occured.");
             e.printStackTrace();
         }
-        
-            
+               
     }
 
     public static void main(String[] args) throws IOException {

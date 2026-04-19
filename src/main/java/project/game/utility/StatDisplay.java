@@ -80,7 +80,8 @@ public interface StatDisplay {
         .append(String.format("Item: %s%n", showItem(p)))
         .append(String.format("%nStatus Effect: %s%n", showCondition(p)))
         .append(String.format("Other Effects: %s%n", showVolatileConditions(p)))
-        .append(String.format("%nMOVES: %n%s", listMoves(p)))
+        .append(String.format("============================================================%n"))
+        .append(String.format("MOVES: %n%s", listMoves(p)))
         .append(String.format("============================================================%n"))
         .toString();
     }

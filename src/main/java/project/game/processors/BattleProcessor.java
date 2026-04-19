@@ -1,6 +1,7 @@
 package project.game.processors;
 
 import project.game.battle.BattleData;
+import project.game.battle.BattleLog;
 import project.game.event.EventManager;
 import project.game.event.GameEvents.EventID;
 import project.game.exceptions.BattleEndedException;
@@ -44,8 +45,17 @@ public class BattleProcessor {
         int speed1 = pokemon1.getSpeed().getPower();
         int speed2 = pokemon2.getSpeed().getPower();
 
+        // Sometimes a Pokemon does not use a move (usually if it's switched in mid-round)
+        if (m1 == null) {
+            order[0] = pokemon1; 
+            order[1] = pokemon2;
+        }
+        else if (m2 == null) {
+            order[0] = pokemon2; 
+            order[1] = pokemon1;
+        }
         // Higher Priority Moves act first
-        if (m1.getPriority() > m2.getPriority()) {
+        else if (m1.getPriority() > m2.getPriority()) {
             order[0] = pokemon1; 
             order[1] = pokemon2;
         }

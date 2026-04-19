@@ -73,7 +73,18 @@ public class PokemonProcessor {
         Pokemon user = this.eventManager.data.user;
         Pokemon target = this.eventManager.data.attackTarget;
 
-        if (user.getConditions().isFainted() || target.getConditions().isFainted()) {
+        user.getConditions().setHasMoved(true); 
+
+        // Use turn to switch in new Pokemon
+        if (user.getConditions().isSwitchedIn()) {
+            user.getOwner().sendOutPokemon();
+            return;
+        }
+
+        // Pokemon will not act if any of these conditions are met.
+        if (
+            user.getConditions().isFainted() || 
+            target.getConditions().isFainted()) {
             return;
         }
 
@@ -92,9 +103,8 @@ public class PokemonProcessor {
             user.getConditions().setInterrupted(true);
                   
         } 
-        user.getConditions().setHasMoved(true); 
-        this.updateAfterMoveEvents();
 
+        this.updateAfterMoveEvents();
         eventManager.updateEventMaps();
     }
 

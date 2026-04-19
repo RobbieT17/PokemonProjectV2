@@ -84,7 +84,7 @@ public class PokemonConditions {
     }
 
     public void clearAtReturn() {
-        this.setSwitchedIn(false);
+        this.switchedIn = false;
         this.clearVolatileConditions();
     }
 
