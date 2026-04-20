@@ -19,10 +19,8 @@ public class PowerPoints {
 // Methods
     /**
      *  Decrements PP (cannot go below 0)
-     *  Doesn't decrement if a special condition is meet
      */
-    public void decrement(boolean cond) {
-        if (cond) return;
+    public void decrement() {
         this.powerPoints--;
         if (this.powerPoints < 0) this.powerPoints = 0;
     }

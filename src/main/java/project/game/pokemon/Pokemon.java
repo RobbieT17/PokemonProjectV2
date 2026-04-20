@@ -233,10 +233,15 @@ public class Pokemon {
         if (this.isFirstRound()) {
             this.firstMove = this.moveSelected;
         }
-
-        this.moveSelected.resetStats();
+        
         this.lastMove = this.moveSelected;
-        this.moveSelected = null;
+
+        // Only update if move is phase 0
+        if (this.moveSelected.getPhase().nextPhase() == 0) {
+            this.moveSelected.resetStats(); 
+            this.moveSelected = null;
+        }
+        
     }
 
     public void endOfRoundReset() {  
@@ -250,8 +255,6 @@ public class Pokemon {
         this.damageDealt = 0;
         this.damageReceived = 0;
         this.roundCount++;
-
-        
     }
 
     // TODO: Remove this function, I want Pokemon classes to be immutable in the final version

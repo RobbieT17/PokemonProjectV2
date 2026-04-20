@@ -52,11 +52,9 @@ public class PokemonProcessor implements Processor {
      */
     private void useMove(Pokemon target) {
         EventManager eventManager = new EventManager(battleData, user, target);
-        Move m = eventManager.data.moveUsed;
 
         try {
             eventManager.notifyUserPokemon(EventID.USE_MOVE);
-            m.getPp().decrement(user.getConditions().hasKey(StatusConditionID.Forced_Move));
             new MoveProcessor(eventManager).process();
 
         } catch (MoveEndedEarlyException e) { // TODO: Entering immune state should throw this exception

@@ -36,7 +36,8 @@ public enum MoveCategory {Physical, Special, Status};
     private final boolean makesContact; // True if the move makes contact with the defender
     private final boolean multiHit; // True if the move hits multiple times
     private final AdditonalEffects additonEffects; // Additional Effect such as stat/condition changes
-        
+    
+    private final MovePhase phase; // The current phase the move is in (for moves that take multiple turns to execute)
     private boolean disabled; // Move is currently unusable
 
 // Constructor
@@ -68,6 +69,7 @@ public enum MoveCategory {Physical, Special, Status};
         this.makesContact = contact;
         this.multiHit = multiHit;
         this.additonEffects = additionalEffects;
+        this.phase = new MovePhase();
     }
 
 // Methods
@@ -100,9 +102,13 @@ public enum MoveCategory {Physical, Special, Status};
         .toString();
     }
 
+    /**
+     * Reset move stat mods and decreases PP by 1
+     */
     public void resetStats() {
         if (this.power != null) this.power.reset();
         this.accuracy.reset();
+        this.pp.decrement();
         this.disabled = false;
     }
 
@@ -146,6 +152,7 @@ public enum MoveCategory {Physical, Special, Status};
     public boolean isContactMove() {return this.makesContact;}
     public boolean isMultiHit() {return this.multiHit;}
     public AdditonalEffects getAdditionalEffects() {return this.additonEffects;}
+    public MovePhase getPhase() {return this.phase;}
     public boolean isDisabled() {return this.disabled;}
 
 }
