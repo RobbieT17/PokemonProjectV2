@@ -88,6 +88,13 @@ public class PokemonConditions {
         this.clearVolatileConditions();
     }
 
+    @Override
+    public  String toString() {
+        if (this.fainted) return "FAINTED";
+        if (!this.hasPrimary()) return "";
+        return this.primaryCondition.toString().toUpperCase();
+    }
+
 // Setters
     public void setFainted(boolean f) {this.fainted = f;}
     public void setImmobilized(boolean i) {this.immobilized = i;}

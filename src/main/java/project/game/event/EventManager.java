@@ -7,13 +7,13 @@ import project.game.pokemon.Pokemon;
 public class EventManager {
     
     public final EventData data;
-  
+
     public EventManager(BattleData data, Pokemon user) {
-        this.data = new EventData(
-            data, 
-            user, 
-            user.getTargetSelected() != null ? user.getTargetSelected().getCurrentPokemon() : null, 
-            user.getMoveSelected());
+        this.data = new EventData(data, user, null, user.getMoveSelected());
+    }
+  
+    public EventManager(BattleData data, Pokemon user, Pokemon target) {
+        this.data = new EventData(data, user, target, user.getMoveSelected());
     }
 
     /**

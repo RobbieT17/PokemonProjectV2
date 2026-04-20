@@ -34,7 +34,7 @@ public class MockPokemonTeam {
 
         p2.addMove(MockPokemonTeam.mockMove("Poison Powder"));
         p2.addMove(MockPokemonTeam.mockMove("Venoshock"));
-        p2.addMove(MockPokemonTeam.mockMove("Energy Ball"));
+        p2.addMove(MockPokemonTeam.mockMove("Giga Drain"));
         p2.addMove(MockPokemonTeam.mockMove("Synthesis"));
         p2.setNickName("Vance");
         p2.setAbility(AbilityID.Water_Absorb);
@@ -45,7 +45,7 @@ public class MockPokemonTeam {
         p3.addMove(MockPokemonTeam.mockMove("Aqua Jet"));
         p3.addMove(MockPokemonTeam.mockMove("Shell Smash"));
         p3.setNickName("Bob");
-        p3.setAbility(AbilityID.Torrent);
+        p3.setAbility(AbilityID.Simple);
         p3.setItem(HeldItemID.Rocky_Helmet);
 
         return new PokemonTrainerBuilder()
@@ -59,28 +59,47 @@ public class MockPokemonTeam {
     private static PokemonTrainer build2(String name) {
         Pokemon p1 = MockPokemonTeam.mockPokemon(Pokedex.Charizard);
         Pokemon p2 = MockPokemonTeam.mockPokemon(Pokedex.Blastoise);
+        Pokemon p3 = MockPokemonTeam.mockPokemon(Pokedex.Venusaur);
+        Pokemon p4 = MockPokemonTeam.mockPokemon(Pokedex.Charizard);
 
         p1.addMove(MockPokemonTeam.mockMove("Sandstorm"));
         p1.addMove(MockPokemonTeam.mockMove("Dragon Dance"));
-        p1.addMove(MockPokemonTeam.mockMove("Aerial Ace"));
+        p1.addMove(MockPokemonTeam.mockMove("Fly"));
         p1.addMove(MockPokemonTeam.mockMove("Fire Fang"));
         p1.setNickName("Charlie");
         p1.setAbility(AbilityID.Blaze);
         p1.setItem(HeldItemID.Muscle_Band);
 
-        p2.addMove(MockPokemonTeam.mockMove("Water Pulse"));
+        p2.addMove(MockPokemonTeam.mockMove("Dive"));
         p2.addMove(MockPokemonTeam.mockMove("Icy Wind"));
         p2.addMove(MockPokemonTeam.mockMove("Earth Power"));
         p2.addMove(MockPokemonTeam.mockMove("Rain Dance"));
         p2.setNickName("Barry");
         p2.setAbility(AbilityID.Torrent);
         p2.setItem(HeldItemID.Wise_Glasses);
+
+        p3.addMove(MockPokemonTeam.mockMove("Energy Ball"));
+        p3.addMove(MockPokemonTeam.mockMove("Dig"));
+        p3.addMove(MockPokemonTeam.mockMove("Amnesia"));
+        p3.addMove(MockPokemonTeam.mockMove("Sleep Powder"));
+        p3.setNickName("Violet");
+        p3.setAbility(AbilityID.Overgrow);
+
+        p4.addMove(MockPokemonTeam.mockMove("Flare Blitz"));
+        p4.addMove(MockPokemonTeam.mockMove("Flamethrower"));
+        p4.addMove(MockPokemonTeam.mockMove("Sunny Day"));
+        p4.addMove(MockPokemonTeam.mockMove("Slash"));
+        p4.setNickName("Chandler");
+        p4.setAbility(AbilityID.Blaze);
+        p4.setItem(HeldItemID.Muscle_Band);
         
 
         return new PokemonTrainerBuilder()
         .setName(name)
         .addPokemon(p1)
         .addPokemon(p2)
+        .addPokemon(p3)
+        .addPokemon(p4)
         .build();
     }
 

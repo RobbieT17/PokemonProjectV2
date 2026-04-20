@@ -16,14 +16,9 @@ public class Battle {
     // Players
     private final BattleData battleData;
 
-    private final PokemonTrainer player1;
-    private final PokemonTrainer player2;
-
 // Constructor
     public Battle(PokemonTrainer p1, PokemonTrainer p2) {
         this.battleData = new BattleData(p1, p2);
-        this.player1 = p1;
-        this.player2 = p2;
     }
 
 // Methods
@@ -41,12 +36,10 @@ public class Battle {
      * just switched in this turn.
      */
     public void switchInMessage() {
-        if (this.player1.getPokemonInBattle().getConditions().isSwitchedIn()) { 
-            this.player1.sendOutPokemon();
+        for (BattlePosition pos : this.battleData.getAllBattlePositions()) {
+            pos.sendOutPokemon();
         }
-        if (this.player2.getPokemonInBattle().getConditions().isSwitchedIn()) {
-            this.player2.sendOutPokemon();
-        }
+
         BattleLog.out();
     }
 
@@ -59,15 +52,9 @@ public class Battle {
     public BattleStatus processRound() {
         BattleStatus status;
         try {
-            BattleProcessor battleProcessor = new BattleProcessor(this.battleData);
-        
-            battleProcessor.constructTurnOrder();
-            battleProcessor.processPokemonActions();
-            battleProcessor.updateBattleData();
-            battleProcessor.processRoundEnd();
-            battleProcessor.checkWinConditions();
-            
+            new BattleProcessor(this.battleData).process();
             status = new BattleStatus(0);
+            
         } catch (BattleEndedException e) {
             BattleLog.add(e.getMessage());
             status = new BattleStatus(1, e.getMessage());

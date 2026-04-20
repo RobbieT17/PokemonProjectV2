@@ -1,5 +1,6 @@
 package project.game.utility;
 
+import project.game.battle.BattlePosition;
 import project.game.pokemon.Pokemon;
 import project.game.pokemon.effects.StatusCondition;
 
@@ -25,11 +26,6 @@ public interface StatDisplay {
         return sb.toString();
     }
 
-    public static String showCondition(Pokemon p) {
-        if (p.getConditions().isFainted()) return "FAINTED";
-        if (!p.getConditions().hasPrimary()) return "";
-        return p.getConditions().getPrimaryCondition().toString();
-    }
 
     public static String showVolatileConditions(Pokemon p) {
         StringBuilder sb = new StringBuilder();
@@ -44,8 +40,30 @@ public interface StatDisplay {
       
     }
 
+    private static String showSelectItem(Pokemon p) {
+        return String.format("- %s <%s> (HP: %s) %s%n", 
+        p, p.getPokemonType(), p.getHp(), p.getConditions());
+    }
+
+    private static  String showSelectItem(Pokemon p, int n) {
+        return String.format("[%d] %s <%s> (HP: %s) %s%n", 
+        n, p.getPokemonType(), p.getHp(), p.getConditions());
+    }
+
     public static String showPartyStats(Pokemon p) {
-        return String.format("- %s <%s> (HP: %s) %s%n", p, p.getPokemonType(), p.getHp(), showCondition(p));
+        return String.format(StatDisplay.showSelectItem(p));
+    }
+
+    public static String showPartyStats(Pokemon p, int n) {
+        return String.format(StatDisplay.showSelectItem(p, n));
+    }
+
+    public static String showPartyStats(Pokemon p, String suffix) {
+        return String.format(StatDisplay.showSelectItem(p) + suffix);
+    }
+
+    public static String showPartyStats(Pokemon p, int i, String suffix) {
+        return String.format(StatDisplay.showSelectItem(p) + suffix);
     }
 
     public static String showAbility(Pokemon p) {
@@ -78,11 +96,26 @@ public interface StatDisplay {
         .append(String.format("HP: %s%n", p.getHp().toString()))
         .append(String.format("%nAbility: %s%n", showAbility(p)))
         .append(String.format("Item: %s%n", showItem(p)))
-        .append(String.format("%nStatus Effect: %s%n", showCondition(p)))
+        .append(String.format("%nStatus Effect: %s%n", p.getConditions()))
         .append(String.format("Other Effects: %s%n", showVolatileConditions(p)))
         .append(String.format("============================================================%n"))
         .append(String.format("MOVES: %n%s", listMoves(p)))
         .append(String.format("============================================================%n"))
         .toString();
+    }
+
+
+    public static String displayTargetsSelected(BattlePosition[] targets, Pokemon p) {
+        StringBuilder sb = new StringBuilder("Target(s): ");
+
+        for (BattlePosition target : targets) {
+            Pokemon targetPokemon = target.getCurrentPokemon();
+            sb.append(targetPokemon == p ? "Self" : targetPokemon)
+            .append(", ");
+        }
+
+        // Removes trailing comma
+        String s = sb.toString();
+        return s.length() > 2 ? s.substring(0, s.length() - 2) : s;  
     }
 }

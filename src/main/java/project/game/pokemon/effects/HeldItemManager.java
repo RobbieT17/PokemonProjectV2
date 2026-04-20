@@ -87,8 +87,11 @@ public interface HeldItemManager {
         p.getEvents().addEventListener(flags[0], name, e -> {
             if (c.inc()) {
                 BattleLog.add("Surprise! %s's Bomb Surprise goes off!", p);
-                e.battleData.getPlayer1().getPokemonInBattle().faints();
-                e.battleData.getPlayer2().getPokemonInBattle().faints();
+
+                for (Pokemon t : e.battleData.getAllPokemonInBattle()) {
+                    t.faints();
+                }
+                
             }
         });
 

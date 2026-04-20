@@ -5,16 +5,15 @@ import project.game.pokemon.Pokemon;
 import project.network.ClientHandler;
 import project.network.Server;
 
-public class PokemonTrainerMoveSelector {
+public class PokemonTrainerMoveSelector extends Selector {
     
-    private final ClientHandler client;
     private final Pokemon pokemon;
     private final String[] pokemonMovePool;
 
     private int inputSelected;
 
     public PokemonTrainerMoveSelector(ClientHandler c, Pokemon p) {
-        this.client = c;
+        super(c);
         this.pokemon = p;
         this.pokemonMovePool = Server.SERVER_DATA.getPokemonMovePool(this.pokemon.getPokemonName());
     }
@@ -111,6 +110,12 @@ public class PokemonTrainerMoveSelector {
                 break;
             }
         }
+    }
+
+    @Override
+    public Object select() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'select'");
     }
 }
 

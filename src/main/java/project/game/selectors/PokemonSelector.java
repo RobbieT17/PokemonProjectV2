@@ -5,13 +5,12 @@ import project.game.pokemon.Pokemon;
 import project.game.utility.StatDisplay;
 import project.network.ClientHandler;
 
-public class PokemonSelector {
+public class PokemonSelector extends Selector {
 
-    private final ClientHandler client;
     private final PokemonTrainer trainer;
 
     public PokemonSelector(ClientHandler c) {
-        this.client = c;
+        super(c);
         this.trainer = c.getPlayer();
     }
 
@@ -20,7 +19,7 @@ public class PokemonSelector {
         StringBuilder sb = new StringBuilder();
 
         for (int i = 0; i < this.trainer.getTeam().length; i++) {
-            sb.append(String.format("[%d] %s", i, StatDisplay.showPartyStats(this.trainer.getTeam()[i])));
+            sb.append(StatDisplay.showPartyStats(this.trainer.getTeam()[i], i));
         }
 
         sb.append("\nPlease select a pokemon >>");
@@ -34,18 +33,19 @@ public class PokemonSelector {
             return -1;
         }
 
-        if (p == this.trainer.getPokemonInBattle()) {
+        if (this.trainer.isPokemonInBattle(p)) {
             return -2;
         }
         return 0;
     }
 
-
+    
     /**
      * Chooses a pokemon through user input
      * @param c the client connection
-     */
-    public Pokemon choosePokemon() {
+     */ 
+    @Override
+    public Pokemon select() {
         Pokemon p = null;
         while (true) {
             try {

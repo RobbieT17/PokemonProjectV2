@@ -7,10 +7,10 @@ import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
 import project.game.battle.Battle;
+import project.game.battle.BattlePosition;
 import project.game.battle.BattleStatus;
 import project.game.player.PokemonTrainer;
-import project.game.utility.Time;
-
+import project.game.utility.RandomValues;
 
 public class Server {
 // Class Variables
@@ -79,9 +79,14 @@ public class Server {
         Server.skipRound = false; // Defaults to false, toggles true if pokemon fainted is found
 
         for (PokemonTrainer pt : Server.PLAYERS) {
-            if (pt.getPokemonInBattle().getConditions().isFainted()) {
-                Server.log("%s fainted.", pt.getPokemonInBattle());
-                Server.skipRound = true;
+            for (BattlePosition pos : pt.getBattlePositions()) {
+                if (pos.getCurrentPokemon() == null) {
+                    if (pos.getPrevPokemon() != null) {
+                        Server.log("%s fainted.", pos.getPrevPokemon());
+                        pos.setCurrentPokemon(null);
+                        Server.skipRound = true;
+                    }   
+                }
             }
         }
     }
@@ -124,7 +129,7 @@ public class Server {
             Server.log("Waiting for players...");
             Server.lock(); // Waits for players to choose a move
 
-            Time.hold(1); // Holds to simulate server delay
+            // Time.hold(0.1); // Holds to simulate server delay
 
             Server.log("Processing round...");  
                 
@@ -177,10 +182,17 @@ public class Server {
     }
 
     public static void main(String[] args) throws IOException {
-        ServerSocket serverSocket = new ServerSocket(Server.PORT);
-        Server.start(serverSocket);
-        Server.beginBattle();
-        Server.close(serverSocket);
+        try {
+            ServerSocket serverSocket = new ServerSocket(Server.PORT);
+            Server.start(serverSocket);
+            Server.beginBattle();
+            Server.close(serverSocket);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("Seed: " + RandomValues.SEED);
         System.exit(0);
     }
 }

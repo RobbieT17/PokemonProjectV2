@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import project.game.battle.BattleLog;
 import project.game.battle.BattlePosition;
 import project.game.event.GameEvents;
-import project.game.event.GameEvents.EventID;
 import project.game.move.Move;
 import project.game.player.PokemonTrainer;
 import project.game.pokemon.effects.Ability;
@@ -59,7 +58,8 @@ public class Pokemon {
     private String nickname; 
 
     // Other Stats
-    private BattlePosition targetSelected; // Pokemon the target of the move for the round (null if the target is itself)
+    private BattlePosition position; // The current position of this Pokemon on the field
+    private BattlePosition[] targetPositions; // Pokemon the target(s) of the move for the round (null if the target is itself)
     private Move moveSelected; // Move selected for the round
     private Move firstMove; // First move used since switched in
     private Move lastMove; // Move used the last turn
@@ -94,6 +94,30 @@ public class Pokemon {
 
 // Methods
 
+    // Clears any temporary effects and volatile conditions
+    public void backToTrainer() {
+        this.resetMove();
+        this.conditions.clearAtReturn();
+        this.position.setCurrentPokemon(null);
+
+        this.firstMove = null;
+        this.lastMove = null;   
+        this.damageDealt = 0;
+        this.damageReceived = 0;  
+        this.roundCount = 0;
+
+    }
+
+    // Pokemon faints and sent back to the trainer
+    public void faints() {
+        this.conditions.setFainted(true);
+        this.conditions.clearPrimary();
+        this.conditions.clearVolatileConditions();
+        this.position.setCurrentPokemon(null);
+
+        BattleLog.add("%s fainted!", this);
+    } 
+
     /**
      * Takes damage which lowers HP
      * If HP drops to 0, the pokemon faints
@@ -111,8 +135,13 @@ public class Pokemon {
             this.conditions.getEndure().setActive(false);
             takeDamageEndure(value);
         }
-        else this.hp.change(-value); 
-        if (this.hp.depleted()) this.faints();   
+        else {
+            this.hp.change(-value);
+        } 
+
+        if (this.hp.depleted()) {
+            this.faints();
+        } 
     }
 
     // Takes damage equal to a percent of max HP
@@ -162,6 +191,7 @@ public class Pokemon {
         return this.nickname != null ? this.nickname : this.pokemonName;
     }
 
+
 // Boolean Methods
     public boolean isOutOfMoves() {
         for (Move m : this.moves) 
@@ -177,16 +207,14 @@ public class Pokemon {
         return this.hp.getCurrentHealthPoints() / (double) this.hp.getMaxHealthPoints() < 0.01 * percent; 
     }
 
+    /**
+     * Checks if this is the first round since switched in
+     */
     public boolean isFirstRound() { 
         return this.roundCount == 0;
     }
  
-// Setters
-    public void faints() {
-        this.conditions.setFainted(true);
-        BattleLog.add("%s fainted!", this);
-    } 
-    
+// Setters 
     public void addDealtDamage(int d) {
         if (d <= 0) throw new IllegalArgumentException(Pokemon.INVALID_DAMAGE_ERR);
         this.damageDealt += d;
@@ -211,6 +239,21 @@ public class Pokemon {
         this.moveSelected = null;
     }
 
+    public void endOfRoundReset() {  
+        this.resetMove();
+
+        this.conditions.setTookDamage(false);
+        this.conditions.setHasMoved(false);
+        this.conditions.setSwitchedIn(false);
+
+        this.targetPositions = null;
+        this.damageDealt = 0;
+        this.damageReceived = 0;
+        this.roundCount++;
+
+        
+    }
+
     // TODO: Remove this function, I want Pokemon classes to be immutable in the final version
     public void addMove(Move m) {
         if (this.moves.size() > 4) { // 4 moves max
@@ -229,46 +272,6 @@ public class Pokemon {
         this.moves.add(m);
     } 
 
-    public void clearStatMods() {
-        for (StatPoint s : this.stats) s.resetMod();
-    }
-
-    public void endOfRoundReset() {
-        if (this.conditions.isFainted()) {
-            this.conditions.clearPrimary();
-            this.conditions.clearVolatileConditions();
-        }
-            
-        this.clearStatMods();
-        this.conditions.setTookDamage(false);
-        this.conditions.setHasMoved(false);
-        this.conditions.setSwitchedIn(false);
-
-        this.damageDealt = 0;
-        this.damageReceived = 0;
-        this.roundCount++;
-
-        this.resetMove();
-    }
-
-    // Clears any temporary effects and volatile conditions
-    public void backToTrainer() {
-        this.resetMove();
-        this.conditions.clearAtReturn();
-        this.firstMove = null;
-        this.lastMove = null;   
-        this.damageDealt = 0;
-        this.damageReceived = 0;  
-        this.roundCount = 0;
-
-        this.events.updateEvent(EventID.SWITCH_OUT, null);
-    }
-
-    public void removeItem() {
-        if (this.item == null) return;
-        this.item.removeEffect();
-    }
-
 // Setters
     public void setAbility(AbilityID a) {
         this.ability = a.apply(this);
@@ -281,8 +284,11 @@ public class Pokemon {
     }
 
     public void resetDamageDealt() {this.damageDealt = 0;}
-    public void setTargetSelected(BattlePosition bp) {this.targetSelected = bp;}
+    public void setPosition(BattlePosition pos) {this.position = pos;}
+    public void setTargetPositions(BattlePosition[] pos) {this.targetPositions = pos;}
     public void setMoveSelected(Move m) {this.moveSelected = m;}
+
+    // Will not exist once Pokemon class if immuntible 
     public void setOwner(PokemonTrainer pt) {this.owner = pt;}
     public void setNickName(String n) {this.nickname = !n.isEmpty() ? n : null;}
 
@@ -303,7 +309,8 @@ public class Pokemon {
 	public double getWeight() {return this.weight;}
     public ArrayList<Move> getMoves() {return this.moves;}
     public PokemonConditions getConditions() {return this.conditions;}
-    public BattlePosition getTargetSelected() {return this.targetSelected;}
+    public BattlePosition getPosition() {return this.position;}
+    public BattlePosition[] getTargetPositions() {return this.targetPositions;}
     public Move getMoveSelected() {return this.moveSelected;}
     public Move getFirstMove() {return this.firstMove;}
     public Move getLastMove() {return this.lastMove;}
@@ -315,5 +322,6 @@ public class Pokemon {
     public String getNickname() {return this.nickname;}
     public PokemonTrainer getOwner() {return this.owner;}
     public GameEvents getEvents() {return this.events;}
+
 
 }

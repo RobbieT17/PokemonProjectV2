@@ -16,6 +16,6 @@ public interface MoveActionHealthRestore extends MoveAction {
             throw new MoveInterruptedException("But %s is already at full health!", p);
         }
 
-        p.restoreHpPercentMaxHP(data.healPercent, "");
+        p.restoreHpPercentMaxHP(data.healPercent * data.percentMod , "");
     }
 }

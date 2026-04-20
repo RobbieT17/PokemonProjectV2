@@ -7,21 +7,22 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 
+import project.config.GameConfig;
 import project.debug.MockPokemonTeam;
 import project.game.battle.BattlePosition;
 import project.game.event.GameEvents.EventID;
 import project.game.move.Move;
-import project.game.move.Move.MoveTarget;
 import project.game.player.PokemonTrainer;
 import project.game.pokemon.Pokemon;
 import project.game.selectors.MoveSelector;
+import project.game.selectors.MoveTargetSelector;
 import project.game.selectors.PokemonSelector;
 import project.game.selectors.PokemonTrainerSelector;
+import project.game.utility.RandomValues;
+import project.game.utility.StatDisplay;
 
 // NOTE: This class is run server side
 public class ClientHandler implements Runnable {
-
-    private final static boolean debug = true; // For debugging, uses preset pokemon team
 
     private Socket socket;
     private BufferedReader bufferedReader;
@@ -116,9 +117,11 @@ public class ClientHandler implements Runnable {
         this.writeToBuffer("This is a simple Pokemon battle simulator");
         this.writeToBuffer("where you build a team of pokemon and battle");
         this.writeToBuffer("an opponent. Good luck, and have fun!");
+        this.writeToBuffer("\nGAME MODE: %s", GameConfig.DOUBLES_MODE_ENABLED ? "DOUBLES" : "SINGLES");
         this.writeToBuffer("=======================================");
 
         Server.logp(this.playerNum, "Signed in as %s.", this.clientName);
+        
     }
 
     // The server prompts the user to create a Pokemon team for battle, stores
@@ -126,29 +129,27 @@ public class ClientHandler implements Runnable {
     public void buildTeam() {
         Server.logp(this.playerNum, "Building team...");
 
-        if (debug) {
-            this.writeToBuffer("<DEBUG MODE ACTIVE> Using preset team build.");
+        if (GameConfig.USE_PRESET_TRAINER_BUILDS) {
+            this.writeToBuffer("<CONFIG> Using preset team build.");
             this.player = MockPokemonTeam.build(this.clientId, this.clientName);
         }
         else {
-            PokemonTrainerSelector pokemonTrainerSelector = new PokemonTrainerSelector(this);
-            this.player = pokemonTrainerSelector.initializPokemonTrainer();
+            this.player = new PokemonTrainerSelector(this).select();
         }
 
         Server.PLAYERS[this.clientId] = this.player; // Adds reference of trainer to Server class
         Server.logp(this.playerNum, "Ready for battle.");
     }
 
-    // Prompts user to select a pokemon to send into battle
-    public Pokemon selectPokemon() {
+    // Prompts user to select a pokemon to send into battle at position i
+    public Pokemon selectPokemon(int i) {
         Server.logp(this.playerNum, "Selecting a pokemon...");
 
-        PokemonSelector selector = new PokemonSelector(this);
-        Pokemon p = selector.choosePokemon();
-        this.player.setPokemonInBattle(p);
+        Pokemon p = new PokemonSelector(this).select();
+        this.player.setPokemonInBattle(p, i);
 
-        Server.logp(this.playerNum, "Sent out %s.", this.player.getPokemonInBattle());
-        this.writeToBuffer("You sent out %s.", this.player.getPokemonInBattle());
+        Server.logp(this.playerNum, "Sent out %s.", p);
+        this.writeToBuffer("You sent out %s.", p);
 
         return p;
     }
@@ -160,11 +161,10 @@ public class ClientHandler implements Runnable {
         p.getEvents().updateEvent(EventID.MOVE_SELECTION, null);
 
         Move m;
-        if (p.getMoveSelected() == null) {
-            MoveSelector selector = new MoveSelector(this, p);
-            m = selector.chooseMove();
+        if (p.getMoveSelected() == null) { 
+            m = new MoveSelector(this, p).select();
         }
-        else {
+        else { // Preset Move
             m = p.getMoveSelected();
         }
         
@@ -181,32 +181,35 @@ public class ClientHandler implements Runnable {
     }
 
     // Prompts user to select the target of the move
-    // TODO: Currently, no input is needed bc only implemented single battle (will add double battles soon)
-    public BattlePosition selectTargetPokemon(Move m) {
+    public BattlePosition[] selectTargetPokemon(Move m, Pokemon p) {
         Server.logp(this.playerNum, "Selecting a target...");
 
         if (m == null) {
             return null;
         }
 
-        BattlePosition pos;
-        if (m.getMoveTarget() == MoveTarget.Self) {
-            pos = this.player.getBattlePosition();
+        p.getEvents().updateEvent(EventID.TARGET_SELECTION, null);
+
+        BattlePosition[] targetPositions;
+        if (p.getTargetPositions() != null) { // Preset Target
+            targetPositions = p.getTargetPositions();
         }
         else {
-            pos = this.opponent.getBattlePosition();
+            targetPositions = new MoveTargetSelector(
+                this, 
+                m.getMoveTarget(),
+                p.getPosition(),
+                this.player.getBattlePositions(),
+                this.opponent.getBattlePositions()
+            ).select(); 
+            
         }
-
-        this.player.getPokemonInBattle().setTargetSelected(pos);
-
-        Pokemon target = pos.getCurrentPokemon();
-        this.writeToBuffer("Target: %s", target == this.player.getPokemonInBattle() 
-            ? "Self" 
-            : this.opponent.showPokemonInBattle()
-        );
-
+        
+        p.setTargetPositions(targetPositions);
+        this.writeToBuffer(StatDisplay.displayTargetsSelected(targetPositions, p));
+        
         Server.logp(this.playerNum, "Target locked.");
-        return pos;
+        return targetPositions;
     }
 
     public void setup() {
@@ -229,46 +232,62 @@ public class ClientHandler implements Runnable {
         this.writeToBuffer("Your opponent:\n%s", this.opponent.showPokemon());
         this.writeToBuffer("==================================");
 
-        // Client chooses a pokemon to first use in battle.
-        this.selectPokemon();
+        // Client chooses pokemon to first use in battle.
+        for (int i = 0; i < this.player.getBattlePositions().length; i++) {
+            this.selectPokemon(i);
+        }
+        
         this.player.updateShowPokemon();
 
         // Waits for other player to finish setup
         this.writeToBuffer("Waiting for opponent...");
         Server.lock();
     }
+ 
+    public void processRound() {
+        // A skipped round indicates a Pokemon fainted the last round, checks if this client's pokemon fainted
+        if (Server.skipRound) {
+            for (BattlePosition pos : this.player.getBattlePositions()) {
+                if (this.player.canSelectPokemon(pos.getId(), false)) {
+                    this.selectPokemon(pos.getId());
+                }
+            }
+        } 
+        else {
+            this.writeToBuffer("Round %d", Server.round);
 
-    public void battleProcess() {
+            // Each Pokemon in battle selects a move
+            for (BattlePosition pos : this.player.getBattlePositions()) {
+                if (pos.getCurrentPokemon() == null) {
+                    continue;
+                }
+
+                int id = pos.getId();
+                Move m = this.selectMove(pos.getCurrentPokemon());
+
+                if (m != null) {
+                    this.selectTargetPokemon(m, pos.getCurrentPokemon());
+                }
+                else {
+                    this.selectPokemon(id);
+                }
+            }
+
+        }
+        
+        this.writeToBuffer("============================================================");
+        this.writeToBuffer("Waiting for opponent....");
+    }
+
+    public void gameLoop() {
         // Battle Process
         while (this.socket.isConnected()) {
             Server.lock(); // Waits for server to finish processing
 
-            // A skipped round indicates a Pokemon fainted the last round, checks if this client's pokemon fainted
-            if (Server.skipRound) {
-                // Fainted Pokemon needs to be switched out, player selects a new Pokemon
-                if (this.player.getPokemonInBattle().getConditions().isFainted()) {
-                    this.selectPokemon();
-                }
-                else { // Indicates the other player's pokemon fainted
-                    this.writeToBuffer("Waiting for opponent to choose new Pokemon....");
-                }
-            } 
-            else {
-                this.writeToBuffer("Round %d", Server.round);
-
-                Move m = this.selectMove(this.player.getPokemonInBattle());
-
-                if (m != null) {
-                    this.selectTargetPokemon(m);
-                }
-                else {
-                    this.selectPokemon();
-                }
-   
-                this.writeToBuffer("Waiting for opponent....");
-            }
+            this.processRound();
 
             Server.lock(); // Waits for opponent
+
             this.writeToBuffer("Waiting for server...");
 
             if (this.socket.isClosed()) { // Checks if socket was closed
@@ -277,24 +296,23 @@ public class ClientHandler implements Runnable {
         }
     }
 
-    // Getters
-    public int clientId() {
-        return this.clientId;
-    }
-
-    public String clientName() {
-        return this.clientName;
-    }
-
-    public PokemonTrainer getPlayer() {
-        return this.player;
-    }
-
 // Main Function: Clients inputs commands to send back to the server 
     @Override
     public void run() {
-        this.setup();
-        this.battleProcess();
+        try {
+            this.setup();
+            this.gameLoop();
+        } catch (Exception e) {
+           System.out.println("Seed: " + RandomValues.SEED); 
+           System.exit(1);
+        }
+        
     }
+
+// Getters
+    public int clientId() {return this.clientId;}
+    public String clientName() {return this.clientName;}
+    public PokemonTrainer getPlayer() {return this.player;}
+    public PokemonTrainer getOpponent() {return this.opponent;}
     
 }

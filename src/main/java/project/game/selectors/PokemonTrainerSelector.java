@@ -1,5 +1,6 @@
 package project.game.selectors;
 
+import project.config.GameConfig;
 import project.game.builders.PokemonTrainerBuilder;
 import project.game.player.PokemonTrainer;
 import project.game.pokemon.Pokedex;
@@ -7,13 +8,12 @@ import project.game.pokemon.Pokemon;
 import project.network.ClientHandler;
 import project.network.Server;
 
-public class PokemonTrainerSelector {
+public class PokemonTrainerSelector extends Selector {
 
-    private final ClientHandler client;
     private final PokemonTrainerBuilder ptb;
 
     public PokemonTrainerSelector(ClientHandler c) {
-        this.client = c;
+        super(c);
         this.ptb = new PokemonTrainerBuilder();
     }
 
@@ -28,7 +28,10 @@ public class PokemonTrainerSelector {
                 int n = Integer.parseInt(input);
 
                 if (n == -1) {
-                    if (this.ptb.getParty().isEmpty()) {
+                    if (GameConfig.DOUBLES_MODE_ENABLED && this.ptb.getParty().size() < 2) { // Double battle requirements
+                        this.client.writeToBuffer("Please add at least two pokemon.");
+                    }
+                    else if (this.ptb.getParty().isEmpty()) {
                         // Need at least one pokemon in the party
                         this.client.writeToBuffer("Please add at least one pokemon.");
                     }
@@ -131,7 +134,7 @@ public class PokemonTrainerSelector {
      * Creates a Pokemon trainer through user-commands. User must choose a name
      * then select up to six pokemon.
      *  */ 
-    public PokemonTrainer initializPokemonTrainer() {
+    public PokemonTrainer select() {
         this.ptb.setName(this.client.clientName());
 
         while (this.ptb.getParty().size() < PokemonTrainerBuilder.MAX_PARTY_CAPACITY) {
@@ -153,4 +156,5 @@ public class PokemonTrainerSelector {
 
         return pt;
     }
+
 }

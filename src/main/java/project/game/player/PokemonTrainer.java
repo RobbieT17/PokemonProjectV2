@@ -1,6 +1,6 @@
 package project.game.player;
 
-import project.game.battle.BattleLog;
+import project.config.GameConfig;
 import project.game.battle.BattlePosition;
 import project.game.pokemon.Pokemon;
 import project.game.utility.StatDisplay;
@@ -10,9 +10,7 @@ public class PokemonTrainer {
 // Object Variables
     private final String playerName; // Player name
     private final Pokemon[] team; // Pokemon Team to use in battle
-    private final BattlePosition battlePosition;
-
-    private Pokemon showPokemon; // Pokemon in battle
+    private final BattlePosition[] battlePositions; // Slots for Pokemon in battle
 
 // Constructor
     /**
@@ -23,7 +21,7 @@ public class PokemonTrainer {
     public PokemonTrainer(String name, Pokemon[] team) {
         this.playerName = name;
         this.team = team;
-        this.battlePosition = new BattlePosition(this);
+        this.battlePositions = this.initBattlePositions();
 
         // Sets the pokemons' owner to the this trainer
         for (Pokemon p : team) {
@@ -32,7 +30,61 @@ public class PokemonTrainer {
     }
 
 // Methods
-   
+    // Configures number of battle positions based on the gamemode (Singles/Doubles)
+    private BattlePosition[] initBattlePositions() {
+        return GameConfig.DOUBLES_MODE_ENABLED
+        ? new BattlePosition[] {new BattlePosition(this, 0), new BattlePosition(this, 1)}
+        : new BattlePosition[] {new BattlePosition(this, 0)};
+    }
+
+
+// Boolean Methods
+    // True when all the trainer's Pokemon have fainted
+    public boolean isOutOfPokemon() {
+        for (Pokemon p : this.team)
+            if (!p.getConditions().isFainted()) return false;
+        return true;
+    }
+
+    /**
+     * Checks all positions on the field for a Pokemon.
+     * @param p search Pokemon
+     * @return True if the Pokemon reference matches one 
+     * of the positions' current Pokemon
+     */
+    public boolean isPokemonInBattle(Pokemon p) {
+        for (BattlePosition pos : this.battlePositions) {
+            if (p == pos.getCurrentPokemon()) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    /**
+     * Checks if a trainer can send 
+     * another Pokemon onto the battlefield
+     * 
+     * Done by seeing if the trainer has more
+     * Pokemon avaiable then battle position slot
+     * 
+     * @param pos postion id
+     * @param override ignores null position check
+     * @return
+     */
+    public boolean canSelectPokemon(int pos, boolean override) {
+        // Check for an empty slot
+        boolean emptyPosition = this.battlePositions[pos].getCurrentPokemon() == null;
+
+        if (override) {
+            emptyPosition = true;
+        }
+
+        // Check if player has more 
+
+        return emptyPosition && this.pokemonAvailable() > 0;
+    }
+// Other Methods
     // Formats Pokemon team info
     private String listPokemon() {
         StringBuilder sb = new StringBuilder();
@@ -44,19 +96,28 @@ public class PokemonTrainer {
         return sb.toString();
     }
 
-    // True when all the trainer's Pokemon have fainted
-    public boolean outOfPokemon() {
-        for (Pokemon p : this.team)
-            if (!p.getConditions().isFainted()) return false;
-        return true;
+    public String displayPokemonInBattle(String prefix) {
+        StringBuilder sb = new StringBuilder();
+
+        for (BattlePosition pos : this.battlePositions) {
+            if (pos.getCurrentPokemon() != null) {
+                sb.append(StatDisplay.showPartyStats(pos.getIllusionPokemon(), prefix));
+            }
+
+        }
+        return sb.toString();
     }
 
-    // Number of Pokemon that are still alive (not fainted)
+
+    // Number of Pokemon that are still alive and not in battle
     public int pokemonAvailable() {
         int count = 0;
 
         for (Pokemon p : this.team)
-            if (!p.getConditions().isFainted()) count++;
+            if (!p.getConditions().isFainted() && !this.isPokemonInBattle(p)) {
+                count++;
+            } 
+                
 
         return count;
     }
@@ -69,41 +130,39 @@ public class PokemonTrainer {
         .toString();
     }
 
-    // Sends out a Pokemon, returns the Pokemon already in battle
-    public void sendOutPokemon() {
-        this.getPokemonInBattle().getConditions().setSwitchedIn(false);
-        this.updateShowPokemon();
-
-        if (this.getPokemonLastInBattle() != null) {
-            BattleLog.add("%s returns %s!", this, this.getPokemonLastInBattle());
-        }
-
-        BattleLog.add("%s sends out %s!", this, this.getPokemonInBattle());
+    // Gets the pokemon currently in position pos
+    public Pokemon getPokemonInBattle(int pos) {
+        return this.getBattlePositions()[pos].getCurrentPokemon();
     }
 
+    // Gets the pokemon previously in position pos
+    public Pokemon getPokemonLastInBattle(int pos) {
+        return this.getBattlePositions()[pos].getPrevPokemon();
+    }
+
+    public Pokemon getShowPokemon(int pos) {
+       return this.battlePositions[pos].getIllusionPokemon();
+    }
+
+    // Updates the Pokemon display shown to opponent
+    public void updateShowPokemon() {
+        for (BattlePosition pos : this.battlePositions) {
+            pos.updateIllusion();
+        }
+    }  
+
     // Sets the current Pokemon in battle
-    public void setPokemonInBattle(Pokemon p) {
+    public void setPokemonInBattle(Pokemon p, int pos) {
         p.getConditions().setSwitchedIn(true);
-        this.battlePosition.setCurrentPokemon(p);
+        this.battlePositions[pos].setCurrentPokemon(p);
     }
 
     // Returns the Pokemon on the battle
-    public void returns() {
-        if (this.battlePosition.getCurrentPokemon() == null) return;
+    public void returns(int pos) {
+        if (this.battlePositions[pos].getCurrentPokemon() == null) return;
     
-        this.battlePosition.getCurrentPokemon().backToTrainer();
-        this.battlePosition.setCurrentPokemon(null);
-    }
-
-    // Sets show Pokemon to current Pokemon in battle
-    public void updateShowPokemon() {
-        this.showPokemon = this.battlePosition.getCurrentPokemon();
-    }
-
-    // Shows the current Pokemon in battle (hides if the pokemon was switched out)
-    // Only update this at the end of the turn to reflect 
-    public Pokemon showPokemonInBattle() {
-        return this.showPokemon;
+        this.battlePositions[pos].getCurrentPokemon().backToTrainer();
+        this.battlePositions[pos].setCurrentPokemon(null);
     }
 
     @Override
@@ -112,23 +171,7 @@ public class PokemonTrainer {
     }
 
 // Getters
-    public String getPlayerName() {
-        return this.playerName;
-    }
-
-    public Pokemon[] getTeam() {
-        return this.team;
-    }
-
-    public BattlePosition getBattlePosition() {
-        return this.battlePosition;
-    }
-
-    public Pokemon getPokemonInBattle() {
-        return this.getBattlePosition().getCurrentPokemon();
-    }
-
-    public Pokemon getPokemonLastInBattle() {
-        return this.getBattlePosition().getPrevPokemon();
-    }
+    public String getPlayerName() { return this.playerName;}
+    public Pokemon[] getTeam() {return this.team;}
+    public BattlePosition[] getBattlePositions() {return this.battlePositions;}
 }

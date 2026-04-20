@@ -19,7 +19,7 @@ public interface MoveActionDamagePct {
             return;
         }
 
-        int damage = (int) (0.01 * data.recoilPercent * p.getDamageDealt()); 
+        int damage = (int) (0.01 * data.recoilPercent * data.percentMod  * p.getDamageDealt()); 
         BattleLog.add("%s took %d damage from the recoil!", p, damage);
         p.addDamageReceived(damage);
         p.takeDamage(damage);
@@ -34,7 +34,7 @@ public interface MoveActionDamagePct {
             return;
         }
 
-        int heal = (int) (0.01 * data.drainPercent * p.getDamageDealt()); 
+        int heal = (int) (0.01 * data.drainPercent * data.percentMod * p.getDamageDealt()); 
         BattleLog.add("%s restored %d HP!", p, heal);
         p.restoreHP(heal);
     }
