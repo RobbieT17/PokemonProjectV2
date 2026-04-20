@@ -3,7 +3,7 @@ package project.game.battle;
 import project.game.player.PokemonTrainer;
 import project.game.pokemon.Pokemon;
 
-public class BattlePosition {
+public class BattlePosition  {
     
     private final PokemonTrainer trainer;
     private final int id;
@@ -72,5 +72,5 @@ public class BattlePosition {
     public Pokemon getCurrentPokemon() {return this.currentPokemon;}
     public Pokemon getPrevPokemon() {return this.prevPokemon;}
     public Pokemon getIllusionPokemon() {return this.illusionPokemon;}
-    
+
 }

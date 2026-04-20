@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import project.game.battle.BattleLog;
 import project.game.battle.BattlePosition;
 import project.game.event.GameEvents;
-import project.game.exceptions.PokemonFaintedException;
 import project.game.move.Move;
 import project.game.player.PokemonTrainer;
 import project.game.pokemon.effects.Ability;
@@ -192,6 +191,7 @@ public class Pokemon {
         return this.nickname != null ? this.nickname : this.pokemonName;
     }
 
+
 // Boolean Methods
     public boolean isOutOfMoves() {
         for (Move m : this.moves) 
@@ -322,5 +322,6 @@ public class Pokemon {
     public String getNickname() {return this.nickname;}
     public PokemonTrainer getOwner() {return this.owner;}
     public GameEvents getEvents() {return this.events;}
+
 
 }

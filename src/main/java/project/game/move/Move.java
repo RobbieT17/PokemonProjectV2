@@ -100,6 +100,16 @@ public enum MoveCategory {Physical, Special, Status};
         .toString();
     }
 
+    public void resetStats() {
+        if (this.power != null) this.power.reset();
+        this.accuracy.reset();
+        this.disabled = false;
+    }
+
+    public boolean alwaysHit() {
+        return this.accuracy.base() == Move.ALWAYS_HITS;
+    }
+
     @Override
     public boolean equals(Object m) {
         return m != null 
@@ -110,16 +120,6 @@ public enum MoveCategory {Physical, Special, Status};
     @Override
     public String toString() {
         return this.moveName.replaceAll("[_-]", " ");
-    }
-
-    public void resetStats() {
-        if (this.power != null) this.power.reset();
-        this.accuracy.reset();
-        this.disabled = false;
-    }
-
-    public boolean alwaysHit() {
-        return this.accuracy.base() == Move.ALWAYS_HITS;
     }
 
 // Setters
@@ -147,4 +147,5 @@ public enum MoveCategory {Physical, Special, Status};
     public boolean isMultiHit() {return this.multiHit;}
     public AdditonalEffects getAdditionalEffects() {return this.additonEffects;}
     public boolean isDisabled() {return this.disabled;}
+
 }

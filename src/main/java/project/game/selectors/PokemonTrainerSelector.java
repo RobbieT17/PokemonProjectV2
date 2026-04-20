@@ -8,13 +8,12 @@ import project.game.pokemon.Pokemon;
 import project.network.ClientHandler;
 import project.network.Server;
 
-public class PokemonTrainerSelector {
+public class PokemonTrainerSelector extends Selector {
 
-    private final ClientHandler client;
     private final PokemonTrainerBuilder ptb;
 
     public PokemonTrainerSelector(ClientHandler c) {
-        this.client = c;
+        super(c);
         this.ptb = new PokemonTrainerBuilder();
     }
 
@@ -135,7 +134,7 @@ public class PokemonTrainerSelector {
      * Creates a Pokemon trainer through user-commands. User must choose a name
      * then select up to six pokemon.
      *  */ 
-    public PokemonTrainer initializPokemonTrainer() {
+    public PokemonTrainer select() {
         this.ptb.setName(this.client.clientName());
 
         while (this.ptb.getParty().size() < PokemonTrainerBuilder.MAX_PARTY_CAPACITY) {
@@ -157,4 +156,5 @@ public class PokemonTrainerSelector {
 
         return pt;
     }
+
 }

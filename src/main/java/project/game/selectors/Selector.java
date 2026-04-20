@@ -4,11 +4,11 @@ import project.network.ClientHandler;
 
 public abstract class Selector {
     
-    private final ClientHandler client;
+    protected final ClientHandler client;
 
     public Selector(ClientHandler c) {
         this.client = c;
     }
 
-    abstract public Selectable select();
+    abstract public Object select();
 } 

@@ -5,13 +5,12 @@ import project.game.pokemon.Pokemon;
 import project.game.utility.StatDisplay;
 import project.network.ClientHandler;
 
-public class MoveSelector {
+public class MoveSelector extends Selector {
 
-    private final ClientHandler client;
     private final Pokemon pokemon;
 
     public MoveSelector(ClientHandler c, Pokemon p) {
-        this.client = c;
+        super(c);
         this.pokemon = p;
     }
 
@@ -41,7 +40,8 @@ public class MoveSelector {
      * current Pokemon. A null pointer is return if this option 
      * is selected.
      */
-    public Move chooseMove() {
+    @Override
+    public Move select() {
         Move m = null;
 
         while (true) {

@@ -26,11 +26,6 @@ public interface StatDisplay {
         return sb.toString();
     }
 
-    public static String showCondition(Pokemon p) {
-        if (p.getConditions().isFainted()) return "FAINTED";
-        if (!p.getConditions().hasPrimary()) return "";
-        return p.getConditions().getPrimaryCondition().toString().toUpperCase();
-    }
 
     public static String showVolatileConditions(Pokemon p) {
         StringBuilder sb = new StringBuilder();
@@ -45,12 +40,30 @@ public interface StatDisplay {
       
     }
 
-    public static String showPartyStats(Pokemon p) {
-        return String.format("- %s <%s> (HP: %s) %s%n", p, p.getPokemonType(), p.getHp(), showCondition(p));
+    private static String showSelectItem(Pokemon p) {
+        return String.format("- %s <%s> (HP: %s) %s%n", 
+        p, p.getPokemonType(), p.getHp(), p.getConditions());
     }
 
-    public static String showPartyStats(Pokemon p, String prefix) {
-        return String.format("- %s %s <%s> (HP: %s) %s%n", prefix, p, p.getPokemonType(), p.getHp(), showCondition(p));
+    private static  String showSelectItem(Pokemon p, int n) {
+        return String.format("[%d] %s <%s> (HP: %s) %s%n", 
+        n, p.getPokemonType(), p.getHp(), p.getConditions());
+    }
+
+    public static String showPartyStats(Pokemon p) {
+        return String.format(StatDisplay.showSelectItem(p));
+    }
+
+    public static String showPartyStats(Pokemon p, int n) {
+        return String.format(StatDisplay.showSelectItem(p, n));
+    }
+
+    public static String showPartyStats(Pokemon p, String suffix) {
+        return String.format(StatDisplay.showSelectItem(p) + suffix);
+    }
+
+    public static String showPartyStats(Pokemon p, int i, String suffix) {
+        return String.format(StatDisplay.showSelectItem(p) + suffix);
     }
 
     public static String showAbility(Pokemon p) {
@@ -83,7 +96,7 @@ public interface StatDisplay {
         .append(String.format("HP: %s%n", p.getHp().toString()))
         .append(String.format("%nAbility: %s%n", showAbility(p)))
         .append(String.format("Item: %s%n", showItem(p)))
-        .append(String.format("%nStatus Effect: %s%n", showCondition(p)))
+        .append(String.format("%nStatus Effect: %s%n", p.getConditions()))
         .append(String.format("Other Effects: %s%n", showVolatileConditions(p)))
         .append(String.format("============================================================%n"))
         .append(String.format("MOVES: %n%s", listMoves(p)))

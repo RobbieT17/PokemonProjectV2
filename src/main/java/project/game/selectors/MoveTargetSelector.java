@@ -9,9 +9,8 @@ import project.game.utility.StatDisplay;
 import project.network.ClientHandler;
 
 // TODO: This whole class is so buns right now, fix this soon!
-public class MoveTargetSelector {
+public class MoveTargetSelector extends Selector {
     
-    private final ClientHandler client;
     private final MoveTarget targetType;
     private final BattlePosition self;
     private final BattlePosition[] playerPositions;
@@ -24,7 +23,7 @@ public class MoveTargetSelector {
         BattlePosition self, 
         BattlePosition[] playerPos, BattlePosition[] opponentPos
     ) {
-        this.client = c;
+        super(c);
         this.targetType = t;
         this.self = self;
         this.playerPositions = playerPos;
@@ -52,14 +51,7 @@ public class MoveTargetSelector {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < options.length; i++) {
             Pokemon p = options[i].getIllusionPokemon();
-            sb.append(String.format(
-                "[%d] %s %s <%s> (HP: %s) %s%n", 
-                i, 
-                this.isAlly(p) ? "(ALLY)" : "",
-                p, 
-                p.getPokemonType(), 
-                p.getHp(), 
-                StatDisplay.showCondition(p)));
+            sb.append(StatDisplay.showPartyStats(p, i, this.isAlly(p) ? "(ALLY)" : ""));
         }
 
         return sb.toString();
@@ -143,6 +135,7 @@ public class MoveTargetSelector {
         return list.toArray(BattlePosition[]::new);
     }
 
+    @Override
     public BattlePosition[] select() {
         return switch(this.targetType){
             case MoveTarget.Self -> this.chooseSelf();

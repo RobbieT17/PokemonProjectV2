@@ -10,6 +10,7 @@ import project.game.battle.Battle;
 import project.game.battle.BattlePosition;
 import project.game.battle.BattleStatus;
 import project.game.player.PokemonTrainer;
+import project.game.utility.RandomValues;
 import project.game.utility.Time;
 
 
@@ -183,10 +184,17 @@ public class Server {
     }
 
     public static void main(String[] args) throws IOException {
-        ServerSocket serverSocket = new ServerSocket(Server.PORT);
-        Server.start(serverSocket);
-        Server.beginBattle();
-        Server.close(serverSocket);
+        try {
+            ServerSocket serverSocket = new ServerSocket(Server.PORT);
+            Server.start(serverSocket);
+            Server.beginBattle();
+            Server.close(serverSocket);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("Seed: " + RandomValues.SEED);
         System.exit(0);
     }
 }

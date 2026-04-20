@@ -56,7 +56,7 @@ moves:
   category: Physical
   pp: 15
   pow: 90
-  acc: 095
+  acc: 95
   addEffects:
     semiImmune:
       effect: Fly-State
