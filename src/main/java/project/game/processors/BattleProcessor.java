@@ -13,7 +13,7 @@ import project.game.player.PokemonTrainer;
 import project.game.pokemon.Pokemon;
 import project.game.utility.Order;
 
-public class BattleProcessor implements Processor{
+public class BattleProcessor implements Processor {
 
     private final BattleData battleData;
 

@@ -299,14 +299,8 @@ public class ClientHandler implements Runnable {
 // Main Function: Clients inputs commands to send back to the server 
     @Override
     public void run() {
-        try {
-            this.setup();
-            this.gameLoop();
-        } catch (Exception e) {
-           System.out.println("Seed: " + RandomValues.SEED); 
-           System.exit(1);
-        }
-        
+        this.setup();
+        this.gameLoop();  
     }
 
 // Getters

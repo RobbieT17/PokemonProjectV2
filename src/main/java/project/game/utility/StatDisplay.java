@@ -30,7 +30,6 @@ public interface StatDisplay {
     public static String showVolatileConditions(Pokemon p) {
         StringBuilder sb = new StringBuilder();
 
-
         for (StatusCondition c : p.getConditions().getVolatileConditions().values()) 
             sb.append(c.getEffectName())
             .append(", ");
@@ -40,30 +39,34 @@ public interface StatDisplay {
       
     }
 
-    private static String showSelectItem(Pokemon p) {
-        return String.format("- %s <%s> (HP: %s) %s%n", 
+    private static String getStats(Pokemon p) {
+        return String.format("%s <%s> (HP: %s) %s%n", 
         p, p.getPokemonType(), p.getHp(), p.getConditions());
     }
 
-    private static  String showSelectItem(Pokemon p, int n) {
-        return String.format("[%d] %s <%s> (HP: %s) %s%n", 
-        n, p.getPokemonType(), p.getHp(), p.getConditions());
+    private static String toListItem(Pokemon p, String prefix) {
+        return String.format("- %s %s", prefix, StatDisplay.getStats(p));
     }
 
+    private static String toNumItem(Pokemon p, int n, String prefix) {
+        return String.format("[%d] %s %s", n, prefix, StatDisplay.getStats(p));
+    } 
+
+
     public static String showPartyStats(Pokemon p) {
-        return String.format(StatDisplay.showSelectItem(p));
+        return String.format(StatDisplay.toListItem(p, ""));
     }
 
     public static String showPartyStats(Pokemon p, int n) {
-        return String.format(StatDisplay.showSelectItem(p, n));
+        return String.format(StatDisplay.toNumItem(p, n, ""));
     }
 
-    public static String showPartyStats(Pokemon p, String suffix) {
-        return String.format(StatDisplay.showSelectItem(p) + suffix);
+    public static String showPartyStats(Pokemon p, String prefix) {
+        return String.format(StatDisplay.toListItem(p, prefix));
     }
 
-    public static String showPartyStats(Pokemon p, int i, String suffix) {
-        return String.format(StatDisplay.showSelectItem(p) + suffix);
+    public static String showPartyStats(Pokemon p, int n, String prefix) {
+        return String.format(StatDisplay.toNumItem(p, n, prefix));
     }
 
     public static String showAbility(Pokemon p) {
