@@ -3,7 +3,6 @@ package project.game.pokemon.effects;
 import java.util.function.Function;
 
 import project.game.battle.BattleLog;
-import project.game.battle.BattlePosition;
 import project.game.event.GameEvents.EventID;
 import project.game.move.Move;
 import project.game.move.Move.MoveCategory;

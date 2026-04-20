@@ -11,8 +11,6 @@ import project.game.battle.BattlePosition;
 import project.game.battle.BattleStatus;
 import project.game.player.PokemonTrainer;
 import project.game.utility.RandomValues;
-import project.game.utility.Time;
-
 
 public class Server {
 // Class Variables
