@@ -8,7 +8,7 @@ import project.game.exceptions.PokemonFaintedException;
 import project.game.pokemon.Pokemon;
 import project.game.pokemon.stats.Type;
 
-public class WeatherProcessor {
+public class WeatherProcessor implements Processor {
 
     private final BattleData battleData;
 
@@ -87,7 +87,8 @@ public class WeatherProcessor {
         if (p.getConditions().isFainted()) throw new PokemonFaintedException();
     }
 
-    public void updateWeather() {
+    @Override
+    public void process() {
         if (this.battleData.getCurrenWeather().getCounter().inc()) { // Weather expires
             this.changeWeather(WeatherEffect.Clear);
         }

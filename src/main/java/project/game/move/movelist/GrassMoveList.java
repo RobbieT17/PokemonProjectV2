@@ -9,6 +9,7 @@ import project.game.move.moveactions.MoveActionCharge;
 import project.game.move.moveactions.MoveActionHealthRestore;
 import project.game.pokemon.Pokemon;
 import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;
+import project.game.processors.AdditionalEffectsProcessor;
 
 public class GrassMoveList {
 
@@ -40,10 +41,22 @@ public class GrassMoveList {
     }
 
     public static int synthesis(EventManager e) {
-        MoveAction.targetsUser(e.data);
-        double percent = (e.data.battleData.isCurrentWeather(WeatherEffect.Sunny)) ? 67 :
-                         (e.data.battleData.isCurrentWeather(WeatherEffect.Clear)) ? 50 : 25;
-        MoveActionHealthRestore.restoreHp(e, percent);
+        double mod;
+
+        // Restores more HP in Sunny weather
+        if (e.data.battleData.isCurrentWeather(WeatherEffect.Sunny)) {
+            mod = 1.33;
+        }
+        else if (e.data.battleData.isCurrentWeather(WeatherEffect.Clear)) {
+            mod = 1.0;
+        }
+        else { // Restores less HP other weather conditions
+            mod = 0.5;
+        }
+        
+        AdditionalEffectsProcessor aep = new AdditionalEffectsProcessor(e); 
+        aep.prodPercentMods(mod);
+        aep.process();
         return 0;
     }
 

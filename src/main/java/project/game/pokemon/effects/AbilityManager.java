@@ -132,8 +132,8 @@ public interface AbilityManager {
         EventID[] flags = new EventID[] {EventID.DEF_STAT_CHANGE};
 
         p.getEvents().addEventListener(flags[0], name, e -> {
-            for (int i = 0; i < e.statChanges.length; i++) {
-                e.statChanges[i] *= 2;
+            for (int i = 0; i < e.statMods.length; i++) {
+                e.statMods[i] *= 2;
             }
         });
 

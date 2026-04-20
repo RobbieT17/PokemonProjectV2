@@ -34,7 +34,7 @@ public class PokemonSelector {
             return -1;
         }
 
-        if (p == this.trainer.getPokemonInBattle()) {
+        if (this.trainer.isPokemonInBattle(p)) {
             return -2;
         }
         return 0;

@@ -6,6 +6,7 @@ public class GameEvents {
 
     public enum EventID {
         MOVE_SELECTION,
+        TARGET_SELECTION,
         FIND_MOVE_ORDER,
         USE_MOVE,
         MOVE_INTERRUPTED,  

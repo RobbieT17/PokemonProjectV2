@@ -3,6 +3,7 @@ package project.game.pokemon.effects;
 import java.util.function.Function;
 
 import project.game.battle.BattleLog;
+import project.game.battle.BattlePosition;
 import project.game.event.GameEvents.EventID;
 import project.game.move.Move;
 import project.game.move.Move.MoveCategory;
@@ -87,8 +88,11 @@ public interface HeldItemManager {
         p.getEvents().addEventListener(flags[0], name, e -> {
             if (c.inc()) {
                 BattleLog.add("Surprise! %s's Bomb Surprise goes off!", p);
-                e.battleData.getPlayer1().getPokemonInBattle().faints();
-                e.battleData.getPlayer2().getPokemonInBattle().faints();
+
+                for (Pokemon t : e.battleData.getAllPokemonInBattle()) {
+                    t.faints();
+                }
+                
             }
         });
 

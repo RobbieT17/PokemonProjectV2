@@ -1,5 +1,6 @@
 package project.game.utility;
 
+import project.game.battle.BattlePosition;
 import project.game.pokemon.Pokemon;
 import project.game.pokemon.effects.StatusCondition;
 
@@ -28,7 +29,7 @@ public interface StatDisplay {
     public static String showCondition(Pokemon p) {
         if (p.getConditions().isFainted()) return "FAINTED";
         if (!p.getConditions().hasPrimary()) return "";
-        return p.getConditions().getPrimaryCondition().toString();
+        return p.getConditions().getPrimaryCondition().toString().toUpperCase();
     }
 
     public static String showVolatileConditions(Pokemon p) {
@@ -46,6 +47,10 @@ public interface StatDisplay {
 
     public static String showPartyStats(Pokemon p) {
         return String.format("- %s <%s> (HP: %s) %s%n", p, p.getPokemonType(), p.getHp(), showCondition(p));
+    }
+
+    public static String showPartyStats(Pokemon p, String prefix) {
+        return String.format("- %s %s <%s> (HP: %s) %s%n", prefix, p, p.getPokemonType(), p.getHp(), showCondition(p));
     }
 
     public static String showAbility(Pokemon p) {
@@ -84,5 +89,20 @@ public interface StatDisplay {
         .append(String.format("MOVES: %n%s", listMoves(p)))
         .append(String.format("============================================================%n"))
         .toString();
+    }
+
+
+    public static String displayTargetsSelected(BattlePosition[] targets, Pokemon p) {
+        StringBuilder sb = new StringBuilder("Target(s): ");
+
+        for (BattlePosition target : targets) {
+            Pokemon targetPokemon = target.getCurrentPokemon();
+            sb.append(targetPokemon == p ? "Self" : targetPokemon)
+            .append(", ");
+        }
+
+        // Removes trailing comma
+        String s = sb.toString();
+        return s.length() > 2 ? s.substring(0, s.length() - 2) : s;  
     }
 }

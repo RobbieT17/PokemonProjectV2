@@ -1,17 +1,19 @@
 package project.game.processors;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+
 import project.game.battle.BattleData;
 import project.game.battle.BattleLog;
 import project.game.event.EventManager;
 import project.game.event.GameEvents.EventID;
 import project.game.exceptions.BattleEndedException;
-import project.game.exceptions.PokemonFaintedException;
 import project.game.move.Move;
 import project.game.player.PokemonTrainer;
 import project.game.pokemon.Pokemon;
-import project.game.utility.RandomValues;
+import project.game.utility.Order;
 
-public class BattleProcessor {
+public class BattleProcessor implements Processor{
 
     private final BattleData battleData;
 
@@ -26,75 +28,53 @@ public class BattleProcessor {
         this.player2 = data.getPlayer2();
     }
 
-    // Finds the order which the Pokemon in battle will act
-    public void constructTurnOrder() {
-        Pokemon pokemon1 = this.player1.getPokemonInBattle();
-        Pokemon pokemon2 = this.player2.getPokemonInBattle();
+    private void constructTurnOrder() {
+        ArrayList<Order> orderList = new ArrayList<>();
+        ArrayList<Pokemon> noActList = new ArrayList<>(); // Keeps track of Pokemon without an action
 
-        EventManager eventManager1 = new EventManager(this.battleData, pokemon1);
-        EventManager eventManager2 = new EventManager(this.battleData, pokemon2);
-
-        eventManager1.notifyUserPokemon(EventID.FIND_MOVE_ORDER);
-        eventManager2.notifyUserPokemon(EventID.FIND_MOVE_ORDER);
-
-        Pokemon[] order = new Pokemon[2];
-
-        Move m1 = pokemon1.getMoveSelected();
-        Move m2 = pokemon2.getMoveSelected();
-
-        int speed1 = pokemon1.getSpeed().getPower();
-        int speed2 = pokemon2.getSpeed().getPower();
-
-        // Sometimes a Pokemon does not use a move (usually if it's switched in mid-round)
-        if (m1 == null) {
-            order[0] = pokemon1; 
-            order[1] = pokemon2;
-        }
-        else if (m2 == null) {
-            order[0] = pokemon2; 
-            order[1] = pokemon1;
-        }
-        // Higher Priority Moves act first
-        else if (m1.getPriority() > m2.getPriority()) {
-            order[0] = pokemon1; 
-            order[1] = pokemon2;
-        }
-        else if (m2.getPriority() > m1.getPriority()) {
-            order[0] = pokemon2; 
-            order[1] = pokemon1;
-        }
-        // Pokemon with higher speed acts firsts
-        else if (speed1 > speed2) {
-            order[0] = pokemon1;
-            order[1] = pokemon2;
-        }
-        else if (speed2 > speed1) {
-            order[0] = pokemon2;
-            order[1] = pokemon1;
-        }
-        // Speed Tie, move order is random
-        else {
-            if (RandomValues.chance(50)){
-                order[0] = pokemon1;
-                order[1] = pokemon2;
+        // 1. Adds all Pokemon who have selected a move to the order list
+        for (Pokemon p : this.battleData.getAllPokemonInBattle()) {
+            if (p.getMoveSelected() == null) { // Skips null moves
+                noActList.add(p);
+                continue;
             }
-            else {
-                order[0] = pokemon2;
-                order[1] = pokemon1;
-            }
+
+            EventManager eventManager = new EventManager(this.battleData, p);
+            eventManager.notifyUserPokemon(EventID.FIND_MOVE_ORDER);
+
+            Move m = p.getMoveSelected();
+
+            Order o = new Order(m.getPriority(), p.getSpeed().getPower(), p);
+            orderList.add(o);
         }
 
-        this.turnOrder = order;
+        // 2. Sorts the order list first by move priority, then by move user speed
+        orderList.sort(
+            Comparator.comparingInt(Order::getPriority)
+            .thenComparingInt(Order::getValue).reversed()
+            .thenComparingDouble(Order::getTiebreaker) // Random tiebreaker
+        );
+
+        // 3. All Pokemon whose move select was null are added first, then move users
+        ArrayList<Pokemon> turnOrderList = new ArrayList<>();
+        turnOrderList.addAll(noActList);
+        
+        for (Order o : orderList) {
+            turnOrderList.add((Pokemon) o.getRef());
+        }
+
+        this.turnOrder = turnOrderList.toArray(Pokemon[]::new);
+
     }
 
     /**
      * Each pokemon acts and targets their opponent with the move chosen
      * Function terminates early if a <b>PokemonFaintedException</b> is caught.
      */
-    public void processPokemonActions() {
+    private void processPokemonActions() {
         // Faster pokemon acts first, followed by the second
         for (Pokemon p : this.turnOrder) {
-            new PokemonProcessor(this.battleData, p).useTurn();
+            new PokemonProcessor(this.battleData, p).process();
         }
         
     }
@@ -102,8 +82,8 @@ public class BattleProcessor {
     /**
      * Updates things like weather and terrain effects 
      */
-    public void updateBattleData() {
-        new WeatherProcessor(this.battleData).updateWeather();
+    private void updateBattleData() {
+        new WeatherProcessor(this.battleData).process();
     }
 
     /**
@@ -112,46 +92,35 @@ public class BattleProcessor {
      * reset any Pokemon params needed.
      * 
      */
-    public void processRoundEnd() {
+    private void processRoundEnd() {
+        BattleLog.add("===================================================");
         for (Pokemon p : this.turnOrder) {
-            p.endOfRoundReset();
-
-            if (p.getConditions().isFainted()) { // Skips Pokemon if fainted
-                continue;
-            }
-
-            try {
-                // TODO: Tick weather
-                new WeatherProcessor(this.battleData).pokemonTakeWeatherDamage(p);
-
-                EventManager eventManager = new EventManager(this.battleData, p);
-                eventManager.updateEventMaps();
-                eventManager.notifyUserPokemon(EventID.WEATHER_EFFECT);
-                eventManager.notifyUserPokemon(EventID.PRIMARY_STATUS_AFTER);
-                eventManager.notifyUserPokemon(EventID.STATUS_AFTER);
-                eventManager.notifyUserPokemon(EventID.END_OF_ROUND);
-            } catch (PokemonFaintedException e) { 
-                // Some effects might cause the Pokemon to faint, skip to next Pokemon if so
-                continue;
-            }
-            
+            new EndRoundProcessor(battleData, p).process();
         }
-
     }
 
     /**
      * Checks if a Pokemon has fainted or the battle has been won (player is out of Pokemon)
      */
-    public void checkWinConditions() {        
-        if (this.player1.outOfPokemon() && this.player2.outOfPokemon()) {
+    private void checkWinConditions() {        
+        if (this.player1.isOutOfPokemon() && this.player2.isOutOfPokemon()) {
             throw new BattleEndedException("Both players are out of Pokemon, it's a tie!");
         }
-        else if (this.player1.outOfPokemon()) {
+        else if (this.player1.isOutOfPokemon()) {
             throw new BattleEndedException(this.player2, this.player1);
         }
-        else if (this.player2.outOfPokemon()){
+        else if (this.player2.isOutOfPokemon()){
             throw new BattleEndedException(this.player1, this.player2);
         }
+    }
+
+    @Override
+    public void process() {
+        this.constructTurnOrder();
+        this.processPokemonActions();
+        this.updateBattleData();
+        this.processRoundEnd();
+        this.checkWinConditions();
     }
 
 }

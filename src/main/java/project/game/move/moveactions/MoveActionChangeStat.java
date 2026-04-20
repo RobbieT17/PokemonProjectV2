@@ -10,18 +10,14 @@ import project.game.utility.RandomValues;
 
 public interface MoveActionChangeStat extends MoveAction {
      /**
-     * Changes one of a Pokemon's stats.
-     * @param p Pokemon whose stat will be changed
-     * @param change number of stages stat will increase/decrease
-     * @param id Stat ID
-     * @param chance The stat change success rate
+     * Changes each Pokemon stats
      */
-    private static void changeEachStat(EventManager eventManager, int[] stats) {
+    private static void changeEachStat(EventManager eventManager, int[] stats, int mods[]) {
         EventData data  = eventManager.data;
         Pokemon p = data.effectTarget;
     
         for (int i = 0; i < stats.length; i++) {
-            int change = stats[i];
+            int change = stats[i] * mods[i];
             if (change == 0) {
                 continue;
             }
@@ -46,7 +42,7 @@ public interface MoveActionChangeStat extends MoveAction {
         eventManager.notifyEffectTargetPokemon(EventID.DEF_STAT_CHANGE);
 
         if (RandomValues.chance(chance)) {
-            MoveActionChangeStat.changeEachStat(eventManager, data.statChanges);    
+            MoveActionChangeStat.changeEachStat(eventManager, data.statChanges, data.statMods);    
         }
         else {
             data.statFailed = true;

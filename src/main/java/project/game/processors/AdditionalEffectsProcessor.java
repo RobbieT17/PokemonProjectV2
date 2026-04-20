@@ -14,7 +14,7 @@ import project.game.move.moveactions.MoveActionHealthRestore;
 import project.game.move.moveactions.MoveActionSemiImmuneState;
 import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;
 
-public class AdditionalEffectsProcessor {
+public class AdditionalEffectsProcessor implements Processor {
 
     private final EventManager eventManager;
 
@@ -60,10 +60,42 @@ public class AdditionalEffectsProcessor {
     }
 
     /**
+     * Checks if the effect and be applied to the user 
+     */
+    private boolean canApplySelfEffect(MoveEffect me) {
+        if (me == null) {
+            return false;
+        }
+        this.eventManager.data.effectTarget = this.eventManager.data.user;
+        return true;
+    }
+
+    /**
+     * Multiplies each stat modifier by given stat values
+     */
+    public void prodStatMods(int atk, int def, int spAtk, int spDef, int spd, int acc, int eva) {
+        int[] stats = new int[] {atk, def, spAtk, spDef, spd, acc, eva};
+
+        for (int i = 0; i < this.eventManager.data.statMods.length; i++) {
+            if (stats[i] == 0) { // Skips zero value to avoid multiplier staying at zero
+                continue;
+            }
+            this.eventManager.data.statMods[i] *= stats[i];
+        }
+    }
+
+    /**
+     * Multiplies percent mod by value
+     */
+    public void prodPercentMods(double m) {
+        this.eventManager.data.percentMod *= m;
+    }
+
+    /**
      * Some condition need to be procted before the Pokemon
      * takes action.
      */
-    public void applyAdditionEffectsBefore() {
+    public void processBeforeMove() {
         AdditonalEffects ae = this.eventManager.data.moveUsed.getAdditionalEffects();
 
         if (ae == null) {
@@ -73,12 +105,12 @@ public class AdditionalEffectsProcessor {
         MoveEffect charge = ae.getCharge();
         MoveEffect semiImmune = ae.getSemiImmune();
 
-        if (this.canApplyEffect(charge)) {
+        if (this.canApplySelfEffect(charge)) {
             StatusConditionID c = StatusConditionID.valueOf(charge.getEffect());
             MoveActionCharge.enterChargeState(this.eventManager, c);
         }
 
-        if (this.canApplyEffect(semiImmune)) {
+        if (this.canApplySelfEffect(semiImmune)) {
             StatusConditionID c = StatusConditionID.valueOf(semiImmune.getEffect());
             MoveActionSemiImmuneState.enterImmuneState(this.eventManager, c);
         }
@@ -89,7 +121,8 @@ public class AdditionalEffectsProcessor {
      * Applies all additional effects using the <b>AdditionEffects</b> class.
      * Skips over any null values. Ignores if user fainted during the round.
      */
-    public void applyAdditionEffects() {
+    @Override
+    public void process() {
         AdditonalEffects ae = this.eventManager.data.moveUsed.getAdditionalEffects();
 
         if (ae == null) {
@@ -141,12 +174,12 @@ public class AdditionalEffectsProcessor {
             BattleLog.add("SWITCH OUT NOT IMPLEMENTED");
         }
 
-        if (this.canApplyEffect(recoil)) {
+        if (this.canApplySelfEffect(recoil)) {
             MoveActionDamagePct.recoilDamage(this.eventManager, recoil.getPercent());
 
         }
 
-        if (this.canApplyEffect(lifeSteal)) {
+        if (this.canApplySelfEffect(lifeSteal)) {
             MoveActionDamagePct.drainHP(this.eventManager, lifeSteal.getPercent());
         }
 
@@ -154,5 +187,6 @@ public class AdditionalEffectsProcessor {
             MoveActionHealthRestore.restoreHp(this.eventManager, heal.getPercent());
         }   
     }
+
     
 } 

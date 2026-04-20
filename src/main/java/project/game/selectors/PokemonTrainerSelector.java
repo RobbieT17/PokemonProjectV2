@@ -1,5 +1,6 @@
 package project.game.selectors;
 
+import project.config.GameConfig;
 import project.game.builders.PokemonTrainerBuilder;
 import project.game.player.PokemonTrainer;
 import project.game.pokemon.Pokedex;
@@ -28,7 +29,10 @@ public class PokemonTrainerSelector {
                 int n = Integer.parseInt(input);
 
                 if (n == -1) {
-                    if (this.ptb.getParty().isEmpty()) {
+                    if (GameConfig.DOUBLES_MODE_ENABLED && this.ptb.getParty().size() < 2) { // Double battle requirements
+                        this.client.writeToBuffer("Please add at least two pokemon.");
+                    }
+                    else if (this.ptb.getParty().isEmpty()) {
                         // Need at least one pokemon in the party
                         this.client.writeToBuffer("Please add at least one pokemon.");
                     }

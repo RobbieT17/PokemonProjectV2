@@ -8,7 +8,7 @@ import project.game.move.Move.MoveTarget;
 import project.game.move.moveactions.MoveActionAccuracy;
 import project.game.move.moveactions.MoveActionAttack;
 
-public class MoveProcessor {
+public class MoveProcessor implements Processor {
     
     private final EventManager eventManager;
 
@@ -40,7 +40,7 @@ public class MoveProcessor {
         Move move = this.eventManager.data.moveUsed;
 
         AdditionalEffectsProcessor additionalEffectsProcessor = new AdditionalEffectsProcessor(this.eventManager);
-        additionalEffectsProcessor.applyAdditionEffectsBefore();
+        additionalEffectsProcessor.processBeforeMove();
 
         if (this.eventManager.data.moveEndedEarly) {
             return;
@@ -58,14 +58,15 @@ public class MoveProcessor {
         }
 
         // Applies additional effects
-        additionalEffectsProcessor.applyAdditionEffects();
+        additionalEffectsProcessor.process();
     }
 
     /**
      * Process the move. Checks if there is a move specific function for the move used
      * in the <b>Movedex</b>. If not, the default move function is called.
      */
-    public void processMove() {
+    @Override
+    public void process() {
         String moveName = this.eventManager.data.moveUsed.getMoveName();
         Movedex moveEntry;
 
@@ -76,6 +77,7 @@ public class MoveProcessor {
             moveEntry = null;
         }
 
+    
         if (moveEntry != null) {
             this.dynamicMoveProcess(moveEntry);
         }

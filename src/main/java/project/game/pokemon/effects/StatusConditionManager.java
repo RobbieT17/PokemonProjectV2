@@ -3,6 +3,7 @@ package project.game.pokemon.effects;
 import java.util.function.Function;
 
 import project.game.battle.BattleLog;
+import project.game.battle.BattlePosition;
 import project.game.event.GameEvents.EventID;
 import project.game.exceptions.MoveInterruptedException;
 import project.game.exceptions.PokemonCannotActException;
@@ -263,21 +264,24 @@ public interface StatusConditionManager {
     public static StatusCondition fly(StatusContext c) {
         Pokemon p = c.target;
         Move m = c.move;
+        BattlePosition[] pos = p.getTargetPositions();
         StatusConditionID id = StatusConditionID.Fly_State;
         String name = id.name();
-        EventID[] flags = new EventID[] {EventID.MOVE_SELECTION, EventID.DEF_MOVE_ACCURACY};
+        EventID[] flags = new EventID[] {EventID.MOVE_SELECTION, EventID.TARGET_SELECTION, EventID.DEF_MOVE_ACCURACY};
 
         p.getEvents().addEventListener(flags[0], name, e -> {
             p.setMoveSelected(m);
         });
         p.getEvents().addEventListener(flags[1], name, e -> {
+            p.setTargetPositions(pos);
+        });
+        p.getEvents().addEventListener(flags[2], name, e -> {
             Move a = e.moveUsed;
 
-            if (a.getMoveID() == 479 ||  a.getMoveID() == 542) {
-                return;
+            if (!(a.getMoveID() == 479 ||  a.getMoveID() == 542)) {
+                throw new MoveInterruptedException("But %s is high in the sky!", p);
             }
-            
-            throw new MoveInterruptedException("But %s is high in the sky!", p);
+             
         });
 
         BattleLog.add("%s flew into the sky!", p);
@@ -287,17 +291,21 @@ public interface StatusConditionManager {
     public static StatusCondition dig(StatusContext c) {
         Pokemon p = c.target;
         Move m = c.move;
+        BattlePosition[] pos = p.getTargetPositions();
         StatusConditionID id = StatusConditionID.Dig_State;
         String name = id.name();
-        EventID[] flags = new EventID[] {EventID.MOVE_SELECTION, EventID.DEF_MOVE_ACCURACY};
+        EventID[] flags = new EventID[] {EventID.MOVE_SELECTION, EventID.TARGET_SELECTION, EventID.DEF_MOVE_ACCURACY};
 
-        p.getEvents().addEventListener(flags[0], name, e -> p.setMoveSelected(m));
+        p.getEvents().addEventListener(flags[0], name, e -> {
+            p.setMoveSelected(m);
+        });
         p.getEvents().addEventListener(flags[1], name, e -> {
+            p.setTargetPositions(pos);
+        });
+        p.getEvents().addEventListener(flags[2], name, e -> {
             if (e.moveUsed.getMoveID() != 89) {
-                return;
+                throw new MoveInterruptedException("But %s is underground!", p);
             }
-
-            throw new MoveInterruptedException("But %s is underground!", p);
         });
 
         BattleLog.add("%s dug underground!", p);
@@ -307,19 +315,24 @@ public interface StatusConditionManager {
     public static StatusCondition dive(StatusContext c) {
         Pokemon p = c.target;
         Move m = c.move;
+        BattlePosition[] pos = p.getTargetPositions();
         StatusConditionID id = StatusConditionID.Dive_State;
         String name = id.name();
-        EventID[] flags = new EventID[] {EventID.MOVE_SELECTION, EventID.DEF_MOVE_ACCURACY};
+        EventID[] flags = new EventID[] {EventID.MOVE_SELECTION, EventID.TARGET_SELECTION, EventID.DEF_MOVE_ACCURACY};
 
-        p.getEvents().addEventListener(flags[0], name, e -> p.setMoveSelected(m));
+        p.getEvents().addEventListener(flags[0], name, e -> {
+            p.setMoveSelected(m);
+        });
         p.getEvents().addEventListener(flags[1], name, e -> {
+            p.setTargetPositions(pos);
+        });
+        p.getEvents().addEventListener(flags[2], name, e -> {
             Move a = e.moveUsed;
 
-            if (a.getMoveID() == 57 || a.getMoveID() == 250) {
-                return;
+            if (!(a.getMoveID() == 57 || a.getMoveID() == 250)) {
+                throw new MoveInterruptedException("But %s is underwater!", p);
             }
 
-            throw new MoveInterruptedException("But %s is underwater!", p);
         });
 
         BattleLog.add("%s dove underwater!", p);
@@ -518,14 +531,18 @@ public interface StatusConditionManager {
     public static StatusCondition chargeMove(StatusContext c) {
         Pokemon p = c.target;
         Move m = c.move;
+        BattlePosition[] pos = p.getTargetPositions();
         StatusConditionID id = StatusConditionID.Charge;
         String name = id.name();
-        EventID[] flags = new EventID[] {EventID.MOVE_SELECTION, EventID.MOVE_INTERRUPTED};
+        EventID[] flags = new EventID[] {EventID.MOVE_SELECTION, EventID.TARGET_SELECTION, EventID.MOVE_INTERRUPTED};
 
         p.getEvents().addEventListener(flags[0], name, e -> {
             p.setMoveSelected(m);
         });
         p.getEvents().addEventListener(flags[1], name, e -> {
+            p.setTargetPositions(pos);
+        });
+        p.getEvents().addEventListener(flags[2], name, e -> {
             p.getConditions().removeCondition(id);
         });
 

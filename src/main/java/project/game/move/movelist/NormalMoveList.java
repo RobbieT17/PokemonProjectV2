@@ -11,6 +11,7 @@ import project.game.move.moveactions.MoveActionBracing;
 import project.game.move.moveactions.MoveActionChangeStat;
 import project.game.pokemon.Pokemon;
 import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;
+import project.game.processors.AdditionalEffectsProcessor;
 import project.game.utility.RandomValues;
 
 public class NormalMoveList {
@@ -39,12 +40,14 @@ public class NormalMoveList {
     }
 
     public static int growth(EventManager e) {
-        MoveAction.targetsUser(e.data);
+        AdditionalEffectsProcessor aep = new AdditionalEffectsProcessor(e);
+
+        // Doubles Attack and Special-Attack in Sunny weather
         if (e.data.battleData.isCurrentWeather(WeatherEffect.Sunny)) {
-            MoveActionChangeStat.changeStats(e, MoveAction.stats(2, 0, 2, 0, 0, 0, 0));
-        } else {
-            MoveActionChangeStat.changeStats(e, MoveAction.stats(1, 0, 1, 0, 0, 0, 0));
-        }
+            aep.prodStatMods(2, 0, 2, 0, 0, 0, 0);
+        } 
+        
+        aep.process();
         return 0;
     }
 
