@@ -23,12 +23,13 @@ public class MockPokemonTeam {
         Pokemon p1 = MockPokemonTeam.mockPokemon(Pokedex.Venusaur);
         Pokemon p2 = MockPokemonTeam.mockPokemon(Pokedex.Venusaur);
         Pokemon p3 = MockPokemonTeam.mockPokemon(Pokedex.Blastoise);
+        Pokemon p4 = MockPokemonTeam.mockPokemon(Pokedex.Charizard);
 
         p1.addMove(MockPokemonTeam.mockMove("Solar Beam"));
         p1.addMove(MockPokemonTeam.mockMove("Leaf Storm"));
         p1.addMove(MockPokemonTeam.mockMove("Sunny Day"));
         p1.addMove(MockPokemonTeam.mockMove("Growth"));
-        p1.setNickName("Vince");
+        p1.setNickName("Victoria");
         p1.setAbility(AbilityID.Chlorophyll);
         p1.setItem(HeldItemID.Black_Sludge);
 
@@ -45,14 +46,23 @@ public class MockPokemonTeam {
         p3.addMove(MockPokemonTeam.mockMove("Aqua Jet"));
         p3.addMove(MockPokemonTeam.mockMove("Shell Smash"));
         p3.setNickName("Bob");
-        p3.setAbility(AbilityID.Simple);
+        p3.setAbility(AbilityID.Torrent);
         p3.setItem(HeldItemID.Rocky_Helmet);
+
+        p4.addMove(MockPokemonTeam.mockMove("Slash"));
+        p4.addMove(MockPokemonTeam.mockMove("Flame Charge"));
+        p4.addMove(MockPokemonTeam.mockMove("Blast Burn"));
+        p4.addMove(MockPokemonTeam.mockMove("Swords Dance"));
+        p4.setNickName("Carly");
+        p4.setAbility(AbilityID.Blaze);
+        p4.setItem(HeldItemID.Muscle_Band);
 
         return new PokemonTrainerBuilder()
         .setName(name)
         .addPokemon(p1)
         .addPokemon(p2)
         .addPokemon(p3)
+        .addPokemon(p4)
         .build();
     }
 
@@ -78,7 +88,7 @@ public class MockPokemonTeam {
         p2.setAbility(AbilityID.Torrent);
         p2.setItem(HeldItemID.Wise_Glasses);
 
-        p3.addMove(MockPokemonTeam.mockMove("Energy Ball"));
+        p3.addMove(MockPokemonTeam.mockMove("Petal Dance"));
         p3.addMove(MockPokemonTeam.mockMove("Dig"));
         p3.addMove(MockPokemonTeam.mockMove("Amnesia"));
         p3.addMove(MockPokemonTeam.mockMove("Sleep Powder"));
@@ -86,9 +96,9 @@ public class MockPokemonTeam {
         p3.setAbility(AbilityID.Overgrow);
 
         p4.addMove(MockPokemonTeam.mockMove("Flare Blitz"));
-        p4.addMove(MockPokemonTeam.mockMove("Flamethrower"));
+        p4.addMove(MockPokemonTeam.mockMove("Graveyard Shock"));
         p4.addMove(MockPokemonTeam.mockMove("Sunny Day"));
-        p4.addMove(MockPokemonTeam.mockMove("Slash"));
+        p4.addMove(MockPokemonTeam.mockMove("Overheat"));
         p4.setNickName("Chandler");
         p4.setAbility(AbilityID.Blaze);
         p4.setItem(HeldItemID.Muscle_Band);

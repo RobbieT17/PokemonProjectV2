@@ -41,10 +41,6 @@ public class MoveProcessor implements Processor {
 
         AdditionalEffectsProcessor additionalEffectsProcessor = new AdditionalEffectsProcessor(this.eventManager);
         additionalEffectsProcessor.processBeforeMove();
-
-        if (this.eventManager.data.moveEndedEarly) {
-            return;
-        }
        
         if (move.getMoveTarget() != MoveTarget.Self) {
             if (move.getCategory() == MoveCategory.Status) { 

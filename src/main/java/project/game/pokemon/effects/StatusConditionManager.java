@@ -30,19 +30,20 @@ public interface StatusConditionManager {
         Sleep(StatusConditionManager::sleep),
         Flinch(StatusConditionManager::flinch),
         Bound(StatusConditionManager::bound),
-        Confusion(StatusConditionManager::confusion),
-        Charge(StatusConditionManager::chargeMove),
-        Recharge(StatusConditionManager::rampage),
+        Confusion(StatusConditionManager::confusion),  
         Forced_Move(StatusConditionManager::forcedMove),
         Focused(StatusConditionManager::focused),
-        Rampage(StatusConditionManager::rampage),
         Grounded(StatusConditionManager::grounded),
         Seeded(StatusConditionManager::seeded),
         Endure(StatusConditionManager::endure),
         Fly_State(StatusConditionManager::fly),
         Dig_State(StatusConditionManager::dig),
         Dive_State(StatusConditionManager::dive),
+        
         // No Function Provided
+        Charge(null),
+        Rampage(null),
+        Recharge(null),
         No_Invul(null),
         Protect(null);
 
@@ -523,32 +524,6 @@ public interface StatusConditionManager {
         return new StatusCondition(p, name, flags);
 	}
     
-    /*
-     * Pokemon takes a turn to charge a move,
-     * If not interrupted, the Pokemon acts
-     * on the next turn
-     */
-    public static StatusCondition chargeMove(StatusContext c) {
-        Pokemon p = c.target;
-        Move m = c.move;
-        BattlePosition[] pos = p.getTargetPositions();
-        StatusConditionID id = StatusConditionID.Charge;
-        String name = id.name();
-        EventID[] flags = new EventID[] {EventID.MOVE_SELECTION, EventID.TARGET_SELECTION, EventID.MOVE_INTERRUPTED};
-
-        p.getEvents().addEventListener(flags[0], name, e -> {
-            p.setMoveSelected(m);
-        });
-        p.getEvents().addEventListener(flags[1], name, e -> {
-            p.setTargetPositions(pos);
-        });
-        p.getEvents().addEventListener(flags[2], name, e -> {
-            p.getConditions().removeCondition(id);
-        });
-
-        return new StatusCondition(p, id.name(), flags);
-	}
-
     public static StatusCondition endure(StatusContext c) {
         Pokemon p = c.target;
         StatusConditionID id = StatusConditionID.Endure;

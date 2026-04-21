@@ -27,12 +27,9 @@ public class GrassMoveList {
     public static int solarBeam(EventManager e) {
         if (e.data.battleData.isCurrentWeather(WeatherEffect.Sunny)) {
             MoveActionAttack.attackTarget(e);
-            e.data.user.getConditions().removeCondition(StatusConditionID.Charge);
         } else {
             MoveActionCharge.enterChargeState(e, StatusConditionID.Charge);
-            if (!e.data.moveEndedEarly) {
-                MoveActionAttack.attackTarget(e);
-            }
+            MoveActionAttack.attackTarget(e);
         }
         return 0;
     }

@@ -237,9 +237,10 @@ public class Pokemon {
         this.lastMove = this.moveSelected;
 
         // Only update if move is phase 0
-        if (this.moveSelected.getPhase().nextPhase() == 0) {
+        if (this.moveSelected.getPhase().next() == 0) {
             this.moveSelected.resetStats(); 
             this.moveSelected = null;
+            this.targetPositions = null;
         }
         
     }
@@ -251,7 +252,6 @@ public class Pokemon {
         this.conditions.setHasMoved(false);
         this.conditions.setSwitchedIn(false);
 
-        this.targetPositions = null;
         this.damageDealt = 0;
         this.damageReceived = 0;
         this.roundCount++;

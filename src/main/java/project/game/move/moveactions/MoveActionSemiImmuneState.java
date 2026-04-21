@@ -3,6 +3,7 @@ package project.game.move.moveactions;
 import project.game.battle.BattleLog;
 import project.game.event.EventData;
 import project.game.event.EventManager;
+import project.game.exceptions.MoveEndedEarlyException;
 import project.game.pokemon.Pokemon;
 import project.game.pokemon.effects.StatusConditionManager;
 import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;
@@ -49,11 +50,10 @@ public interface MoveActionSemiImmuneState {
         // Enters semi-immune state if in it already (1nd part of the move)
         if (!attacker.getConditions().inImmuneState()) {
             MoveActionSemiImmuneState.enterState(eventManager, data.immuneStateChange);
-            eventManager.data.moveEndedEarly = true;
+            throw new MoveEndedEarlyException();
         } 
         else {  // Leaves the state if in it already (2nd part of the move)
             attacker.getConditions().removeCondition(data.immuneStateChange);
-            eventManager.data.moveEndedEarly = false;
         }
     
     }
