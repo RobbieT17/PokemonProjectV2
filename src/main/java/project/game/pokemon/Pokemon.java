@@ -129,7 +129,6 @@ public class Pokemon {
     public void takeDamage(int value) {
         if (value <= 0) throw new IllegalArgumentException(Pokemon.INVALID_DAMAGE_ERR);
 
-        this.conditions.setTookDamage(true);
         this.damageReceived += value;
 
         if (this.getConditions().getEndure().isActive()) {

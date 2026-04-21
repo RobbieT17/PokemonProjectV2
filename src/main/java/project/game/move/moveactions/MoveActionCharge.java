@@ -3,6 +3,7 @@ package project.game.move.moveactions;
 import project.game.battle.BattleLog;
 import project.game.event.EventManager;
 import project.game.exceptions.MoveEndedEarlyException;
+import project.game.exceptions.MoveInterruptedException;
 import project.game.move.MovePhase;
 import project.game.pokemon.Pokemon;
 import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;
@@ -18,7 +19,7 @@ public interface MoveActionCharge extends MoveAction{
 
         if (phase.equals(0)) { // Sets up the charge (lasts 2 phases)
             phase.set(2);
-            throw new MoveEndedEarlyException(String.format("%s begins charging!", eventManager.data.user));
+            throw new MoveEndedEarlyException("%s begins charging!", eventManager.data.user);
         }
         else if (phase.equals(1)){ // Attacks the target
             return;
@@ -30,7 +31,22 @@ public interface MoveActionCharge extends MoveAction{
     }
 
     private static void focusMove(EventManager eventManager) {
-        BattleLog.add("<NOT IMPLEMENTED: Focus Move>");
+        Pokemon p = eventManager.data.user;
+        MovePhase phase = eventManager.data.moveUsed.getPhase();
+
+        if (phase.equals(0)) { // Begins focus move (lasts 2 phases)
+            phase.set(2);
+            throw new MoveEndedEarlyException("%s is tightening its focus!", p);
+        }
+        else if (phase.equals(1)){ // Attacks the target
+            if (p.getConditions().tookDamage()) {
+                throw new MoveInterruptedException("%s lost its focus and couldn't move!", p);
+            }
+            return;
+        } 
+        
+        // Move is in some unknown state
+        throw new IllegalStateException(String.format("Charge move in illegal phase: %s ", phase));
     }
 
     private static void rechargeMove(EventManager eventManager) {

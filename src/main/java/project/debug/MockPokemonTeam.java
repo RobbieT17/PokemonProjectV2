@@ -53,7 +53,7 @@ public class MockPokemonTeam {
         p3.setAbility(AbilityID.Torrent);
         p3.setItem(HeldItemID.Rocky_Helmet);
 
-        p4.addMove(MockPokemonTeam.mockMove("Slash"));
+        p4.addMove(MockPokemonTeam.mockMove("Focus Punch"));
         p4.addMove(MockPokemonTeam.mockMove("Flame Charge"));
         p4.addMove(MockPokemonTeam.mockMove("Hurricane"));
         p4.addMove(MockPokemonTeam.mockMove("Swords Dance"));
