@@ -95,7 +95,7 @@ public class MockPokemonTeam {
         p3.setNickName("Violet");
         p3.setAbility(AbilityID.Overgrow);
 
-        p4.addMove(MockPokemonTeam.mockMove("Flare Blitz"));
+        p4.addMove(MockPokemonTeam.mockMove("Giga Impact"));
         p4.addMove(MockPokemonTeam.mockMove("Graveyard Shock"));
         p4.addMove(MockPokemonTeam.mockMove("Sunny Day"));
         p4.addMove(MockPokemonTeam.mockMove("Overheat"));

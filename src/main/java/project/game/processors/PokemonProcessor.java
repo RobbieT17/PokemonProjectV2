@@ -45,7 +45,8 @@ public class PokemonProcessor implements Processor {
     private void useMove(Pokemon target) {
         EventManager eventManager = new EventManager(this.battleData, this.user, target);
         eventManager.notifyUserPokemon(EventID.USE_MOVE);
-        new MoveProcessor(eventManager).process();        
+        new MoveProcessor(eventManager).process();
+        eventManager.logFailMessage();        
     }
     
     /**
@@ -140,6 +141,10 @@ public class PokemonProcessor implements Processor {
 
         this.updateAfterMoveEvents();
         this.user.getEvents().updateEventMaps();
+
+        if (this.user.getConditions().isRecharge()) {
+            BattleLog.add("%s must recharge next round...", this.user);
+        }
     }
 
 }

@@ -97,9 +97,10 @@ public class Pokemon {
     // Clears any temporary effects and volatile conditions
     public void backToTrainer() {
         this.resetMove();
+        this.resetStatChanges();
         this.conditions.clearAtReturn();
-        this.position.setCurrentPokemon(null);
 
+        this.position.setCurrentPokemon(null);
         this.firstMove = null;
         this.lastMove = null;   
         this.damageDealt = 0;
@@ -192,29 +193,13 @@ public class Pokemon {
     }
 
 
-// Boolean Methods
-    public boolean isOutOfMoves() {
-        for (Move m : this.moves) 
-            if (!(m.getPp().depleted() || m.isDisabled())) return false;
-        return true;
-    }
-
-    public boolean isType(Type type) {
-        return this.pokemonType.typeEquals(type);
-    }
-
-    public boolean isHpLessThanPercent(double percent) {
-        return this.hp.getCurrentHealthPoints() / (double) this.hp.getMaxHealthPoints() < 0.01 * percent; 
-    }
-
     /**
      * Checks if this is the first round since switched in
      */
     public boolean isFirstRound() { 
         return this.roundCount == 0;
     }
- 
-// Setters 
+     
     public void addDealtDamage(int d) {
         if (d <= 0) throw new IllegalArgumentException(Pokemon.INVALID_DAMAGE_ERR);
         this.damageDealt += d;
@@ -243,6 +228,12 @@ public class Pokemon {
             this.targetPositions = null;
         }
         
+    }
+
+    public void resetStatChanges() {
+        for (StatPoint stat : this.stats) {
+            stat.resetMod();
+        }
     }
 
     public void endOfRoundReset() {  
@@ -274,6 +265,22 @@ public class Pokemon {
         // Adds moves 
         this.moves.add(m);
     } 
+
+
+// Boolean Methods
+    public boolean isOutOfMoves() {
+        for (Move m : this.moves) 
+            if (!(m.getPp().depleted() || m.isDisabled())) return false;
+        return true;
+    }
+
+    public boolean isType(Type type) {
+        return this.pokemonType.typeEquals(type);
+    }
+
+    public boolean isHpLessThanPercent(double percent) {
+        return this.hp.getCurrentHealthPoints() / (double) this.hp.getMaxHealthPoints() < 0.01 * percent; 
+    }
 
 // Setters
     public void setAbility(AbilityID a) {

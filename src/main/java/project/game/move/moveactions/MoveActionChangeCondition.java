@@ -99,7 +99,7 @@ public interface MoveActionChangeCondition extends MoveAction {
         // Checks if
         if (cannotApplyCondition(p, id)) {
             data.statusFailed = true;
-            data.message = Move.FAILED;
+            data.failMessage = Move.FAILED;
             return;
         }
 

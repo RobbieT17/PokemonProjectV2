@@ -65,7 +65,7 @@ public interface MoveActionSemiImmuneState {
         EventData data  = eventManager.data;
         Pokemon p = data.attackTarget;
         data.immuneStateChange = StatusConditionID.No_Invul;
-        data.message = message;
+        data.failMessage = message;
     
         if (p.getConditions().isFainted() || !p.getConditions().hasKey(data.immuneStateChange)) {
             return;
@@ -74,7 +74,6 @@ public interface MoveActionSemiImmuneState {
         p.getConditions().removeCondition(data.immuneStateChange);
         p.getConditions().setInterrupted(true);
         p.resetMove();
-        BattleLog.add(data.message);
     }
     
 } 

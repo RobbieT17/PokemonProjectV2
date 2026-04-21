@@ -1,10 +1,10 @@
 package project.game.move.moveactions;
 
 import project.game.battle.BattleLog;
-import project.game.event.EventData;
 import project.game.event.EventManager;
 import project.game.exceptions.MoveEndedEarlyException;
 import project.game.move.MovePhase;
+import project.game.pokemon.Pokemon;
 import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;
 import project.game.utility.RandomValues;
 
@@ -34,8 +34,8 @@ public interface MoveActionCharge extends MoveAction{
     }
 
     private static void rechargeMove(EventManager eventManager) {
-        EventData data  = eventManager.data;
-        data.user.getConditions().setRecharge(true);
+        Pokemon p  = eventManager.data.effectTarget;
+        p.getConditions().setRecharge(true);
     }
 
     /**

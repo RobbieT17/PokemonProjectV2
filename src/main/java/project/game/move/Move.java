@@ -92,7 +92,11 @@ public enum MoveCategory {Physical, Special, Status};
     }
 
     public boolean isCategory(MoveCategory c) {
-        return this.category.equals(c);
+        return this.category == c;
+    }
+
+    public boolean isTarget(MoveTarget t) {
+        return this.moveTarget == t;
     }
 
     // Displays the move's name, type, and PP available

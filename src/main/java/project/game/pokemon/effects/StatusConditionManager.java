@@ -32,7 +32,6 @@ public interface StatusConditionManager {
         Bound(StatusConditionManager::bound),
         Confusion(StatusConditionManager::confusion),  
         Forced_Move(StatusConditionManager::forcedMove),
-        Focused(StatusConditionManager::focused),
         Grounded(StatusConditionManager::grounded),
         Seeded(StatusConditionManager::seeded),
         Endure(StatusConditionManager::endure),
@@ -41,10 +40,11 @@ public interface StatusConditionManager {
         Dive_State(StatusConditionManager::dive),
         
         // No Function Provided
+        Recharge(null),
         Charge(null),
         Rampage(null),
-        Recharge(null),
         No_Invul(null),
+        Focused(null),
         Protect(null);
 
         private final Function<StatusContext, StatusCondition> func;
@@ -497,33 +497,6 @@ public interface StatusConditionManager {
         return new StatusCondition(p, name, flags);
 	}
 
-    /*
-     * Pokemon uses the same move 2-3 turns then becomes confused.
-     * The rampage ends early if the move is interrupted.
-     */
-    public static StatusCondition rampage(StatusContext c) {
-        Pokemon p = c.target;
-        Move m = c.move;
-        StatusConditionID id = StatusConditionID.Rampage;
-        String name = id.name();
-        EventID[] flags = new EventID[] {EventID.MOVE_SELECTION, EventID.END_OF_TURN, EventID.MOVE_INTERRUPTED};
-
-        Counter counter = new Counter(RandomValues.generateInt(2, 3));
-
-        p.getEvents().addEventListener(flags[0], name, e -> p.setMoveSelected(m));
-        p.getEvents().addEventListener(flags[1], name, e -> {
-            if (counter.inc()) {
-                p.getConditions().removeCondition(id);
-                p.getConditions().addCondition(confusion(c));
-            }  
-        });
-        p.getEvents().addEventListener(flags[2], name, e -> {
-            p.getConditions().removeCondition(id);
-        });
-
-        return new StatusCondition(p, name, flags);
-	}
-    
     public static StatusCondition endure(StatusContext c) {
         Pokemon p = c.target;
         StatusConditionID id = StatusConditionID.Endure;

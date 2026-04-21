@@ -1,7 +1,9 @@
 package project.game.event;
 
 import project.game.battle.BattleData;
+import project.game.battle.BattleLog;
 import project.game.event.GameEvents.EventID;
+import project.game.move.Move.MoveCategory;
 import project.game.pokemon.Pokemon;
 
 public class EventManager {
@@ -14,6 +16,15 @@ public class EventManager {
   
     public EventManager(BattleData data, Pokemon user, Pokemon target) {
         this.data = new EventData(data, user, target, user.getMoveSelected());
+    }
+
+    /**
+     * Logs failed Status moves
+     */
+    public void logFailMessage() {
+        if (this.data.moveUsed.isCategory(MoveCategory.Status)) {
+            BattleLog.add(this.data.failMessage);
+        }
     }
 
     /**
