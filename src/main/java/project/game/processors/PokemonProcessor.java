@@ -8,9 +8,7 @@ import project.game.event.GameEvents.EventID;
 import project.game.exceptions.MoveEndedEarlyException;
 import project.game.exceptions.MoveInterruptedException;
 import project.game.exceptions.PokemonCannotActException;
-import project.game.move.Move;
 import project.game.pokemon.Pokemon;
-import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;;
 
 public class PokemonProcessor implements Processor {
 
@@ -23,26 +21,20 @@ public class PokemonProcessor implements Processor {
     }
 
     private void updateBeforeMoveEvents() {
-        EventManager eventManager = new EventManager(battleData, user);
+        EventManager eventManager = new EventManager(this.battleData, this.user);
         eventManager.notifyUserPokemon(EventID.BEFORE_MOVE);
         eventManager.notifyUserPokemon(EventID.PRIMARY_STATUS_BEFORE);
         eventManager.notifyUserPokemon(EventID.STATUS_BEFORE);
     }
 
     private void updateInterruptedMoveEvents() {
-        EventManager eventManager = new EventManager(battleData, user);
+        EventManager eventManager = new EventManager(this.battleData, this.user);
         eventManager.notifyUserPokemon(EventID.MOVE_INTERRUPTED);
     }
 
     private void updateAfterMoveEvents() {
-        EventManager eventManager = new EventManager(battleData, user);
+        EventManager eventManager = new EventManager(this.battleData, this.user);
         eventManager.notifyUserPokemon(EventID.END_OF_TURN);
-    }
-
-    private void stopOnGoingMoves(Pokemon p) {
-        p.getConditions().removeCondition(StatusConditionID.Focused);
-        p.getConditions().removeCondition(StatusConditionID.Forced_Move);
-        p.getConditions().removeCondition(StatusConditionID.Rampage);
     }
 
     /**
@@ -51,17 +43,10 @@ public class PokemonProcessor implements Processor {
      * @param target the target Pokemon
      */
     private void useMove(Pokemon target) {
-        EventManager eventManager = new EventManager(battleData, user, target);
-        Move m = eventManager.data.moveUsed;
-
-        try {
-            eventManager.notifyUserPokemon(EventID.USE_MOVE);
-            m.getPp().decrement(user.getConditions().hasKey(StatusConditionID.Forced_Move));
-            new MoveProcessor(eventManager).process();
-
-        } catch (MoveEndedEarlyException e) { // TODO: Entering immune state should throw this exception
-            eventManager.data.message = e.getMessage();
-        }
+        EventManager eventManager = new EventManager(this.battleData, this.user, target);
+        eventManager.notifyUserPokemon(EventID.USE_MOVE);
+        new MoveProcessor(eventManager).process();
+        eventManager.logFailMessage();        
     }
     
     /**
@@ -76,7 +61,7 @@ public class PokemonProcessor implements Processor {
                 continue;
             }
             if (logMessage) { // Only execute during first loop iteration
-                BattleLog.add("%s used %s!", user, user.getMoveSelected());
+                BattleLog.add("%s used %s!", this.user, this.user.getMoveSelected());
                 logMessage = false;
             }
             
@@ -96,27 +81,39 @@ public class PokemonProcessor implements Processor {
     }
 
     /**
+     * Validiates if the Pokemon can act
+     * @return
+     */
+    public boolean validPokemon() {
+        // Use turn to switch in new Pokemon
+        if (this.user.getConditions().isSwitchedIn()) {
+            this.user.getPosition().sendOutPokemon();
+            return false;
+        }
+       
+        // No targets selected
+        if (this.user.getTargetPositions() == null) {
+            return false;
+        }
+ 
+        // Pokemon will not act if any of these conditions are met.
+        if (this.user.getConditions().isFainted()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Checks any condition, then
      * Pokemon uses their move if actionable
      * Pokemon is considered to have moved (even if they cannot act)
      */
     @Override
     public void process() {
-        user.getConditions().setHasMoved(true); 
+        this.user.getConditions().setHasMoved(true); 
 
-        // Use turn to switch in new Pokemon
-        if (user.getConditions().isSwitchedIn()) {
-            user.getPosition().sendOutPokemon();
-            return;
-        }
-       
-        // No targets selected
-        if (this.user.getTargetPositions() == null) {
-            return;
-        }
- 
-        // Pokemon will not act if any of these conditions are met.
-        if (this.user.getConditions().isFainted()) {
+        if (!this.validPokemon()) {
             return;
         }
 
@@ -126,19 +123,28 @@ public class PokemonProcessor implements Processor {
         try {
             this.updateBeforeMoveEvents(); // Status condition checks
             this.useTurn();
-            user.getConditions().setInterrupted(false); // Successful Move
-
-        } catch (MoveInterruptedException | PokemonCannotActException e) {
+            this.user.getConditions().setInterrupted(false); // Successful Move
+        } 
+        catch (MoveEndedEarlyException e) { // Move ended early, but considered successful
+            BattleLog.add(e.getMessage());
+            this.user.getConditions().setInterrupted(false);
+        }
+        catch (MoveInterruptedException | PokemonCannotActException e) { // Move was interrupt and unsuccessful
             BattleLog.add(e.getMessage());
 
             this.updateInterruptedMoveEvents();
-            this.stopOnGoingMoves(user);
-            user.getConditions().setInterrupted(true);
-                  
-        } 
+            
+            // Sets interrupt value to true, resets phase to 0
+            this.user.getMoveSelected().getPhase().reset();
+            this.user.getConditions().setInterrupted(true);   
+        }
 
         this.updateAfterMoveEvents();
         this.user.getEvents().updateEventMaps();
+
+        if (this.user.getConditions().isRecharge()) {
+            BattleLog.add("%s must recharge next round...", this.user);
+        }
     }
 
 }

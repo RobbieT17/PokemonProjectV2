@@ -1,5 +1,6 @@
 package project.game.pokemon.effects;
 
+import project.game.battle.BattlePosition;
 import project.game.move.Move;
 import project.game.pokemon.Pokemon;
 
@@ -7,9 +8,13 @@ import project.game.pokemon.Pokemon;
 public class StatusContext {
 
     public final Pokemon target;
-    public Pokemon source; // optional
-    public Move move;      // optional
-    public int count;      // optional
+    
+    // optional
+    public BattlePosition source;   // position on which initiate the effect (for seeded condition)
+    public Move move;               // move used
+    public int count;               // turn duration
+    public int[] exceptions;        // moves that his through semi-immune states
+    public String message;
   
     public StatusContext(Pokemon target) {
         this.target = target;

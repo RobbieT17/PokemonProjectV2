@@ -12,15 +12,13 @@ public class StatPoint {
 	private final StatID statID;
 	private final int base; // Base power
 
-	private int power; // Power depending on the current stage
 	private int stage; // Stage of the stat, max: 6 min: -6
-	private double mod; // Modified Stat Multiplier
+	private double mod; // Modified Stat Multiplier (based on current stage)
 
 	public StatPoint(StatID id, int base) {
 		this.statID = id;
 		this.base = base;
 
-		this.power = base;
 		this.stage = 0;
 		this.mod = 1.0;
 	}
@@ -52,7 +50,7 @@ public class StatPoint {
 	// If not a stage 0, shows the difference in power and current stage
 	private String showStage() {
 		return this.stage != 0 
-		? String.format(" (%s) [%s Stage]", sign(this.power - this.base), sign(this.stage)) 
+		? String.format(" (%s) [%s Stage]", sign(this.getPower() - this.base), sign(this.stage)) 
 		: "";
 	}
 
@@ -63,7 +61,7 @@ public class StatPoint {
 
 	// Changes a stat based on the stage and base stat
 	public void changeStat() {
-		double mod = switch (this.stage){
+		this.mod = switch (this.stage){
 			case -6 -> 0.25;
 			case -5 -> 0.28;
 			case -4 -> 0.33;
@@ -79,12 +77,11 @@ public class StatPoint {
 			default -> 1.0;
 		};
 
-		this.power = (int) (this.base * mod);
 	}
 
 	// Changes a stat based on an accuracy/evasion of 100%
 	public void changeStatForAccuracyOrEvasion() {
-		double mod = switch (this.stage){
+		this.mod = switch (this.stage){
 			case -6 -> 0.33;
 			case -5 -> 0.375;
 			case -4 -> 0.429;
@@ -100,7 +97,6 @@ public class StatPoint {
 			default -> 1.0;
 		};
 
-		this.power = (int) (this.base * mod);
 	}
 
 	// Changes stage of a stat. The stage should never be outside the range of -6 and 6
@@ -135,8 +131,8 @@ public class StatPoint {
 	// Displays stat's current power and stage
 	public String showStat() {
 		return isAccuracyOrEvasion()
-		? String.format("%s: %d%%%s%n", this.statID.name(), this.power, this.showStage())
-		: String.format("%s: %d%s%n", this.statID.name(), this.power, this.showStage());
+		? String.format("%s: %d%%%s%n", this.statID.name(), this.getPower(), this.showStage())
+		: String.format("%s: %d%s%n", this.statID.name(), this.getPower(), this.showStage());
 	}
 
 	// Attack: 52 (-32) [-4 Stage]
@@ -161,6 +157,6 @@ public class StatPoint {
 // Getters
 	public StatID getStatID() {return this.statID;}
 	public int getBase() {return this.base;}
-	public int getPower() {return (int) (this.power * this.mod);}
+	public int getPower() {return (int) (this.base * this.mod);}
 	public int getStage() {return this.stage;}
 }

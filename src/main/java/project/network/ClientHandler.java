@@ -258,15 +258,22 @@ public class ClientHandler implements Runnable {
 
             // Each Pokemon in battle selects a move
             for (BattlePosition pos : this.player.getBattlePositions()) {
-                if (pos.getCurrentPokemon() == null) {
+                Pokemon p = pos.getCurrentPokemon();
+                if (p == null) {
+                    continue;
+                }
+
+                if (p.getConditions().isRecharge()) {
+                    p.getConditions().setRecharge(false);
+                    this.writeToBuffer("%s is recharging this turn.", p);
                     continue;
                 }
 
                 int id = pos.getId();
-                Move m = this.selectMove(pos.getCurrentPokemon());
+                Move m = this.selectMove(p);
 
                 if (m != null) {
-                    this.selectTargetPokemon(m, pos.getCurrentPokemon());
+                    this.selectTargetPokemon(m, p);
                 }
                 else {
                     this.selectPokemon(id);

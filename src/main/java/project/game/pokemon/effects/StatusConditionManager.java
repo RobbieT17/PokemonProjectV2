@@ -30,19 +30,21 @@ public interface StatusConditionManager {
         Sleep(StatusConditionManager::sleep),
         Flinch(StatusConditionManager::flinch),
         Bound(StatusConditionManager::bound),
-        Confusion(StatusConditionManager::confusion),
-        Charge(StatusConditionManager::chargeMove),
-        Recharge(StatusConditionManager::rampage),
+        Confusion(StatusConditionManager::confusion),  
         Forced_Move(StatusConditionManager::forcedMove),
-        Focused(StatusConditionManager::focused),
-        Rampage(StatusConditionManager::rampage),
         Grounded(StatusConditionManager::grounded),
         Seeded(StatusConditionManager::seeded),
         Endure(StatusConditionManager::endure),
-        Fly_State(StatusConditionManager::fly),
-        Dig_State(StatusConditionManager::dig),
-        Dive_State(StatusConditionManager::dive),
+        Semi_Immune(StatusConditionManager::semiImmune),
+        
         // No Function Provided
+        Recharge(null),
+        Charge(null),
+        Rampage(null),
+        Focused(null),
+        Fly_State(null),
+        Dig_State(null),
+        Dive_State(null),
         No_Invul(null),
         Protect(null);
 
@@ -261,84 +263,32 @@ public interface StatusConditionManager {
         return new StatusCondition(p, name, flags);
     }
 
-    public static StatusCondition fly(StatusContext c) {
+    /**
+     * Pokemon is in a semi-invulnerable state and most moves
+     * will miss. Any exceptions will still hit the target 
+     * in this state
+     */
+    public static StatusCondition semiImmune(StatusContext c) {
         Pokemon p = c.target;
-        Move m = c.move;
-        BattlePosition[] pos = p.getTargetPositions();
-        StatusConditionID id = StatusConditionID.Fly_State;
+        StatusConditionID id = StatusConditionID.Semi_Immune;
         String name = id.name();
-        EventID[] flags = new EventID[] {EventID.MOVE_SELECTION, EventID.TARGET_SELECTION, EventID.DEF_MOVE_ACCURACY};
+
+        EventID[] flags = new EventID[] {EventID.DEF_MOVE_ACCURACY};
 
         p.getEvents().addEventListener(flags[0], name, e -> {
-            p.setMoveSelected(m);
-        });
-        p.getEvents().addEventListener(flags[1], name, e -> {
-            p.setTargetPositions(pos);
-        });
-        p.getEvents().addEventListener(flags[2], name, e -> {
-            Move a = e.moveUsed;
-
-            if (!(a.getMoveID() == 479 ||  a.getMoveID() == 542)) {
-                throw new MoveInterruptedException("But %s is high in the sky!", p);
+            for (int exception : c.exceptions) {
+                if (e.moveUsed.getMoveID() == exception) {
+                    return;
+                }
             }
-             
+
+            throw new MoveInterruptedException(c.message);      
         });
 
-        BattleLog.add("%s flew into the sky!", p);
         return new StatusCondition(p, name, flags);
 	}
 
-    public static StatusCondition dig(StatusContext c) {
-        Pokemon p = c.target;
-        Move m = c.move;
-        BattlePosition[] pos = p.getTargetPositions();
-        StatusConditionID id = StatusConditionID.Dig_State;
-        String name = id.name();
-        EventID[] flags = new EventID[] {EventID.MOVE_SELECTION, EventID.TARGET_SELECTION, EventID.DEF_MOVE_ACCURACY};
-
-        p.getEvents().addEventListener(flags[0], name, e -> {
-            p.setMoveSelected(m);
-        });
-        p.getEvents().addEventListener(flags[1], name, e -> {
-            p.setTargetPositions(pos);
-        });
-        p.getEvents().addEventListener(flags[2], name, e -> {
-            if (e.moveUsed.getMoveID() != 89) {
-                throw new MoveInterruptedException("But %s is underground!", p);
-            }
-        });
-
-        BattleLog.add("%s dug underground!", p);
-        return new StatusCondition(p, name, flags);
-	}
-
-    public static StatusCondition dive(StatusContext c) {
-        Pokemon p = c.target;
-        Move m = c.move;
-        BattlePosition[] pos = p.getTargetPositions();
-        StatusConditionID id = StatusConditionID.Dive_State;
-        String name = id.name();
-        EventID[] flags = new EventID[] {EventID.MOVE_SELECTION, EventID.TARGET_SELECTION, EventID.DEF_MOVE_ACCURACY};
-
-        p.getEvents().addEventListener(flags[0], name, e -> {
-            p.setMoveSelected(m);
-        });
-        p.getEvents().addEventListener(flags[1], name, e -> {
-            p.setTargetPositions(pos);
-        });
-        p.getEvents().addEventListener(flags[2], name, e -> {
-            Move a = e.moveUsed;
-
-            if (!(a.getMoveID() == 57 || a.getMoveID() == 250)) {
-                throw new MoveInterruptedException("But %s is underwater!", p);
-            }
-
-        });
-
-        BattleLog.add("%s dove underwater!", p);
-        return new StatusCondition(p, name, flags);
-	}
-
+    
     // Pokemon flinches and can't act for the round
     public static StatusCondition flinch(StatusContext c) {
         Pokemon p = c.target;
@@ -413,18 +363,22 @@ public interface StatusConditionManager {
      */
     public static StatusCondition seeded(StatusContext c) {
         Pokemon p = c.target;
-        Pokemon r = c.source;
+        BattlePosition pos = c.source;
         StatusConditionID id = StatusConditionID.Seeded;
         String name = id.name();
         EventID[] flags = new EventID[] {EventID.STATUS_AFTER};
 
         p.getEvents().addEventListener(flags[0], name, e -> {
             int damage = (int) (p.getHp().getMaxHealthPoints() / 8.0);
-            BattleLog.add("%s drained %d HP from %s!", r, damage, p);
+            Pokemon r = pos.getCurrentPokemon();
 
-            r.restoreHP(damage);
-            p.takeDamage(damage);
-            checkIfFaints(p);
+            if (r != null) {
+                BattleLog.add("%s drained %d HP from %s!", r, damage, p);
+                r.restoreHP(damage);
+                p.takeDamage(damage);
+                checkIfFaints(p);
+            }
+            
         });
 
         BattleLog.add("%s was seeded!", p);
@@ -494,59 +448,6 @@ public interface StatusConditionManager {
         });
 
         return new StatusCondition(p, name, flags);
-	}
-
-    /*
-     * Pokemon uses the same move 2-3 turns then becomes confused.
-     * The rampage ends early if the move is interrupted.
-     */
-    public static StatusCondition rampage(StatusContext c) {
-        Pokemon p = c.target;
-        Move m = c.move;
-        StatusConditionID id = StatusConditionID.Rampage;
-        String name = id.name();
-        EventID[] flags = new EventID[] {EventID.MOVE_SELECTION, EventID.END_OF_TURN, EventID.MOVE_INTERRUPTED};
-
-        Counter counter = new Counter(RandomValues.generateInt(2, 3));
-
-        p.getEvents().addEventListener(flags[0], name, e -> p.setMoveSelected(m));
-        p.getEvents().addEventListener(flags[1], name, e -> {
-            if (counter.inc()) {
-                p.getConditions().removeCondition(id);
-                p.getConditions().addCondition(confusion(c));
-            }  
-        });
-        p.getEvents().addEventListener(flags[2], name, e -> {
-            p.getConditions().removeCondition(id);
-        });
-
-        return new StatusCondition(p, name, flags);
-	}
-    
-    /*
-     * Pokemon takes a turn to charge a move,
-     * If not interrupted, the Pokemon acts
-     * on the next turn
-     */
-    public static StatusCondition chargeMove(StatusContext c) {
-        Pokemon p = c.target;
-        Move m = c.move;
-        BattlePosition[] pos = p.getTargetPositions();
-        StatusConditionID id = StatusConditionID.Charge;
-        String name = id.name();
-        EventID[] flags = new EventID[] {EventID.MOVE_SELECTION, EventID.TARGET_SELECTION, EventID.MOVE_INTERRUPTED};
-
-        p.getEvents().addEventListener(flags[0], name, e -> {
-            p.setMoveSelected(m);
-        });
-        p.getEvents().addEventListener(flags[1], name, e -> {
-            p.setTargetPositions(pos);
-        });
-        p.getEvents().addEventListener(flags[2], name, e -> {
-            p.getConditions().removeCondition(id);
-        });
-
-        return new StatusCondition(p, id.name(), flags);
 	}
 
     public static StatusCondition endure(StatusContext c) {

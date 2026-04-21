@@ -2,6 +2,7 @@ package project.game.selectors;
 
 import java.util.ArrayList;
 
+import project.config.GameConfig;
 import project.game.battle.BattlePosition;
 import project.game.move.Move.MoveTarget;
 import project.game.pokemon.Pokemon;
@@ -137,17 +138,26 @@ public class MoveTargetSelector extends Selector {
 
     @Override
     public BattlePosition[] select() {
-        return switch(this.targetType){
-            case MoveTarget.Self -> this.chooseSelf();
-            case MoveTarget.Single_Ally -> this.singleAlly();
-            case MoveTarget.All_Allies -> this.allAllies();
-            case MoveTarget.Single_Foe -> this.singleFoe();
-            case MoveTarget.All_Foes -> this.allFoes();
-            case MoveTarget.Single_Adjacent -> this.singleAdjacent();
-            case MoveTarget.All_Adjacent -> this.allAdjacent();
-            case MoveTarget.All -> this.chooseAll();
-            default -> throw new IllegalStateException("Invalid move target id: " + this.targetType);
-        };
+        if (GameConfig.DOUBLES_MODE_ENABLED) {
+            return switch(this.targetType){
+                case MoveTarget.Single_Ally -> this.singleAlly();
+                case MoveTarget.All_Allies -> this.allAllies();
+                case MoveTarget.Single_Foe -> this.singleFoe();
+                case MoveTarget.All_Foes -> this.allFoes();
+                case MoveTarget.Single_Adjacent -> this.singleAdjacent();
+                case MoveTarget.All_Adjacent -> this.allAdjacent();
+                case MoveTarget.All -> this.chooseAll();
+                default -> this.chooseSelf();
+            };
+        }
+        else {
+            return switch(this.targetType){
+                case MoveTarget.Self, MoveTarget.Single_Ally, MoveTarget.All_Allies -> this.chooseSelf();
+                case MoveTarget.All -> this.chooseAll();                
+                default -> this.allFoes();
+            };
+        }
+        
     }
 
 }

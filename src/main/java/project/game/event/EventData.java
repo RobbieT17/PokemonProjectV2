@@ -50,11 +50,9 @@ public class EventData {
     public double recoilPercent; // Percentage of damage dealt applied to recoil
     public double drainPercent; // Percentage of damage dealt applied to heal
     public double healPercent; // Percentage of max HP restored
-
     public double percentMod; // Percent modifier
 
-    public boolean moveEndedEarly; // True if move ends early
-    public String message; // A message produced 
+    public String failMessage; // A message produced 
    
     public EventData(BattleData data, Pokemon user, Pokemon target, Move m) {
         this.battleData = data;
@@ -64,7 +62,7 @@ public class EventData {
 
         this.otherMoveMods = 1.0;
         this.percentMod = 1.0;
-        this.message = "";
+        this.failMessage = "";
 
         this.statMods = new int[StatID.values().length];
         Arrays.fill(this.statMods, 1);

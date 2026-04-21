@@ -186,6 +186,7 @@ public class AdditionalEffectsProcessor implements Processor {
         if (this.canApplyEffect(heal)) { 
             MoveActionHealthRestore.restoreHp(this.eventManager, heal.getPercent());
         }   
+
     }
 
     

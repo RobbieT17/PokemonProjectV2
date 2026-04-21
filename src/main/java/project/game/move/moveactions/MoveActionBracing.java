@@ -1,6 +1,5 @@
 package project.game.move.moveactions;
 
-import project.game.battle.BattleLog;
 import project.game.event.EventData;
 import project.game.event.EventManager;
 import project.game.move.Move;
@@ -12,13 +11,12 @@ public interface  MoveActionBracing extends MoveAction {
         EventData data  = eventManager.data;
         Pokemon p = data.user;
         data.protectionType = b;
-        data.message = success;
 
         if (p.getMoveSelected().equals(p.getLastMove())) b.set();
         else {
             b.reset();
             b.set();   
         }
-        BattleLog.add(b.isActive() ? data.message : Move.FAILED);
+        data.failMessage = b.isActive() ? success : Move.FAILED;
     }
 }

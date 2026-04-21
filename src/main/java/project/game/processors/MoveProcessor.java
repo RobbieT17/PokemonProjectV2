@@ -41,13 +41,9 @@ public class MoveProcessor implements Processor {
 
         AdditionalEffectsProcessor additionalEffectsProcessor = new AdditionalEffectsProcessor(this.eventManager);
         additionalEffectsProcessor.processBeforeMove();
-
-        if (this.eventManager.data.moveEndedEarly) {
-            return;
-        }
        
-        if (move.getMoveTarget() != MoveTarget.Self) {
-            if (move.getCategory() == MoveCategory.Status) { 
+        if (!move.isTarget(MoveTarget.Self)) {
+            if (move.isCategory(MoveCategory.Status)) { 
                 // Status do not deal direct damage to the target, but still have an accuracy check
                 MoveActionAccuracy.rollForAccuracy(this.eventManager);
             }

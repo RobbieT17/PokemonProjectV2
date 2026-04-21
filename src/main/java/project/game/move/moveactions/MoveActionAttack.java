@@ -47,6 +47,7 @@ public interface MoveActionAttack extends MoveAction {
 
         attacker.addDealtDamage(damage);
         defender.takeDamage(damage);
+        defender.getConditions().setTookDamage(true);
         
         eventManager.notifyUserPokemon(EventID.ATK_MOVE_DEALS_DAMAGE);
         eventManager.notifyAttackTargetPokemon(EventID.DEF_MOVE_DEALS_DAMAGE);
