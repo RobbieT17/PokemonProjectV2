@@ -3,8 +3,8 @@ package project.game.move.movelist;
 import project.game.battle.Weather.WeatherEffect;
 import project.game.event.EventManager;
 import project.game.move.moveactions.MoveActionAttack;
-import project.game.move.moveactions.MoveActionChangeCondition;
-import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;
+import project.game.processors.AdditionalEffectsProcessor;
+
 
 public class FlyingMoveList {
 
@@ -17,7 +17,7 @@ public class FlyingMoveList {
         }
 
         MoveActionAttack.attackTarget(e);
-        MoveActionChangeCondition.applyCondition(e, StatusConditionID.Confusion, 10);
+        new AdditionalEffectsProcessor(e).process();
         return 0;
     }
 

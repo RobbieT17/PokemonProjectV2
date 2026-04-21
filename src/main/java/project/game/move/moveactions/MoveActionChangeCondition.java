@@ -110,7 +110,7 @@ public interface MoveActionChangeCondition extends MoveAction {
         }
 
         StatusContext c = new StatusContext(p);
-        c.source = data.user;
+        c.source = data.user.getPosition();
             
         switch (id) {
             case StatusConditionID.Burn -> applyBurn(c);

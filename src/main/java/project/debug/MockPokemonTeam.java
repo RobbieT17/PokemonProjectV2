@@ -15,6 +15,10 @@ public class MockPokemonTeam {
         return Server.SERVER_DATA.newPokemonInstance(entry, Pokemon.DEFAULT_LEVEL);
     }
 
+    private static Pokemon mockPokemon(Pokedex entry, int level) {
+        return Server.SERVER_DATA.newPokemonInstance(entry, level);
+    }
+
     private static Move mockMove(String moveName) {
         return Server.SERVER_DATA.newMoveInstance(moveName);
     }
@@ -27,7 +31,7 @@ public class MockPokemonTeam {
 
         p1.addMove(MockPokemonTeam.mockMove("Solar Beam"));
         p1.addMove(MockPokemonTeam.mockMove("Leaf Storm"));
-        p1.addMove(MockPokemonTeam.mockMove("Sunny Day"));
+        p1.addMove(MockPokemonTeam.mockMove("Earthquake"));
         p1.addMove(MockPokemonTeam.mockMove("Growth"));
         p1.setNickName("Victoria");
         p1.setAbility(AbilityID.Chlorophyll);
@@ -43,7 +47,7 @@ public class MockPokemonTeam {
 
         p3.addMove(MockPokemonTeam.mockMove("Rock Slide"));
         p3.addMove(MockPokemonTeam.mockMove("Bulldoze"));
-        p3.addMove(MockPokemonTeam.mockMove("Aqua Jet"));
+        p3.addMove(MockPokemonTeam.mockMove("Surf"));
         p3.addMove(MockPokemonTeam.mockMove("Shell Smash"));
         p3.setNickName("Bob");
         p3.setAbility(AbilityID.Torrent);
@@ -51,7 +55,7 @@ public class MockPokemonTeam {
 
         p4.addMove(MockPokemonTeam.mockMove("Slash"));
         p4.addMove(MockPokemonTeam.mockMove("Flame Charge"));
-        p4.addMove(MockPokemonTeam.mockMove("Blast Burn"));
+        p4.addMove(MockPokemonTeam.mockMove("Hurricane"));
         p4.addMove(MockPokemonTeam.mockMove("Swords Dance"));
         p4.setNickName("Carly");
         p4.setAbility(AbilityID.Blaze);
@@ -67,10 +71,10 @@ public class MockPokemonTeam {
     }
 
     private static PokemonTrainer build2(String name) {
-        Pokemon p1 = MockPokemonTeam.mockPokemon(Pokedex.Charizard);
-        Pokemon p2 = MockPokemonTeam.mockPokemon(Pokedex.Blastoise);
-        Pokemon p3 = MockPokemonTeam.mockPokemon(Pokedex.Venusaur);
-        Pokemon p4 = MockPokemonTeam.mockPokemon(Pokedex.Charizard);
+        Pokemon p1 = MockPokemonTeam.mockPokemon(Pokedex.Charizard, 60);
+        Pokemon p2 = MockPokemonTeam.mockPokemon(Pokedex.Blastoise, 60);
+        Pokemon p3 = MockPokemonTeam.mockPokemon(Pokedex.Venusaur, 60);
+        Pokemon p4 = MockPokemonTeam.mockPokemon(Pokedex.Charizard, 60);
 
         p1.addMove(MockPokemonTeam.mockMove("Sandstorm"));
         p1.addMove(MockPokemonTeam.mockMove("Dragon Dance"));

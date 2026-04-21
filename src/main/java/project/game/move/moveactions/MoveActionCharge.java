@@ -61,8 +61,7 @@ public interface MoveActionCharge extends MoveAction{
         }
 
         // Move is in some unknown state
-        throw new IllegalStateException(String.format("Charge move in illegal phase: %s", phase));
-
+        throw new IllegalStateException(String.format("Charge move in illegal phase: %s", phase)); 
              
     }
 
