@@ -97,6 +97,7 @@ public class BattleProcessor implements Processor {
         for (Pokemon p : this.turnOrder) {
             new EndRoundProcessor(battleData, p).process();
         }
+        this.battleData.logEventData();
     }
 
     /**

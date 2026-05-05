@@ -67,4 +67,21 @@ public class EventData {
         this.statMods = new int[StatID.values().length];
         Arrays.fill(this.statMods, 1);
     }
+
+    @Override
+    public String toString() {
+        return new StringBuilder()
+        .append(String.format("User: %s%n", this.user))
+        .append(String.format("Move Used: %s%n", this.moveUsed))
+        .append(String.format("Target: %s%n", this.attackTarget))
+        .append(String.format("Effect Target: %s%n", this.effectTarget))
+        .append(String.format("Move Hits: %b%n", this.moveHits))
+        .append(String.format("Move Failed: %b%n", this.moveFailed))
+        .append(String.format("Move Interrupted: %b%n", this.moveInterrupted))
+        .append(String.format("Damage Dealt: %d%n", this.damageDealt))
+        .append(String.format("Critical Hit: %b%n", this.criticalHit))
+        .append(String.format("Move Effectiveness: %.2f%n", this.moveEffectiveness))
+        .append(String.format("Hit Count: %d%n", this.hitCount))
+        .toString();
+    }
 }

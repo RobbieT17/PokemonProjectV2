@@ -44,8 +44,12 @@ public class PokemonProcessor implements Processor {
      */
     private void useMove(Pokemon target) {
         EventManager eventManager = new EventManager(this.battleData, this.user, target);
+        
+        this.battleData.addEventData(eventManager.data);
         eventManager.notifyUserPokemon(EventID.USE_MOVE);
+       
         new MoveProcessor(eventManager).process();
+
         eventManager.logFailMessage();        
     }
     
@@ -57,7 +61,7 @@ public class PokemonProcessor implements Processor {
         int interruptCount = 0; 
 
         for (BattlePosition target : this.user.getTargetPositions()) {
-            if (target.getCurrentPokemon() == null) {
+            if (target.getCurrentPokemon() == null) { 
                 continue;
             }
             if (logMessage) { // Only execute during first loop iteration
