@@ -40,6 +40,7 @@ public interface MoveActionAttack extends MoveAction {
 
         int damage = AttackMoveCalculations.calculateDamage(eventManager);
         data.damageDealt += damage;
+        data.hitCount = 1;
 
         BattleLog.add("%s took %d damage!", defender, damage);
         BattleLog.add(!isMultiHit ? MoveEffectiveCalculations.isSuperEffective(data.moveEffectiveness) : "");
@@ -65,8 +66,8 @@ public interface MoveActionAttack extends MoveAction {
 
         for (int i = 0; i < data.hitCount; i++) {
             dealDamage(eventManager);
+            data.hitCount++;
             if (data.attackTarget.getConditions().isFainted()) {
-                data.hitCount = ++i;
                 break;
             }
         }
