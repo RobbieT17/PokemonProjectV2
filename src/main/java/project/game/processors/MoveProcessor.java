@@ -69,17 +69,12 @@ public class MoveProcessor implements Processor {
         // Checks Movedex for specified function, if none moveEntry value is null
         try {
             moveEntry = Movedex.valueOf(moveName);
-        } catch (Exception e) {
-            moveEntry = null;
+        } catch (IllegalArgumentException e) { // Name not found in movedex
+            this.defaultMoveProcess();
+            return;
         }
 
-    
-        if (moveEntry != null) {
-            this.dynamicMoveProcess(moveEntry);
-        }
-        else {
-            this.defaultMoveProcess();
-        }
+        this.dynamicMoveProcess(moveEntry);
         
     }
 } 
