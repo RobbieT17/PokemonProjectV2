@@ -2,20 +2,19 @@ package project.game.pokemon.stats;
 
 public enum Type {
         Bug(
-            new TypeName[] { TypeName.Fighting, TypeName.Grass, TypeName.Ground, TypeName.Sound },
+            new TypeName[] { TypeName.Fighting, TypeName.Grass, TypeName.Ground, TypeName.Sound, TypeName.Space },
             new TypeName[] { TypeName.Fire, TypeName.Flying, TypeName.Rock }
         ),
 
         Dark(
-            new TypeName[] { TypeName.Dark, TypeName.Digital, TypeName.Ghost },
+            new TypeName[] { TypeName.Dark, TypeName.Digital, TypeName.Ghost, TypeName.Space },
             new TypeName[] { TypeName.Bug, TypeName.Fairy, TypeName.Fighting },
             new TypeName[] { TypeName.Psychic }
         ),
 
         Digital(
-            new TypeName[] { TypeName.Electric, TypeName.Psychic, TypeName.Steel },
-            new TypeName[] { TypeName.Bug, TypeName.Ice, TypeName.Poison },
-            new TypeName[] { TypeName.Fairy }
+            new TypeName[] { TypeName.Dragon, TypeName.Electric, TypeName.Fairy, TypeName.Psychic, TypeName.Space, TypeName.Steel },
+            new TypeName[] { TypeName.Bug, TypeName.Dark, TypeName.Poison }
         ),
 
         Dragon(
@@ -24,19 +23,19 @@ public enum Type {
         ),
 
         Electric(
-            new TypeName[] { TypeName.Electric, TypeName.Flying, TypeName.Steel },
+            new TypeName[] { TypeName.Electric, TypeName.Flying, TypeName.Space, TypeName.Steel },
             new TypeName[] { TypeName.Digital, TypeName.Ground }
         ),
 
         Fairy(
-            new TypeName[] { TypeName.Bug, TypeName.Dark, TypeName.Fighting },
-            new TypeName[] { TypeName.Digital, TypeName.Poison, TypeName.Sound, TypeName.Steel },
+            new TypeName[] { TypeName.Bug, TypeName.Dark, TypeName.Fighting, TypeName.Sound},
+            new TypeName[] { TypeName.Digital, TypeName.Poison, TypeName.Steel },
             new TypeName[] { TypeName.Dragon }
         ),
 
         Fighting(
-            new TypeName[] { TypeName.Bug, TypeName.Dark, TypeName.Rock },
-            new TypeName[] { TypeName.Fairy, TypeName.Flying, TypeName.Psychic, TypeName.Zombie }
+            new TypeName[] { TypeName.Bug, TypeName.Dark, TypeName.Digital, TypeName.Rock, TypeName.Sound},
+            new TypeName[] { TypeName.Fairy, TypeName.Flying, TypeName.Psychic, TypeName.Space, TypeName.Zombie }
         ),
 
         Fire(
@@ -45,7 +44,7 @@ public enum Type {
         ),
 
         Flying(
-            new TypeName[] { TypeName.Bug, TypeName.Digital, TypeName.Fighting, TypeName.Grass },
+            new TypeName[] { TypeName.Bug, TypeName.Digital, TypeName.Fighting, TypeName.Grass, TypeName.Sound, TypeName.Zombie },
             new TypeName[] { TypeName.Electric, TypeName.Ice, TypeName.Rock, TypeName.Space },
             new TypeName[] { TypeName.Ground }
         ),
@@ -57,13 +56,13 @@ public enum Type {
         ),
 
         Grass(
-            new TypeName[] { TypeName.Electric, TypeName.Grass, TypeName.Ground, TypeName.Water },
-            new TypeName[] { TypeName.Bug, TypeName.Fire, TypeName.Flying, TypeName.Ice, TypeName.Poison }
+            new TypeName[] { TypeName.Electric, TypeName.Grass, TypeName.Ground, TypeName.Water, TypeName.Zombie },
+            new TypeName[] { TypeName.Bug, TypeName.Fire, TypeName.Flying, TypeName.Ice, TypeName.Poison, TypeName.Space }
         ),
 
         Ground(
-            new TypeName[] { TypeName.Digital, TypeName.Poison, TypeName.Rock, TypeName.Sound },
-            new TypeName[] { TypeName.Grass, TypeName.Ice, TypeName.Water },
+            new TypeName[] { TypeName.Digital, TypeName.Poison, TypeName.Rock},
+            new TypeName[] { TypeName.Grass, TypeName.Ice, TypeName.Sound, TypeName.Water },
             new TypeName[] { TypeName.Electric }
         ),
 
@@ -90,24 +89,24 @@ public enum Type {
 
         Rock(
             new TypeName[] { TypeName.Fire, TypeName.Flying, TypeName.Normal, TypeName.Poison, TypeName.Space },
-            new TypeName[] { TypeName.Fighting, TypeName.Grass, TypeName.Ground, TypeName.Steel, TypeName.Water }
+            new TypeName[] { TypeName.Fighting, TypeName.Grass, TypeName.Ground, TypeName.Sound, TypeName.Steel, TypeName.Water }
         ),
 
         Sound(
-            new TypeName[] { TypeName.Dark, TypeName.Fairy, TypeName.Ghost, TypeName.Sound},
-            new TypeName[] { TypeName.Ground, TypeName.Space }
+            new TypeName[] { TypeName.Dark, TypeName.Ghost, TypeName.Poison, TypeName.Sound},
+            new TypeName[] { TypeName.Digital, TypeName.Psychic, TypeName.Space }
         ),
 
         Space(
-            new TypeName[] { TypeName.Bug, TypeName.Fighting, TypeName.Grass, TypeName.Space },
-            new TypeName[] { TypeName.Ice, TypeName.Rock },
+            new TypeName[] { TypeName.Bug, TypeName.Fighting, TypeName.Fire, TypeName.Grass, TypeName.Space, TypeName.Water},
+            new TypeName[] { TypeName.Ice, TypeName.Psychic, TypeName.Rock },
             new TypeName[] { TypeName.Flying, TypeName.Sound }
         ), 
 
         Steel(
             new TypeName[] { TypeName.Bug, TypeName.Dragon, TypeName.Fairy, TypeName.Flying, TypeName.Grass, TypeName.Ice,
                             TypeName.Normal, TypeName.Psychic, TypeName.Rock, TypeName.Space, TypeName.Steel, TypeName.Zombie },
-            new TypeName[] { TypeName.Fire, TypeName.Fighting, TypeName.Ground, TypeName.Digital },
+            new TypeName[] { TypeName.Digital, TypeName.Fire, TypeName.Fighting, TypeName.Ground, TypeName.Sound },
             new TypeName[] { TypeName.Poison }
         ),
 
@@ -117,8 +116,8 @@ public enum Type {
         ),
 
         Zombie(
-            new TypeName[] { TypeName.Bug, TypeName.Dark, TypeName.Electric, TypeName.Fighting, TypeName.Ghost,
-                            TypeName.Ground, TypeName.Normal, TypeName.Poison, TypeName.Psychic, TypeName.Sound },
+            new TypeName[] { TypeName.Bug, TypeName.Dark, TypeName.Fighting, TypeName.Ghost, TypeName.Ground, 
+                            TypeName.Normal, TypeName.Poison, TypeName.Psychic},
             new TypeName[] { TypeName.Fire, TypeName.Grass, TypeName.Steel },
             new TypeName[] { TypeName.Zombie }
         );
