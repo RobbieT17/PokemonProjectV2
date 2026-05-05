@@ -18,7 +18,6 @@ import project.game.selectors.MoveSelector;
 import project.game.selectors.MoveTargetSelector;
 import project.game.selectors.PokemonSelector;
 import project.game.selectors.PokemonTrainerSelector;
-import project.game.utility.RandomValues;
 import project.game.utility.StatDisplay;
 
 // NOTE: This class is run server side
