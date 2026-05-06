@@ -2,7 +2,7 @@ package project.game.pokemon.stats;
 
 public enum Type {
         Bug(
-            new TypeName[] { TypeName.Fighting, TypeName.Grass, TypeName.Ground, TypeName.Sound, TypeName.Space },
+            new TypeName[] { TypeName.Fighting, TypeName.Grass, TypeName.Ground, TypeName.Sound},
             new TypeName[] { TypeName.Fire, TypeName.Flying, TypeName.Rock }
         ),
 
