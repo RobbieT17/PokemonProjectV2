@@ -11,9 +11,9 @@ public class TypeMatchupHelpers {
     private static String listTypes(ArrayList<String> list, String prefix) {
         if (list.isEmpty()) return "";
 
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder("\t");
 
-        sb.append(prefix).append(": ");
+        sb.append(String.format("%-9s", prefix)).append(": ");
 
         for (String value : list) 
             sb.append(value).append(", ");
@@ -22,13 +22,13 @@ public class TypeMatchupHelpers {
         return s.length() > 2 ? s.substring(0, s.length() - 2) + "\n" : s + "\n";    
     }
 
-    private static double effectiveness(Type t1, Type t2) {
+    private static double effectiveness(Type target, Type source) {
         return 
-        Arrays.asList(t1.getImmunities()).contains(t2.toTypeName()) 
+        Arrays.asList(target.getImmunities()).contains(source.toTypeName()) 
         ? 0.0
-        : Arrays.asList(t1.getResistances()).contains(t2.toTypeName()) 
+        : Arrays.asList(target.getResistances()).contains(source.toTypeName()) 
             ? 0.5
-            : Arrays.asList(t1.getWeaknesses()).contains(t2.toTypeName())
+            : Arrays.asList(target.getWeaknesses()).contains(source.toTypeName())
                 ? 2.0
                 : 1.0;
     }
@@ -73,8 +73,8 @@ public class TypeMatchupHelpers {
     public static double[] calculateMatchups(Type type) {
         double[] values = new double[Type.values().length];
         int i = 0;
-        for (Type t : Type.values()) 
-            values[i++] = TypeMatchupHelpers.effectiveness(type, Type.valueOf(t.name()));
+        for (Type attackType : Type.values()) 
+            values[i++] = TypeMatchupHelpers.effectiveness(type, Type.valueOf(attackType.name()));
 
         return values;     
     }
@@ -89,7 +89,26 @@ public class TypeMatchupHelpers {
         return combinedValues;
     }
 
-    public static void showMatchups(double[] values) {
+    public static double[] calculateMatchupsOffense(Type type) {
+        double[] values = new double[Type.values().length];
+        int i = 0;
+        for (Type defenderType : Type.values()) 
+            values[i++] = TypeMatchupHelpers.effectiveness(Type.valueOf(defenderType.name()), type);
+
+        return values;     
+    }
+
+    public static double[] calculateMatchupsOffense(Type type1, Type type2) {
+        double[] values1 = calculateMatchupsOffense(type1);
+        double[] values2 = calculateMatchupsOffense(type2);
+
+        double[] combinedValues = new double[values1.length];
+
+        for (int i = 0; i < values1.length; i++) combinedValues[i] = values1[i] * values2[i];   
+        return combinedValues;
+    }
+
+    public static String showMatchups(double[] values) {
             
         ArrayList<String> immune = new ArrayList<>(); // x0
         ArrayList<String> heavyResist = new ArrayList<>(); // x0.25
@@ -107,13 +126,13 @@ public class TypeMatchupHelpers {
             }
         }
 
-        System.out.println(new StringBuilder()
+        return new StringBuilder()
         .append(listTypes(immune, "[x0]"))
         .append(listTypes(heavyResist, "[x0.25]"))
         .append(listTypes(resist, "[x0.5]"))
         .append(listTypes(weak, "[x2]"))
         .append(listTypes(heavyWeak, "[x4]"))
-        .toString());
+        .toString();
          
     }
 

@@ -9,7 +9,12 @@ public class TypeMatchCalculator {
         Type type1 = TypeMatchupHelpers.selectType(TypeName.values(), "Select First Type: ");
         Type type2 = TypeMatchupHelpers.selectType(TypeMatchupHelpers.removeElement(Type.values(), type1), "Select Second Type: ");
             
-        System.out.printf("%nType: %s-%s%n%n", type1.name().toUpperCase(), type2.name().toUpperCase());
-        TypeMatchupHelpers.showMatchups(TypeMatchupHelpers.calculateMatchups(type1, type2));
+        System.out.printf("%nType: %s-%s%n%nDefense:%n%s%nOffense:%n%s", 
+            type1.name().toUpperCase(), 
+            type2.name().toUpperCase(),
+            TypeMatchupHelpers.showMatchups(TypeMatchupHelpers.calculateMatchups(type1, type2)),
+            TypeMatchupHelpers.showMatchups(TypeMatchupHelpers.calculateMatchupsOffense(type1, type2))
+        );
+        
     }
 }
