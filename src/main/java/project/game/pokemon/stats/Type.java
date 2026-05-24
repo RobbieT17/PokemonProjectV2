@@ -2,7 +2,7 @@ package project.game.pokemon.stats;
 
 public enum Type {
         Bug(
-            new TypeName[] { TypeName.Fighting, TypeName.Grass, TypeName.Ground, TypeName.Sound},
+            new TypeName[] { TypeName.Digital, TypeName.Fighting, TypeName.Grass, TypeName.Ground, TypeName.Sound},
             new TypeName[] { TypeName.Fire, TypeName.Flying, TypeName.Rock }
         ),
 
@@ -14,7 +14,7 @@ public enum Type {
 
         Digital(
             new TypeName[] { TypeName.Dragon, TypeName.Electric, TypeName.Fairy, TypeName.Psychic, TypeName.Space, TypeName.Steel },
-            new TypeName[] { TypeName.Bug, TypeName.Dark, TypeName.Poison }
+            new TypeName[] { TypeName.Bug, TypeName.Dark, TypeName.Grass, TypeName.Ice, TypeName.Poison }
         ),
 
         Dragon(
@@ -78,7 +78,7 @@ public enum Type {
         ),
 
         Poison(
-            new TypeName[] { TypeName.Bug, TypeName.Fairy, TypeName.Fighting, TypeName.Grass, TypeName.Poison },
+            new TypeName[] { TypeName.Bug, TypeName.Digital, TypeName.Fairy, TypeName.Fighting, TypeName.Grass, TypeName.Poison },
             new TypeName[] { TypeName.Ground, TypeName.Psychic }
         ),
 
