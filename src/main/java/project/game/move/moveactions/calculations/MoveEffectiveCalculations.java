@@ -1,4 +1,4 @@
-package project.game.move.calculations;
+package project.game.move.moveactions.calculations;
 
 import project.game.event.EventData;
 import project.game.event.EventManager;
