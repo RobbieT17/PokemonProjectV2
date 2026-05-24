@@ -1,24 +1,17 @@
 1: ICE-ROCK          
-	Average: 1.330
+	Average: 1.375
 	[x0.25]  : STEEL
 	[x0.5]   : FIGHTING, WATER
-	[x2]     : BUG, DRAGON, GRASS
+	[x2]     : BUG, DIGITAL, DRAGON, GRASS
 	[x4]     : FLYING, SPACE
 
-2: DIGITAL-GROUND    
-	Average: 1.318
-	[x0]     : FLYING
-	[x0.5]   : BUG, DARK, FIGHTING, GRASS, GROUND, ZOMBIE
-	[x2]     : FAIRY, FIRE, POISON, ROCK, SOUND
-	[x4]     : ELECTRIC, STEEL
-
-3: FIRE-ROCK         
+2: FIRE-ROCK         
 	Average: 1.295
 	[x0.5]   : DRAGON, FIGHTING, GROUND, ROCK, WATER
 	[x2]     : FLYING, GRASS, ZOMBIE
 	[x4]     : BUG, ICE
 
-4: GROUND-SOUND      
+3: GROUND-SOUND      
 	Average: 1.284
 	[x0]     : FLYING, SPACE
 	[x0.25]  : BUG
@@ -26,7 +19,7 @@
 	[x2]     : ELECTRIC, FIRE, GROUND, ICE, POISON, WATER
 	[x4]     : ROCK, STEEL
 
-5: FIGHTING-SOUND    
+4: FIGHTING-SOUND    
 	Average: 1.273
 	[x0]     : GHOST, SPACE
 	[x0.25]  : BUG, FAIRY, FLYING, PSYCHIC
@@ -34,14 +27,44 @@
 	[x2]     : DARK, GROUND, NORMAL, WATER
 	[x4]     : ICE, ROCK, STEEL
 
-6: ROCK-STEEL        
+5: FAIRY-ICE         
+	Average: 1.273
+	[x0.25]  : FIRE, STEEL
+	[x0.5]   : ICE, POISON, WATER
+	[x2]     : DARK, FIGHTING, FLYING, GRASS, GROUND, SPACE
+	[x4]     : DRAGON
+
+6: FIRE-ICE          
+	Average: 1.273
+	[x0.25]  : FIRE, WATER
+	[x0.5]   : ROCK
+	[x2]     : BUG, DIGITAL, FLYING, GROUND, ZOMBIE
+	[x4]     : GRASS
+
+7: ICE-PSYCHIC       
+	Average: 1.261
+	[x0]     : DARK
+	[x0.25]  : STEEL
+	[x0.5]   : FIRE, ICE, PSYCHIC, WATER, ZOMBIE
+	[x2]     : DRAGON, FIGHTING, FLYING, GRASS, GROUND, POISON, SOUND
+	[x4]     : SPACE
+
+8: DIGITAL-GROUND    
+	Average: 1.261
+	[x0]     : FLYING
+	[x0.25]  : BUG
+	[x0.5]   : DARK, FIGHTING, GRASS, GROUND, ZOMBIE
+	[x2]     : FAIRY, FIRE, ROCK, SOUND
+	[x4]     : ELECTRIC, STEEL
+
+9: ROCK-STEEL        
 	Average: 1.261
 	[x0.25]  : STEEL
 	[x0.5]   : DIGITAL, ELECTRIC, FIGHTING, GROUND, WATER
 	[x2]     : BUG, FAIRY, FLYING, ROCK, SPACE, ZOMBIE
 	[x4]     : ICE
 
-7: GROUND-WATER      
+10: GROUND-WATER      
 	Average: 1.261
 	[x0]     : FLYING
 	[x0.25]  : GRASS
@@ -49,20 +72,21 @@
 	[x2]     : ELECTRIC, GROUND, POISON, STEEL
 	[x4]     : FIRE, ROCK
 
-8: DIGITAL-FIRE      
+11: ICE-SPACE         
 	Average: 1.250
-	[x0.5]   : DARK, DRAGON, FIGHTING, FIRE, FLYING, GROUND, ROCK, SPACE, WATER
-	[x2]     : BUG, ELECTRIC, FAIRY, GRASS, ICE, SOUND, ZOMBIE
-	[x4]     : STEEL
+	[x0.25]  : ICE, STEEL
+	[x0.5]   : DARK, ELECTRIC, FIRE, PSYCHIC, ROCK, WATER
+	[x2]     : DRAGON, FIGHTING, GROUND, SOUND
+	[x4]     : FLYING, GRASS
 
-9: FIRE-STEEL        
+12: FIRE-STEEL        
 	Average: 1.250
 	[x0.25]  : FIRE, WATER
 	[x0.5]   : DIGITAL, DRAGON, ELECTRIC, SPACE
 	[x2]     : BUG, FAIRY, GRASS
 	[x4]     : ICE, ZOMBIE
 
-10: FIGHTING-GROUND   
+13: FIGHTING-GROUND   
 	Average: 1.250
 	[x0]     : FLYING, GHOST
 	[x0.25]  : BUG, ZOMBIE
@@ -70,22 +94,27 @@
 	[x2]     : DARK, ELECTRIC, FIRE, ICE, NORMAL
 	[x4]     : ROCK, STEEL
 
-11: FAIRY-ICE         
+14: GRASS-SOUND       
 	Average: 1.250
-	[x0.25]  : FIRE, STEEL
-	[x0.5]   : DIGITAL, ICE, POISON, WATER
-	[x2]     : DARK, FIGHTING, FLYING, GRASS, GROUND, SPACE
-	[x4]     : DRAGON
+	[x0]     : SPACE
+	[x0.25]  : BUG, FLYING
+	[x0.5]   : DRAGON, FAIRY, FIGHTING, FIRE, GRASS, POISON, PSYCHIC, SOUND
+	[x2]     : DIGITAL, ICE, ZOMBIE
+	[x4]     : GROUND, ROCK, WATER
 
-12: ICE-PSYCHIC       
+15: DARK-ICE          
+	Average: 1.250
+	[x0.5]   : DARK, FAIRY, FIGHTING, FIRE, ICE, SOUND, STEEL, WATER, ZOMBIE
+	[x2]     : DRAGON, FLYING, GHOST, GRASS, GROUND, PSYCHIC, SPACE
+	[x4]     : DIGITAL
+
+16: ICE-STEEL         
 	Average: 1.239
-	[x0]     : DARK
-	[x0.25]  : STEEL
-	[x0.5]   : DIGITAL, FIRE, ICE, PSYCHIC, WATER, ZOMBIE
-	[x2]     : DRAGON, FIGHTING, FLYING, GRASS, GROUND, POISON, SOUND
-	[x4]     : SPACE
+	[x0.25]  : FIRE, STEEL, WATER
+	[x0.5]   : ELECTRIC
+	[x2]     : DRAGON, FAIRY, FLYING, GRASS, GROUND, ROCK, SPACE, ZOMBIE
 
-13: PSYCHIC-ROCK      
+17: PSYCHIC-ROCK      
 	Average: 1.239
 	[x0]     : DARK
 	[x0.25]  : STEEL
@@ -93,7 +122,7 @@
 	[x2]     : BUG, FIRE, FLYING, ICE, POISON, SOUND
 	[x4]     : SPACE
 
-14: FIRE-FLYING       
+18: FIRE-FLYING       
 	Average: 1.239
 	[x0]     : SPACE
 	[x0.25]  : ROCK
@@ -101,61 +130,63 @@
 	[x2]     : FIGHTING, ICE, ZOMBIE
 	[x4]     : BUG, GRASS
 
-15: ICE-SPACE         
+19: GRASS-ICE         
 	Average: 1.227
-	[x0.25]  : ICE, STEEL
-	[x0.5]   : DARK, DIGITAL, ELECTRIC, FIRE, PSYCHIC, ROCK, WATER
-	[x2]     : DRAGON, FIGHTING, GROUND, SOUND
-	[x4]     : FLYING, GRASS
+	[x0.25]  : FIRE, STEEL
+	[x0.5]   : BUG, ICE, POISON
+	[x2]     : ROCK, ZOMBIE
+	[x4]     : DIGITAL, GROUND
 
-16: DIGITAL-ROCK      
+20: ICE-POISON        
 	Average: 1.227
-	[x0.25]  : FIGHTING, GROUND
-	[x0.5]   : DARK
-	[x2]     : BUG, ELECTRIC, FAIRY, FIRE, ICE, SOUND, SPACE
+	[x0]     : STEEL
+	[x0.5]   : FIRE, GHOST, ICE, POISON, ROCK, SOUND, WATER, ZOMBIE
+	[x2]     : DRAGON, FAIRY, FLYING, SPACE
+	[x4]     : DIGITAL, GRASS
 
-17: GROUND-ROCK       
+21: BUG-ICE           
+	Average: 1.227
+	[x0.25]  : FIRE, STEEL
+	[x0.5]   : FAIRY, FIGHTING, GHOST, ICE, POISON, WATER, ZOMBIE
+	[x2]     : DARK, DRAGON, GROUND, PSYCHIC
+	[x4]     : DIGITAL, GRASS
+
+22: GROUND-ROCK       
 	Average: 1.227
 	[x0]     : FLYING
 	[x0.5]   : FIGHTING, GRASS, GROUND, ZOMBIE
 	[x2]     : ELECTRIC, ICE, POISON, ROCK, SPACE
 	[x4]     : FIRE
 
-18: FIRE-ICE          
-	Average: 1.227
-	[x0.25]  : FIRE, WATER
-	[x0.5]   : ROCK
-	[x2]     : BUG, FLYING, GROUND, ZOMBIE
+23: FLYING-ICE        
+	Average: 1.216
+	[x0]     : SPACE
+	[x0.25]  : STEEL
+	[x0.5]   : ELECTRIC, FIRE, ICE, ROCK, WATER
+	[x2]     : BUG, DIGITAL, DRAGON, FIGHTING, FLYING, GROUND
 	[x4]     : GRASS
 
-19: ICE-STEEL         
-	Average: 1.216
-	[x0.25]  : FIRE, STEEL, WATER
-	[x0.5]   : DIGITAL, ELECTRIC
-	[x2]     : DRAGON, FAIRY, FLYING, GRASS, GROUND, ROCK, SPACE, ZOMBIE
-
-20: ROCK-WATER        
+24: ROCK-WATER        
 	Average: 1.205
 	[x0.5]   : DRAGON, FIGHTING, GRASS, STEEL, WATER
 	[x2]     : BUG, FLYING, ICE, ROCK
 	[x4]     : FIRE
 
-21: GRASS-SOUND       
-	Average: 1.205
-	[x0]     : SPACE
-	[x0.25]  : BUG, FLYING
-	[x0.5]   : DRAGON, FAIRY, FIGHTING, FIRE, GRASS, POISON, PSYCHIC, SOUND
-	[x2]     : ICE, ZOMBIE
-	[x4]     : GROUND, ROCK, WATER
-
-22: FIRE-SOUND        
+25: FIRE-SOUND        
 	Average: 1.205
 	[x0]     : SPACE
 	[x0.5]   : DRAGON, FAIRY, FIGHTING, FIRE, FLYING, PSYCHIC, SOUND
 	[x2]     : GRASS, GROUND, ZOMBIE
 	[x4]     : ICE, STEEL
 
-23: GROUND-PSYCHIC    
+26: ICE-WATER         
+	Average: 1.193
+	[x0.25]  : WATER
+	[x0.5]   : ICE, STEEL
+	[x2]     : DIGITAL, FLYING, ROCK
+	[x4]     : GROUND
+
+27: GROUND-PSYCHIC    
 	Average: 1.193
 	[x0]     : DARK, FLYING
 	[x0.25]  : ZOMBIE
@@ -163,35 +194,51 @@
 	[x2]     : ELECTRIC, FIGHTING, FIRE, ROCK, SOUND, SPACE
 	[x4]     : POISON
 
-24: DARK-ROCK         
+28: DARK-ROCK         
 	Average: 1.193
 	[x0.25]  : FIGHTING
 	[x0.5]   : DARK, FAIRY, GROUND, SOUND, STEEL, ZOMBIE
 	[x2]     : BUG, DIGITAL, FIRE, FLYING, GHOST, ICE, PSYCHIC, SPACE
 
-25: ELECTRIC-ROCK     
+29: DIGITAL-FIRE      
+	Average: 1.182
+	[x0.5]   : DARK, DRAGON, FIGHTING, FIRE, FLYING, GROUND, POISON, ROCK, SPACE, WATER
+	[x2]     : ELECTRIC, FAIRY, GRASS, ICE, SOUND, ZOMBIE
+	[x4]     : STEEL
+
+30: ELECTRIC-ROCK     
 	Average: 1.182
 	[x0]     : GROUND
 	[x0.5]   : DIGITAL, DRAGON, ELECTRIC, FIGHTING, GRASS, STEEL
 	[x2]     : BUG, FIRE, ICE, SPACE, WATER
 	[x4]     : FLYING
 
-26: SOUND-WATER       
+31: SOUND-WATER       
 	Average: 1.182
 	[x0]     : SPACE
 	[x0.5]   : BUG, DRAGON, FAIRY, FIGHTING, FLYING, GRASS, PSYCHIC, SOUND
 	[x2]     : FIRE, ICE, STEEL
 	[x4]     : GROUND, ROCK
 
-27: FLYING-ICE        
-	Average: 1.170
-	[x0]     : SPACE
-	[x0.25]  : STEEL
-	[x0.5]   : ELECTRIC, FIRE, ICE, ROCK, WATER
-	[x2]     : BUG, DRAGON, FIGHTING, FLYING, GROUND
-	[x4]     : GRASS
+32: ICE               
+	Average: 1.182
+	[x0.5]   : FIRE, ICE, STEEL, WATER
+	[x2]     : DIGITAL, DRAGON, FLYING, GRASS, GROUND, SPACE
 
-28: FIGHTING-FIRE     
+33: GRASS-STEEL       
+	Average: 1.182
+	[x0.25]  : FIRE, STEEL
+	[x0.5]   : BUG, DRAGON, ELECTRIC, FLYING, GRASS, POISON, SPACE
+	[x2]     : FAIRY, GROUND, ICE
+	[x4]     : ROCK, ZOMBIE
+
+34: GROUND-ICE        
+	Average: 1.182
+	[x0]     : FLYING
+	[x0.5]   : BUG, ICE, WATER, ZOMBIE
+	[x2]     : DIGITAL, DRAGON, ELECTRIC, GROUND, POISON, ROCK, SPACE
+
+35: FIGHTING-FIRE     
 	Average: 1.170
 	[x0]     : GHOST
 	[x0.25]  : SPACE
@@ -199,13 +246,13 @@
 	[x2]     : DARK, GRASS, NORMAL
 	[x4]     : ICE, STEEL
 
-29: FAIRY-ROCK        
+36: FAIRY-ROCK        
 	Average: 1.170
 	[x0.25]  : STEEL
 	[x0.5]   : DIGITAL, GROUND, POISON
 	[x2]     : BUG, DARK, DRAGON, FLYING, ICE, SPACE
 
-30: FLYING-ROCK       
+37: FLYING-ROCK       
 	Average: 1.170
 	[x0]     : SPACE
 	[x0.25]  : STEEL
@@ -213,7 +260,22 @@
 	[x2]     : FIRE, FLYING, GRASS, ICE
 	[x4]     : BUG
 
-31: FLYING-SPACE      
+38: GRASS-WATER       
+	Average: 1.170
+	[x0.25]  : DRAGON, GRASS, SPACE
+	[x0.5]   : BUG, FLYING, POISON, STEEL
+	[x2]     : DIGITAL, ZOMBIE
+	[x4]     : GROUND, ROCK
+
+39: DRAGON-ICE        
+	Average: 1.170
+	[x0]     : FAIRY
+	[x0.25]  : STEEL
+	[x0.5]   : FIRE, ICE, WATER
+	[x2]     : FLYING, GRASS, GROUND, SPACE
+	[x4]     : DRAGON
+
+40: FLYING-SPACE      
 	Average: 1.170
 	[x0]     : SPACE
 	[x0.25]  : ELECTRIC, ROCK, STEEL
@@ -221,7 +283,7 @@
 	[x2]     : BUG, FLYING, SOUND
 	[x4]     : FIGHTING, GRASS
 
-32: PSYCHIC-SPACE     
+41: PSYCHIC-SPACE     
 	Average: 1.170
 	[x0]     : DARK
 	[x0.25]  : DIGITAL, PSYCHIC, STEEL
@@ -229,165 +291,126 @@
 	[x2]     : FLYING, GRASS, POISON
 	[x4]     : FIGHTING, SOUND
 
-33: DIGITAL-PSYCHIC   
+42: DIGITAL-ROCK      
 	Average: 1.159
-	[x0]     : DARK
-	[x0.5]   : DIGITAL, FLYING, GROUND, PSYCHIC, ZOMBIE
-	[x2]     : ELECTRIC, FAIRY, POISON, SPACE
-	[x4]     : SOUND
+	[x0.25]  : FIGHTING, GROUND
+	[x0.5]   : DARK, POISON
+	[x2]     : ELECTRIC, FAIRY, FIRE, ICE, SOUND, SPACE
 
-34: DIGITAL-STEEL     
+43: GRASS-GROUND      
 	Average: 1.159
-	[x0.5]   : DARK, DIGITAL, FIGHTING, FIRE, FLYING, GROUND, WATER
-	[x2]     : ICE, ROCK, SOUND, ZOMBIE
-	[x4]     : FAIRY
+	[x0]     : FLYING
+	[x0.25]  : BUG, GRASS
+	[x0.5]   : DRAGON, SPACE
+	[x2]     : DIGITAL, ELECTRIC, GROUND, WATER
+	[x4]     : ROCK
 
-35: GRASS-STEEL       
-	Average: 1.159
-	[x0.25]  : FIRE, STEEL
-	[x0.5]   : BUG, DIGITAL, DRAGON, ELECTRIC, FLYING, GRASS, POISON, SPACE
-	[x2]     : FAIRY, GROUND, ICE
-	[x4]     : ROCK, ZOMBIE
-
-36: ROCK              
+44: ROCK              
 	Average: 1.159
 	[x0.5]   : FIGHTING, GROUND, STEEL
 	[x2]     : BUG, FIRE, FLYING, ICE, SPACE
 
-37: DIGITAL-ICE       
+45: DIGITAL-ICE       
 	Average: 1.159
-	[x0.5]   : DARK, FIGHTING, FIRE, ICE, WATER
-	[x2]     : DRAGON, ELECTRIC, FAIRY, GRASS, SOUND, SPACE
+	[x0.5]   : BUG, DARK, FIGHTING, FIRE, ICE, POISON, WATER
+	[x2]     : DIGITAL, DRAGON, ELECTRIC, FAIRY, GRASS, SOUND, SPACE
 
-38: FIRE-GROUND       
+46: FIRE-GROUND       
 	Average: 1.159
 	[x0]     : FLYING
 	[x0.5]   : DRAGON, SPACE, WATER
 	[x2]     : ELECTRIC, ICE, POISON
 	[x4]     : STEEL
 
-39: DARK-ICE          
+47: GHOST-ICE         
 	Average: 1.159
-	[x0.5]   : DARK, FAIRY, FIGHTING, FIRE, ICE, SOUND, STEEL, WATER, ZOMBIE
+	[x0]     : NORMAL
+	[x0.5]   : DARK, FIRE, ICE, SOUND, STEEL, WATER, ZOMBIE
 	[x2]     : DIGITAL, DRAGON, FLYING, GHOST, GRASS, GROUND, PSYCHIC, SPACE
 
-40: ICE-WATER         
-	Average: 1.148
-	[x0.25]  : WATER
-	[x0.5]   : ICE, STEEL
-	[x2]     : FLYING, ROCK
-	[x4]     : GROUND
-
-41: STEEL-WATER       
+48: STEEL-WATER       
 	Average: 1.148
 	[x0.25]  : WATER
 	[x0.5]   : DIGITAL, DRAGON, ELECTRIC, GRASS, SPACE, STEEL
 	[x2]     : FAIRY, GROUND, ICE, ZOMBIE
 	[x4]     : ROCK
 
-42: DRAGON-ICE        
-	Average: 1.148
-	[x0]     : FAIRY
-	[x0.25]  : STEEL
-	[x0.5]   : DIGITAL, FIRE, ICE, WATER
-	[x2]     : FLYING, GRASS, GROUND, SPACE
-	[x4]     : DRAGON
-
-43: DARK-GROUND       
+49: DARK-GROUND       
 	Average: 1.148
 	[x0]     : FLYING
 	[x0.25]  : ZOMBIE
 	[x0.5]   : BUG, DARK, FAIRY, FIGHTING, GRASS, SOUND
 	[x2]     : DIGITAL, ELECTRIC, FIRE, GHOST, POISON, PSYCHIC, ROCK, STEEL
 
-44: POISON-ROCK       
+50: POISON-ROCK       
 	Average: 1.148
 	[x0]     : STEEL
 	[x0.25]  : GROUND
 	[x0.5]   : FIGHTING, GHOST, POISON, ROCK, SOUND, ZOMBIE
 	[x2]     : BUG, DIGITAL, FAIRY, FIRE, FLYING, GRASS, ICE, SPACE
 
-45: FAIRY-STEEL       
+51: FAIRY-STEEL       
 	Average: 1.148
 	[x0.25]  : DIGITAL, FIRE, STEEL
 	[x0.5]   : ELECTRIC, POISON, WATER
 	[x2]     : DARK, DRAGON, FAIRY, FIGHTING, ICE, ROCK, ZOMBIE
 
-46: ROCK-SPACE        
+52: ROCK-SPACE        
 	Average: 1.148
 	[x0.25]  : STEEL
 	[x0.5]   : DARK, DIGITAL, ELECTRIC, GROUND, PSYCHIC, ROCK
 	[x2]     : BUG, FIRE, GRASS, SOUND
 	[x4]     : FLYING
 
-47: ICE               
+53: ICE-SOUND         
 	Average: 1.136
-	[x0.5]   : FIRE, ICE, STEEL, WATER
-	[x2]     : DRAGON, FLYING, GRASS, GROUND, SPACE
+	[x0]     : SPACE
+	[x0.5]   : BUG, FAIRY, FIGHTING, FIRE, PSYCHIC, SOUND
+	[x2]     : DIGITAL, DRAGON, GRASS, ROCK
+	[x4]     : GROUND
 
-48: ICE-POISON        
-	Average: 1.136
-	[x0]     : STEEL
-	[x0.5]   : FIRE, GHOST, ICE, POISON, ROCK, SOUND, WATER, ZOMBIE
-	[x2]     : DIGITAL, DRAGON, FAIRY, FLYING, SPACE
-	[x4]     : GRASS
-
-49: GHOST-ROCK        
+54: GHOST-ROCK        
 	Average: 1.136
 	[x0]     : NORMAL
 	[x0.5]   : DARK, FIGHTING, GROUND, SOUND, STEEL, ZOMBIE
 	[x2]     : BUG, FIRE, FLYING, GHOST, ICE, PSYCHIC, SPACE
 
-50: GROUND-ICE        
+55: ICE-ZOMBIE        
 	Average: 1.136
-	[x0]     : FLYING
-	[x0.5]   : BUG, ICE, WATER, ZOMBIE
-	[x2]     : DRAGON, ELECTRIC, GROUND, POISON, ROCK, SPACE
-
-51: BUG-ICE           
-	Average: 1.136
+	[x0]     : ZOMBIE
 	[x0.25]  : FIRE, STEEL
-	[x0.5]   : FAIRY, FIGHTING, GHOST, ICE, POISON, WATER, ZOMBIE
-	[x2]     : DARK, DIGITAL, DRAGON, GROUND, PSYCHIC
-	[x4]     : GRASS
+	[x0.5]   : GHOST, ICE, WATER
+	[x2]     : DIGITAL, DRAGON, FIGHTING, GROUND, NORMAL, PSYCHIC, SPACE
 
-52: SOUND-STEEL       
+56: SOUND-STEEL       
 	Average: 1.136
 	[x0]     : SPACE
 	[x0.5]   : BUG, DIGITAL, ELECTRIC, FIGHTING, FIRE, FLYING, PSYCHIC, SOUND
 	[x2]     : GROUND, ZOMBIE
 	[x4]     : ICE, ROCK
 
-53: DIGITAL-SOUND     
-	Average: 1.136
-	[x0]     : SPACE
-	[x0.25]  : FIGHTING, FLYING
-	[x0.5]   : BUG, DARK, PSYCHIC
-	[x2]     : ELECTRIC, ICE, ROCK, WATER
-	[x4]     : STEEL
-
-54: FIGHTING-ROCK     
+57: FIGHTING-ROCK     
 	Average: 1.136
 	[x0]     : GHOST
 	[x0.5]   : FAIRY, FIGHTING, GROUND, POISON, PSYCHIC, ZOMBIE
 	[x2]     : DARK, FIRE, NORMAL, ROCK
 	[x4]     : ICE
 
-55: FIRE-SPACE        
+58: FIRE-SPACE        
 	Average: 1.136
 	[x0.25]  : ROCK, SPACE
 	[x0.5]   : DARK, DIGITAL, DRAGON, ELECTRIC, FIRE, PSYCHIC, WATER
 	[x2]     : BUG, FIGHTING, FLYING, SOUND, ZOMBIE
 	[x4]     : GRASS
 
-56: GROUND-STEEL      
+59: GROUND-STEEL      
 	Average: 1.136
 	[x0]     : FLYING
 	[x0.5]   : BUG, DIGITAL, GRASS, WATER
 	[x2]     : FAIRY, ICE, POISON
 	[x4]     : ROCK
 
-57: DARK-GHOST        
+60: DARK-GHOST        
 	Average: 1.125
 	[x0]     : NORMAL
 	[x0.25]  : DARK, SOUND, ZOMBIE
@@ -395,7 +418,7 @@
 	[x2]     : DIGITAL
 	[x4]     : GHOST, PSYCHIC
 
-58: FAIRY-FLYING      
+61: FAIRY-FLYING      
 	Average: 1.125
 	[x0]     : SPACE
 	[x0.25]  : STEEL
@@ -403,22 +426,7 @@
 	[x2]     : BUG, DARK, DRAGON, GRASS
 	[x4]     : FIGHTING
 
-59: GRASS-WATER       
-	Average: 1.125
-	[x0.25]  : DRAGON, GRASS, SPACE
-	[x0.5]   : BUG, FLYING, POISON, STEEL
-	[x2]     : ZOMBIE
-	[x4]     : GROUND, ROCK
-
-60: DIGITAL-FIGHTING  
-	Average: 1.125
-	[x0]     : GHOST
-	[x0.25]  : FLYING
-	[x0.5]   : BUG, FIGHTING, GROUND, POISON, PSYCHIC, SPACE, ZOMBIE
-	[x2]     : ELECTRIC, ICE, NORMAL, ROCK, SOUND
-	[x4]     : STEEL
-
-61: ROCK-SOUND        
+62: ROCK-SOUND        
 	Average: 1.125
 	[x0]     : SPACE
 	[x0.25]  : FIGHTING
@@ -426,14 +434,14 @@
 	[x2]     : FIRE, ROCK, WATER
 	[x4]     : ICE
 
-62: DRAGON-ROCK       
+63: DRAGON-ROCK       
 	Average: 1.125
 	[x0]     : FAIRY
 	[x0.25]  : STEEL
 	[x0.5]   : DIGITAL, FIGHTING, GROUND
 	[x2]     : BUG, DRAGON, FIRE, FLYING, ICE, SPACE
 
-63: FIGHTING-WATER    
+64: FIGHTING-WATER    
 	Average: 1.125
 	[x0]     : GHOST
 	[x0.25]  : SPACE
@@ -441,74 +449,82 @@
 	[x2]     : DARK, FIRE, GROUND, ICE, NORMAL, STEEL
 	[x4]     : ROCK
 
-64: FAIRY-FIRE        
+65: FIRE-GRASS        
+	Average: 1.125
+	[x0.25]  : DRAGON, FIRE, SPACE
+	[x0.5]   : FLYING, POISON
+	[x2]     : DIGITAL, GROUND, ICE
+	[x4]     : ZOMBIE
+
+66: FAIRY-FIRE        
 	Average: 1.125
 	[x0.25]  : FIRE
 	[x0.5]   : DIGITAL, POISON, ROCK, SPACE, WATER
 	[x2]     : BUG, DARK, FIGHTING, GRASS, ICE, ZOMBIE
 
-65: FIRE-WATER        
+67: FIRE-WATER        
 	Average: 1.125
 	[x0.25]  : DRAGON, SPACE, WATER
 	[x2]     : BUG, GROUND, ICE, STEEL, ZOMBIE
 
-66: FIRE              
+68: FIRE              
 	Average: 1.114
 	[x0.5]   : DRAGON, FIRE, ROCK, SPACE, WATER
 	[x2]     : BUG, GRASS, ICE, STEEL, ZOMBIE
 
-67: BUG-FIRE          
+69: BUG-FIRE          
 	Average: 1.114
 	[x0.25]  : FIRE, SPACE
 	[x0.5]   : DRAGON, FAIRY, FIGHTING, FLYING, GHOST, POISON, ROCK, WATER
 	[x2]     : BUG, DARK, DIGITAL, ICE, PSYCHIC
 	[x4]     : GRASS
 
-68: GROUND            
+70: GROUND            
 	Average: 1.114
 	[x0]     : FLYING
 	[x0.5]   : BUG, GRASS, ZOMBIE
 	[x2]     : ELECTRIC, FIRE, POISON, ROCK, STEEL
 
-69: DARK-FIRE         
+71: FIGHTING-GRASS    
+	Average: 1.114
+	[x0]     : GHOST
+	[x0.25]  : BUG, FLYING, POISON, SPACE
+	[x0.5]   : DRAGON, FAIRY, FIRE, GRASS, PSYCHIC
+	[x2]     : DARK, DIGITAL, GROUND, ICE, NORMAL, WATER
+	[x4]     : ROCK
+
+72: DARK-FIRE         
 	Average: 1.114
 	[x0.5]   : DARK, DRAGON, FAIRY, FIGHTING, FIRE, ROCK, SOUND, SPACE, WATER
 	[x2]     : BUG, DIGITAL, GHOST, GRASS, ICE, PSYCHIC, STEEL
 
-70: GRASS-GROUND      
+73: DIGITAL-STEEL     
 	Average: 1.114
-	[x0]     : FLYING
-	[x0.25]  : BUG, GRASS
-	[x0.5]   : DRAGON, SPACE
-	[x2]     : ELECTRIC, GROUND, WATER
-	[x4]     : ROCK
+	[x0.5]   : BUG, DARK, DIGITAL, FIGHTING, FIRE, FLYING, GROUND, POISON, WATER
+	[x2]     : ICE, ROCK, SOUND, ZOMBIE
+	[x4]     : FAIRY
 
-71: DIGITAL-WATER     
-	Average: 1.114
-	[x0.5]   : DARK, DRAGON, FIGHTING, FLYING, GRASS, SPACE, WATER
-	[x2]     : ELECTRIC, FAIRY, FIRE, ROCK, SOUND, STEEL
-
-72: PSYCHIC-STEEL     
+74: PSYCHIC-STEEL     
 	Average: 1.114
 	[x0]     : DARK
 	[x0.25]  : DIGITAL, STEEL
 	[x0.5]   : ELECTRIC, FIRE, PSYCHIC, WATER
 	[x2]     : FAIRY, FIGHTING, ICE, POISON, ROCK, SOUND, SPACE
 
-73: GHOST-ICE         
-	Average: 1.114
-	[x0]     : NORMAL
-	[x0.5]   : DARK, FIRE, ICE, SOUND, STEEL, WATER, ZOMBIE
-	[x2]     : DRAGON, FLYING, GHOST, GRASS, GROUND, PSYCHIC, SPACE
-
-74: FIGHTING-STEEL    
+75: FIGHTING-STEEL    
 	Average: 1.114
 	[x0]     : GHOST
 	[x0.5]   : BUG, DIGITAL, ELECTRIC, FIRE, FLYING, POISON, PSYCHIC, SPACE, WATER
 	[x2]     : DARK, NORMAL
 	[x4]     : ICE, ROCK
 
-75: FAIRY-FIGHTING    
+76: FIGHTING-ICE      
+	Average: 1.114
+	[x0]     : GHOST
+	[x0.5]   : BUG, FAIRY, FIRE, POISON, PSYCHIC, WATER, ZOMBIE
+	[x2]     : DARK, DIGITAL, DRAGON, GRASS, GROUND, NORMAL, ROCK
+
+77: FAIRY-FIGHTING    
 	Average: 1.102
 	[x0]     : GHOST
 	[x0.25]  : POISON
@@ -516,33 +532,43 @@
 	[x2]     : DRAGON, FIGHTING, ICE, NORMAL, ROCK
 	[x4]     : DARK
 
-76: GROUND-ZOMBIE     
+78: GROUND-ZOMBIE     
 	Average: 1.102
 	[x0]     : FLYING, ZOMBIE
 	[x0.25]  : GRASS
 	[x0.5]   : BUG, GHOST
 	[x2]     : ELECTRIC, FIGHTING, NORMAL, POISON, PSYCHIC, ROCK
 
-77: GHOST-GROUND      
+79: GRASS-ROCK        
+	Average: 1.102
+	[x0.25]  : STEEL
+	[x0.5]   : DRAGON, FIGHTING, GRASS, POISON
+	[x2]     : DIGITAL, ICE, ROCK, WATER, ZOMBIE
+
+80: DIGITAL-FIGHTING  
+	Average: 1.102
+	[x0]     : GHOST
+	[x0.25]  : BUG, FLYING, POISON
+	[x0.5]   : FIGHTING, GROUND, PSYCHIC, SPACE, ZOMBIE
+	[x2]     : ELECTRIC, ICE, NORMAL, ROCK, SOUND
+	[x4]     : STEEL
+
+81: GHOST-GROUND      
 	Average: 1.102
 	[x0]     : FLYING, NORMAL
 	[x0.25]  : ZOMBIE
 	[x0.5]   : BUG, DARK, GRASS, SOUND
 	[x2]     : ELECTRIC, FIRE, GHOST, POISON, PSYCHIC, ROCK, STEEL
 
-78: ICE-SOUND         
-	Average: 1.091
+82: DIGITAL-SOUND     
+	Average: 1.102
 	[x0]     : SPACE
-	[x0.5]   : BUG, FAIRY, FIGHTING, FIRE, PSYCHIC, SOUND
-	[x2]     : DRAGON, GRASS, ROCK
-	[x4]     : GROUND
+	[x0.25]  : BUG, FIGHTING, FLYING
+	[x0.5]   : DARK, POISON, PSYCHIC
+	[x2]     : ELECTRIC, ICE, ROCK, WATER
+	[x4]     : STEEL
 
-79: DIGITAL           
-	Average: 1.091
-	[x0.5]   : DARK, FIGHTING, FLYING, GROUND
-	[x2]     : ELECTRIC, FAIRY, SOUND, STEEL
-
-80: FAIRY-ZOMBIE      
+83: FAIRY-ZOMBIE      
 	Average: 1.091
 	[x0]     : ZOMBIE
 	[x0.25]  : FIRE, STEEL
@@ -550,14 +576,7 @@
 	[x2]     : DARK, DRAGON, NORMAL, PSYCHIC
 	[x4]     : FIGHTING
 
-81: GRASS-ICE         
-	Average: 1.091
-	[x0.25]  : FIRE, STEEL
-	[x0.5]   : BUG, ICE, POISON
-	[x2]     : ROCK, ZOMBIE
-	[x4]     : GROUND
-
-82: FAIRY-PSYCHIC     
+84: FAIRY-PSYCHIC     
 	Average: 1.091
 	[x0]     : DARK
 	[x0.25]  : DIGITAL, STEEL
@@ -565,59 +584,66 @@
 	[x2]     : DRAGON, SOUND, SPACE
 	[x4]     : FIGHTING
 
-83: FAIRY-SPACE       
+85: FAIRY-SPACE       
 	Average: 1.091
 	[x0.25]  : DIGITAL, STEEL
 	[x0.5]   : ELECTRIC, FIRE, ICE, POISON, PSYCHIC, ROCK, SPACE
 	[x2]     : DRAGON, FLYING, GRASS, SOUND
 	[x4]     : FIGHTING
 
-84: ICE-ZOMBIE        
+86: DIGITAL-PSYCHIC   
 	Average: 1.091
-	[x0]     : ZOMBIE
-	[x0.25]  : FIRE, STEEL
-	[x0.5]   : GHOST, ICE, WATER
-	[x2]     : DRAGON, FIGHTING, GROUND, NORMAL, PSYCHIC, SPACE
+	[x0]     : DARK
+	[x0.5]   : BUG, DIGITAL, FLYING, GROUND, PSYCHIC, ZOMBIE
+	[x2]     : ELECTRIC, FAIRY, SPACE
+	[x4]     : SOUND
 
-85: BUG-ROCK          
+87: DARK-GRASS        
+	Average: 1.091
+	[x0.5]   : BUG, DARK, DRAGON, FAIRY, FIGHTING, FIRE, FLYING, GRASS, POISON, SOUND, SPACE, STEEL
+	[x2]     : GHOST, GROUND, PSYCHIC, ROCK, WATER
+	[x4]     : DIGITAL
+
+88: BUG-ROCK          
 	Average: 1.091
 	[x0.25]  : FIGHTING, STEEL
 	[x0.5]   : FAIRY, GHOST, GROUND, POISON, ZOMBIE
 	[x2]     : BUG, DARK, DIGITAL, GRASS, ICE, PSYCHIC
 
-86: DARK-DIGITAL      
-	Average: 1.091
-	[x0.25]  : DARK, FIGHTING
-	[x0.5]   : FLYING, GROUND, ZOMBIE
-	[x2]     : DIGITAL, ELECTRIC, GHOST, PSYCHIC, STEEL
-
-87: FAIRY-GROUND      
+89: FAIRY-GROUND      
 	Average: 1.091
 	[x0]     : FLYING
 	[x0.5]   : BUG, DIGITAL, GRASS, ZOMBIE
 	[x2]     : DARK, DRAGON, ELECTRIC, FIGHTING, ROCK
 
-88: FLYING-STEEL      
+90: FLYING-STEEL      
 	Average: 1.091
 	[x0]     : SPACE
 	[x0.25]  : ELECTRIC, STEEL
 	[x0.5]   : DIGITAL, FIRE, WATER
 	[x2]     : BUG, FAIRY, FIGHTING, GRASS, ICE, ZOMBIE
 
-89: FIRE-PSYCHIC      
+91: FIRE-PSYCHIC      
 	Average: 1.091
 	[x0]     : DARK
 	[x0.5]   : DIGITAL, DRAGON, FIRE, PSYCHIC, ROCK, WATER
 	[x2]     : BUG, FIGHTING, GRASS, ICE, POISON, SOUND
 
-90: DARK-SOUND        
+92: ICE-NORMAL        
+	Average: 1.080
+	[x0]     : GHOST
+	[x0.25]  : STEEL
+	[x0.5]   : FIRE, ICE, ROCK, WATER, ZOMBIE
+	[x2]     : DIGITAL, DRAGON, FLYING, GRASS, GROUND, SPACE
+
+93: DARK-SOUND        
 	Average: 1.080
 	[x0]     : SPACE
 	[x0.25]  : FAIRY, FIGHTING, SOUND
 	[x0.5]   : BUG, DARK, FLYING, ZOMBIE
 	[x2]     : DIGITAL, GHOST, GROUND, ICE, ROCK, STEEL, WATER
 
-91: FLYING-PSYCHIC    
+94: FLYING-PSYCHIC    
 	Average: 1.080
 	[x0]     : DARK, SPACE
 	[x0.25]  : STEEL
@@ -625,21 +651,40 @@
 	[x2]     : BUG, GRASS, POISON, SOUND
 	[x4]     : FIGHTING
 
-92: ROCK-ZOMBIE       
+95: BUG-GRASS         
+	Average: 1.080
+	[x0.25]  : FIRE, FLYING, POISON, SPACE, STEEL
+	[x0.5]   : BUG, DRAGON, FAIRY, FIGHTING, GHOST
+	[x2]     : DARK, GROUND, PSYCHIC, ROCK, WATER
+	[x4]     : DIGITAL
+
+96: FAIRY-GRASS       
+	Average: 1.080
+	[x0.25]  : FIRE, POISON, STEEL
+	[x0.5]   : BUG, FLYING, GRASS, SPACE
+	[x2]     : DARK, FIGHTING, GROUND, ROCK, WATER, ZOMBIE
+
+97: ROCK-ZOMBIE       
 	Average: 1.080
 	[x0]     : ZOMBIE
 	[x0.25]  : STEEL
 	[x0.5]   : GHOST, GRASS, GROUND
 	[x2]     : BUG, ICE, NORMAL, PSYCHIC, SPACE
 
-93: BUG-DARK          
+98: BUG-DARK          
 	Average: 1.080
 	[x0.25]  : FAIRY, FIGHTING, ZOMBIE
 	[x0.5]   : FIRE, FLYING, POISON, SOUND, SPACE, STEEL
 	[x2]     : GRASS
 	[x4]     : DIGITAL, PSYCHIC
 
-94: BUG-FIGHTING      
+99: DIGITAL-GRASS     
+	Average: 1.080
+	[x0.25]  : BUG, FLYING, POISON
+	[x0.5]   : DARK, DRAGON, FIGHTING, FIRE, GRASS, SPACE
+	[x2]     : DIGITAL, ELECTRIC, FAIRY, ROCK, SOUND, WATER, ZOMBIE
+
+100: BUG-FIGHTING      
 	Average: 1.080
 	[x0]     : GHOST
 	[x0.25]  : FAIRY, FLYING, POISON, SPACE, ZOMBIE
@@ -647,14 +692,7 @@
 	[x2]     : DIGITAL, GRASS, ICE, NORMAL, ROCK
 	[x4]     : DARK
 
-95: FIRE-GRASS        
-	Average: 1.080
-	[x0.25]  : DRAGON, FIRE, SPACE
-	[x0.5]   : FLYING, POISON
-	[x2]     : GROUND, ICE
-	[x4]     : ZOMBIE
-
-96: PSYCHIC-ZOMBIE    
+101: PSYCHIC-ZOMBIE    
 	Average: 1.080
 	[x0]     : DARK, ZOMBIE
 	[x0.25]  : STEEL
@@ -662,7 +700,7 @@
 	[x2]     : NORMAL, POISON, SOUND, SPACE
 	[x4]     : FIGHTING
 
-97: DRAGON-FAIRY      
+102: DRAGON-FAIRY      
 	Average: 1.068
 	[x0]     : FAIRY
 	[x0.25]  : DIGITAL, STEEL
@@ -670,48 +708,34 @@
 	[x2]     : DARK, FIGHTING
 	[x4]     : DRAGON
 
-98: FIGHTING-GRASS    
-	Average: 1.068
-	[x0]     : GHOST
-	[x0.25]  : BUG, FLYING, POISON, SPACE
-	[x0.5]   : DRAGON, FAIRY, FIRE, GRASS, PSYCHIC
-	[x2]     : DARK, GROUND, ICE, NORMAL, WATER
-	[x4]     : ROCK
-
-99: FIRE-GHOST        
+103: FIRE-GHOST        
 	Average: 1.068
 	[x0]     : NORMAL
 	[x0.5]   : DARK, DRAGON, FIRE, ROCK, SOUND, SPACE, WATER
 	[x2]     : BUG, GHOST, GRASS, ICE, PSYCHIC, STEEL
 
-100: STEEL             
+104: STEEL             
 	Average: 1.068
 	[x0.5]   : DIGITAL, ELECTRIC, FIRE, STEEL, WATER
 	[x2]     : FAIRY, ICE, ROCK, ZOMBIE
 
-101: DIGITAL-FAIRY     
+105: DIGITAL-WATER     
 	Average: 1.068
-	[x0.5]   : DIGITAL, FIRE, FLYING, GROUND, POISON
-	[x2]     : DRAGON, ELECTRIC, FAIRY, SOUND
+	[x0.5]   : BUG, DARK, DRAGON, FIGHTING, FLYING, GRASS, POISON, SPACE, WATER
+	[x2]     : ELECTRIC, FAIRY, FIRE, ROCK, SOUND, STEEL
 
-102: PSYCHIC-WATER     
+106: PSYCHIC-WATER     
 	Average: 1.068
 	[x0]     : DARK
 	[x0.5]   : DIGITAL, DRAGON, GRASS, PSYCHIC, STEEL, WATER, ZOMBIE
 	[x2]     : FIGHTING, FIRE, GROUND, POISON, ROCK, SOUND
 
-103: DARK-WATER        
+107: DARK-WATER        
 	Average: 1.068
 	[x0.5]   : DARK, DRAGON, FAIRY, FIGHTING, GRASS, SOUND, SPACE, WATER, ZOMBIE
 	[x2]     : DIGITAL, FIRE, GHOST, GROUND, PSYCHIC, ROCK
 
-104: FIGHTING-ICE      
-	Average: 1.068
-	[x0]     : GHOST
-	[x0.5]   : BUG, FAIRY, FIRE, POISON, PSYCHIC, WATER, ZOMBIE
-	[x2]     : DARK, DRAGON, GRASS, GROUND, NORMAL, ROCK
-
-105: BUG-POISON        
+108: BUG-POISON        
 	Average: 1.057
 	[x0]     : STEEL
 	[x0.25]  : GHOST, POISON, ZOMBIE
@@ -719,19 +743,7 @@
 	[x2]     : DARK, PSYCHIC
 	[x4]     : DIGITAL, GRASS
 
-106: GRASS-ROCK        
-	Average: 1.057
-	[x0.25]  : STEEL
-	[x0.5]   : DRAGON, FIGHTING, GRASS, POISON
-	[x2]     : ICE, ROCK, WATER, ZOMBIE
-
-107: FAIRY-GRASS       
-	Average: 1.057
-	[x0.25]  : FIRE, POISON, STEEL
-	[x0.5]   : BUG, DIGITAL, FLYING, GRASS, SPACE
-	[x2]     : DARK, FIGHTING, GROUND, ROCK, WATER, ZOMBIE
-
-108: FLYING-POISON     
+109: FLYING-POISON     
 	Average: 1.057
 	[x0]     : SPACE, STEEL
 	[x0.25]  : ROCK
@@ -739,20 +751,13 @@
 	[x2]     : BUG, DIGITAL, FAIRY, FIGHTING
 	[x4]     : GRASS
 
-109: FIRE-POISON       
+110: FIRE-POISON       
 	Average: 1.057
 	[x0]     : STEEL
 	[x0.25]  : ROCK
 	[x0.5]   : DRAGON, FIRE, GHOST, GROUND, POISON, SOUND, SPACE, WATER
 	[x2]     : BUG, DIGITAL, FAIRY, ICE
 	[x4]     : GRASS
-
-110: DIGITAL-GHOST     
-	Average: 1.057
-	[x0]     : NORMAL
-	[x0.25]  : DARK
-	[x0.5]   : FIGHTING, FLYING, GROUND, ZOMBIE
-	[x2]     : ELECTRIC, FAIRY, GHOST, PSYCHIC, STEEL
 
 111: BUG-FAIRY         
 	Average: 1.057
@@ -761,20 +766,14 @@
 	[x2]     : DRAGON, GRASS, PSYCHIC
 	[x4]     : DARK
 
-112: DIGITAL-GRASS     
-	Average: 1.057
-	[x0.25]  : FLYING
-	[x0.5]   : BUG, DARK, DRAGON, FIGHTING, FIRE, GRASS, POISON, SPACE
-	[x2]     : ELECTRIC, FAIRY, ROCK, SOUND, WATER, ZOMBIE
-
-113: NORMAL-ROCK       
+112: NORMAL-ROCK       
 	Average: 1.057
 	[x0]     : GHOST
 	[x0.25]  : STEEL
 	[x0.5]   : FIGHTING, GROUND, ROCK, ZOMBIE
 	[x2]     : BUG, FIRE, FLYING, ICE, SPACE
 
-114: BUG-FLYING        
+113: BUG-FLYING        
 	Average: 1.057
 	[x0]     : SPACE
 	[x0.25]  : STEEL
@@ -782,14 +781,7 @@
 	[x2]     : BUG, DARK, DIGITAL, PSYCHIC
 	[x4]     : GRASS
 
-115: DIGITAL-SPACE     
-	Average: 1.057
-	[x0.25]  : DARK
-	[x0.5]   : DIGITAL, GROUND, ICE, PSYCHIC, ROCK, SPACE
-	[x2]     : FAIRY, GRASS
-	[x4]     : SOUND
-
-116: FIGHTING-ZOMBIE   
+114: FIGHTING-ZOMBIE   
 	Average: 1.057
 	[x0]     : GHOST, ZOMBIE
 	[x0.25]  : FLYING
@@ -797,92 +789,109 @@
 	[x2]     : DARK, FIGHTING, ICE, ROCK
 	[x4]     : NORMAL
 
-117: SPACE-STEEL       
+115: SPACE-STEEL       
 	Average: 1.057
 	[x0.25]  : DIGITAL, ELECTRIC, STEEL
 	[x0.5]   : DARK, FIRE, PSYCHIC, SPACE, WATER
 	[x2]     : FAIRY, FIGHTING, FLYING, GRASS, SOUND, ZOMBIE
 
-118: WATER             
+116: WATER             
 	Average: 1.045
 	[x0.5]   : DRAGON, GRASS, SPACE, WATER
 	[x2]     : FIRE, GROUND, ROCK
 
-119: FAIRY             
+117: DIGITAL           
+	Average: 1.045
+	[x0.5]   : BUG, DARK, FIGHTING, FLYING, GROUND, POISON
+	[x2]     : ELECTRIC, FAIRY, SOUND, STEEL
+
+118: FAIRY             
 	Average: 1.045
 	[x0.5]   : DIGITAL, FIRE, POISON, STEEL
 	[x2]     : DARK, DRAGON, FIGHTING
 
-120: FAIRY-WATER       
+119: FAIRY-WATER       
 	Average: 1.045
 	[x0.5]   : DIGITAL, GRASS, POISON, SPACE, STEEL, WATER
 	[x2]     : DARK, FIGHTING, GROUND, ROCK
 
-121: SOUND             
+120: SOUND             
 	Average: 1.045
 	[x0]     : SPACE
 	[x0.5]   : BUG, FAIRY, FIGHTING, FLYING, PSYCHIC, SOUND
 	[x2]     : GROUND, ICE, ROCK, STEEL, WATER
 
-122: DIGITAL-FLYING    
-	Average: 1.045
-	[x0]     : SPACE
-	[x0.5]   : DARK, FLYING, GROUND, ROCK
-	[x2]     : BUG, FAIRY, GRASS, SOUND
-
-123: FAIRY-SOUND       
+121: FAIRY-SOUND       
 	Average: 1.045
 	[x0]     : SPACE
 	[x0.5]   : BUG, DIGITAL, FAIRY, FIRE, FLYING, POISON, PSYCHIC, SOUND
 	[x2]     : DARK, DRAGON, GROUND, ICE, ROCK, WATER
 
-124: DRAGON-GROUND     
+122: DRAGON-GROUND     
 	Average: 1.045
 	[x0]     : FAIRY, FLYING
 	[x0.5]   : BUG, DIGITAL, GRASS, ZOMBIE
 	[x2]     : DRAGON, ELECTRIC, FIRE, POISON, ROCK
 
-125: PSYCHIC           
+123: PSYCHIC           
 	Average: 1.045
 	[x0]     : DARK
 	[x0.5]   : DIGITAL, PSYCHIC, STEEL, ZOMBIE
 	[x2]     : FIGHTING, POISON, SOUND, SPACE
 
-126: FLYING-WATER      
+124: DARK-DIGITAL      
+	Average: 1.045
+	[x0.25]  : DARK, FIGHTING
+	[x0.5]   : BUG, FLYING, GROUND, POISON, ZOMBIE
+	[x2]     : DIGITAL, ELECTRIC, GHOST, PSYCHIC, STEEL
+
+125: FLYING-WATER      
 	Average: 1.045
 	[x0]     : SPACE
 	[x0.5]   : DRAGON, ELECTRIC, STEEL, WATER
 	[x2]     : BUG, FIGHTING, FIRE, GROUND
 
-127: ICE-NORMAL        
-	Average: 1.034
-	[x0]     : GHOST
-	[x0.25]  : STEEL
-	[x0.5]   : FIRE, ICE, ROCK, WATER, ZOMBIE
-	[x2]     : DRAGON, FLYING, GRASS, GROUND, SPACE
+126: GRASS             
+	Average: 1.045
+	[x0.5]   : BUG, DRAGON, FIRE, FLYING, GRASS, POISON, SPACE, STEEL
+	[x2]     : DIGITAL, GROUND, ROCK, WATER, ZOMBIE
 
-128: BUG-GROUND        
+127: ELECTRIC-ICE      
+	Average: 1.045
+	[x0]     : GROUND
+	[x0.5]   : ELECTRIC, FIRE, ICE, STEEL
+	[x2]     : SPACE
+	[x4]     : FLYING
+
+128: FLYING-GRASS      
+	Average: 1.034
+	[x0]     : SPACE
+	[x0.25]  : STEEL
+	[x0.5]   : DRAGON, ELECTRIC, FIRE, FLYING, POISON
+	[x2]     : DIGITAL, FIGHTING, GROUND, WATER, ZOMBIE
+
+129: BUG-GROUND        
 	Average: 1.034
 	[x0]     : FLYING
 	[x0.25]  : ZOMBIE
 	[x0.5]   : BUG, FAIRY, FIGHTING, GHOST, SPACE
 	[x2]     : DARK, DIGITAL, ELECTRIC, PSYCHIC, ROCK
 
-129: ELECTRIC-FIRE     
+130: ELECTRIC-FIRE     
 	Average: 1.034
 	[x0]     : GROUND
 	[x0.25]  : DRAGON
 	[x0.5]   : DIGITAL, ELECTRIC, FIRE, ROCK, SPACE
 	[x2]     : BUG, FLYING, ICE, STEEL, ZOMBIE
 
-130: BUG-SOUND         
+131: BUG-SOUND         
 	Average: 1.034
 	[x0]     : SPACE
 	[x0.25]  : FAIRY, FIGHTING, FLYING
 	[x0.5]   : BUG, FIRE, GHOST, POISON, SOUND, ZOMBIE
 	[x2]     : DARK, DIGITAL, GRASS, GROUND, ICE, ROCK, WATER
 
-131: FLYING-ZOMBIE     
+132: FLYING-ZOMBIE     
 	Average: 1.034
 	[x0]     : SPACE, ZOMBIE
 	[x0.25]  : STEEL
@@ -890,20 +899,11 @@
 	[x2]     : BUG, NORMAL, PSYCHIC
 	[x4]     : FIGHTING
 
-132: DIGITAL-ZOMBIE    
+133: DIGITAL-FAIRY     
 	Average: 1.034
-	[x0]     : ZOMBIE
-	[x0.25]  : FLYING
-	[x0.5]   : DARK, FIRE, GHOST, GRASS, GROUND
-	[x2]     : ELECTRIC, FAIRY, NORMAL, PSYCHIC, SOUND
-
-133: DIGITAL-POISON    
-	Average: 1.034
-	[x0]     : STEEL
-	[x0.25]  : GROUND
-	[x0.5]   : DARK, FIGHTING, FLYING, GHOST, POISON, ROCK, ZOMBIE
-	[x2]     : DIGITAL, ELECTRIC, GRASS
-	[x4]     : FAIRY
+	[x0.25]  : POISON
+	[x0.5]   : BUG, DIGITAL, FIRE, FLYING, GROUND
+	[x2]     : DRAGON, ELECTRIC, FAIRY, SOUND
 
 134: BUG-ZOMBIE        
 	Average: 1.023
@@ -944,36 +944,37 @@
 	[x2]     : DIGITAL, NORMAL
 	[x4]     : PSYCHIC
 
-140: FLYING-GROUND     
+140: GRASS-ZOMBIE      
+	Average: 1.023
+	[x0]     : ZOMBIE
+	[x0.25]  : FIRE, FLYING, GRASS, STEEL
+	[x0.5]   : BUG, DRAGON, GHOST, POISON, SPACE
+	[x2]     : DIGITAL, FIGHTING, GROUND, NORMAL, PSYCHIC, ROCK, WATER
+
+141: FLYING-GROUND     
 	Average: 1.023
 	[x0]     : FLYING, SPACE
 	[x0.5]   : ZOMBIE
 	[x2]     : FIGHTING, FIRE, POISON
 
-141: DRAGON-PSYCHIC    
+142: DRAGON-PSYCHIC    
 	Average: 1.023
 	[x0]     : DARK, FAIRY
 	[x0.25]  : DIGITAL, STEEL
 	[x0.5]   : PSYCHIC, ZOMBIE
 	[x2]     : DRAGON, FIGHTING, POISON, SOUND, SPACE
 
-142: FLYING            
+143: FLYING            
 	Average: 1.023
 	[x0]     : SPACE
 	[x0.5]   : ELECTRIC, ROCK, STEEL
 	[x2]     : BUG, FIGHTING, GRASS
 
-143: FLYING-SOUND      
+144: FLYING-SOUND      
 	Average: 1.023
 	[x0]     : SPACE
 	[x0.5]   : ELECTRIC, FAIRY, FLYING, PSYCHIC, SOUND
 	[x2]     : GRASS, GROUND, ICE, WATER
-
-144: DIGITAL-ELECTRIC  
-	Average: 1.023
-	[x0]     : GROUND
-	[x0.5]   : DARK, DIGITAL, DRAGON, FIGHTING, GRASS
-	[x2]     : FAIRY, SOUND, STEEL, WATER
 
 145: DARK              
 	Average: 1.023
@@ -1005,60 +1006,61 @@
 	[x0.5]   : DIGITAL, ELECTRIC, FLYING, GHOST, GRASS, WATER
 	[x2]     : FAIRY, FIGHTING, ICE, NORMAL, PSYCHIC, ROCK
 
-150: ELECTRIC-ICE      
-	Average: 1.023
-	[x0]     : GROUND
-	[x0.5]   : DIGITAL, ELECTRIC, FIRE, ICE, STEEL
-	[x2]     : SPACE
-	[x4]     : FLYING
-
-151: BUG-DIGITAL       
-	Average: 1.023
-	[x0.25]  : FIGHTING, FLYING
-	[x0.5]   : FIRE, GHOST, GROUND, POISON, SPACE, ZOMBIE
-	[x2]     : DIGITAL, ELECTRIC, GRASS, PSYCHIC, SOUND
-
-152: POISON-STEEL      
+150: POISON-STEEL      
 	Average: 1.023
 	[x0]     : STEEL
 	[x0.5]   : ELECTRIC, FIRE, GHOST, GROUND, POISON, SOUND, WATER
 	[x2]     : GRASS, ICE
 	[x4]     : FAIRY
 
-153: FIRE-ZOMBIE       
+151: FIRE-ZOMBIE       
 	Average: 1.011
 	[x0]     : ZOMBIE
 	[x0.25]  : FIRE
 	[x0.5]   : DRAGON, FLYING, GHOST, ROCK, SPACE, WATER
 	[x2]     : BUG, FIGHTING, ICE, NORMAL, PSYCHIC
 
-154: GHOST-SOUND       
+152: GHOST-SOUND       
 	Average: 1.011
 	[x0]     : NORMAL, SPACE
 	[x0.25]  : SOUND
 	[x0.5]   : BUG, DARK, FAIRY, FIGHTING, FLYING, ZOMBIE
 	[x2]     : GHOST, GROUND, ICE, ROCK, STEEL, WATER
 
-155: FAIRY-POISON      
+153: FAIRY-POISON      
 	Average: 1.011
 	[x0]     : STEEL
 	[x0.25]  : POISON
 	[x0.5]   : FIRE, GHOST, GROUND, ROCK, SOUND, ZOMBIE
 	[x2]     : DARK, DRAGON, FAIRY, FIGHTING, GRASS
 
-156: DARK-PSYCHIC      
+154: DARK-PSYCHIC      
 	Average: 1.011
 	[x0]     : DARK
 	[x0.25]  : ZOMBIE
 	[x0.5]   : FAIRY, STEEL
 	[x2]     : GHOST, POISON, SPACE
 
-157: GHOST-PSYCHIC     
+155: GRASS-PSYCHIC     
+	Average: 1.011
+	[x0]     : DARK
+	[x0.25]  : STEEL
+	[x0.5]   : BUG, DRAGON, FIRE, FLYING, GRASS, PSYCHIC
+	[x2]     : FIGHTING, GROUND, ROCK, SOUND, WATER
+
+156: GHOST-PSYCHIC     
 	Average: 1.011
 	[x0]     : DARK, NORMAL
 	[x0.25]  : ZOMBIE
 	[x0.5]   : DIGITAL, STEEL
 	[x2]     : FIGHTING, GHOST, POISON, SPACE
+
+157: DIGITAL-GHOST     
+	Average: 1.011
+	[x0]     : NORMAL
+	[x0.25]  : DARK
+	[x0.5]   : BUG, FIGHTING, FLYING, GROUND, POISON, ZOMBIE
+	[x2]     : ELECTRIC, FAIRY, GHOST, PSYCHIC, STEEL
 
 158: WATER-ZOMBIE      
 	Average: 1.011
@@ -1087,24 +1089,31 @@
 	[x0.5]   : DARK, DIGITAL, DRAGON, ELECTRIC, ICE, PSYCHIC, STEEL, WATER
 	[x2]     : FIGHTING, FIRE, FLYING, GROUND, SOUND
 
-162: BUG-STEEL         
+162: DIGITAL-SPACE     
+	Average: 1.011
+	[x0.25]  : DARK
+	[x0.5]   : BUG, DIGITAL, GROUND, ICE, POISON, PSYCHIC, ROCK, SPACE
+	[x2]     : FAIRY, GRASS
+	[x4]     : SOUND
+
+163: BUG-STEEL         
 	Average: 1.000
 	[x0.25]  : FIRE, STEEL
 	[x0.5]   : ELECTRIC, FIGHTING, FLYING, GHOST, POISON, SPACE, WATER
 	[x2]     : DARK, GRASS, ICE, PSYCHIC, ROCK
 
-163: SPACE             
+164: SPACE             
 	Average: 1.000
 	[x0.5]   : DARK, DIGITAL, ELECTRIC, ICE, PSYCHIC, ROCK, SPACE, STEEL
 	[x2]     : FIGHTING, FLYING, GRASS, SOUND
 
-164: DRAGON-SOUND      
+165: DRAGON-SOUND      
 	Average: 1.000
 	[x0]     : FAIRY, SPACE
 	[x0.5]   : BUG, DIGITAL, FIGHTING, FLYING, PSYCHIC, SOUND
 	[x2]     : DRAGON, GROUND, ICE, ROCK, WATER
 
-165: DARK-POISON       
+166: DARK-POISON       
 	Average: 1.000
 	[x0]     : STEEL
 	[x0.25]  : SOUND, ZOMBIE
@@ -1112,19 +1121,20 @@
 	[x2]     : GRASS, PSYCHIC
 	[x4]     : DIGITAL
 
-166: DARK-GRASS        
+167: GHOST-GRASS       
 	Average: 1.000
-	[x0.5]   : BUG, DARK, DRAGON, FAIRY, FIGHTING, FIRE, FLYING, GRASS, POISON, SOUND, SPACE, STEEL
+	[x0]     : NORMAL
+	[x0.5]   : BUG, DARK, DRAGON, FIRE, FLYING, GRASS, POISON, SOUND, SPACE, STEEL
 	[x2]     : DIGITAL, GHOST, GROUND, PSYCHIC, ROCK, WATER
 
-167: DRAGON-STEEL      
+168: DRAGON-STEEL      
 	Average: 1.000
 	[x0]     : FAIRY
 	[x0.25]  : DIGITAL, STEEL
 	[x0.5]   : ELECTRIC, FIRE, WATER
 	[x2]     : DRAGON, ICE, ROCK, ZOMBIE
 
-168: ELECTRIC-SPACE    
+169: ELECTRIC-SPACE    
 	Average: 1.000
 	[x0]     : GROUND
 	[x0.25]  : DIGITAL, ELECTRIC
@@ -1132,16 +1142,11 @@
 	[x2]     : FIGHTING, SOUND, WATER
 	[x4]     : FLYING
 
-169: FLYING-GHOST      
+170: FLYING-GHOST      
 	Average: 1.000
 	[x0]     : NORMAL, SPACE
 	[x0.5]   : DARK, ELECTRIC, ROCK, SOUND, STEEL, ZOMBIE
 	[x2]     : BUG, FIGHTING, GHOST, GRASS, PSYCHIC
-
-170: GRASS             
-	Average: 1.000
-	[x0.5]   : BUG, DRAGON, FIRE, FLYING, GRASS, POISON, SPACE, STEEL
-	[x2]     : GROUND, ROCK, WATER, ZOMBIE
 
 171: DARK-FAIRY        
 	Average: 1.000
@@ -1154,18 +1159,19 @@
 	[x0.5]   : DIGITAL, FIRE, POISON, SOUND, STEEL, ZOMBIE
 	[x2]     : DRAGON, FIGHTING, GHOST, PSYCHIC
 
-173: FIGHTING-FLYING   
+173: DIGITAL-POISON    
+	Average: 1.000
+	[x0]     : STEEL
+	[x0.25]  : GROUND, POISON
+	[x0.5]   : BUG, DARK, FIGHTING, FLYING, GHOST, ROCK, ZOMBIE
+	[x2]     : DIGITAL, ELECTRIC, GRASS
+	[x4]     : FAIRY
+
+174: FIGHTING-FLYING   
 	Average: 1.000
 	[x0]     : GHOST, SPACE
 	[x0.5]   : ELECTRIC, FAIRY, FLYING, POISON, PSYCHIC, ZOMBIE
 	[x2]     : DARK, FIGHTING, GRASS, ICE, NORMAL
-
-174: FLYING-GRASS      
-	Average: 0.989
-	[x0]     : SPACE
-	[x0.25]  : STEEL
-	[x0.5]   : DRAGON, ELECTRIC, FIRE, FLYING, POISON
-	[x2]     : FIGHTING, GROUND, WATER, ZOMBIE
 
 175: POISON-SPACE      
 	Average: 0.989
@@ -1175,24 +1181,26 @@
 	[x2]     : FAIRY, FIGHTING, FLYING
 	[x4]     : GRASS
 
-176: GRASS-PSYCHIC     
+176: GRASS-POISON      
 	Average: 0.989
-	[x0]     : DARK
-	[x0.25]  : STEEL
-	[x0.5]   : BUG, DIGITAL, DRAGON, FIRE, FLYING, GRASS, PSYCHIC
-	[x2]     : FIGHTING, GROUND, ROCK, SOUND, WATER
+	[x0]     : STEEL
+	[x0.25]  : POISON
+	[x0.5]   : BUG, DRAGON, FIRE, FLYING, GHOST, SOUND, SPACE
+	[x2]     : FAIRY, WATER
+	[x4]     : DIGITAL
 
-177: BUG-GRASS         
-	Average: 0.989
-	[x0.25]  : FIRE, FLYING, POISON, SPACE, STEEL
-	[x0.5]   : BUG, DRAGON, FAIRY, FIGHTING, GHOST
-	[x2]     : DARK, DIGITAL, GROUND, PSYCHIC, ROCK, WATER
-
-178: BUG-WATER         
+177: BUG-WATER         
 	Average: 0.989
 	[x0.25]  : SPACE
 	[x0.5]   : DRAGON, FAIRY, FIGHTING, FLYING, GHOST, POISON, STEEL, WATER, ZOMBIE
 	[x2]     : DARK, DIGITAL, GROUND, PSYCHIC, ROCK
+
+178: DIGITAL-ZOMBIE    
+	Average: 0.989
+	[x0]     : ZOMBIE
+	[x0.25]  : FLYING
+	[x0.5]   : BUG, DARK, FIRE, GHOST, GRASS, GROUND, POISON
+	[x2]     : ELECTRIC, FAIRY, NORMAL, PSYCHIC, SOUND
 
 179: PSYCHIC-SOUND     
 	Average: 0.989
@@ -1215,110 +1223,129 @@
 	[x0.5]   : ELECTRIC, FIRE, GRASS, POISON, STEEL
 	[x2]     : DARK, FIGHTING, FLYING, WATER
 
-182: DRAGON-FIGHTING   
+182: BUG-DIGITAL       
+	Average: 0.989
+	[x0.25]  : FIGHTING, FLYING, POISON
+	[x0.5]   : BUG, FIRE, GHOST, GROUND, SPACE, ZOMBIE
+	[x2]     : DIGITAL, ELECTRIC, GRASS, PSYCHIC, SOUND
+
+183: DRAGON-FIGHTING   
 	Average: 0.977
 	[x0]     : FAIRY, GHOST
 	[x0.5]   : BUG, DIGITAL, FLYING, POISON, PSYCHIC, SPACE, ZOMBIE
 	[x2]     : DARK, DRAGON, ICE, NORMAL, ROCK
 
-183: FIGHTING-PSYCHIC  
+184: FIGHTING-PSYCHIC  
 	Average: 0.977
 	[x0]     : DARK, GHOST
 	[x0.25]  : PSYCHIC, ZOMBIE
 	[x0.5]   : BUG, DIGITAL, FAIRY, FLYING
 	[x2]     : FIGHTING, ICE, NORMAL, ROCK, SOUND
 
-184: ZOMBIE            
+185: ZOMBIE            
 	Average: 0.977
 	[x0]     : ZOMBIE
 	[x0.5]   : FIRE, FLYING, GHOST, GRASS, STEEL
 	[x2]     : FIGHTING, NORMAL, PSYCHIC
 
-185: BUG               
+186: BUG               
 	Average: 0.977
 	[x0.5]   : FAIRY, FIGHTING, FIRE, FLYING, GHOST, POISON, SPACE, STEEL, ZOMBIE
 	[x2]     : DARK, DIGITAL, GRASS, PSYCHIC
 
-186: GHOST             
+187: ELECTRIC-GRASS    
+	Average: 0.977
+	[x0]     : GROUND
+	[x0.25]  : DRAGON, GRASS
+	[x0.5]   : BUG, ELECTRIC, FIRE, POISON, SPACE, STEEL
+	[x2]     : ROCK, ZOMBIE
+	[x4]     : WATER
+
+188: DIGITAL-FLYING    
+	Average: 0.977
+	[x0]     : SPACE
+	[x0.5]   : DARK, FLYING, GROUND, POISON, ROCK
+	[x2]     : FAIRY, GRASS, SOUND
+
+189: GHOST             
 	Average: 0.977
 	[x0]     : NORMAL
 	[x0.5]   : DARK, SOUND, ZOMBIE
 	[x2]     : GHOST, PSYCHIC
 
-187: DARK-FIGHTING     
+190: DARK-FIGHTING     
 	Average: 0.977
 	[x0]     : GHOST
 	[x0.25]  : FAIRY, ZOMBIE
 	[x0.5]   : BUG, FIGHTING, FLYING, POISON, SOUND, SPACE
 	[x2]     : DIGITAL, ICE, NORMAL, ROCK, STEEL
 
-188: DRAGON-SPACE      
+191: DRAGON-SPACE      
 	Average: 0.977
 	[x0]     : FAIRY
 	[x0.25]  : DIGITAL, STEEL
 	[x0.5]   : DARK, ELECTRIC, ICE, PSYCHIC, ROCK, SPACE
 	[x2]     : DRAGON, FIGHTING, FLYING, GRASS, SOUND
 
-189: DIGITAL-DRAGON    
-	Average: 0.977
-	[x0]     : FAIRY
-	[x0.5]   : DARK, DIGITAL, FIGHTING, FLYING, GROUND
-	[x2]     : DRAGON, ELECTRIC, SOUND
-
-190: DRAGON-WATER      
+192: DRAGON-WATER      
 	Average: 0.977
 	[x0]     : FAIRY
 	[x0.5]   : DIGITAL, GRASS, SPACE, STEEL, WATER
 	[x2]     : FIRE, GROUND, ROCK
 
-191: GRASS-ZOMBIE      
-	Average: 0.977
-	[x0]     : ZOMBIE
-	[x0.25]  : FIRE, FLYING, GRASS, STEEL
-	[x0.5]   : BUG, DRAGON, GHOST, POISON, SPACE
-	[x2]     : FIGHTING, GROUND, NORMAL, PSYCHIC, ROCK, WATER
-
-192: GROUND-SPACE      
+193: GROUND-SPACE      
 	Average: 0.977
 	[x0]     : FLYING
 	[x0.5]   : BUG, DARK, DIGITAL, ICE, PSYCHIC, SPACE, ZOMBIE
 	[x2]     : FIGHTING, FIRE, POISON, SOUND
 
-193: DARK-DRAGON       
+194: DARK-DRAGON       
 	Average: 0.977
 	[x0]     : FAIRY
 	[x0.5]   : DARK, FIGHTING, SOUND, STEEL, ZOMBIE
 	[x2]     : DRAGON, GHOST, PSYCHIC
 
-194: ELECTRIC-SOUND    
+195: DIGITAL-ELECTRIC  
+	Average: 0.977
+	[x0]     : GROUND
+	[x0.5]   : BUG, DARK, DIGITAL, DRAGON, FIGHTING, GRASS, POISON
+	[x2]     : FAIRY, SOUND, STEEL, WATER
+
+196: ELECTRIC-SOUND    
 	Average: 0.977
 	[x0]     : GROUND, SPACE
 	[x0.5]   : BUG, DIGITAL, DRAGON, ELECTRIC, FAIRY, FIGHTING, GRASS, PSYCHIC, SOUND
 	[x2]     : ICE, ROCK, STEEL
 	[x4]     : WATER
 
-195: SOUND-ZOMBIE      
+197: GRASS-SPACE       
+	Average: 0.977
+	[x0.25]  : SPACE, STEEL
+	[x0.5]   : BUG, DARK, DRAGON, ELECTRIC, FIRE, ICE, POISON, PSYCHIC
+	[x2]     : FIGHTING, GROUND, SOUND, WATER, ZOMBIE
+
+198: SOUND-ZOMBIE      
 	Average: 0.966
 	[x0]     : SPACE, ZOMBIE
 	[x0.25]  : FLYING
 	[x0.5]   : BUG, FAIRY, FIRE, GHOST, GRASS, SOUND
 	[x2]     : GROUND, ICE, NORMAL, ROCK, WATER
 
-196: POISON-PSYCHIC    
+199: POISON-PSYCHIC    
 	Average: 0.966
 	[x0]     : DARK, STEEL
 	[x0.25]  : ZOMBIE
 	[x0.5]   : GHOST, GROUND, PSYCHIC, ROCK
 	[x2]     : FAIRY, FIGHTING, GRASS, SPACE
 
-197: ELECTRIC-FLYING   
+200: ELECTRIC-FLYING   
 	Average: 0.966
 	[x0]     : GROUND, SPACE
 	[x0.25]  : ELECTRIC
 	[x0.5]   : DIGITAL, DRAGON, ROCK, STEEL
 	[x2]     : BUG, FIGHTING, FLYING, WATER
 
-198: SPACE-ZOMBIE      
+201: SPACE-ZOMBIE      
 	Average: 0.966
 	[x0]     : ZOMBIE
 	[x0.25]  : STEEL
@@ -1326,35 +1353,42 @@
 	[x2]     : NORMAL, SOUND
 	[x4]     : FIGHTING
 
-199: GROUND-POISON     
+202: GROUND-POISON     
 	Average: 0.966
 	[x0]     : FLYING, STEEL
 	[x0.25]  : ZOMBIE
 	[x0.5]   : BUG, GHOST, GROUND, SOUND
 	[x2]     : DIGITAL, ELECTRIC, FAIRY, FIRE
 
-200: POISON-ZOMBIE     
+203: POISON-ZOMBIE     
 	Average: 0.966
 	[x0]     : STEEL, ZOMBIE
 	[x0.25]  : GHOST
 	[x0.5]   : FIRE, FLYING, GROUND, POISON, ROCK, SOUND
 	[x2]     : DIGITAL, FAIRY, FIGHTING, NORMAL, PSYCHIC
 
-201: GROUND-NORMAL     
+204: DRAGON-GRASS      
+	Average: 0.966
+	[x0]     : FAIRY
+	[x0.25]  : STEEL
+	[x0.5]   : BUG, FIRE, FLYING, GRASS, POISON, SPACE
+	[x2]     : GROUND, ROCK, WATER, ZOMBIE
+
+205: GROUND-NORMAL     
 	Average: 0.966
 	[x0]     : FLYING, GHOST
 	[x0.25]  : ZOMBIE
 	[x0.5]   : BUG, GRASS
 	[x2]     : ELECTRIC, FIRE, POISON
 
-202: FIRE-NORMAL       
+206: FIRE-NORMAL       
 	Average: 0.966
 	[x0]     : GHOST
 	[x0.25]  : ROCK
 	[x0.5]   : DRAGON, FIRE, SPACE, WATER
 	[x2]     : BUG, GRASS, ICE
 
-203: BUG-GHOST         
+207: BUG-GHOST         
 	Average: 0.966
 	[x0]     : NORMAL
 	[x0.25]  : ZOMBIE
@@ -1362,63 +1396,37 @@
 	[x2]     : DIGITAL, GRASS
 	[x4]     : PSYCHIC
 
-204: ELECTRIC-GRASS    
-	Average: 0.955
-	[x0]     : GROUND
-	[x0.25]  : DRAGON, GRASS
-	[x0.5]   : BUG, DIGITAL, ELECTRIC, FIRE, POISON, SPACE, STEEL
-	[x2]     : ROCK, ZOMBIE
-	[x4]     : WATER
-
-205: DIGITAL-NORMAL    
-	Average: 0.955
-	[x0]     : GHOST
-	[x0.5]   : DARK, FIGHTING, FLYING, GROUND, ROCK, ZOMBIE
-	[x2]     : ELECTRIC, FAIRY, SOUND
-
-206: GHOST-ZOMBIE      
+208: GHOST-ZOMBIE      
 	Average: 0.955
 	[x0]     : NORMAL, ZOMBIE
 	[x0.5]   : DARK, FIRE, FLYING, GRASS, SOUND, STEEL
 	[x2]     : FIGHTING
 	[x4]     : PSYCHIC
 
-207: DRAGON            
+209: DRAGON            
 	Average: 0.955
 	[x0]     : FAIRY
 	[x0.5]   : DIGITAL, STEEL
 	[x2]     : DRAGON
 
-208: ELECTRIC          
+210: ELECTRIC          
 	Average: 0.955
 	[x0]     : GROUND
 	[x0.5]   : DIGITAL, DRAGON, ELECTRIC, GRASS
 	[x2]     : FLYING, WATER
 
-209: DARK-ELECTRIC     
+211: DARK-ELECTRIC     
 	Average: 0.955
 	[x0]     : GROUND
 	[x0.5]   : DARK, DRAGON, ELECTRIC, FAIRY, FIGHTING, GRASS, SOUND, ZOMBIE
 	[x2]     : FLYING, GHOST, PSYCHIC, WATER
 
-210: NORMAL-PSYCHIC    
+212: NORMAL-PSYCHIC    
 	Average: 0.955
 	[x0]     : DARK, GHOST
 	[x0.25]  : STEEL, ZOMBIE
 	[x0.5]   : DIGITAL, PSYCHIC, ROCK
 	[x2]     : FIGHTING, POISON, SOUND, SPACE
-
-211: GHOST-GRASS       
-	Average: 0.955
-	[x0]     : NORMAL
-	[x0.5]   : BUG, DARK, DRAGON, FIRE, FLYING, GRASS, POISON, SOUND, SPACE, STEEL
-	[x2]     : GHOST, GROUND, PSYCHIC, ROCK, WATER
-
-212: GRASS-SPACE       
-	Average: 0.955
-	[x0.25]  : SPACE, STEEL
-	[x0.5]   : BUG, DARK, DIGITAL, DRAGON, ELECTRIC, FIRE, ICE, POISON, PSYCHIC
-	[x2]     : FIGHTING, GROUND, SOUND, WATER, ZOMBIE
 
 213: ELECTRIC-FIGHTING 
 	Average: 0.955
@@ -1459,46 +1467,45 @@
 	[x0.5]   : DIGITAL, ELECTRIC, ICE, ROCK, SPACE, STEEL, ZOMBIE
 	[x2]     : FIGHTING, FLYING, GHOST, GRASS
 
-219: DRAGON-GRASS      
-	Average: 0.943
-	[x0]     : FAIRY
-	[x0.25]  : STEEL
-	[x0.5]   : BUG, DIGITAL, FIRE, FLYING, GRASS, POISON, SPACE
-	[x2]     : GROUND, ROCK, WATER, ZOMBIE
-
-220: FAIRY-NORMAL      
+219: FAIRY-NORMAL      
 	Average: 0.943
 	[x0]     : GHOST
 	[x0.25]  : STEEL
 	[x0.5]   : DIGITAL, FIRE, POISON, ROCK, ZOMBIE
 	[x2]     : DARK, DRAGON, FIGHTING
 
-221: DRAGON-ZOMBIE     
+220: DRAGON-ZOMBIE     
 	Average: 0.943
 	[x0]     : FAIRY, ZOMBIE
 	[x0.25]  : STEEL
 	[x0.5]   : DIGITAL, FIRE, FLYING, GHOST, GRASS
 	[x2]     : DRAGON, FIGHTING, NORMAL, PSYCHIC
 
-222: BUG-DRAGON        
+221: BUG-DRAGON        
 	Average: 0.943
 	[x0]     : FAIRY
 	[x0.25]  : STEEL
 	[x0.5]   : FIGHTING, FIRE, FLYING, GHOST, POISON, SPACE, ZOMBIE
 	[x2]     : DARK, DRAGON, GRASS, PSYCHIC
 
-223: POISON-WATER      
+222: POISON-WATER      
 	Average: 0.932
 	[x0]     : STEEL
 	[x0.5]   : DRAGON, GHOST, POISON, SOUND, SPACE, WATER, ZOMBIE
 	[x2]     : DIGITAL, FAIRY, FIRE
 
-224: FLYING-NORMAL     
+223: FLYING-NORMAL     
 	Average: 0.932
 	[x0]     : GHOST, SPACE
 	[x0.25]  : ROCK, STEEL
 	[x0.5]   : ELECTRIC, ZOMBIE
 	[x2]     : BUG, FIGHTING, GRASS
+
+224: DIGITAL-DRAGON    
+	Average: 0.932
+	[x0]     : FAIRY
+	[x0.5]   : BUG, DARK, DIGITAL, FIGHTING, FLYING, GROUND, POISON
+	[x2]     : DRAGON, ELECTRIC, SOUND
 
 225: BUG-SPACE         
 	Average: 0.932
@@ -1582,103 +1589,102 @@
 	[x0.5]   : GROUND, POISON, SOUND
 	[x2]     : DIGITAL, FAIRY, GRASS
 
-237: NORMAL-WATER      
+237: DIGITAL-NORMAL    
+	Average: 0.909
+	[x0]     : GHOST
+	[x0.5]   : BUG, DARK, FIGHTING, FLYING, GROUND, POISON, ROCK, ZOMBIE
+	[x2]     : ELECTRIC, FAIRY, SOUND
+
+238: NORMAL-WATER      
 	Average: 0.909
 	[x0]     : GHOST
 	[x0.5]   : DRAGON, GRASS, SPACE, STEEL, WATER, ZOMBIE
 	[x2]     : FIRE, GROUND
 
-238: BUG-NORMAL        
+239: BUG-NORMAL        
 	Average: 0.909
 	[x0]     : GHOST
 	[x0.25]  : STEEL, ZOMBIE
 	[x0.5]   : FAIRY, FIGHTING, FIRE, FLYING, POISON, ROCK, SPACE
 	[x2]     : DARK, DIGITAL, GRASS, PSYCHIC
 
-239: POISON-SOUND      
+240: GRASS-NORMAL      
+	Average: 0.898
+	[x0]     : GHOST
+	[x0.25]  : STEEL
+	[x0.5]   : BUG, DRAGON, FIRE, FLYING, GRASS, POISON, SPACE
+	[x2]     : DIGITAL, GROUND, WATER
+
+241: POISON-SOUND      
 	Average: 0.898
 	[x0]     : SPACE, STEEL
 	[x0.25]  : SOUND
 	[x0.5]   : BUG, FIGHTING, FLYING, GHOST, POISON, PSYCHIC, ZOMBIE
 	[x2]     : DIGITAL, GRASS, ICE, WATER
 
-240: GRASS-POISON      
-	Average: 0.898
-	[x0]     : STEEL
-	[x0.25]  : POISON
-	[x0.5]   : BUG, DRAGON, FIRE, FLYING, GHOST, SOUND, SPACE
-	[x2]     : DIGITAL, FAIRY, WATER
-
-241: DRAGON-ELECTRIC   
+242: DRAGON-ELECTRIC   
 	Average: 0.898
 	[x0]     : FAIRY, GROUND
 	[x0.25]  : DIGITAL
 	[x0.5]   : ELECTRIC, GRASS, STEEL
 	[x2]     : FLYING, WATER
 
-242: NORMAL-SOUND      
+243: NORMAL-SOUND      
 	Average: 0.886
 	[x0]     : GHOST, SPACE
 	[x0.5]   : BUG, FAIRY, FIGHTING, FLYING, PSYCHIC, SOUND, ZOMBIE
 	[x2]     : GROUND, ICE, WATER
 
-243: BUG-PSYCHIC       
+244: BUG-PSYCHIC       
 	Average: 0.886
 	[x0]     : DARK
 	[x0.25]  : STEEL, ZOMBIE
 	[x0.5]   : FAIRY, FIRE, FLYING, GHOST
 	[x2]     : GRASS, SOUND
 
-244: NORMAL            
+245: NORMAL            
 	Average: 0.886
 	[x0]     : GHOST
 	[x0.5]   : ROCK, STEEL, ZOMBIE
 
-245: ELECTRIC-POISON   
+246: ELECTRIC-POISON   
 	Average: 0.886
 	[x0]     : GROUND, STEEL
 	[x0.5]   : DRAGON, ELECTRIC, GHOST, POISON, ROCK, SOUND, ZOMBIE
 	[x2]     : FAIRY, FLYING, WATER
 
-246: FIGHTING-GHOST    
+247: FIGHTING-GHOST    
 	Average: 0.875
 	[x0]     : GHOST, NORMAL
 	[x0.25]  : ZOMBIE
 	[x0.5]   : BUG, FAIRY, FLYING, POISON, SOUND, SPACE
 	[x2]     : ICE, ROCK, STEEL
 
-247: DARK-NORMAL       
+248: DARK-NORMAL       
 	Average: 0.875
 	[x0]     : GHOST
 	[x0.25]  : ZOMBIE
 	[x0.5]   : DARK, FAIRY, FIGHTING, ROCK, SOUND, STEEL
 	[x2]     : DIGITAL, PSYCHIC
 
-248: DRAGON-POISON     
+249: DRAGON-POISON     
 	Average: 0.864
 	[x0]     : FAIRY, STEEL
 	[x0.5]   : GHOST, GROUND, POISON, ROCK, SOUND, ZOMBIE
 	[x2]     : DRAGON, GRASS
 
-249: BUG-ELECTRIC      
+250: BUG-ELECTRIC      
 	Average: 0.864
 	[x0]     : GROUND
 	[x0.5]   : DRAGON, ELECTRIC, FAIRY, FIGHTING, FIRE, GHOST, POISON, SPACE, STEEL, ZOMBIE
 	[x2]     : DARK, PSYCHIC, WATER
 
-250: DRAGON-NORMAL     
+251: DRAGON-NORMAL     
 	Average: 0.852
 	[x0]     : FAIRY, GHOST
 	[x0.25]  : STEEL
 	[x0.5]   : DIGITAL, ROCK, ZOMBIE
 	[x2]     : DRAGON
-
-251: GRASS-NORMAL      
-	Average: 0.852
-	[x0]     : GHOST
-	[x0.25]  : STEEL
-	[x0.5]   : BUG, DRAGON, FIRE, FLYING, GRASS, POISON, SPACE
-	[x2]     : GROUND, WATER
 
 252: ELECTRIC-NORMAL   
 	Average: 0.841

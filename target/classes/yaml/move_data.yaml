@@ -1382,12 +1382,11 @@ moves:
       effect: Infect
       chance: 10
     statChange:
-      chance: 30
       stats:
         atk: -1
 
 - id: 966
-  name: Vampire Fang
+  name: Vampire Fangs
   type: Zombie
   category: Physical
   pp: 15
@@ -1414,7 +1413,7 @@ moves:
       chance: 20
 
 - id: 968
-  name: Viral Spread
+  name: Rotten Breath
   type: Zombie
   category: Special
   pp: 5
@@ -1425,19 +1424,6 @@ moves:
       effect: Infect
       chance: 30
 
-- id: 969
-  name: Graveyard Shock
-  type: Zombie
-  category: Special
-  pp: 5
-  pow: 120
-  addEffects:
-    conditionChange:
-      effect: Infect
-      chance: 30
-    charge:
-      effect: Charge
-
 - id: 970
   name: Cosmic Punch
   type: Space
@@ -1447,8 +1433,9 @@ moves:
   acc: 95
   addEffects:
     statChange:
+      chance: 30
       stats:
-        spDef: -1
+        def: -1
 
 - id: 971
   name: Gravity Switch
@@ -1469,7 +1456,7 @@ moves:
   acc: 90
 
 - id: 973
-  name: Orbital Strike
+  name: Orbital Oblivion
   type: Space
   category: Physical
   pp: 15
@@ -1490,6 +1477,7 @@ moves:
   target: All-Adjacent
   addEffects:
     statChange:
+      chance: 30
       stats:
         spd: -1
     
