@@ -35,6 +35,7 @@ public interface StatusConditionManager {
         Grounded(StatusConditionManager::grounded),
         Seeded(StatusConditionManager::seeded),
         Endure(StatusConditionManager::endure),
+        Glitch(StatusConditionManager::glitch),
         Semi_Immune(StatusConditionManager::semiImmune),
         
         // No Function Provided
@@ -457,6 +458,36 @@ public interface StatusConditionManager {
         EventID[] flags = new EventID[] {EventID.DEF_MOVE_DEALS_DAMAGE, EventID.STATUS_AFTER};
 
         return new StatusCondition(p, name, flags);
+    }
+
+    // A glitched Pokemon cannot use the move it last used when 
+    // the effect was applied for 3-5 turns
+    public static StatusCondition glitch(StatusContext c) {
+        Pokemon p = c.target;
+        Move m = p.getLastMove();
+        StatusConditionID id = StatusConditionID.Glitch;
+        String name = id.name();
+        EventID[] flags = new EventID[] {EventID.MOVE_SELECTION, EventID.END_OF_ROUND};
+
+        Counter counter = new Counter(RandomValues.generateInt(3, 5));
+
+        p.getEvents().addEventListener(flags[0], name, e -> {
+            if (m != null) {
+                m.disable();
+            }
+        });
+
+        p.getEvents().addEventListener(flags[1], name, e -> {
+            if (counter.inc()) {
+                m.enable();
+                p.getConditions().removeCondition(id);
+                BattleLog.add("%s's %s is no longer glitched!", p, m);
+            }
+        });
+
+        BattleLog.add("%s's %s was disabled!", p, m);
+        return new StatusCondition(p, name, flags);
+
     }
     
 // Public Class Methods

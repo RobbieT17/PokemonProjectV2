@@ -6,8 +6,10 @@ import project.game.battle.BattleData;
 import project.game.battle.Weather.WeatherEffect;
 import project.game.move.Move;
 import project.game.pokemon.Pokemon;
+import project.game.pokemon.PokemonType;
 import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;
 import project.game.pokemon.stats.StatPoint.StatID;
+import project.game.pokemon.stats.Type;
 import project.game.utility.Protection;
 
 
@@ -51,6 +53,8 @@ public class EventData {
     public double drainPercent; // Percentage of damage dealt applied to heal
     public double healPercent; // Percentage of max HP restored
     public double percentMod; // Percent modifier
+
+    public Type invertedType; // Inverts matchup for type
 
     public String failMessage; // A message produced 
    

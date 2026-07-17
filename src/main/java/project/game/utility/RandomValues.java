@@ -10,7 +10,7 @@ public interface  RandomValues {
     /**
      * @param min int
      * @param max int
-     * @return random integer between max and min
+     * @return random integer between max and min (inclusive)
      */
     public static int generateInt(int min, int max) {
         if (min > max) throw new IllegalArgumentException("Max must be greater than min");

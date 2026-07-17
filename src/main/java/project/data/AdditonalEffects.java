@@ -14,6 +14,7 @@ public class AdditonalEffects {
     private MoveEffect lifeSteal;
     private MoveEffect charge;
     private MoveEffect semiImmune;
+    private MoveEffect hazard;
 
     public void setStatChange(MoveEffect statChange) {
         this.statChange = statChange;
@@ -50,6 +51,9 @@ public class AdditonalEffects {
     }
     public void setSemiImmune(MoveEffect semiImmune) {
         this.semiImmune = semiImmune;
+    }
+    public void setHazard(MoveEffect hazard) {
+        this.hazard = hazard;
     }
 
     public MoveEffect getStatChange() {
@@ -88,5 +92,9 @@ public class AdditonalEffects {
     public MoveEffect getSemiImmune() {
         return this.semiImmune;
     }
+    public MoveEffect getHazard() {
+        return this.hazard;
+    }
+
      
 }

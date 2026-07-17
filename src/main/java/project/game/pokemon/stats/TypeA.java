@@ -1,6 +1,6 @@
 package project.game.pokemon.stats;
 
-public enum Type {
+public enum TypeA { 
     Bug(
         new TypeName[] { TypeName.Digital, TypeName.Fighting, TypeName.Grass, TypeName.Ground, TypeName.Sound},
         new TypeName[] { TypeName.Fire, TypeName.Flying, TypeName.Rock }
@@ -122,24 +122,24 @@ public enum Type {
         new TypeName[] { TypeName.Zombie }
     );
 
-    private final TypeName[] resistances;
-    private final TypeName[] weaknesses;
-    private final TypeName[] immunities;
+    private final TypeName[] high;
+    private final TypeName[] low;
+    private final TypeName[] none;
 
-    Type(TypeName[] resist, TypeName[] weak) {
-        this.resistances = resist;
-        this.weaknesses = weak;
-        this.immunities = new TypeName[] {};
+    TypeA(TypeName[] resist, TypeName[] weak) {
+        this.high = resist;
+        this.low = weak;
+        this.none = new TypeName[] {};
     }
 
-    Type(TypeName[] resist, TypeName[] weak, TypeName[] immune) {
-        this.resistances = resist;
-        this.weaknesses = weak;
-        this.immunities = immune;
+    TypeA(TypeName[] high, TypeName[] low, TypeName[] none) {
+        this.high = high;
+        this.low = low;
+        this.none = none;
     }
 
     public TypeName toTypeName() { return TypeName.valueOf(this.name()); }
-    public TypeName[] getResistances() { return this.resistances; }
-    public TypeName[] getWeaknesses() { return this.weaknesses; }
-    public TypeName[] getImmunities() { return this.immunities; }
+    public TypeName[] getHighs() { return this.high; }
+    public TypeName[] getLows() { return this.low; }
+    public TypeName[] getNones() { return this.none; }
 }

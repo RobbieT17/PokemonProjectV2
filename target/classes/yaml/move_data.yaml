@@ -1360,6 +1360,245 @@ moves:
   pp: 10
   pow: 75
 
+- id: 921
+  name: Computer Slam
+  type: Digital
+  category: Physical
+  pp: 10
+  pow: 75
+  addEffects:
+    statChange:
+      self: true
+      chance: 10
+      stats:
+        atk: 1
+
+- id: 922
+  name: Hard Driver
+  type: Digital
+  category: Physical
+  pp: 15
+
+- id: 923
+  name: Protocol Punch
+  type: Digital
+  category: Physical
+  pp: 20
+  pow: 70
+
+- id: 924
+  name: RAM Rush
+  type: Digital
+  category: Physical
+  pp: 10
+  pow: 50
+
+- id: 925
+  name: Return Zero
+  type: Digital
+  category: Physical
+  pp: 20
+  pow: 70
+  addEffects:
+    switchOut:
+      self: true
+
+- id: 926
+  name: Shutdown
+  type: Digital
+  category: Physical
+  pp: 10
+  pow: 120
+  addEffects:
+    statChange:
+      self: true
+      stats:
+        atk: -2
+
+- id: 927
+  name: Backspace
+  type: Digital
+  category: Special
+  pp: 15
+  pow: 60
+  priority: -6
+  addEffects:
+    switchOut:
+      self: false
+
+- id: 928
+  name: Cyberwave
+  type: Digital
+  category: Special
+  pp: 10
+  pow: 90
+  target: All-Adjacent
+
+- id: 929
+  name: Data Breach
+  type: Digital
+  category: Special
+  pp: 10
+  pow: 50
+  acc: 95
+  crit: 1.0
+
+- id: 930
+  name: Debugger
+  type: Digital
+  category: Special
+  pp: 15
+  pow: 80
+  acc: 90
+
+
+- id: 931
+  name: Download Drain
+  type: Digital
+  category: Special
+  pp: 10
+  pow: 60
+  addEffects:
+    lifeSteal:
+      percent: 100
+
+- id: 932
+  name: Fatal Error
+  type: Digital
+  category: Special
+  pp: 5
+  pow: 150
+  acc: 95
+  addEffects: 
+    charge:
+      effect: Recharge
+
+- id: 933
+  name: Glitch
+  type: Digital
+  category: Special
+  pp: 20
+  pow: 20
+  acc: 90
+  addEffects:
+    conditionChange:
+      effect: Glitch 
+
+- id: 934
+  name: Iteration Rush
+  type: Digital
+  category: Special
+  pp: 10
+  pow: 15
+  contact: true
+  addEffects:
+    charge:
+      effect: Rollout
+
+- id: 935
+  name: Malware
+  type: Digital
+  category: Special
+  pp: 5
+  pow: 100
+  acc: 80
+
+- id: 936
+  name: Ping Pointer
+  type: Digital
+  category: Special
+  pp: 10
+  pow: 70
+  acc: 101
+
+- id: 937
+  name: System Crash
+  type: Digital
+  category: Special
+  pp: 5
+  pow: 250
+
+- id: 938
+  name: Trojan Horse
+  type: Digital
+  category: Special
+  pp: 15
+  pow: 100
+  addEffects:
+    charge:
+      effect: Charge
+    statChange:
+      stats:
+        spDef: -2
+
+- id: 939
+  name: Allow Cookies
+  type: Digital
+  category: Status
+  pp: 10
+  target: Self
+  addEffects:
+    hazard: 
+      effect: Cookies
+
+- id: 940
+  name: Antivirus
+  type: Digital
+  category: Status
+  pp: 20
+  target: Self
+  addEffects:
+    statChange:
+      stats:
+        def: 1
+        spDef: 1
+
+- id: 941
+  name: MF Authentication
+  type: Digital
+  category: Status
+  pp: 5
+
+- id: 942
+  name: Ciphertext
+  type: Digital
+  category: Status
+  pp: 15
+
+- id: 943
+  name: Cloud Sync
+  type: Digital
+  category: Status
+  target: Self
+  pp: 5
+
+- id: 944
+  name: Data Corruption 
+  type: Digital
+  category: Status
+  pp: 10
+  acc: 90
+
+- id: 945
+  name: Encryption
+  type: Digital
+  category: Status
+  pp: 10
+  target: Self
+  addEffects:
+    conditionChange:
+      effect: Encryption
+
+- id: 946
+  name: Error Correction
+  type: Digital
+  category: Status
+  pp: 10
+  target: Self
+
+    
+
+
 - id: 964
   name: Infect
   type: Zombie

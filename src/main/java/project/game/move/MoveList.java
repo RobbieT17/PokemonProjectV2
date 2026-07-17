@@ -4,6 +4,8 @@ import project.game.battle.BattleLog;
 import project.game.battle.Weather.WeatherEffect;
 import project.game.event.EventManager;
 import project.game.exceptions.MoveInterruptedException;
+import project.game.move.Move.MoveCategory;
+import project.game.move.moveactions.MoveActionAccuracy;
 import project.game.move.moveactions.MoveActionAttack;
 import project.game.move.moveactions.MoveActionBracing;
 import project.game.move.moveactions.MoveActionChangeCondition;
@@ -12,7 +14,10 @@ import project.game.move.moveactions.MoveActionCharge;
 import project.game.move.moveactions.MoveActionSemiImmuneState;
 import project.game.pokemon.Pokemon;
 import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;
+import project.game.pokemon.stats.StatPoint;
+import project.game.pokemon.stats.Type;
 import project.game.processors.AdditionalEffectsProcessor;
+import project.game.processors.MoveProcessor;
 import project.game.utility.RandomValues;
 
 public class MoveList {
@@ -25,7 +30,41 @@ public class MoveList {
         return 0;
     }
 
-    
+    public static int cloudSync(EventManager e) {
+        int[] stats = new int[7];
+
+        switch (e.data.battleData.getCurrenWeather().getWeatherEffect()) {
+            case WeatherEffect.Sunny -> stats[0] = 2; // Attack
+            case WeatherEffect.Sandstorm -> stats[1] = 2; // Defense
+            case WeatherEffect.Rain -> stats[2] = 2; // Sp. Atk
+            case WeatherEffect.Hail -> stats[3] = 2; // Sp. Def
+            case WeatherEffect.Clear -> stats[4] = 2; // Speed
+            default -> throw new IllegalStateException("Invalid weather id");  
+        }
+
+        MoveActionChangeStat.changeStats(e, stats);
+
+        return 0;
+    }
+
+    public static int dataCorruption(EventManager e) {
+        MoveActionAccuracy.rollForAccuracy(e);
+
+        Pokemon t = e.data.attackTarget;
+        for (StatPoint stat : t.getStats()) {
+            stat.setStage(stat.getStage() * -1);
+        }
+
+        BattleLog.add("%s's stats were inverted!", t);
+        return 0;
+    }
+
+    public static int debugger(EventManager e) {
+        e.data.invertedType = Type.Bug;
+        MoveActionAttack.attackTarget(e);
+        
+        return 0;
+    }
 
     public static int earthquake(EventManager e) {
         if (e.data.attackTarget.getConditions().hasKey(StatusConditionID.Dig_State)) {
@@ -37,6 +76,32 @@ public class MoveList {
 
     public static int endure(EventManager e) {
         MoveActionBracing.pokemonProtects(e, e.data.user.getConditions().getEndure(), e.data.user + " braced itself!");
+        return 0;
+    }
+
+    public static int errorCorrection(EventManager e) {
+        Pokemon p = e.data.user;
+        Move lastMove = p.getLastMove();
+        if (lastMove == null || lastMove.getMoveID() == 946) {
+            BattleLog.add(Move.FAILED);
+            return 0;
+        }
+
+        if (lastMove.isCategory(MoveCategory.Status)) {
+            lastMove.perfectAccuracy();
+        }
+        else {
+            lastMove.changePowerByPercent(150);
+        }
+
+        // Sets new move
+        p.setMoveSelected(lastMove);
+
+        BattleLog.add("%s used %s!", p, lastMove);
+        
+        EventManager newE = new EventManager(e.data.battleData, p);
+        new MoveProcessor(newE).process(); 
+
         return 0;
     }
 
@@ -56,8 +121,6 @@ public class MoveList {
         MoveActionAttack.attackTarget(e);
         return 0;
     }
-
-    
 
     public static int fakeOut(EventManager e) {
         if (!e.data.user.isFirstRound()) {
@@ -137,8 +200,38 @@ public class MoveList {
         return 0;
     }
 
+    public static int malware(EventManager e) {
+        MoveActionAttack.attackTarget(e);
+
+        int[] stats = new int[7];
+        int random = RandomValues.generateInt(0, 6);
+
+        stats[random] = -2;
+
+        MoveActionChangeStat.changeStats(e, stats);
+        return 0;
+    }
+
     public static int protect(EventManager e) {
         MoveActionBracing.pokemonProtects(e, e.data.user.getConditions().getProtect(), e.data.user + " protected itself!");
+        return 0;
+    }
+
+    public static int ramRush(EventManager e) {
+        MoveActionAttack.attackTarget(e);
+
+        int[] stats = new int[7];
+        int random = RandomValues.generateInt(0, 2);
+        
+        // Increase stat based on random value
+        switch (random) {
+            case 0 -> stats[0] = 1; // Attack
+            case 1 -> stats[4] = 1; // Speed
+            case 2 -> stats[5] = 1; // Accuracy
+            default -> throw new IllegalStateException("Random value of bounds");
+        }
+
+        MoveActionChangeStat.changeStats(e, stats);
         return 0;
     }
 
@@ -169,7 +262,8 @@ public class MoveList {
         BattleLog.add("%s used %s!", a, randomMove);
         
         EventManager newE = new EventManager(e.data.battleData, a);
-        Movedex.processMove(newE);
+        new MoveProcessor(newE).process();
+
         return 0;
     }
 
