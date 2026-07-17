@@ -4,6 +4,7 @@ import project.game.battle.BattleLog;
 import project.game.event.EventData;
 import project.game.event.EventManager;
 import project.game.exceptions.MoveEndedEarlyException;
+import project.game.move.Move.MoveStatus;
 import project.game.move.MovePhase;
 import project.game.pokemon.Pokemon;
 import project.game.pokemon.effects.StatusConditionManager;
@@ -89,8 +90,8 @@ public interface MoveActionSemiImmuneState {
         }
 
         p.getMoveSelected().getPhase().reset();
+        p.getMoveSelected().setStatus(MoveStatus.Failed);
         p.getConditions().removeCondition(data.immuneStateChange);
-        p.getConditions().setInterrupted(true);
         p.resetMove();
     }
     

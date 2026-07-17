@@ -15,7 +15,6 @@ public class PokemonConditions {
     private boolean immobilized; // Pokemon cannot act or dodge attacks
     private boolean switchedIn; // Pokemon first enters the field
     private boolean hasMoved; // Pokemon has moved during the round
-    private boolean interrupted; // Pokemon's last move was interrupted
     private boolean recharge; // Pokemon has to recharge before moving again
     private boolean tookDamage; // Pokemon took damage during the round
 
@@ -100,7 +99,6 @@ public class PokemonConditions {
     public void setImmobilized(boolean i) {this.immobilized = i;}
     public void setSwitchedIn(boolean s) {this.switchedIn = s;}
     public void setHasMoved(boolean h) {this.hasMoved = h;}
-    public void setInterrupted(boolean i) {this.interrupted = i;}
     public void setRecharge(boolean r) {this.recharge = r;}
     public void setTookDamage(boolean d) {this.tookDamage = d;}
     public void setProtect(Protection p) {this.protect = p;}
@@ -112,7 +110,6 @@ public class PokemonConditions {
     public boolean isFainted() {return this.fainted;}
     public boolean isSwitchedIn() {return this.switchedIn;}
     public boolean hasMoved() {return this.hasMoved;}
-    public boolean isInterrupted() {return this.interrupted;}
     public boolean isRecharge() {return this.recharge;}
     public boolean tookDamage() {return this.tookDamage;}
 

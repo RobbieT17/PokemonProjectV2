@@ -9,6 +9,7 @@ public class Move {
 // Class Variables
 public enum MoveTarget {Self, Single_Adjacent, Single_Ally, Single_Foe, All_Adjacent, All_Allies, All_Foes, All};
 public enum MoveCategory {Physical, Special, Status};
+public enum MoveStatus {Success, Failed};
 
     // Message when a move fails
     public static final String FAILED = "But it failed!";
@@ -39,6 +40,7 @@ public enum MoveCategory {Physical, Special, Status};
     
     private final MovePhase phase; // The current phase the move is in (for moves that take multiple turns to execute)
     private boolean disabled; // Move is currently unusable
+    private MoveStatus status; // True if the move used/failed
 
 // Constructor
     // A move that is used by a Pokemon in battle
@@ -99,6 +101,10 @@ public enum MoveCategory {Physical, Special, Status};
         return this.moveTarget == t;
     }
 
+    public boolean isStatus(MoveStatus s) {
+        return this.status == s;
+    }
+
     // Displays the move's name, type, and PP available
     public String moveStats() {
         return new StringBuilder()
@@ -141,7 +147,8 @@ public enum MoveCategory {Physical, Special, Status};
     public void perfectAccuracy() {this.accuracy.setPower(Move.ALWAYS_HITS);}
     public void enable() {this.disabled = false;}
     public void disable() {this.disabled = true;}
-    
+    public void setStatus(MoveStatus s) {this.status = s;}
+
 // Getters
     public int getMoveID() {return this.moveID;}
     public String getMoveName() {return this.moveName;}
@@ -158,5 +165,6 @@ public enum MoveCategory {Physical, Special, Status};
     public AdditonalEffects getAdditionalEffects() {return this.additonEffects;}
     public MovePhase getPhase() {return this.phase;}
     public boolean isDisabled() {return this.disabled;}
+    public MoveStatus hasFailed() {return this.status;}
 
 }

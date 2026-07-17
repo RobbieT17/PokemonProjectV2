@@ -5,6 +5,7 @@ import project.game.battle.Weather.WeatherEffect;
 import project.game.event.EventManager;
 import project.game.exceptions.MoveInterruptedException;
 import project.game.move.Move.MoveCategory;
+import project.game.move.Move.MoveStatus;
 import project.game.move.moveactions.MoveActionAccuracy;
 import project.game.move.moveactions.MoveActionAttack;
 import project.game.move.moveactions.MoveActionBracing;
@@ -79,12 +80,13 @@ public class MoveList {
         return 0;
     }
 
+    // 1.5x power for last attack used if it failed (Perfect accuracy if last move used was a status move)
     public static int errorCorrection(EventManager e) {
         Pokemon p = e.data.user;
         Move lastMove = p.getLastMove();
-        if (lastMove == null || lastMove.getMoveID() == 946) {
-            BattleLog.add(Move.FAILED);
-            return 0;
+        
+        if (lastMove == null || lastMove.isStatus(MoveStatus.Success) || lastMove.getMoveID() == 946) {
+            throw new MoveInterruptedException("But it failed!");
         }
 
         if (lastMove.isCategory(MoveCategory.Status)) {
@@ -286,7 +288,7 @@ public class MoveList {
     }
 
     public static int stompingTantrum(EventManager e) {
-        if (e.data.user.getConditions().isInterrupted()) {
+        if (e.data.user.getLastMove().isStatus(MoveStatus.Failed)) {
             e.data.moveUsed.doublePower();
         }
         MoveActionAttack.attackTarget(e);
@@ -314,7 +316,7 @@ public class MoveList {
     }
 
     public static int temperFlare(EventManager e) {
-        if (e.data.user.getConditions().isInterrupted()) {
+        if (e.data.user.getLastMove().isStatus(MoveStatus.Failed)) {
             e.data.moveUsed.doublePower();
         }
 

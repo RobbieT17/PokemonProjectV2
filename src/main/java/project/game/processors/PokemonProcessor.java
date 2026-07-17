@@ -8,6 +8,7 @@ import project.game.event.GameEvents.EventID;
 import project.game.exceptions.MoveEndedEarlyException;
 import project.game.exceptions.MoveInterruptedException;
 import project.game.exceptions.PokemonCannotActException;
+import project.game.move.Move.MoveStatus;
 import project.game.pokemon.Pokemon;
 
 public class PokemonProcessor implements Processor {
@@ -27,7 +28,7 @@ public class PokemonProcessor implements Processor {
         eventManager.notifyUserPokemon(EventID.STATUS_BEFORE);
     }
 
-    private void updateInterruptedMoveEvents() {
+    private void updateEventsForFailedMoves() {
         EventManager eventManager = new EventManager(this.battleData, this.user);
         eventManager.notifyUserPokemon(EventID.MOVE_INTERRUPTED);
     }
@@ -56,7 +57,7 @@ public class PokemonProcessor implements Processor {
     /**
      * Uses the move selected on each target.
      */
-    private void useTurn(){
+    private MoveStatus useTurn(){
         boolean logMessage = true;
         int interruptCount = 0; 
 
@@ -80,8 +81,10 @@ public class PokemonProcessor implements Processor {
 
         // Move interrupt by all move targets
         if (interruptCount >= this.user.getTargetPositions().length) {
-            throw new MoveInterruptedException();
+            return MoveStatus.Failed;
         }
+
+        return MoveStatus.Success;
     }
 
     /**
@@ -126,21 +129,24 @@ public class PokemonProcessor implements Processor {
         
         try {
             this.updateBeforeMoveEvents(); // Status condition checks
-            this.useTurn();
-            this.user.getConditions().setInterrupted(false); // Successful Move
+            MoveStatus status = this.useTurn();
+
+            this.user.getMoveSelected().setStatus(status);
+
+            if (status != MoveStatus.Success) {
+                this.updateEventsForFailedMoves();
+                this.user.getMoveSelected().getPhase().reset();
+            }
         } 
         catch (MoveEndedEarlyException e) { // Move ended early, but considered successful
             BattleLog.add(e.getMessage());
-            this.user.getConditions().setInterrupted(false);
+            this.user.getMoveSelected().setStatus(MoveStatus.Success);
         }
-        catch (MoveInterruptedException | PokemonCannotActException e) { // Move was interrupt and unsuccessful
+        catch (PokemonCannotActException e) { // Move was interrupt and unsuccessful
             BattleLog.add(e.getMessage());
-
-            this.updateInterruptedMoveEvents();
-            
+   
             // Sets interrupt value to true, resets phase to 0
             this.user.getMoveSelected().getPhase().reset();
-            this.user.getConditions().setInterrupted(true);   
         }
 
         this.updateAfterMoveEvents();
