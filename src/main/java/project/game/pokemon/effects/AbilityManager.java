@@ -1,40 +1,18 @@
 package project.game.pokemon.effects;
 
-import java.util.function.Function;
-
 import project.game.battle.BattleLog;
 import project.game.battle.Weather.WeatherEffect;
+import project.game.event.EventManager;
 import project.game.event.GameEvents.EventID;
 import project.game.exceptions.MoveInterruptedException;
 import project.game.exceptions.PokemonFaintedException;
 import project.game.move.Move;
+import project.game.move.moveactions.MoveActionHealthRestore;
 import project.game.pokemon.Pokemon;
+import project.game.pokemon.effects.Ability.AbilityID;
 import project.game.pokemon.stats.Type;
 
 public interface AbilityManager {
-
-    public enum AbilityID {
-        All_Or_Nothing(AbilityManager::allOrNothing),
-        Blaze(AbilityManager::blaze),
-        Chlorophyll(AbilityManager::chlorophyll),
-        Overgrow(AbilityManager::overgrow),
-        Rain_Dish(AbilityManager::rainDish),
-        Simple(AbilityManager::simple),
-        Solar_Power(AbilityManager::solarPower),
-        Torrent(AbilityManager::torrent),
-        Water_Absorb(AbilityManager::waterAbsorb);
-
-        private final Function<Pokemon, Ability> func;
-
-        AbilityID(Function<Pokemon, Ability> func) {
-            this.func = func;
-        }    
-
-        public Ability apply(Pokemon p) {
-            return this.func.apply(p);
-        }
-
-    }
 
     /**
      * Pokemon move accuracy is decreased by 30% but all attack move
@@ -72,7 +50,7 @@ public interface AbilityManager {
         p.getEvents().addEventListener(flags[0], name , e -> {
             Move move = e.moveUsed;
             if (move.isType(Type.Fire) && p.isHpLessThanPercent(33)) {
-                e.otherMoveMods *= 1.5;
+                e.otherDamageMods *= 1.5;
                 BattleLog.add("Blaze increased the power of %s's Fire-Type attack!", p);
             } 
         });
@@ -102,7 +80,7 @@ public interface AbilityManager {
         p.getEvents().addEventListener(flags[0], name, e -> {
             Move move = e.moveUsed;
             if (move.isType(Type.Grass) && p.isHpLessThanPercent(33)) {
-                e.otherMoveMods *= 1.5;
+                e.otherDamageMods *= 1.5;
                 BattleLog.add("Overgrow increased the power of %s's Grass-Type attack!", p);
             }         
         });
@@ -117,7 +95,7 @@ public interface AbilityManager {
 
         p.getEvents().addEventListener(flags[0], name, e -> {
             if (e.battleData.isCurrentWeather(WeatherEffect.Rain)) {
-                p.restoreHpPercentMaxHP(6.25, " from its Rain Dish");
+                MoveActionHealthRestore.applyHpRestorePercent(new EventManager(e.battleData, p), 6.25, " from its Rain Dish");
             }
         });
 
@@ -173,7 +151,7 @@ public interface AbilityManager {
         p.getEvents().addEventListener(flags[0], name, e -> {
             Move move = e.moveUsed;
             if (move.isType(Type.Water) && p.isHpLessThanPercent(33)) {
-                e.otherMoveMods *= 1.5; 
+                e.otherDamageMods *= 1.5; 
                 BattleLog.add("Torrent increased the power of %s's Water-Type attack!", p);
             }        
         });
@@ -190,8 +168,7 @@ public interface AbilityManager {
             if (e.moveUsed.isType(Type.Water)) {
                 e.moveEffectiveness = 0;
                 BattleLog.add("%s's Water Absorb soaked up the water!", p);
-                p.restoreHpPercentMaxHP(25, "");
-
+                MoveActionHealthRestore.applyHpRestorePercent(new EventManager(e.battleData, p), 25, "");
                 throw new MoveInterruptedException();
             }
         });

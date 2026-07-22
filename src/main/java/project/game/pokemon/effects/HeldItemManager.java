@@ -1,40 +1,18 @@
 package project.game.pokemon.effects;
 
-import java.util.function.Function;
-
 import project.game.battle.BattleLog;
+import project.game.event.EventManager;
 import project.game.event.GameEvents.EventID;
 import project.game.move.Move;
 import project.game.move.Move.MoveCategory;
+import project.game.move.moveactions.MoveActionHealthRestore;
 import project.game.pokemon.Pokemon;
+import project.game.pokemon.effects.HeldItem.HeldItemID;
 import project.game.pokemon.stats.Type;
 import project.game.utility.Counter;
 
 public interface HeldItemManager {
 
-    public enum HeldItemID {
-        Assault_Vest(HeldItemManager::assaultVest),
-        Black_Sludge(HeldItemManager::blackSludge),
-        Bomb_Surprise(HeldItemManager::bombSurprise),
-        Choice_Band(HeldItemManager::choiceBand),
-        Choice_Scarf(HeldItemManager::choiceScarf),
-        Choice_Specs(HeldItemManager::choiceSpecs),
-        Leftovers(HeldItemManager::leftovers),
-        Muscle_Band(HeldItemManager::muscleBand),
-        Rocky_Helmet(HeldItemManager::rockyHelmet),
-        Wise_Glasses(HeldItemManager::wiseGlasses);
-
-        private final Function<Pokemon, HeldItem> func;
-
-        HeldItemID(Function<Pokemon, HeldItem> func) {
-            this.func = func;
-        }    
-
-        public HeldItem apply(Pokemon p) {
-            return this.func.apply(p);
-        }
-    }
-    
     // Increases Pokemon's Sp.Def by 50% but disables Status Move (except Me First)
     public static HeldItem assaultVest(Pokemon p) {
         String name = HeldItemID.Assault_Vest.name();
@@ -61,7 +39,7 @@ public interface HeldItemManager {
         p.getEvents().addEventListener(flags[0], name, e -> {
             double percent = 6.25;
             if (p.isType(Type.Poison)) {
-                p.restoreHpPercentMaxHP(percent, " from its Black Sludge");
+                MoveActionHealthRestore.applyHpRestorePercent(new EventManager(e.battleData, p), percent, " from its Black Sludge");
             }
             else {
                p.takeDamagePercentMaxHP(percent, " from its Black Sludge"); 
@@ -155,7 +133,10 @@ public interface HeldItemManager {
         String name = HeldItemID.Leftovers.name();
         EventID[] flags = new EventID[] {EventID.END_OF_ROUND};
 
-        p.getEvents().addEventListener(flags[0], name, e -> p.restoreHpPercentMaxHP(6.25, " from its Leftovers"));
+        p.getEvents().addEventListener(flags[0], name, e -> {
+                MoveActionHealthRestore.applyHpRestorePercent(new EventManager(e.battleData, p), 6.25, " from its Leftovers");
+            }
+        );
 
         return new HeldItem(p, name, flags);
 	}
@@ -167,7 +148,7 @@ public interface HeldItemManager {
 
         p.getEvents().addEventListener(flags[0], name, e -> {
             if (e.moveUsed.isCategory(MoveCategory.Physical)) {
-                e.otherMoveMods *= 1.1;
+                e.otherDamageMods *= 1.1;
             }
         });
 
@@ -180,7 +161,7 @@ public interface HeldItemManager {
         EventID[] flags = new EventID[] {EventID.DEF_MOVE_MAKES_CONTACT};
 
         p.getEvents().addEventListener(flags[0], name, e -> {
-            e.user.takeDamagePercentMaxHP(100.0 / 6.0, String.format(" from %s's Rocky Helmet", p));
+            e.attackUser.takeDamagePercentMaxHP(100.0 / 6.0, String.format(" from %s's Rocky Helmet", p));
         });
 
         return new HeldItem(p, name, flags);
@@ -193,7 +174,7 @@ public interface HeldItemManager {
 
         p.getEvents().addEventListener(flags[0], name, e -> {
             if (e.moveUsed.isCategory(MoveCategory.Special)) {
-                e.otherMoveMods *= 1.1;
+                e.otherDamageMods *= 1.1;
             }
         });
 

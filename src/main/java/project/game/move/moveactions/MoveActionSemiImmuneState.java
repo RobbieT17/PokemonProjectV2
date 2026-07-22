@@ -7,8 +7,8 @@ import project.game.exceptions.MoveEndedEarlyException;
 import project.game.move.Move.MoveStatus;
 import project.game.move.MovePhase;
 import project.game.pokemon.Pokemon;
+import project.game.pokemon.effects.StatusCondition.StatusConditionID;
 import project.game.pokemon.effects.StatusConditionManager;
-import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;
 import project.game.pokemon.effects.StatusContext;
 
 public interface MoveActionSemiImmuneState {
@@ -35,10 +35,10 @@ public interface MoveActionSemiImmuneState {
     private static void enterState(EventManager eventManager, StatusConditionID state) {
         EventData data = eventManager.data;
         Pokemon p = data.effectTarget;
-        data.immuneStateChange = state;
+        StatusContext c = new StatusContext(state, p);
 
-        StatusContext c = new StatusContext(p);
         c.move = eventManager.data.moveUsed;
+        data.statusContext = c;
 
         switch (state) {
             case StatusConditionID.Fly_State -> MoveActionSemiImmuneState.flyState(c);
@@ -47,7 +47,7 @@ public interface MoveActionSemiImmuneState {
             default -> throw new IllegalArgumentException("Unexpected value: " + state);
         }
 
-        c.target.getConditions().addCondition(StatusConditionManager.semiImmune(c));
+        c.target.getConditions().addCondition(StatusConditionManager.addSemiImmune(c));
     }
 
      // Semi-Immune State Function
@@ -66,7 +66,7 @@ public interface MoveActionSemiImmuneState {
         }
         else if (phase.equals(1)){ // Attacks the target
             // Removes immune state
-            eventManager.data.user.getConditions().removeCondition(StatusConditionID.Semi_Immune);
+            eventManager.data.attackUser.getConditions().removeCondition(StatusConditionID.Semi_Immune);
             return;
         } 
         
@@ -82,16 +82,16 @@ public interface MoveActionSemiImmuneState {
         EventData data  = eventManager.data;
         Pokemon p = data.attackTarget;
         
-        data.immuneStateChange = StatusConditionID.No_Invul;
-        data.failMessage = message;
+        data.statusContext = new StatusContext(state, p);
+        data.message = message;
     
-        if (p.getConditions().isFainted() || !p.getConditions().hasKey(data.immuneStateChange)) {
+        if (p.getConditions().isFainted() || !p.getConditions().hasKey(data.statusContext.id)) {
             return;
         }
 
         p.getMoveSelected().getPhase().reset();
         p.getMoveSelected().setStatus(MoveStatus.Failed);
-        p.getConditions().removeCondition(data.immuneStateChange);
+        p.getConditions().removeCondition(data.statusContext.id);
         p.resetMove();
     }
     

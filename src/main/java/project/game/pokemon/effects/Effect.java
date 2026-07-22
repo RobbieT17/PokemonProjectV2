@@ -1,6 +1,7 @@
 package project.game.pokemon.effects;
 
 import project.game.event.GameEvents.EventID;
+import project.game.event.Observer;
 import project.game.pokemon.Pokemon;
 
 public abstract class Effect {
@@ -20,6 +21,14 @@ public abstract class Effect {
     @Override
     public String toString() {
         return this.effectName.replaceAll("[_ ]", "-");
+    }
+
+    public static EventID[] setFlags(EventID... args) {
+      return args;
+    }
+
+    public static Observer[] setObservers(Observer... args) {
+        return args;
     }
 
 // Getters

@@ -8,6 +8,7 @@ import project.game.event.GameEvents.EventID;
 import project.game.exceptions.MoveEndedEarlyException;
 import project.game.exceptions.MoveInterruptedException;
 import project.game.exceptions.PokemonCannotActException;
+import project.game.exceptions.PokemonFaintedException;
 import project.game.move.Move.MoveStatus;
 import project.game.pokemon.Pokemon;
 
@@ -102,13 +103,9 @@ public class PokemonProcessor implements Processor {
         if (this.user.getTargetPositions() == null) {
             return false;
         }
- 
+        
         // Pokemon will not act if any of these conditions are met.
-        if (this.user.getConditions().isFainted()) {
-            return false;
-        }
-
-        return true;
+        return !this.user.getConditions().isFainted();
     }
 
     /**
@@ -144,9 +141,12 @@ public class PokemonProcessor implements Processor {
         }
         catch (PokemonCannotActException e) { // Move was interrupt and unsuccessful
             BattleLog.add(e.getMessage());
-   
+
             // Sets interrupt value to true, resets phase to 0
             this.user.getMoveSelected().getPhase().reset();
+        }
+        catch (PokemonFaintedException e) {
+            return;
         }
 
         this.updateAfterMoveEvents();

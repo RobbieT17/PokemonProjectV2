@@ -20,6 +20,7 @@ public class GameEvents {
         WEATHER_EFFECT,
         SWITCH_IN,
         SWITCH_OUT,
+        RESTORE_HEALTH,
         ATK_MOVE_HITS,
         ATK_STAT_CHANGE,
         ATK_STATUS_CONDITION_CHANGE,

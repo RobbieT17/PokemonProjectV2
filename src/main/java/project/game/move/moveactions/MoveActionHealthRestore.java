@@ -1,21 +1,45 @@
 package project.game.move.moveactions;
 
+import project.game.battle.BattleLog;
 import project.game.event.EventData;
 import project.game.event.EventManager;
-import project.game.exceptions.MoveInterruptedException;
+import project.game.event.GameEvents.EventID;
 import project.game.pokemon.Pokemon;
 
 public interface MoveActionHealthRestore extends MoveAction {
-        // Restores a percentage of a Pokemon's maximum HP
-    public static void restoreHp(EventManager eventManager, double percent) {
-        EventData data  = eventManager.data;
-        Pokemon p = data.attackTarget;
-        data.healPercent = percent;
 
-        if (p.getHp().atFullHP()) {
-            throw new MoveInterruptedException("But %s is already at full health!", p);
+    private static void restoreHp(EventManager eventManager) {
+        EventData data = eventManager.data;
+        Pokemon p = data.attackTarget;
+
+        eventManager.notifyAttackTargetPokemon(EventID.RESTORE_HEALTH);
+
+        p.restoreHP((int) (data.healAmount * data.percentMod));
+        BattleLog.add("%s restored %d HP%s", p, data.healAmount, data.message + "!");
+
+    }
+
+    // Restores a percentage of a Pokemon's maximum HP
+    public static void applyHpRestorePercent(EventManager eventManager, double percent, String message, boolean checkValidation) {
+        EventData data = eventManager.data;
+        Pokemon p = data.attackTarget;
+        
+        if (checkValidation && p.getHp().atFullHP()) {
+            BattleLog.add("But %s is already at full health!", p);
+            return;
         }
 
-        p.restoreHpPercentMaxHP(data.healPercent * data.percentMod , "");
+        data.message = message;
+        data.healPercent = percent;
+        data.healAmount = p.getPercentMaxHp(data.healPercent);
+
+        MoveActionHealthRestore.restoreHp(eventManager);
     }
+
+    public static void applyHpRestorePercent(EventManager eventManager, double percent, String message) {
+        MoveActionHealthRestore.applyHpRestorePercent(eventManager, percent, message, false);
+    }
+
+
+    
 }

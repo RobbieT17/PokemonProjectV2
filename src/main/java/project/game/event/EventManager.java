@@ -11,7 +11,7 @@ public class EventManager {
     public final EventData data;
 
     public EventManager(BattleData data, Pokemon user) {
-        this.data = new EventData(data, user, null, user.getMoveSelected());
+        this.data = new EventData(data, user, user, user.getMoveSelected());
     }
   
     public EventManager(BattleData data, Pokemon user, Pokemon target) {
@@ -23,7 +23,7 @@ public class EventManager {
      */
     public void logFailMessage() {
         if (this.data.moveUsed.isCategory(MoveCategory.Status)) {
-            BattleLog.add(this.data.failMessage);
+            BattleLog.add(this.data.message);
         }
     }
 
@@ -32,7 +32,7 @@ public class EventManager {
      * @param id Event ID
      */
     public void notifyUserPokemon(EventID id) {
-        this.data.user.getEvents().updateEvent(id, this.data);
+        this.data.attackUser.getEvents().updateEvent(id, this.data);
     }
 
     /**
@@ -52,7 +52,7 @@ public class EventManager {
     }
 
     public void updateEventMaps() {
-        this.data.user.getEvents().updateEventMaps();
+        this.data.attackUser.getEvents().updateEventMaps();
     }
 
 }

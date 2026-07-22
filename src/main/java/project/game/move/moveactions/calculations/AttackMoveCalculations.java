@@ -96,7 +96,7 @@ public interface AttackMoveCalculations {
         eventManager.notifyUserPokemon(EventID.ATK_DAMAGE_MULTIPLIER);
         eventManager.notifyAttackTargetPokemon(EventID.DEF_DAMAGE_MULTIPLIER);
         
-        Pokemon attacker = data.user;
+        Pokemon attacker = data.attackUser;
         Pokemon defender = data.attackTarget;
         Move move = data.moveUsed;
         boolean isCritical = data.criticalHit;
@@ -106,7 +106,7 @@ public interface AttackMoveCalculations {
         double weather = weatherBonus(data);
         double crit = isCritical ? 1.5 : 1.0;
         double random = random();
-        double addition = data.otherMoveMods;
+        double addition = data.otherDamageMods;
 
         double attack = move.getCategory().equals(MoveCategory.Special) 
         ? calculateAttack(attacker.getSpecialAttack(), isCritical) 

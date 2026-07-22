@@ -9,7 +9,7 @@ import project.game.utility.Protection;
 public interface  MoveActionBracing extends MoveAction {
      public static void pokemonProtects(EventManager eventManager, Protection b, String success) {
         EventData data  = eventManager.data;
-        Pokemon p = data.user;
+        Pokemon p = data.attackUser;
         data.protectionType = b;
 
         if (p.getMoveSelected().equals(p.getLastMove())) b.set();
@@ -17,6 +17,6 @@ public interface  MoveActionBracing extends MoveAction {
             b.reset();
             b.set();   
         }
-        data.failMessage = b.isActive() ? success : Move.FAILED;
+        data.message = b.isActive() ? success : Move.FAILED;
     }
 }

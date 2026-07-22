@@ -93,6 +93,15 @@ public enum MoveStatus {Success, Failed};
         return this.moveType == t;
     }
 
+    public boolean isType(Type... args) {
+        for (Type t : args) {
+            if (this.isType(t)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean isCategory(MoveCategory c) {
         return this.category == c;
     }

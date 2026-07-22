@@ -9,8 +9,8 @@ import project.game.move.Move;
 import project.game.player.PokemonTrainer;
 import project.game.pokemon.effects.Ability;
 import project.game.pokemon.effects.HeldItem;
-import project.game.pokemon.effects.AbilityManager.AbilityID;
-import project.game.pokemon.effects.HeldItemManager.HeldItemID;
+import project.game.pokemon.effects.Ability.AbilityID;
+import project.game.pokemon.effects.HeldItem.HeldItemID;
 import project.game.pokemon.stats.HealthPoints;
 import project.game.pokemon.stats.StatPoint;
 import project.game.pokemon.stats.Type;
@@ -176,11 +176,9 @@ public class Pokemon {
         this.hp.change(value);
     }
 
-     // Takes damage equal to a percent of max HP
-     public void restoreHpPercentMaxHP(double percent, String message) {
-        int heal = (int) (this.hp.getMaxHealthPoints() * percent * 0.01);
-        BattleLog.add("%s restored %d HP%s", this, heal, message + "!");
-        this.restoreHP(heal);
+     // Heals damage equal to a percent of max HP
+     public int getPercentMaxHp(double percent) {
+        return (int) (this.hp.getMaxHealthPoints() * percent * 0.01);
     }
 
     @Override
@@ -190,7 +188,6 @@ public class Pokemon {
     public String toString() {
         return this.nickname != null ? this.nickname : this.pokemonName;
     }
-
 
     /**
      * Checks if this is the first round since switched in
@@ -229,14 +226,21 @@ public class Pokemon {
         
     }
 
-    public void resetStatChanges() {
+    public void resetModifiers() {
         for (StatPoint stat : this.stats) {
             stat.resetMod();
         }
     }
 
+    public void resetStatChanges() {
+        for (StatPoint stat : this.stats) {
+            stat.setStage(0);
+        }
+    }
+
     public void endOfRoundReset() {  
         this.resetMove();
+        this.resetModifiers();
 
         this.conditions.setTookDamage(false);
         this.conditions.setHasMoved(false);
@@ -279,6 +283,20 @@ public class Pokemon {
 
     public boolean isHpLessThanPercent(double percent) {
         return this.hp.getCurrentHealthPoints() / (double) this.hp.getMaxHealthPoints() < 0.01 * percent; 
+    }
+
+    /**
+     * Check if the Pokemon's target is null. In this case it may imply
+     * the Pokemon's target fainted before the user could use its move
+     * @return true if a null target is found
+     */
+    public boolean hasNullTarget() {
+        for (BattlePosition bp : this.targetPositions) {
+            if (bp.getCurrentPokemon() == null) {
+                return true;
+            }
+        }
+        return false;
     }
 
 // Setters

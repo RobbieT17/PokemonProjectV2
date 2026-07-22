@@ -1,12 +1,11 @@
 package project.game.move.moveactions;
 
-import project.game.battle.BattleLog;
 import project.game.event.EventManager;
 import project.game.exceptions.MoveEndedEarlyException;
 import project.game.exceptions.MoveInterruptedException;
 import project.game.move.MovePhase;
 import project.game.pokemon.Pokemon;
-import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;
+import project.game.pokemon.effects.StatusCondition.StatusConditionID;
 import project.game.utility.RandomValues;
 
 public interface MoveActionCharge extends MoveAction{
@@ -19,7 +18,7 @@ public interface MoveActionCharge extends MoveAction{
 
         if (phase.equals(0)) { // Sets up the charge (lasts 2 phases)
             phase.set(2);
-            throw new MoveEndedEarlyException("%s begins charging!", eventManager.data.user);
+            throw new MoveEndedEarlyException("%s begins charging!", eventManager.data.attackUser);
         }
         else if (phase.equals(1)){ // Attacks the target
             return;
@@ -31,7 +30,7 @@ public interface MoveActionCharge extends MoveAction{
     }
 
     private static void focusMove(EventManager eventManager) {
-        Pokemon p = eventManager.data.user;
+        Pokemon p = eventManager.data.attackUser;
         MovePhase phase = eventManager.data.moveUsed.getPhase();
 
         if (phase.equals(0)) { // Begins focus move (lasts 2 phases)

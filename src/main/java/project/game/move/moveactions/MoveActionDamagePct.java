@@ -11,7 +11,7 @@ public interface MoveActionDamagePct {
     // Pokemon takes damage based on some percent of the damage dealt
     public static void recoilDamage(EventManager eventManager, double percent) {
         EventData data  = eventManager.data;
-        Pokemon p = data.user;
+        Pokemon p = data.attackUser;
 
         data.recoilPercent = percent;
 
@@ -27,7 +27,7 @@ public interface MoveActionDamagePct {
 
     public static void drainHP(EventManager eventManager, double percent) {
         EventData data  = eventManager.data;
-        Pokemon p = data.user;
+        Pokemon p = data.attackUser;
         data.drainPercent = percent;
 
         if (p.getDamageDealt() == 0) {

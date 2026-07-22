@@ -34,13 +34,17 @@ public interface MoveActionAttack extends MoveAction {
 
     private static void dealDamage(EventManager eventManager) {
         EventData data = eventManager.data;
-        Pokemon attacker = data.user;
+        Pokemon attacker = data.attackUser;
         Pokemon defender = data.attackTarget;
         boolean isMultiHit = data.moveUsed.isMultiHit();
 
-        int damage = AttackMoveCalculations.calculateDamage(eventManager);
-        data.damageDealt += damage;
-        data.hitCount = 1;
+        data.damage = AttackMoveCalculations.calculateDamage(eventManager);
+        data.totalDamageDealt += data.damage;
+
+        eventManager.notifyUserPokemon(EventID.ATK_MOVE_DEALS_DAMAGE);
+        eventManager.notifyAttackTargetPokemon(EventID.DEF_MOVE_DEALS_DAMAGE);
+
+        int damage = data.damage;
 
         BattleLog.add("%s took %d damage!", defender, damage);
         BattleLog.add(!isMultiHit ? MoveEffectiveCalculations.isSuperEffective(data.moveEffectiveness) : "");
@@ -50,9 +54,6 @@ public interface MoveActionAttack extends MoveAction {
         defender.takeDamage(damage);
         defender.getConditions().setTookDamage(true);
         
-        eventManager.notifyUserPokemon(EventID.ATK_MOVE_DEALS_DAMAGE);
-        eventManager.notifyAttackTargetPokemon(EventID.DEF_MOVE_DEALS_DAMAGE);
-
         if (data.moveUsed.isContactMove()) {
             eventManager.notifyUserPokemon(EventID.ATK_MOVE_MAKES_CONTACT);
             eventManager.notifyAttackTargetPokemon(EventID.DEF_MOVE_MAKES_CONTACT);

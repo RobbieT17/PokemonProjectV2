@@ -29,7 +29,6 @@ public interface MoveEffectiveCalculations {
             if (t == type.toTypeName()) effect *= 2;
 
         for (TypeName t : p.getPokemonType().getTypeImmunities()) { // Pokemon immune to type, nullifies damage
-            // if (immunityExceptionFound(type, p)) break;
             if (t == type.toTypeName()) effect = 0;
         } 
         

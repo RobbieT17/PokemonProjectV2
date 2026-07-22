@@ -1596,8 +1596,81 @@ moves:
   pp: 10
   target: Self
 
-    
+- id: 947
+  name: Factory Reset
+  type: Digital
+  category: Status
+  pp: 5
+  target: Self
 
+- id: 948
+  name: File Copy 
+  type: Digital
+  category: Status
+  pp: 5
+
+- id: 949
+  name: File Transfer 
+  type: Digital
+  category: Status
+  pp: 5
+
+- id: 950
+  name: Firewall
+  type: Digital
+  category: Status
+  pp: 5
+  target: Self
+
+- id: 951
+  name: Hijack
+  type: Digital
+  category: Status
+  pp: 10
+
+- id: 955
+  name: Reboot
+  type: Digital
+  category: Status
+  pp: 10
+  target: Self
+  addEffects:
+    heal: 
+      percent: 100
+    charge:
+      effect: Recharge
+
+- id: 958
+  name: Telnet
+  type: Digital
+  category: Status
+  pp: 5
+  target: Single Ally
+  addEffects:
+    conditionChange:
+      effect: Link
+
+- id: 960
+  name: System Update
+  type: Digital
+  category: Status
+  pp: 15
+  target: Self
+  addEffects:
+    statChange:
+      stats:
+        spAtk: 1
+        spd: 1
+
+- id: 962
+  name: VPN
+  type: Digital
+  category: Status
+  pp: 5
+  target: Self
+  addEffects:
+    conditionChange:
+      effect: Vpn
 
 - id: 964
   name: Infect

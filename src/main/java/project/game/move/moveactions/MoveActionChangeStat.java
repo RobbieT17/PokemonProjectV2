@@ -23,14 +23,22 @@ public interface MoveActionChangeStat extends MoveAction {
             }
         
             StatPoint s = p.getStats()[i];
-            if (s.isAtHighestOrLowestStage(change)) {
-                BattleLog.add("But %s's %s won't go any %s!", p, s, (change > 0) ? "higher" : "lower");
-                data.statFailed = true;
-                continue;
-            }
-            p.getStats()[i].changeStage(change);
-            BattleLog.add("%s's %s %s%s!", p, s, (change > 0) ? "rose" : "fell", StatPoint.sizeOfChange(change));
+
+            data.statFailed = !p.getStats()[i].changeStage(change);
+            
+            MoveActionChangeStat.logStatChange(!data.statFailed, p, s, change);
+           
         }  
+    }
+
+    public static void logStatChange(boolean success, Pokemon p, StatPoint s, int change) {
+        if(success) {
+            BattleLog.add("%s's %s %s%s!", p, s, (change > 0) ? "rose" : "fell", StatPoint.sizeOfChange(change));
+        }
+        else {
+            BattleLog.add("But %s's %s won't go any %s!", p, s, (change > 0) ? "higher" : "lower");
+
+        }
     }
 
     public static void changeStats(EventManager eventManager, int[] stats, double chance) {

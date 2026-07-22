@@ -1,4 +1,4 @@
-package project.game.processors;
+ package project.game.processors;
 
 import project.data.AdditonalEffects;
 import project.data.MoveEffect;
@@ -12,7 +12,7 @@ import project.game.move.moveactions.MoveActionCharge;
 import project.game.move.moveactions.MoveActionDamagePct;
 import project.game.move.moveactions.MoveActionHealthRestore;
 import project.game.move.moveactions.MoveActionSemiImmuneState;
-import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;
+import project.game.pokemon.effects.StatusCondition.StatusConditionID;
 
 public class AdditionalEffectsProcessor implements Processor {
 
@@ -32,7 +32,7 @@ public class AdditionalEffectsProcessor implements Processor {
      */
     private void initEffectTarget(MoveEffect me) {
         this.eventManager.data.effectTarget = me.isSelf() 
-        ? this.eventManager.data.user 
+        ? this.eventManager.data.attackUser 
         : this.eventManager.data.attackTarget;
     }
 
@@ -41,10 +41,7 @@ public class AdditionalEffectsProcessor implements Processor {
      * apply to fainted Pokemon.
      */
     private boolean checkIfPokemonFainted() {
-        if (this.eventManager.data.effectTarget.getConditions().isFainted()) {
-           return false;
-        }
-        return true;
+        return !this.eventManager.data.effectTarget.getConditions().isFainted();
     }
 
     /**
@@ -66,7 +63,7 @@ public class AdditionalEffectsProcessor implements Processor {
         if (me == null) {
             return false;
         }
-        this.eventManager.data.effectTarget = this.eventManager.data.user;
+        this.eventManager.data.effectTarget = this.eventManager.data.attackUser;
         return true;
     }
 
@@ -184,7 +181,7 @@ public class AdditionalEffectsProcessor implements Processor {
         }
 
         if (this.canApplyEffect(heal)) { 
-            MoveActionHealthRestore.restoreHp(this.eventManager, heal.getPercent());
+            MoveActionHealthRestore.applyHpRestorePercent(this.eventManager, heal.getPercent(), "", true);
         }   
 
     }

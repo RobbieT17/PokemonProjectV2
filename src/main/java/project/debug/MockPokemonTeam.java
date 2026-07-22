@@ -5,8 +5,8 @@ import project.game.move.Move;
 import project.game.player.PokemonTrainer;
 import project.game.pokemon.Pokedex;
 import project.game.pokemon.Pokemon;
-import project.game.pokemon.effects.AbilityManager.AbilityID;
-import project.game.pokemon.effects.HeldItemManager.HeldItemID;
+import project.game.pokemon.effects.Ability.AbilityID;
+import project.game.pokemon.effects.HeldItem.HeldItemID;
 import project.network.Server;
 
 public class MockPokemonTeam {
@@ -38,7 +38,7 @@ public class MockPokemonTeam {
         p1.setItem(HeldItemID.Black_Sludge);
 
         p2.addMove(MockPokemonTeam.mockMove("Poison Powder"));
-        p2.addMove(MockPokemonTeam.mockMove("Venoshock"));
+        p2.addMove(MockPokemonTeam.mockMove("Telnet"));
         p2.addMove(MockPokemonTeam.mockMove("Giga Drain"));
         p2.addMove(MockPokemonTeam.mockMove("Synthesis"));
         p2.setNickName("Vance");
@@ -53,9 +53,9 @@ public class MockPokemonTeam {
         p3.setAbility(AbilityID.Torrent);
         p3.setItem(HeldItemID.Rocky_Helmet);
 
-        p4.addMove(MockPokemonTeam.mockMove("Focus Punch"));
-        p4.addMove(MockPokemonTeam.mockMove("Flame Charge"));
-        p4.addMove(MockPokemonTeam.mockMove("Hurricane"));
+        p4.addMove(MockPokemonTeam.mockMove("File Transfer"));
+        p4.addMove(MockPokemonTeam.mockMove("Hijack"));
+        p4.addMove(MockPokemonTeam.mockMove("Glitch"));
         p4.addMove(MockPokemonTeam.mockMove("Swords Dance"));
         p4.setNickName("Carly");
         p4.setAbility(AbilityID.Blaze);
@@ -93,14 +93,14 @@ public class MockPokemonTeam {
         p2.setItem(HeldItemID.Wise_Glasses);
 
         p3.addMove(MockPokemonTeam.mockMove("Petal Dance"));
-        p3.addMove(MockPokemonTeam.mockMove("Dig"));
+        p3.addMove(MockPokemonTeam.mockMove("Scary Face"));
         p3.addMove(MockPokemonTeam.mockMove("Amnesia"));
-        p3.addMove(MockPokemonTeam.mockMove("Sleep Powder"));
+        p3.addMove(MockPokemonTeam.mockMove("Confuse Ray"));
         p3.setNickName("Violet");
         p3.setAbility(AbilityID.Overgrow);
 
         p4.addMove(MockPokemonTeam.mockMove("Giga Impact"));
-        p4.addMove(MockPokemonTeam.mockMove("Graveyard Shock"));
+        p4.addMove(MockPokemonTeam.mockMove("Will-O-Wisp"));
         p4.addMove(MockPokemonTeam.mockMove("Sunny Day"));
         p4.addMove(MockPokemonTeam.mockMove("Overheat"));
         p4.setNickName("Chandler");

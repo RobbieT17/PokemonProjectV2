@@ -13,13 +13,15 @@ public class StatPoint {
 	private final int base; // Base power
 
 	private int stage; // Stage of the stat, max: 6 min: -6
-	private double mod; // Modified Stat Multiplier (based on current stage)
+	private double stageVal; // Based on current stage)
+	private double mod; // Mod multiplier
 
 	public StatPoint(StatID id, int base) {
 		this.statID = id;
 		this.base = base;
 
 		this.stage = 0;
+		this.stageVal = 1.0;
 		this.mod = 1.0;
 	}
 	
@@ -58,10 +60,18 @@ public class StatPoint {
 		return this.statID == StatID.Accuracy || this.statID == StatID.Evasion;
 	}
 
+	/**
+	 * Checks if the stat's stage is out side the range of the max and min.
+	 * @param change number of stage increases/decreases
+	 * @return true if at highest stage (positive chance) or if at lowest stage (negative change)
+	 */
+	private boolean isAtHighestOrLowestStage(int change) {
+		return change > 0 ? this.stage == StatPoint.HIGHEST_STAT_STAGE : this.stage == StatPoint.LOWEST_STAT_STAGE;
+	}
 
 	// Changes a stat based on the stage and base stat
-	public void changeStat() {
-		this.mod = switch (this.stage){
+	private void changeStat() {
+		this.stageVal = switch (this.stage){
 			case -6 -> 0.25;
 			case -5 -> 0.28;
 			case -4 -> 0.33;
@@ -80,8 +90,8 @@ public class StatPoint {
 	}
 
 	// Changes a stat based on an accuracy/evasion of 100%
-	public void changeStatForAccuracyOrEvasion() {
-		this.mod = switch (this.stage){
+	private void changeStatForAccuracyOrEvasion() {
+		this.stageVal = switch (this.stage){
 			case -6 -> 0.33;
 			case -5 -> 0.375;
 			case -4 -> 0.429;
@@ -99,8 +109,24 @@ public class StatPoint {
 
 	}
 
-	// Changes stage of a stat. The stage should never be outside the range of -6 and 6
-	public void changeStage(int change) {
+	/**
+	 * Changes the stat stage. Stage range is between -6 and 6 inclusive. 
+	 * 
+	 * @param change
+	 * @return true if the change was successful, returns false if the
+	 * stage falls outside of the range.
+	 */
+	public boolean changeStage(int change) {
+		// Validation
+		if (change == 0) {
+			throw new IllegalArgumentException("Stage change cannot be zero");
+		}
+
+		if (this.isAtHighestOrLowestStage(change)) {
+			return false;
+		}
+
+		// Changes stage
 		this.stage += change;
 
 		if (this.stage < StatPoint.LOWEST_STAT_STAGE) {
@@ -116,17 +142,11 @@ public class StatPoint {
 		else {
 			this.changeStat(); 
 		}
+
+		return true;
 	}
 
-	/**
-	 * Checks if the stat's stage is out side the range of the max and min.
-	 * @param change number of stage increases/decreases
-	 * @return true if at highest stage (positive chance) or if at lowest stage (negative change)
-	 */
-	public boolean isAtHighestOrLowestStage(int change) {
-		if (change == 0) throw new IllegalArgumentException("Stage change cannot be zero");
-		return change > 0 ? this.stage == StatPoint.HIGHEST_STAT_STAGE : this.stage == StatPoint.LOWEST_STAT_STAGE;
-	}
+
 
 	// Displays stat's current power and stage
 	public String showStat() {
@@ -145,18 +165,21 @@ public class StatPoint {
 
 // Setters
 	public void setStage(int stage) {
+		if (stage > StatPoint.HIGHEST_STAT_STAGE || stage < StatPoint.LOWEST_STAT_STAGE) {
+			throw new IllegalArgumentException(String.format("Cannot set stage. Value (%d) is outside of the range [-6, 6]", stage));
+		}
 		this.stage = stage;
 
 		if (this.isAccuracyOrEvasion()) this.changeStatForAccuracyOrEvasion();
 		else this.changeStat(); 
 	}	
 
-	public void setMod(double percent) {this.mod *= 0.01 * percent;}
+	public void setMod(double percent) {this.mod = percent * 0.01;}
 	public void resetMod() {this.mod = 1.0;}
 
 // Getters
 	public StatID getStatID() {return this.statID;}
 	public int getBase() {return this.base;}
-	public int getPower() {return (int) (this.base * this.mod);}
+	public int getPower() {return (int) (this.base * this.stageVal * this.mod);}
 	public int getStage() {return this.stage;}
 }

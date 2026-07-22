@@ -3,7 +3,7 @@ package project.game.pokemon;
 import java.util.HashMap;
 
 import project.game.pokemon.effects.StatusCondition;
-import project.game.pokemon.effects.StatusConditionManager.StatusConditionID;
+import project.game.pokemon.effects.StatusCondition.StatusConditionID;
 import project.game.utility.Protection;
 
 public class PokemonConditions {
@@ -60,6 +60,8 @@ public class PokemonConditions {
         return this.hasPrimary() ? this.primaryCondition.getEffectName() == id.name() : false;
     }
 
+
+
 // Methods
     public void clearPrimary() {
         if (this.primaryCondition == null) return;
@@ -68,13 +70,29 @@ public class PokemonConditions {
     }
 
     public void addCondition(StatusCondition condition) {
-        this.conditions.put(condition.getEffectName(), condition);
+        if (condition.getId().isNonVolatile()) {
+            this.primaryCondition = condition;
+        }
+        else {
+            this.conditions.put(condition.getEffectName(), condition);
+        }
+        
     }
 
     public void removeCondition(StatusConditionID key) {
-        if (!this.conditions.containsKey(key.name())) return;
-        this.conditions.get(key.name()).removeEffect();
-        this.conditions.remove(key.name());
+        if (key.isNonVolatile()) {
+            this.primaryCondition = null;
+        }
+        else {
+            if (!this.conditions.containsKey(key.name())) return;
+            this.conditions.get(key.name()).removeEffect();
+            this.conditions.remove(key.name());
+        }
+
+    }
+
+    public void removeCondition(String name) {
+        this.removeCondition(StatusConditionID.valueOf(name));
     }
 
     public void clearVolatileConditions() {

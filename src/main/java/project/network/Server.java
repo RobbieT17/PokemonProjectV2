@@ -153,7 +153,6 @@ public class Server {
         }
     }
 
-
     // Starts a new Pokemon battle
     public static void beginBattle() {
         // Waits until both players are ready to battle
