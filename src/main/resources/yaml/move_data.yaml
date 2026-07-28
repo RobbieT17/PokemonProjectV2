@@ -655,6 +655,7 @@ moves:
   category: Physical
   pp: 10
   pow: 40
+  priority: 3
   addEffects:
     conditionChange:
       effect: Flinch

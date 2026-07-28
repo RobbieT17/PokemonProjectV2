@@ -8,12 +8,19 @@ import project.game.pokemon.Pokemon;
 import project.game.pokemon.stats.StatPoint;
 import project.game.utility.RandomValues;
 
-public interface MoveActionChangeStat extends MoveAction {
+public class MoveActionChangeStat {
+
+    private final EventManager eventManager;
+
+    public MoveActionChangeStat(EventManager e) {
+        this.eventManager = e;
+    }
+    
      /**
      * Changes each Pokemon stats
      */
-    private static void changeEachStat(EventManager eventManager, int[] stats, int mods[]) {
-        EventData data  = eventManager.data;
+    private void changeEachStat(int[] stats, int mods[]) {
+        EventData data  = this.eventManager.data;
         Pokemon p = data.effectTarget;
     
         for (int i = 0; i < stats.length; i++) {
@@ -26,31 +33,30 @@ public interface MoveActionChangeStat extends MoveAction {
 
             data.statFailed = !p.getStats()[i].changeStage(change);
             
-            MoveActionChangeStat.logStatChange(!data.statFailed, p, s, change);
+            this.logStatChange(p, s, change);
            
         }  
     }
 
-    public static void logStatChange(boolean success, Pokemon p, StatPoint s, int change) {
-        if(success) {
-            BattleLog.add("%s's %s %s%s!", p, s, (change > 0) ? "rose" : "fell", StatPoint.sizeOfChange(change));
+    public void logStatChange(Pokemon p, StatPoint s, int change) {
+        if(this.eventManager.data.statFailed) {
+            BattleLog.add("But %s's %s won't go any %s!", p, s, (change > 0) ? "higher" : "lower");
         }
         else {
-            BattleLog.add("But %s's %s won't go any %s!", p, s, (change > 0) ? "higher" : "lower");
-
+            BattleLog.add("%s's %s %s%s!", p, s, (change > 0) ? "rose" : "fell", StatPoint.sizeOfChange(change));
         }
     }
 
-    public static void changeStats(EventManager eventManager, int[] stats, double chance) {
-        EventData data  = eventManager.data;
+    public void changeStats(int[] stats, double chance) {
+        EventData data  = this.eventManager.data;
         data.statProb = chance;
         data.statChanges = stats;
 
-        eventManager.notifyUserPokemon(EventID.ATK_STAT_CHANGE);
-        eventManager.notifyEffectTargetPokemon(EventID.DEF_STAT_CHANGE);
+        this.eventManager.notifyUserPokemon(EventID.ATK_STAT_CHANGE);
+        this.eventManager.notifyEffectTargetPokemon(EventID.DEF_STAT_CHANGE);
 
         if (RandomValues.chance(chance)) {
-            MoveActionChangeStat.changeEachStat(eventManager, data.statChanges, data.statMods);    
+            this.changeEachStat(data.statChanges, data.statMods);    
         }
         else {
             data.statFailed = true;
@@ -58,12 +64,8 @@ public interface MoveActionChangeStat extends MoveAction {
        
     }  
 
-    public static void changeStats(EventManager eventManager, int[] stats) {
-        MoveActionChangeStat.changeStats(eventManager, stats, 100);
-    }
-
     // Resets all stat changes back to neutral
-    public static void resetStats(EventManager eventManager, Pokemon p) {
+    public void resetStats(Pokemon p) {
         for (StatPoint s : p.getStats()) {
             s.setStage(0);
         } 

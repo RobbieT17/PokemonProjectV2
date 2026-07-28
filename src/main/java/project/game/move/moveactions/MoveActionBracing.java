@@ -6,9 +6,16 @@ import project.game.move.Move;
 import project.game.pokemon.Pokemon;
 import project.game.utility.Protection;
 
-public interface  MoveActionBracing extends MoveAction {
-     public static void pokemonProtects(EventManager eventManager, Protection b, String success) {
-        EventData data  = eventManager.data;
+public class MoveActionBracing {
+
+    private final EventManager eventManager;
+
+    public MoveActionBracing(EventManager e) {
+        this.eventManager = e;
+    }
+
+    public void pokemonProtects(Protection b, String success) {
+        EventData data  = this.eventManager.data;
         Pokemon p = data.attackUser;
         data.protectionType = b;
 

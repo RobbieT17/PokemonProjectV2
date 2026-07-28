@@ -94,12 +94,12 @@ public class MockPokemonTeam {
 
         p3.addMove(MockPokemonTeam.mockMove("Petal Dance"));
         p3.addMove(MockPokemonTeam.mockMove("Scary Face"));
-        p3.addMove(MockPokemonTeam.mockMove("Amnesia"));
+        p3.addMove(MockPokemonTeam.mockMove("Fake Out"));
         p3.addMove(MockPokemonTeam.mockMove("Confuse Ray"));
         p3.setNickName("Violet");
         p3.setAbility(AbilityID.Overgrow);
 
-        p4.addMove(MockPokemonTeam.mockMove("Giga Impact"));
+        p4.addMove(MockPokemonTeam.mockMove("Cloud Sync"));
         p4.addMove(MockPokemonTeam.mockMove("Will-O-Wisp"));
         p4.addMove(MockPokemonTeam.mockMove("Sunny Day"));
         p4.addMove(MockPokemonTeam.mockMove("Overheat"));

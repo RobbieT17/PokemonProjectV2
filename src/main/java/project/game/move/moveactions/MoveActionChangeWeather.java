@@ -7,11 +7,17 @@ import project.game.exceptions.MoveInterruptedException;
 import project.game.move.Move;
 import project.game.processors.WeatherProcessor;
 
-public interface MoveActionChangeWeather extends MoveAction {
+public class MoveActionChangeWeather {
+
+    private final EventManager eventManager;
+
+    public MoveActionChangeWeather(EventManager e) {
+        this.eventManager = e;
+    }
     
     // Changes current weather
-    public static void changeWeather(EventManager eventManager, WeatherEffect w) {
-        EventData data  = eventManager.data;
+    public void changeWeather(WeatherEffect w) {
+        EventData data  = this.eventManager.data;
         data.weatherChange = w;
 
         if (data.battleData.isCurrentWeather(data.weatherChange)) {

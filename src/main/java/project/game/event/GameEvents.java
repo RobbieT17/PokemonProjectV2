@@ -61,6 +61,12 @@ public class GameEvents {
         this.eventMap.get(eventId.name()).update(data);
     }
 
+    // Adds/removes pending events then updates
+    public void updateEventImmediate(EventID eventId, EventData data) {
+        this.updateEventMaps();
+        this.eventMap.get(eventId.name()).update(data);
+    }
+
     public void addEventListener(EventID eventId, String effectId, Observer e) {
         this.eventMap.get(eventId.name()).addListener(effectId, e);
     }

@@ -8,27 +8,34 @@ import project.game.move.Move;
 import project.game.pokemon.Pokemon;
 import project.game.utility.RandomValues;
 
-public interface MoveActionAccuracy {
-    // Protection Functions
-private static void defenderProtects(Pokemon p) {
-    if (!p.getConditions().getProtect().isActive()) {
-        return;
+public class MoveActionAccuracy {
+
+    private final EventManager eventManager;
+
+    public MoveActionAccuracy(EventManager e) {
+        this.eventManager = e;
     }
-        
-    p.getConditions().getProtect().setActive(false);
-    throw new MoveInterruptedException("But %s protected itself!", p);
-}
+
+    // Protection Functions
+    private static void defenderProtects(Pokemon p) {
+        if (!p.getConditions().getProtect().isActive()) {
+            return;
+        }
+            
+        p.getConditions().getProtect().setActive(false);
+        throw new MoveInterruptedException("But %s protected itself!", p);
+    }
 
 // Accuracy Function
-    public static void rollForAccuracy(EventManager eventManager) {
+    public void rollForAccuracy() {
         EventData data = eventManager.data;
 
         Pokemon attacker = data.attackUser;
         Pokemon defender = data.attackTarget;
         Move move = data.moveUsed;
 
-        eventManager.notifyUserPokemon(EventID.ATK_MOVE_ACCURACY);
-        eventManager.notifyAttackTargetPokemon(EventID.DEF_MOVE_ACCURACY);
+        this.eventManager.notifyUserPokemon(EventID.ATK_MOVE_ACCURACY);
+        this.eventManager.notifyAttackTargetPokemon(EventID.DEF_MOVE_ACCURACY);
 
         defenderProtects(defender);
 
@@ -38,19 +45,19 @@ private static void defenderProtects(Pokemon p) {
         if (accuracy == Move.ALWAYS_HITS || defender.getConditions().isImmobilized()) {
             data.moveHits = true;
 
-            eventManager.notifyUserPokemon(EventID.ATK_MOVE_HITS);
-            eventManager.notifyAttackTargetPokemon(EventID.DEF_MOVE_HITS);
+            this.eventManager.notifyUserPokemon(EventID.ATK_MOVE_HITS);
+            this.eventManager.notifyAttackTargetPokemon(EventID.DEF_MOVE_HITS);
             return;
         }
 		
         // Calcuates hit rate
-        double modifiedAccuracy = accuracy * ((double) attacker.getAccuracy().getPower() 
-        / (double) defender.getEvasion().getPower());
+        double modifiedAccuracy = accuracy * ((double) attacker.getAccuracy().calcPower() 
+        / (double) defender.getEvasion().calcPower());
 
         if (RandomValues.chance(modifiedAccuracy)) { // Move hits
             data.moveHits = true;
-            eventManager.notifyUserPokemon(EventID.ATK_MOVE_HITS);
-            eventManager.notifyAttackTargetPokemon(EventID.DEF_MOVE_HITS);
+            this.eventManager.notifyUserPokemon(EventID.ATK_MOVE_HITS);
+            this.eventManager.notifyAttackTargetPokemon(EventID.DEF_MOVE_HITS);
         }
         else { // Move misses
             data.moveHits = false;

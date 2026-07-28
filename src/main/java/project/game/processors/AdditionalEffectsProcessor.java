@@ -5,13 +5,7 @@ import project.data.MoveEffect;
 import project.game.battle.BattleLog;
 import project.game.battle.Weather.WeatherEffect;
 import project.game.event.EventManager;
-import project.game.move.moveactions.MoveActionChangeCondition;
-import project.game.move.moveactions.MoveActionChangeStat;
-import project.game.move.moveactions.MoveActionChangeWeather;
-import project.game.move.moveactions.MoveActionCharge;
-import project.game.move.moveactions.MoveActionDamagePct;
-import project.game.move.moveactions.MoveActionHealthRestore;
-import project.game.move.moveactions.MoveActionSemiImmuneState;
+import project.game.move.MoveActions;
 import project.game.pokemon.effects.StatusCondition.StatusConditionID;
 
 public class AdditionalEffectsProcessor implements Processor {
@@ -102,14 +96,16 @@ public class AdditionalEffectsProcessor implements Processor {
         MoveEffect charge = ae.getCharge();
         MoveEffect semiImmune = ae.getSemiImmune();
 
+        MoveActions actions = this.eventManager.moveActions;
+
         if (this.canApplySelfEffect(charge)) {
             StatusConditionID c = StatusConditionID.valueOf(charge.getEffect());
-            MoveActionCharge.enterChargeState(this.eventManager, c);
+            actions.enterChargeState(c);
         }
 
         if (this.canApplySelfEffect(semiImmune)) {
             StatusConditionID c = StatusConditionID.valueOf(semiImmune.getEffect());
-            MoveActionSemiImmuneState.enterImmuneState(this.eventManager, c);
+            actions.enterImmuneState(c);
         }
         
     }
@@ -137,23 +133,25 @@ public class AdditionalEffectsProcessor implements Processor {
         MoveEffect heal = ae.getHeal();
         MoveEffect lifeSteal = ae.getLifeSteal();
 
+        MoveActions actions = this.eventManager.moveActions;
+
         if (this.canApplyEffect(statChange)) {
-            MoveActionChangeStat.changeStats(this.eventManager, statChange.statsToIntArray(), statChange.getChance());
+            actions.changeStats(statChange.statsToIntArray(), statChange.getChance());
         }
 
         if (this.canApplyEffect(conditionChange)) {
             StatusConditionID c = StatusConditionID.valueOf(conditionChange.getEffect());
-            MoveActionChangeCondition.applyCondition(this.eventManager, c, conditionChange.getChance());
+            actions.applyCondition(c, conditionChange.getChance());
         }
 
         if (this.canApplyEffect(conditionChange2)) {
             StatusConditionID c = StatusConditionID.valueOf(conditionChange2.getEffect());
-            MoveActionChangeCondition.applyCondition(this.eventManager, c, conditionChange2.getChance());
+            actions.applyCondition(c, conditionChange2.getChance());
         }
 
         if (this.canApplyEffect(weatherChange)) {
             WeatherEffect w = WeatherEffect.valueOf(weatherChange.getEffect());
-            MoveActionChangeWeather.changeWeather(this.eventManager, w);
+            actions.changeWeather(w);
         }
 
         // NOT IMPLEMENTED YET
@@ -172,16 +170,16 @@ public class AdditionalEffectsProcessor implements Processor {
         }
 
         if (this.canApplySelfEffect(recoil)) {
-            MoveActionDamagePct.recoilDamage(this.eventManager, recoil.getPercent());
+            actions.takeRecoilDamage(recoil.getPercent());
 
         }
 
         if (this.canApplySelfEffect(lifeSteal)) {
-            MoveActionDamagePct.drainHP(this.eventManager, lifeSteal.getPercent());
+            actions.drainHP(lifeSteal.getPercent());
         }
 
         if (this.canApplyEffect(heal)) { 
-            MoveActionHealthRestore.applyHpRestorePercent(this.eventManager, heal.getPercent(), "", true);
+            actions.applyHpRestorePercent(heal.getPercent(), "", true);
         }   
 
     }

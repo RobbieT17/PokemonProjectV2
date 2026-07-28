@@ -6,13 +6,6 @@ import project.game.event.EventManager;
 import project.game.exceptions.MoveInterruptedException;
 import project.game.move.Move.MoveCategory;
 import project.game.move.Move.MoveStatus;
-import project.game.move.moveactions.MoveActionAccuracy;
-import project.game.move.moveactions.MoveActionAttack;
-import project.game.move.moveactions.MoveActionBracing;
-import project.game.move.moveactions.MoveActionChangeCondition;
-import project.game.move.moveactions.MoveActionChangeStat;
-import project.game.move.moveactions.MoveActionCharge;
-import project.game.move.moveactions.MoveActionSemiImmuneState;
 import project.game.pokemon.Pokemon;
 import project.game.pokemon.effects.StatusCondition;
 import project.game.pokemon.effects.StatusCondition.StatusConditionID;
@@ -28,10 +21,17 @@ public class MoveList {
         if (e.data.attackUser.getConditions().tookDamage()) {
             e.data.moveUsed.doublePower();
         }
-        MoveActionAttack.attackTarget(e);
+        e.moveActions.attackTarget();
         return 0;
     }
 
+    /* Sharply raises a stat based on the current weather:
+        Sunny - Attack
+        Rainy - Sp.Attack
+        Sandstorm - Defense
+        Hail - Sp. Defense
+        None - Speed
+    */
     public static int cloudSync(EventManager e) {
         int[] stats = new int[7];
 
@@ -44,17 +44,20 @@ public class MoveList {
             default -> throw new IllegalStateException("Invalid weather id");  
         }
 
-        MoveActionChangeStat.changeStats(e, stats);
+        e.data.effectTarget = e.data.attackUser;
+        e.moveActions.changeStats(stats);
 
         return 0;
     }
 
+    // Reverses the target's stat boost/drops
     public static int dataCorruption(EventManager e) {
-        MoveActionAccuracy.rollForAccuracy(e);
+        e.moveActions.rollForAccuracy();
+        e.data.effectTarget = e.data.attackTarget;
+        Pokemon t = e.data.effectTarget;
 
-        Pokemon t = e.data.attackTarget;
         for (StatPoint stat : t.getStats()) {
-            stat.setStage(stat.getStage() * -1);
+            stat.setStage(-stat.getStage());
         }
 
         BattleLog.add("%s's stats were inverted!", t);
@@ -63,7 +66,7 @@ public class MoveList {
 
     public static int debugger(EventManager e) {
         e.data.invertedType = Type.Bug;
-        MoveActionAttack.attackTarget(e);
+        e.moveActions.attackTarget();
         
         return 0;
     }
@@ -72,12 +75,13 @@ public class MoveList {
         if (e.data.attackTarget.getConditions().hasKey(StatusConditionID.Dig_State)) {
             e.data.moveUsed.doublePower();
         }
-        MoveActionAttack.attackTarget(e);
+        e.moveActions.attackTarget();
         return 0;
     }
 
+    // TODO: Remove
     public static int endure(EventManager e) {
-        MoveActionBracing.pokemonProtects(e, e.data.attackUser.getConditions().getEndure(), e.data.attackUser + " braced itself!");
+        e.moveActions.pokemonProtects(e.data.attackUser.getConditions().getEndure(), e.data.attackUser + " braced itself!");
         return 0;
     }
 
@@ -103,7 +107,7 @@ public class MoveList {
         BattleLog.add("%s used %s!", p, lastMove);
         
         EventManager newE = new EventManager(e.data.battleData, p);
-        new MoveProcessor(newE).process(); 
+        e.startNewProcess(new MoveProcessor(newE));
 
         return 0;
     }
@@ -112,10 +116,11 @@ public class MoveList {
         Pokemon a = e.data.attackUser;
         if (a.getConditions().hasKey(StatusConditionID.Burn) ||
             a.getConditions().hasKey(StatusConditionID.Paralysis) ||
-            a.getConditions().hasKey(StatusConditionID.Poison)) {
+            a.getConditions().hasKey(StatusConditionID.Poison) ||
+            a.getConditions().hasKey(StatusConditionID.Bad_Poison)) {
             e.data.moveUsed.doublePower();
         }
-        MoveActionAttack.attackTarget(e);
+        e.moveActions.attackTarget();
         return 0;
     }
 
@@ -125,12 +130,13 @@ public class MoveList {
             p.resetStatChanges();
             p.getConditions().clearVolatileConditions();
         }
+        e.data.battleData.setCurrenWeather(WeatherEffect.Clear);
         return 0;
     }
 
     public static int falseSwipe(EventManager e) {
         e.data.attackTarget.getConditions().getEndure().setActive(true);
-        MoveActionAttack.attackTarget(e);
+        e.moveActions.attackTarget();
         return 0;
     }
 
@@ -139,8 +145,9 @@ public class MoveList {
             throw new MoveInterruptedException(Move.FAILED);
         }
 
-        MoveActionAttack.attackTarget(e);
-        MoveActionChangeCondition.applyCondition(e, StatusConditionID.Flinch);
+        e.data.effectTarget = e.data.attackTarget;
+        e.moveActions.attackTarget();
+        e.moveActions.applyCondition(StatusConditionID.Flinch);
 
         return 0;
     }
@@ -153,37 +160,37 @@ public class MoveList {
 
         // Ignores accuracy check for allies
         if (user.getOwner() != target.getOwner()) {
-            MoveActionAccuracy.rollForAccuracy(e);
+            e.moveActions.rollForAccuracy();
         }
 
         // Copy primary condition
         if (user.getConditions().hasPrimary()) {
             StatusCondition c = user.getConditions().getPrimaryCondition();
-            MoveActionChangeCondition.applyCondition(e, c.getEffectName());
+            e.moveActions.applyConditionByName(c.getEffectName());
         }
 
         // Copies all other conditions
         for (StatusCondition c : user.getConditions().getVolatileConditions().values()) {
-            MoveActionChangeCondition.applyCondition(e, c.getEffectName());
+            e.moveActions.applyConditionByName(c.getEffectName());
         }
 
         return 0;
     }
 
     // Transfer all stat changes to the target. The user loses those effects
-    public static int flieTransfer(EventManager e) {
+    public static int fileTransfer(EventManager e) {
         Pokemon user = e.data.attackUser;
         Pokemon target = e.data.attackTarget;
         e.data.effectTarget = target;
 
         // Ignores accuracy check for allies
         if (user.getOwner() != target.getOwner()) {
-            MoveActionAccuracy.rollForAccuracy(e);
+            e.moveActions.rollForAccuracy();
         }
 
         for (int i = 0; i < user.getStats().length; i++) {
             StatPoint stat = user.getStats()[i];        
-            target.getStats()[i].setStage(stat.getStage());
+            target.getStats()[i].changeStage(stat.getStage());
             stat.setStage(0);
         }
 
@@ -201,7 +208,7 @@ public class MoveList {
             d.getWeight() <= 220.2 ? 80 :
             d.getWeight() < 440.7 ? 100 : 120
         );
-        MoveActionAttack.attackTarget(e);
+        e.moveActions.attackTarget();
         return 0;
     }
 
@@ -218,16 +225,16 @@ public class MoveList {
     }
 
     public static int gyroBall(EventManager e) {
-        int power = (int) (25.0 * e.data.attackTarget.getSpeed().getPower() 
-                           / (double) e.data.attackUser.getSpeed().getPower() + 1);
+        int power = (int) (25.0 * e.data.attackTarget.getSpeed().calcPower() 
+                           / (double) e.data.attackUser.getSpeed().calcPower() + 1);
         e.data.moveUsed.setPower(power);
-        MoveActionAttack.attackTarget(e);
+        e.moveActions.attackTarget();
         return 0;
     }
 
     public static int haze(EventManager e) {
-        MoveActionChangeStat.resetStats(e, e.data.attackUser);
-        MoveActionChangeStat.resetStats(e, e.data.attackTarget);
+        e.moveActions.resetStats(e.data.attackUser);
+        e.moveActions.resetStats(e.data.attackTarget);
         return 0;
     }
 
@@ -242,14 +249,14 @@ public class MoveList {
             : 120
         );
 
-        MoveActionAttack.attackTarget(e);
+        e.moveActions.attackTarget();
         return 0;
     }
 
     // Randomly gives the target a non-voltatile status condition
     public static int hijack(EventManager e) {
         e.data.effectTarget = e.data.attackTarget;
-        MoveActionAccuracy.rollForAccuracy(e);
+        e.moveActions.rollForAccuracy();
 
         double value = RandomValues.randomDouble();
         StatusConditionID id;
@@ -273,7 +280,7 @@ public class MoveList {
             id = StatusConditionID.Infect;
         }
 
-        MoveActionChangeCondition.applyCondition(e, id);
+        e.moveActions.applyCondition(id);
 
         return 0;
     }
@@ -286,30 +293,30 @@ public class MoveList {
             e.data.moveUsed.setAccuracy(50);
         }
 
-        MoveActionAttack.attackTarget(e);
+        e.moveActions.attackTarget();
         new AdditionalEffectsProcessor(e).process();
         return 0;
     }
 
     public static int malware(EventManager e) {
-        MoveActionAttack.attackTarget(e);
+        e.moveActions.attackTarget();
 
         int[] stats = new int[7];
         int random = RandomValues.generateInt(0, 6);
 
         stats[random] = -2;
 
-        MoveActionChangeStat.changeStats(e, stats);
+        e.moveActions.changeStats(stats);
         return 0;
     }
 
     public static int protect(EventManager e) {
-        MoveActionBracing.pokemonProtects(e, e.data.attackUser.getConditions().getProtect(), e.data.attackUser + " protected itself!");
+        e.moveActions.pokemonProtects(e.data.attackUser.getConditions().getProtect(), e.data.attackUser + " protected itself!");
         return 0;
     }
 
     public static int ramRush(EventManager e) {
-        MoveActionAttack.attackTarget(e);
+        e.moveActions.attackTarget();
 
         int[] stats = new int[7];
         int random = RandomValues.generateInt(0, 2);
@@ -322,7 +329,7 @@ public class MoveList {
             default -> throw new IllegalStateException("Random value of bounds");
         }
 
-        MoveActionChangeStat.changeStats(e, stats);
+        e.moveActions.changeStats(stats);
         return 0;
     }
 
@@ -353,8 +360,8 @@ public class MoveList {
 
     public static int scorchingSands(EventManager e) {
         e.data.attackUser.getConditions().removeCondition(StatusConditionID.Freeze);
-        MoveActionAttack.attackTarget(e);
-        MoveActionChangeCondition.applyCondition(e, StatusConditionID.Burn, 30);
+        e.moveActions.attackTarget();
+        e.moveActions.applyCondition(StatusConditionID.Burn, 30);
         return 0;
     }
 
@@ -384,19 +391,19 @@ public class MoveList {
     }
 
     public static int smackDown(EventManager e) {
-        MoveActionAttack.attackTarget(e);
-        MoveActionSemiImmuneState.leaveImmuneState(e, StatusConditionID.Fly_State, "Fell from the sky!");
-        MoveActionChangeCondition.applyCondition(e, StatusConditionID.Grounded);
+        e.moveActions.attackTarget();
+        e.moveActions.leaveImmuneState(StatusConditionID.Fly_State, "Fell from the sky!");
+        e.moveActions.applyCondition(StatusConditionID.Grounded);
         return 0;
     }
 
     
     public static int solarBeam(EventManager e) {
         if (e.data.battleData.isCurrentWeather(WeatherEffect.Sunny)) {
-            MoveActionAttack.attackTarget(e);
+            e.moveActions.attackTarget();
         } else {
-            MoveActionCharge.enterChargeState(e, StatusConditionID.Charge);
-            MoveActionAttack.attackTarget(e);
+            e.moveActions.enterChargeState(StatusConditionID.Charge);
+            e.moveActions.attackTarget();
         }
         return 0;
     }
@@ -405,7 +412,7 @@ public class MoveList {
         if (e.data.attackUser.getLastMove().isStatus(MoveStatus.Failed)) {
             e.data.moveUsed.doublePower();
         }
-        MoveActionAttack.attackTarget(e);
+        e.moveActions.attackTarget();
         return 0;
     }
 
@@ -434,7 +441,7 @@ public class MoveList {
             e.data.moveUsed.doublePower();
         }
 
-        MoveActionAttack.attackTarget(e);
+        e.moveActions.attackTarget();
         return 0;
     }
 
@@ -444,7 +451,7 @@ public class MoveList {
         {
             e.data.moveUsed.doublePower();
         }
-        MoveActionAttack.attackTarget(e);
+        e.moveActions.attackTarget();
         return 0;
     }
 
@@ -452,8 +459,8 @@ public class MoveList {
         if (e.data.attackTarget.getConditions().hasKey(StatusConditionID.Dive_State)) {
             e.data.moveUsed.doublePower();
         }
-        MoveActionAttack.attackTarget(e);
-        MoveActionChangeCondition.applyCondition(e, StatusConditionID.Bound);
+        e.moveActions.attackTarget();
+        e.moveActions.applyCondition(StatusConditionID.Bound);
         return 0;
     }
 

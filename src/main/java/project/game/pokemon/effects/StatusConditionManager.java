@@ -1,10 +1,9 @@
 package project.game.pokemon.effects;
 
-import java.util.function.Function;
-
 import project.config.GameConfig;
 import project.game.battle.BattleLog;
 import project.game.battle.BattlePosition;
+import project.game.event.EventManager;
 import project.game.event.GameEvents.EventID;
 import project.game.event.Observer;
 import project.game.exceptions.MoveInterruptedException;
@@ -13,34 +12,15 @@ import project.game.exceptions.PokemonFaintedException;
 import project.game.move.Move;
 import project.game.move.Move.MoveCategory;
 import project.game.move.Move.MoveTarget;
-import project.game.move.moveactions.MoveActionAttack;
-import project.game.move.moveactions.MoveActionChangeStat;
-import project.game.move.moveactions.calculations.MoveEffectiveCalculations;
+import project.game.move.calculations.MoveEffectiveCalculations;
 import project.game.pokemon.Pokemon;
+import project.game.pokemon.effects.StatusCondition.StatusConditionID;
 import project.game.pokemon.stats.Type;
 import project.game.utility.Counter;
 import project.game.utility.RandomValues;
 import project.game.utility.State;
-import project.game.pokemon.effects.StatusCondition.StatusConditionID;
 
 public interface StatusConditionManager {
-
-    private static void checkIfFaints(Pokemon p) {
-        if (p.getConditions().isFainted()) throw new PokemonFaintedException();
-    }
-
-    private static StatusCondition applyConditionToPokemon(Pokemon p, StatusConditionID id, EventID[] flags, Observer[] obs) {
-        // Add event listeners to target
-        if (flags.length != obs.length) {
-            throw new IllegalArgumentException("Mismatch is flags and observers list, must be same length");
-        }
-
-        for (int i = 0; i < flags.length; i++) {
-            p.getEvents().addEventListener(flags[i], id.name(), obs[i]);
-        }
-
-        return new StatusCondition(p, id, flags);
-    }
 
     public static Boolean condBurn(Pokemon p) {
         return !p.isType(Type.Fire);
@@ -76,6 +56,23 @@ public interface StatusConditionManager {
 
     public static Boolean condLink(Pokemon p) {
         return GameConfig.DOUBLES_MODE_ENABLED && p.hasNullTarget();
+    }
+
+    private static void checkIfFaints(Pokemon p) {
+        if (p.getConditions().isFainted()) throw new PokemonFaintedException();
+    }
+
+    private static StatusCondition applyConditionToPokemon(Pokemon p, StatusConditionID id, EventID[] flags, Observer[] obs) {
+        // Add event listeners to target
+        if (flags.length != obs.length) {
+            throw new IllegalArgumentException("Mismatch is flags and observers list, must be same length");
+        }
+
+        for (int i = 0; i < flags.length; i++) {
+            p.getEvents().addEventListener(flags[i], id.name(), obs[i]);
+        }
+
+        return new StatusCondition(p, id, flags);
     }
 
     /*
@@ -119,11 +116,7 @@ public interface StatusConditionManager {
 
         Observer[] observers = Effect.setObservers(
             e -> {
-                if (p.getMoveSelected().getMoveID() == 815) {
-                    return;
-                }
-
-                if (RandomValues.chance(20)) {
+                if (RandomValues.chance(20) ||p.getMoveSelected().getMoveID() == 815) {
                     p.getConditions().setImmobilized(false);
                     p.getConditions().clearPrimary();
                     BattleLog.add("%s thawed!", p);
@@ -383,8 +376,7 @@ public interface StatusConditionManager {
                 BattleLog.add("%s is confused!", p);
                 if (!RandomValues.chance(50)) return;
 
-                MoveActionAttack.takeConfusionDamage(p);
-
+                new EventManager(e.battleData, p).moveActions.takeConfusionDamage();
              
                 checkIfFaints(p);
                 throw new PokemonCannotActException();
@@ -628,13 +620,13 @@ public interface StatusConditionManager {
                         int newValue = Math.abs(value) > 1 ? (int) Math.floor((double) value / 2) : value;
                         
                         // Updates event data point
-                        e.statChanges[i] = newValue;  
+                        e.statChanges[i] = newValue; 
+                        
+                        EventManager newE = new EventManager(e.battleData, linkPartner);
 
                         // Changes stage for partner
-                        boolean success = linkPartner.getStats()[i].changeStage(newValue);
-                        MoveActionChangeStat.logStatChange(success, linkPartner, linkPartner.getStats()[i], newValue);
-                    
-                                
+                        newE.data.statFailed = !linkPartner.getStats()[i].changeStage(newValue);
+                        newE.moveActions.logStatChange(linkPartner, linkPartner.getStats()[i], value);          
                     }  
                     
                 }

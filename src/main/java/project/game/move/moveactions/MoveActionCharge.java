@@ -8,12 +8,19 @@ import project.game.pokemon.Pokemon;
 import project.game.pokemon.effects.StatusCondition.StatusConditionID;
 import project.game.utility.RandomValues;
 
-public interface MoveActionCharge extends MoveAction{
+public class MoveActionCharge {
+
+    private final EventManager eventManager;
+
+    public MoveActionCharge(EventManager e) {
+        this.eventManager = e;
+    }
+
      /*
      * Charges move first round, then unleashes it on the second.
      * Can be interrupted.
      */
-    private static void chargeMove(EventManager eventManager) {
+    private void chargeMove() {
         MovePhase phase = eventManager.data.moveUsed.getPhase();
 
         if (phase.equals(0)) { // Sets up the charge (lasts 2 phases)
@@ -29,7 +36,7 @@ public interface MoveActionCharge extends MoveAction{
    
     }
 
-    private static void focusMove(EventManager eventManager) {
+    private void focusMove() {
         Pokemon p = eventManager.data.attackUser;
         MovePhase phase = eventManager.data.moveUsed.getPhase();
 
@@ -48,7 +55,7 @@ public interface MoveActionCharge extends MoveAction{
         throw new IllegalStateException(String.format("Charge move in illegal phase: %s ", phase));
     }
 
-    private static void rechargeMove(EventManager eventManager) {
+    private void rechargeMove() {
         Pokemon p  = eventManager.data.effectTarget;
         p.getConditions().setRecharge(true);
     }
@@ -59,7 +66,7 @@ public interface MoveActionCharge extends MoveAction{
      * cannot act due to a status condition. If the move
      * ends uninterrupted, the user becomes confused.
      */
-    private static void rampageMove(EventManager eventManager) {
+    private void rampageMove() {
         MovePhase phase = eventManager.data.moveUsed.getPhase();
 
         if (phase.equals(0)) { // Phase 0: Starts rampage
@@ -71,21 +78,21 @@ public interface MoveActionCharge extends MoveAction{
             return;
         }
         else if (phase.equals(1)) { // Phase 1: Become confused and then attack once more
-            MoveActionChangeCondition.applyCondition(eventManager, StatusConditionID.Confusion);
+            this.eventManager.moveActions.applyCondition(StatusConditionID.Confusion);
             return;
-        }
+        } 
 
         // Move is in some unknown state
         throw new IllegalStateException(String.format("Charge move in illegal phase: %s", phase)); 
              
     }
-
-    public static void enterChargeState(EventManager eventManager, StatusConditionID id) {
+    
+    public void enterChargeState(StatusConditionID id) {
         switch (id) {
-            case StatusConditionID.Charge -> MoveActionCharge.chargeMove(eventManager);
-            case StatusConditionID.Recharge -> MoveActionCharge.rechargeMove(eventManager);
-            case StatusConditionID.Rampage -> MoveActionCharge.rampageMove(eventManager);
-            case StatusConditionID.Focused -> MoveActionCharge.focusMove(eventManager);
+            case StatusConditionID.Charge -> this.chargeMove();
+            case StatusConditionID.Recharge -> this.rechargeMove();
+            case StatusConditionID.Rampage -> this.rampageMove();
+            case StatusConditionID.Focused -> this.focusMove();
             default -> throw new IllegalArgumentException("Unexpected value: " + id);
         }
     }

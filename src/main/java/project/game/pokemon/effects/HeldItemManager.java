@@ -5,7 +5,6 @@ import project.game.event.EventManager;
 import project.game.event.GameEvents.EventID;
 import project.game.move.Move;
 import project.game.move.Move.MoveCategory;
-import project.game.move.moveactions.MoveActionHealthRestore;
 import project.game.pokemon.Pokemon;
 import project.game.pokemon.effects.HeldItem.HeldItemID;
 import project.game.pokemon.stats.Type;
@@ -39,7 +38,7 @@ public interface HeldItemManager {
         p.getEvents().addEventListener(flags[0], name, e -> {
             double percent = 6.25;
             if (p.isType(Type.Poison)) {
-                MoveActionHealthRestore.applyHpRestorePercent(new EventManager(e.battleData, p), percent, " from its Black Sludge");
+                new EventManager(e.battleData, p).moveActions.applyHpRestorePercent(percent, " from its Black Sludge");
             }
             else {
                p.takeDamagePercentMaxHP(percent, " from its Black Sludge"); 
@@ -134,7 +133,8 @@ public interface HeldItemManager {
         EventID[] flags = new EventID[] {EventID.END_OF_ROUND};
 
         p.getEvents().addEventListener(flags[0], name, e -> {
-                MoveActionHealthRestore.applyHpRestorePercent(new EventManager(e.battleData, p), 6.25, " from its Leftovers");
+                new EventManager(e.battleData, p).moveActions.applyHpRestorePercent(6.25, " from its Leftovers");
+                
             }
         );
 

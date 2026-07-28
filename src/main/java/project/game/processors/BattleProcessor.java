@@ -44,7 +44,7 @@ public class BattleProcessor implements Processor {
 
             Move m = p.getMoveSelected();
 
-            Order o = new Order(m.getPriority(), p.getSpeed().getPower(), p);
+            Order o = new Order(m.getPriority(), p.getSpeed().calcPower(), p);
             orderList.add(o);
         }
 

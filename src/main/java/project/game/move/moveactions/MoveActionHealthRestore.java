@@ -6,13 +6,19 @@ import project.game.event.EventManager;
 import project.game.event.GameEvents.EventID;
 import project.game.pokemon.Pokemon;
 
-public interface MoveActionHealthRestore extends MoveAction {
+public class MoveActionHealthRestore {
 
-    private static void restoreHp(EventManager eventManager) {
-        EventData data = eventManager.data;
+    private final EventManager eventManager;
+
+    public MoveActionHealthRestore(EventManager e) {
+        this.eventManager = e;
+    }
+
+    private  void restoreHp() {
+        EventData data = this.eventManager.data;
         Pokemon p = data.attackTarget;
 
-        eventManager.notifyAttackTargetPokemon(EventID.RESTORE_HEALTH);
+        this.eventManager.notifyAttackTargetPokemon(EventID.RESTORE_HEALTH);
 
         p.restoreHP((int) (data.healAmount * data.percentMod));
         BattleLog.add("%s restored %d HP%s", p, data.healAmount, data.message + "!");
@@ -20,8 +26,8 @@ public interface MoveActionHealthRestore extends MoveAction {
     }
 
     // Restores a percentage of a Pokemon's maximum HP
-    public static void applyHpRestorePercent(EventManager eventManager, double percent, String message, boolean checkValidation) {
-        EventData data = eventManager.data;
+    public void applyHpRestorePercent(double percent, String message, boolean checkValidation) {
+        EventData data = this.eventManager.data;
         Pokemon p = data.attackTarget;
         
         if (checkValidation && p.getHp().atFullHP()) {
@@ -33,13 +39,7 @@ public interface MoveActionHealthRestore extends MoveAction {
         data.healPercent = percent;
         data.healAmount = p.getPercentMaxHp(data.healPercent);
 
-        MoveActionHealthRestore.restoreHp(eventManager);
+        this.restoreHp();
     }
 
-    public static void applyHpRestorePercent(EventManager eventManager, double percent, String message) {
-        MoveActionHealthRestore.applyHpRestorePercent(eventManager, percent, message, false);
-    }
-
-
-    
 }

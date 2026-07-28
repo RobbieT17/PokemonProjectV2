@@ -31,8 +31,7 @@ public class MovePhase {
     }
 
     /**
-     * Advance move to its next phase. Once
-     * the internal counter reaches zero,
+     * Advance move to its next phase.
      */
     public int next() {
         if (this.state < 0) {

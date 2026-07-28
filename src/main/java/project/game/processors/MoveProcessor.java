@@ -2,11 +2,9 @@ package project.game.processors;
 
 import project.game.event.EventManager;
 import project.game.move.Move;
-import project.game.move.Movedex;
 import project.game.move.Move.MoveCategory;
 import project.game.move.Move.MoveTarget;
-import project.game.move.moveactions.MoveActionAccuracy;
-import project.game.move.moveactions.MoveActionAttack;
+import project.game.move.Movedex;
 
 public class MoveProcessor implements Processor {
     
@@ -45,11 +43,11 @@ public class MoveProcessor implements Processor {
         if (!move.isTarget(MoveTarget.Self)) {
             if (move.isCategory(MoveCategory.Status)) { 
                 // Status do not deal direct damage to the target, but still have an accuracy check
-                MoveActionAccuracy.rollForAccuracy(this.eventManager);
+                this.eventManager.moveActions.rollForAccuracy();
             }
             else {
                 // Attacks the target Pokemon for damage
-                MoveActionAttack.attackTarget(this.eventManager);
+                this.eventManager.moveActions.attackTarget();
             }
         }
 

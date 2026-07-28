@@ -2,7 +2,6 @@ package project.game.processors;
 
 import project.game.battle.BattleData;
 import project.game.battle.BattleLog;
-import project.game.battle.Weather;
 import project.game.battle.Weather.WeatherEffect;
 import project.game.exceptions.PokemonFaintedException;
 import project.game.pokemon.Pokemon;
@@ -53,7 +52,7 @@ public class WeatherProcessor implements Processor {
      */
     public void changeWeather(WeatherEffect change) {
         BattleLog.add(this.weatherReport(change));
-        this.battleData.setCurrenWeather(new Weather(change));
+        this.battleData.setCurrenWeather(change);
     }
 
     // Pokemon takes damage from Sandstorm / Hail Weather

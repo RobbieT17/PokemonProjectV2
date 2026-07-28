@@ -1,4 +1,4 @@
-package project.game.move.moveactions.calculations;
+package project.game.move.calculations;
 
 import project.game.battle.Weather.WeatherEffect;
 import project.game.event.EventData;
@@ -53,7 +53,7 @@ public interface AttackMoveCalculations {
      * @param crit if the move was a critical hit
      */
     private static double calculateAttack(StatPoint atkStat, boolean crit) {
-        return crit && atkStat.getStage() < 0 ? atkStat.getBase() : atkStat.getPower();
+        return crit && atkStat.getStage() < 0 ? atkStat.getBase() : atkStat.calcPower();
     }
 
     /**
@@ -64,7 +64,7 @@ public interface AttackMoveCalculations {
      * @param crit if the move was a critical hit
      */
     private static double calculateDefense(StatPoint defStat, boolean crit) {
-        return crit && defStat.getStage() > 0 ? defStat.getBase() : defStat.getPower();
+        return crit && defStat.getStage() > 0 ? defStat.getBase() : defStat.calcPower();
     }
 
     /**

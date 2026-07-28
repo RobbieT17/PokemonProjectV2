@@ -3,21 +3,35 @@ package project.game.event;
 import project.game.battle.BattleData;
 import project.game.battle.BattleLog;
 import project.game.event.GameEvents.EventID;
+import project.game.move.Move;
 import project.game.move.Move.MoveCategory;
+import project.game.move.MoveActions;
 import project.game.pokemon.Pokemon;
+import project.game.processors.Processor;
 
 public class EventManager {
     
     public final EventData data;
+    public final MoveActions moveActions;
+
+    private Processor processor;
 
     public EventManager(BattleData data, Pokemon user) {
         this.data = new EventData(data, user, user, user.getMoveSelected());
+        this.moveActions = new MoveActions(this);
+
     }
   
     public EventManager(BattleData data, Pokemon user, Pokemon target) {
         this.data = new EventData(data, user, target, user.getMoveSelected());
+        this.moveActions = new MoveActions(this);
     }
 
+    public EventManager(BattleData data, Pokemon user, Pokemon target, Move move, MoveActions actions) {
+        this.data = new EventData(data, user, target, move);
+        this.moveActions = actions;
+    }
+    
     /**
      * Logs failed Status moves
      */
@@ -53,6 +67,15 @@ public class EventManager {
 
     public void updateEventMaps() {
         this.data.attackUser.getEvents().updateEventMaps();
+    }
+
+    public void startNewProcess(Processor processor) {
+        this.processor = processor;
+        this.processor.process();
+    }
+
+    public Processor getProcessor() {
+        return this.processor;
     }
 
 }

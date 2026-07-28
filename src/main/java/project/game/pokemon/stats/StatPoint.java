@@ -4,24 +4,17 @@ public class StatPoint {
 
 	public enum StatID {Attack, Defense, Special_Attack, Special_Defense, Speed, Accuracy, Evasion};
 
-// Class Variables
-	private final static int LOWEST_STAT_STAGE = -6;
-	private final static int HIGHEST_STAT_STAGE = 6;
-
 // Object Variables
 	private final StatID statID;
 	private final int base; // Base power
-
-	private int stage; // Stage of the stat, max: 6 min: -6
-	private double stageVal; // Based on current stage)
+	private final StatStage stage; // Stage of stat
+	
 	private double mod; // Mod multiplier
 
 	public StatPoint(StatID id, int base) {
 		this.statID = id;
 		this.base = base;
-
-		this.stage = 0;
-		this.stageVal = 1.0;
+		this.stage = new StatStage(!isAccuracyOrEvasion());
 		this.mod = 1.0;
 	}
 	
@@ -51,62 +44,13 @@ public class StatPoint {
 // Methods
 	// If not a stage 0, shows the difference in power and current stage
 	private String showStage() {
-		return this.stage != 0 
-		? String.format(" (%s) [%s Stage]", sign(this.getPower() - this.base), sign(this.stage)) 
+		return this.stage.getValue() != 0 
+		? String.format(" (%s) [%s Stage]", sign(this.calcPower() - this.base), sign(this.stage.getValue())) 
 		: "";
 	}
 
 	private boolean isAccuracyOrEvasion() {
 		return this.statID == StatID.Accuracy || this.statID == StatID.Evasion;
-	}
-
-	/**
-	 * Checks if the stat's stage is out side the range of the max and min.
-	 * @param change number of stage increases/decreases
-	 * @return true if at highest stage (positive chance) or if at lowest stage (negative change)
-	 */
-	private boolean isAtHighestOrLowestStage(int change) {
-		return change > 0 ? this.stage == StatPoint.HIGHEST_STAT_STAGE : this.stage == StatPoint.LOWEST_STAT_STAGE;
-	}
-
-	// Changes a stat based on the stage and base stat
-	private void changeStat() {
-		this.stageVal = switch (this.stage){
-			case -6 -> 0.25;
-			case -5 -> 0.28;
-			case -4 -> 0.33;
-			case -3 -> 0.4;
-			case -2 -> 0.5;
-			case -1 -> 0.66;
-			case 1 -> 1.5;
-			case 2 -> 2;
-			case 3 -> 2.5;
-			case 4 -> 3;
-			case 5 -> 3.5;
-			case 6 -> 4;
-			default -> 1.0;
-		};
-
-	}
-
-	// Changes a stat based on an accuracy/evasion of 100%
-	private void changeStatForAccuracyOrEvasion() {
-		this.stageVal = switch (this.stage){
-			case -6 -> 0.33;
-			case -5 -> 0.375;
-			case -4 -> 0.429;
-			case -3 -> 0.5;
-			case -2 -> 0.6;
-			case -1 -> 0.75;
-			case 1 -> 1.33;
-			case 2 -> 1.66;
-			case 3 -> 2;
-			case 4 -> 2.33;
-			case 5 -> 2.66;
-			case 6 -> 3;
-			default -> 1.0;
-		};
-
 	}
 
 	/**
@@ -122,37 +66,30 @@ public class StatPoint {
 			throw new IllegalArgumentException("Stage change cannot be zero");
 		}
 
-		if (this.isAtHighestOrLowestStage(change)) {
+		if (this.stage.isAtHighestOrLowestStage(change)) {
 			return false;
 		}
 
 		// Changes stage
-		this.stage += change;
-
-		if (this.stage < StatPoint.LOWEST_STAT_STAGE) {
-			this.stage = StatPoint.LOWEST_STAT_STAGE;
-		}
-		else if (this.stage > StatPoint.HIGHEST_STAT_STAGE) {
-			this.stage = StatPoint.HIGHEST_STAT_STAGE;
-		}
-
-		if (this.isAccuracyOrEvasion()) {
-			this.changeStatForAccuracyOrEvasion();
-		}
-		else {
-			this.changeStat(); 
-		}
+		this.stage.changeStage(change);
 
 		return true;
 	}
 
+	public void setStage(int stage) {
+		if (stage > StatStage.HIGHEST_STAT_STAGE || stage < StatStage.LOWEST_STAT_STAGE) {
+			throw new IllegalArgumentException(String.format("Cannot set stage. Value (%d) is outside of the range [-6, 6]", stage));
+		}
 
+		this.stage.setStage(stage);
+
+	}	
 
 	// Displays stat's current power and stage
 	public String showStat() {
 		return isAccuracyOrEvasion()
-		? String.format("%s: %d%%%s%n", this.statID.name(), this.getPower(), this.showStage())
-		: String.format("%s: %d%s%n", this.statID.name(), this.getPower(), this.showStage());
+		? String.format("%s: %d%%%s%n", this.statID.name(), this.calcPower(), this.showStage())
+		: String.format("%s: %d%s%n", this.statID.name(), this.calcPower(), this.showStage());
 	}
 
 	// Attack: 52 (-32) [-4 Stage]
@@ -163,23 +100,16 @@ public class StatPoint {
 		return this.statID.name().replaceAll("_", "-");
 	}
 
+	public int calcPower() {return (int) (this.base * this.stage.getMultiplier() * this.mod);}
+
 // Setters
-	public void setStage(int stage) {
-		if (stage > StatPoint.HIGHEST_STAT_STAGE || stage < StatPoint.LOWEST_STAT_STAGE) {
-			throw new IllegalArgumentException(String.format("Cannot set stage. Value (%d) is outside of the range [-6, 6]", stage));
-		}
-		this.stage = stage;
-
-		if (this.isAccuracyOrEvasion()) this.changeStatForAccuracyOrEvasion();
-		else this.changeStat(); 
-	}	
-
+	
 	public void setMod(double percent) {this.mod = percent * 0.01;}
 	public void resetMod() {this.mod = 1.0;}
 
 // Getters
-	public StatID getStatID() {return this.statID;}
+	public StatID getStatID() {return this.statID;} 
 	public int getBase() {return this.base;}
-	public int getPower() {return (int) (this.base * this.stageVal * this.mod);}
-	public int getStage() {return this.stage;}
+	public int getStage() {return this.stage.getValue();}
+	public double getMod() {return this.mod;}
 }

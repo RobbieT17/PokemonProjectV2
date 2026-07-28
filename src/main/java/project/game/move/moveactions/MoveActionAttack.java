@@ -4,13 +4,19 @@ import project.game.battle.BattleLog;
 import project.game.event.EventData;
 import project.game.event.EventManager;
 import project.game.event.GameEvents.EventID;
-import project.game.move.moveactions.calculations.AttackMoveCalculations;
-import project.game.move.moveactions.calculations.MoveEffectiveCalculations;
+import project.game.move.calculations.AttackMoveCalculations;
+import project.game.move.calculations.MoveEffectiveCalculations;
 import project.game.pokemon.Pokemon;
 import project.game.utility.RandomValues;
 
-public interface MoveActionAttack extends MoveAction {
-    
+public class MoveActionAttack {
+
+    private final EventManager eventManager;
+
+    public MoveActionAttack(EventManager e) {
+        this.eventManager = e;
+    }
+
     /**
      * Number of times a multi-hit damages the opponent
      * 
@@ -21,7 +27,7 @@ public interface MoveActionAttack extends MoveAction {
      * 
      * @return # of hits
      */
-    private static int randomHits() {
+    private int randomHits() {
         double value = RandomValues.randomDouble();
         return value <= 0.35 
         ? 2
@@ -32,17 +38,17 @@ public interface MoveActionAttack extends MoveAction {
                 : 5;
     }
 
-    private static void dealDamage(EventManager eventManager) {
-        EventData data = eventManager.data;
+    private void dealDamage() {
+        EventData data = this.eventManager.data;
         Pokemon attacker = data.attackUser;
         Pokemon defender = data.attackTarget;
         boolean isMultiHit = data.moveUsed.isMultiHit();
 
-        data.damage = AttackMoveCalculations.calculateDamage(eventManager);
+        data.damage = AttackMoveCalculations.calculateDamage(this.eventManager);
         data.totalDamageDealt += data.damage;
 
-        eventManager.notifyUserPokemon(EventID.ATK_MOVE_DEALS_DAMAGE);
-        eventManager.notifyAttackTargetPokemon(EventID.DEF_MOVE_DEALS_DAMAGE);
+        this.eventManager.notifyUserPokemon(EventID.ATK_MOVE_DEALS_DAMAGE);
+        this.eventManager.notifyAttackTargetPokemon(EventID.DEF_MOVE_DEALS_DAMAGE);
 
         int damage = data.damage;
 
@@ -55,18 +61,18 @@ public interface MoveActionAttack extends MoveAction {
         defender.getConditions().setTookDamage(true);
         
         if (data.moveUsed.isContactMove()) {
-            eventManager.notifyUserPokemon(EventID.ATK_MOVE_MAKES_CONTACT);
-            eventManager.notifyAttackTargetPokemon(EventID.DEF_MOVE_MAKES_CONTACT);
+            this.eventManager.notifyUserPokemon(EventID.ATK_MOVE_MAKES_CONTACT);
+            this.eventManager.notifyAttackTargetPokemon(EventID.DEF_MOVE_MAKES_CONTACT);
         }
     }
 
     // Deals multiple hits of damage
-    private static void dealMultiHitDamage(EventManager eventManager) {
-        EventData data  = eventManager.data;
+    private void dealMultiHitDamage() {
+        EventData data  = this.eventManager.data;
         data.hitCount = randomHits();
 
         for (int i = 0; i < data.hitCount; i++) {
-            dealDamage(eventManager);
+            this.dealDamage();
             data.hitCount++;
             if (data.attackTarget.getConditions().isFainted()) {
                 break;
@@ -81,18 +87,18 @@ public interface MoveActionAttack extends MoveAction {
      * Step 2: Rolls for accuracy (proceeds if the move hits the target).<br>
      * Step 3: Deals damage to the target Pokemon (slightly different logic for multi-hit moves).
      * 
-     * @param eventManager
+     * @param this.eventManager
      */
-    public static void attackTarget(EventManager eventManager) {   
-        MoveEffectiveCalculations.calculateMoveEffectiveness(eventManager);
-        MoveActionAccuracy.rollForAccuracy(eventManager);
+    public void attackTarget() {   
+        MoveEffectiveCalculations.calculateMoveEffectiveness(this.eventManager);
+        this.eventManager.moveActions.rollForAccuracy();
 
         // Checks if the move is a multi-hit
-        if (eventManager.data.moveUsed.isMultiHit()) {
-            dealMultiHitDamage(eventManager);
+        if (this.eventManager.data.moveUsed.isMultiHit()) {
+            this.dealMultiHitDamage();
         }   
         else {
-            dealDamage(eventManager);
+            this.dealDamage();
         }
         
     }
@@ -101,8 +107,10 @@ public interface MoveActionAttack extends MoveAction {
      * Confusion damage is calculated as if it were a typeless physical move with a power of 40.
      * It cannot score a critical hit, and does not receive STAB
      */
-    public static void takeConfusionDamage(Pokemon p) {
-        int damage = (int) (((((2 * p.getLevel()) / 5.0 + 2) * 40 * (p.getAttack().getPower() / (double) p.getDefense().getPower())) / 50.0 + 2)); 
+    public void takeConfusionDamage() {
+        Pokemon p = this.eventManager.data.attackUser;
+
+        int damage = (int) (((((2 * p.getLevel()) / 5.0 + 2) * 40 * (p.getAttack().calcPower() / (double) p.getDefense().calcPower())) / 50.0 + 2)); 
         BattleLog.add("%s took %d damage from their own confusion!", p, damage);
         p.takeDamage(damage); 
     }

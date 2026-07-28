@@ -299,6 +299,17 @@ public class Pokemon {
         return false;
     }
 
+    // Gets an array value of the current stat stage increases/drops
+    public int[] getStatsStageArray() {
+        int[] statsInts = new int[this.stats.length];
+
+        for (int i = 0; i < statsInts.length; i++) {
+            statsInts[i] = this.stats[i].getStage();
+        }
+
+        return statsInts;
+    }
+
 // Setters
     public void setAbility(AbilityID a) {
         this.ability = a.apply(this);

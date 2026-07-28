@@ -69,7 +69,7 @@ public class BattleData {
     }
    
     // Setters
-    public void setCurrenWeather(Weather currenWeather) {this.currenWeather = currenWeather;}
+    public void setCurrenWeather(WeatherEffect w) {this.currenWeather = new Weather(w);}
     public void addEventData(EventData data) {this.dataQueue.offer(data);}
 
     // Getters

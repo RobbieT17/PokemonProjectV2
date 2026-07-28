@@ -5,12 +5,17 @@ import project.game.event.EventData;
 import project.game.event.EventManager;
 import project.game.pokemon.Pokemon;
 
-public interface MoveActionDamagePct {
-    
+public class MoveActionDamagePct {
 
+    private final EventManager eventManager;
+
+    public MoveActionDamagePct(EventManager e) {
+        this.eventManager = e;
+    }
+    
     // Pokemon takes damage based on some percent of the damage dealt
-    public static void recoilDamage(EventManager eventManager, double percent) {
-        EventData data  = eventManager.data;
+    public void takeRecoilDamage(double percent) {
+        EventData data  = this.eventManager.data;
         Pokemon p = data.attackUser;
 
         data.recoilPercent = percent;
@@ -25,8 +30,8 @@ public interface MoveActionDamagePct {
         p.takeDamage(damage);
     }
 
-    public static void drainHP(EventManager eventManager, double percent) {
-        EventData data  = eventManager.data;
+    public void drainHP(double percent) {
+        EventData data  = this.eventManager.data;
         Pokemon p = data.attackUser;
         data.drainPercent = percent;
 

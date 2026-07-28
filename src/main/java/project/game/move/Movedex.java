@@ -7,6 +7,7 @@ import project.game.event.EventManager;
 
 public enum Movedex {
     Avalanche(MoveList::avalanche),
+    Cloud_Sync(MoveList::cloudSync),
     Earthquake(MoveList::earthquake),
     Error_Correction(MoveList::errorCorrection),
     Endure(MoveList::endure),
@@ -15,7 +16,7 @@ public enum Movedex {
     False_Swipe(MoveList::falseSwipe),
     Fake_Out(MoveList::fakeOut),
     File_Copy(MoveList::fileCopy),
-    File_Transfer(MoveList::flieTransfer),
+    File_Transfer(MoveList::fileTransfer),
     Grass_Knot(MoveList::grassKnot),
     Growth(MoveList::growth),
     Gyro_Ball(MoveList::gyroBall),

@@ -8,11 +8,17 @@ import project.game.pokemon.effects.StatusCondition.StatusConditionID;
 import project.game.pokemon.effects.StatusContext;
 import project.game.utility.RandomValues;
 
-public interface MoveActionChangeCondition extends MoveAction {
+public class MoveActionChangeCondition {
+
+    private final EventManager eventManager;
+
+    public MoveActionChangeCondition(EventManager e) {
+        this.eventManager = e;
+    }
     
 // Status Conditions Functions
-    public static void applyCondition(EventManager eventManager, StatusConditionID id, double chance) {
-        EventData data  = eventManager.data;
+    public void applyCondition(StatusConditionID id, double chance) {
+        EventData data  = this.eventManager.data;
         Pokemon p = data.effectTarget;
 
         data.statusProb = chance;
@@ -30,18 +36,10 @@ public interface MoveActionChangeCondition extends MoveAction {
 
         data.statusContext = c;
 
-        eventManager.notifyUserPokemon(EventID.ATK_STATUS_CONDITION_CHANGE); 
-        eventManager.notifyEffectTargetPokemon(EventID.DEF_STATUS_CONDITION_CHANGE);
+        this.eventManager.notifyUserPokemon(EventID.ATK_STATUS_CONDITION_CHANGE); 
+        this.eventManager.notifyEffectTargetPokemon(EventID.DEF_STATUS_CONDITION_CHANGE);
             
-        data.statFailed = !c.applyEffectToTarget();
-    }
-
-    public static void applyCondition(EventManager eventManager, StatusConditionID id) {
-        applyCondition(eventManager, id, 100);
-    }
-
-    public static void applyCondition(EventManager eventManager, String name) {
-        applyCondition(eventManager, StatusConditionID.valueOf(name));
+        data.statusFailed = !c.applyEffectToTarget();
     }
 
 }

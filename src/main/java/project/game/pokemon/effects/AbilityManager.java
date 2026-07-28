@@ -7,7 +7,6 @@ import project.game.event.GameEvents.EventID;
 import project.game.exceptions.MoveInterruptedException;
 import project.game.exceptions.PokemonFaintedException;
 import project.game.move.Move;
-import project.game.move.moveactions.MoveActionHealthRestore;
 import project.game.pokemon.Pokemon;
 import project.game.pokemon.effects.Ability.AbilityID;
 import project.game.pokemon.stats.Type;
@@ -95,7 +94,7 @@ public interface AbilityManager {
 
         p.getEvents().addEventListener(flags[0], name, e -> {
             if (e.battleData.isCurrentWeather(WeatherEffect.Rain)) {
-                MoveActionHealthRestore.applyHpRestorePercent(new EventManager(e.battleData, p), 6.25, " from its Rain Dish");
+                new EventManager(e.battleData, p).moveActions.applyHpRestorePercent(6.25, " from its Rain Dish");
             }
         });
 
@@ -168,7 +167,7 @@ public interface AbilityManager {
             if (e.moveUsed.isType(Type.Water)) {
                 e.moveEffectiveness = 0;
                 BattleLog.add("%s's Water Absorb soaked up the water!", p);
-                MoveActionHealthRestore.applyHpRestorePercent(new EventManager(e.battleData, p), 25, "");
+                new EventManager(e.battleData, p).moveActions.applyHpRestorePercent(6.25, "");
                 throw new MoveInterruptedException();
             }
         });
